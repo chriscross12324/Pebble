@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Pebble</string>
+    <string name="sign_in_body">Sign in to your account below to access your gradients</string>
+    <string name="sign_out_body">Sign out of your account</string>
+    <string name="register_body">Create your account to begin making gradients</string>
+
+    <string name="create_group_body">Create a new group to store gradients in</string>
+    <string name="pebble">Pebble</string>
+    <string name="title_activity_gradient_grid_test">gradient_grid_test</string>
+</resources>

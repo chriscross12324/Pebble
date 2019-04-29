@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#50FFFFFF</color>
+
+    <color name="logoColourTopLeft">#F58A33</color>
+    <color name="logoColourBottomRight">#D53593</color>
+
+    <color name="colorDarkThemeForeground">#424242</color>
+    <color name="colorDarkThemeBackground">#303030</color>
+
+    <color name="colorLightThemeForeground">#FFFFFF</color>
+    <color name="colorLightThemeBackground">#F8F8F8</color>
+
+    <!-- Login Screen -->
+    <color name="editTextColour">#80FFFFFF</color>
+    <color name="editTextLineColour">#90FFFFFF</color>
+
+    <color name="colorLightThemeTextColour">#565656</color>
+</resources>

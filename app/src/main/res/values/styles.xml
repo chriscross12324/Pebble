@@ -1,0 +1,44 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="Main" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="ThemeLight" parent="Main">
+        <item name="BackgroundColour">@color/colorLightThemeBackground</item>
+        <item name="ForegroundColour">@color/colorLightThemeForeground</item>
+        <item name="PrimaryTextColour">@color/colorDarkThemeBackground</item>
+        <item name="SecondaryTextColour">@color/colorDarkThemeForeground</item>
+    </style>
+
+    <style name="ThemeDark" parent="Main">
+        <item name="BackgroundColour">@color/colorDarkThemeBackground</item>
+        <item name="ForegroundColour">@color/colorDarkThemeForeground</item>
+        <item name="PrimaryTextColour">@color/colorLightThemeForeground</item>
+        <item name="SecondaryTextColour">@color/colorLightThemeBackground</item>
+    </style>
+
+    <style name="LoginScreenEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:padding">10dp</item>
+        <item name="android:background">@null</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#80FFFFFF</item>
+        <item name="android:textColorHint">#80FFFFFF</item>
+        <item name="android:fontFamily">@font/googlesans_regular</item>
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
+
+    <style name="ThemeLight.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="ThemeLight.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="ThemeLight.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+</resources>
