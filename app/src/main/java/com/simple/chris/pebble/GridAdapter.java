@@ -53,7 +53,7 @@ public class GridAdapter extends ArrayAdapter<String> {
         );
         mViewHolder.mGradient.setBackgroundDrawable(gradientDrawable);
         mViewHolder.mName.setText(names[position]);
-        Log.e("Info", ""+gradientDrawable);
+        Log.e("Info", ""+names[position]);
         return convertView;
     }
 

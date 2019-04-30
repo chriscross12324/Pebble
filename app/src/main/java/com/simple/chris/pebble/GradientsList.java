@@ -173,6 +173,7 @@ public class GradientsList extends AppCompatActivity {
                 /** Gets and parses description **/
                 descriptions.add(jarray.getJSONObject(i).getString("description"));
                 descriptionss = descriptions.toArray(new String[descriptions.size()]);
+                Log.e("Info", ""+backgroundNames);
             }
         } catch (JSONException e) {
             e.printStackTrace();
