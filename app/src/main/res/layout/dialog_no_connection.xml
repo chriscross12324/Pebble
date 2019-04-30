@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/dialog_background"
+        android:backgroundTint="?ForegroundColour">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/googlesans_bold"
+                    android:text="No connection"
+                    android:textAlignment="center"
+                    android:textColor="?PrimaryTextColour"
+                    android:textSize="25dp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/icon_no_connection"
+                    android:tint="?SecondaryTextColour" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:fontFamily="@font/googlesans_regular"
+                    android:text="@string/no_connection_body"
+                    android:textAlignment="center"
+                    android:textColor="?SecondaryTextColour"
+                    android:textSize="18dp" />
+
+                <Button
+                    android:id="@+id/retryButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/button_dialog"
+                    android:backgroundTint="?PrimaryTextColour"
+                    android:fontFamily="@font/googlesans_medium"
+                    android:minWidth="200dp"
+                    android:text="Retry"
+                    android:textAllCaps="false"
+                    android:textColor="?BackgroundColour"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+                <Button
+                    android:id="@+id/openSystemSettingsButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="#00000000"
+                    android:fontFamily="@font/googlesans_medium"
+                    android:minWidth="200dp"
+                    android:text="Open System Settings"
+                    android:textAllCaps="false"
+                    android:textColor="?PrimaryTextColour"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -2,28 +2,28 @@ package com.simple.chris.pebble;
 
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
-import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.GradientDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.JsonReader;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +41,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,13 +49,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class GradientsList extends AppCompatActivity {
 
+    public ArrayList<Integer> colours;
     TextView gradientsFound;
     GridView gridView;
-    SimpleAdapter adapter, backgroundAdapter;
-    GridAdapter gridAdapter;
-    public ArrayList<Integer> colours;
-    ProgressDialog loading;
-    Dialog connectingDialog;
+    Dialog connectingDialog, noConnectionDialog, cellularDataDialog;
+    Button openSystemSettingsNoConnection, openSystemSettingsCellularData, continueButton, retry;
     SwipeRefreshLayout swipeToRefresh;
     List<String> backgroundNames = new ArrayList<String>();
     List<Integer> leftColours = new ArrayList<Integer>();
@@ -71,6 +68,10 @@ public class GradientsList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gradients_grid);
+
+        //Create Dialogs
+        noConnectionDialog = new Dialog(this);
+        cellularDataDialog = new Dialog(this);
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -99,14 +100,20 @@ public class GradientsList extends AppCompatActivity {
                 finish();
             }
         });
+        if (isInterenetConnected()) {
+            if (isNetworkTypeCellular()) {
+                showCellularWarningDialog();
+            } else {
+                getItems();
+            }
+        } else {
+            showNoConnectionDialog();
+        }
 
-        //gridView.setColumnWidth(size.x / 2 - 30);
-        getItems();
     }
 
     private void getItems() {
         showConnectingDialog();
-        //loading = ProgressDialog.show(this, "Loading Gradients", "Please wait...", false, true);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -130,7 +137,7 @@ public class GradientsList extends AppCompatActivity {
                 }
         );
 
-        int socketTimeOut = 50000;
+        int socketTimeOut = 30000;
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
         stringRequest.setRetryPolicy(policy);
@@ -141,116 +148,40 @@ public class GradientsList extends AppCompatActivity {
     }
 
     private void parseItems(String jsonResponse) {
-        Log.e("Info", "Got here");
-        ArrayList<HashMap<String, String>> list = new ArrayList<>();
+        Log.e("Info", "Got to 'parseItems' with response: " + jsonResponse);
 
         try {
-            ArrayList<String> listData = new ArrayList<String>();
             JSONObject jobj = new JSONObject(jsonResponse);
             JSONArray jarray = jobj.getJSONArray("items");
 
-
             for (int i = jarray.length() - 1; i >= 0; i--) { //int i = 0; i < jarray.length(); i++
 
-
-
+                /** Gets and parses backgroundName **/
                 backgroundNames.add(jarray.getJSONObject(i).getString("backgroundName").replace(" ", "\n"));
                 backgroundNamess = backgroundNames.toArray(new String[backgroundNames.size()]);
+
+                /** Gets and parses leftColour **/
                 String left = jarray.getJSONObject(i).getString("leftColour");
-                //left.replace("#", "");
-                //leftColours.add(Integer.parseInt(left, 16));
                 leftColours.add(Color.parseColor(left));
                 leftColourss = leftColours.stream().mapToInt(Integer::intValue).toArray();
+
+                /** Gets and parses rightColour **/
                 String right = jarray.getJSONObject(i).getString("rightColour");
-                //right.replace("#", "");
-                //rightColours.add(Integer.parseInt(right, 16));
                 rightColours.add(Color.parseColor(right));
                 rightColourss = rightColours.stream().mapToInt(Integer::intValue).toArray();
+
+                /** Gets and parses description **/
                 descriptions.add(jarray.getJSONObject(i).getString("description"));
                 descriptionss = descriptions.toArray(new String[descriptions.size()]);
-                //names[i] = items.getString("backgroundName");
-
-
-
-
-                /*String backgroundName = jo.getString("backgroundName");
-                String leftColour = jo.getString("leftColour");
-                String rightColour = jo.getString("rightColour");
-                String description = jo.getString("description");
-
-                backgroundName = backgroundName.replace(" ", "\n");
-                leftColour = leftColour.replace("#", "");
-                rightColour = rightColour.replace("#", "");
-                hexL = Integer.parseInt(leftColour, 16);
-                hexR = Integer.parseInt(rightColour, 16);
-                colours.add(hexL);
-
-                HashMap<String, String> item = new HashMap<>();
-                item.put("backgroundName", backgroundName);
-                item.put("leftColour", leftColour);
-                item.put("rightColour", rightColour);
-                item.put("description", description);
-
-                Log.e("NOTE:", "Item got");
-
-                list.add(item);
-
-                //gradientsFound.setText("Gradients found: " + jarray);*/
-
-
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e("Info", "Failed "+e.getLocalizedMessage());
+            Log.e("Info", "Failed " + e.getLocalizedMessage());
         }
-        Log.e("Background Names", ""+ backgroundNamess);
-        Log.e("Left Colours", ""+ leftColours);
-        Log.e("Right Colours", ""+ rightColours);
-        Log.e("Description", ""+ descriptions);
 
-        /*adapter = new SimpleAdapter(this, list, R.layout.gridview_module,
-                new String[]{"backgroundName"},
-                new int[]{R.id.backgroundName});*/
-        //gridAdapter = new GridAdapter(this,colours);
         GridAdapter gridAdapter = new GridAdapter(GradientsList.this, backgroundNamess, leftColourss, rightColourss);
         gridView.setAdapter(gridAdapter);
 
-        /*adapter = new SimpleAdapter(this, list, R.layout.gridview_module,
-                new String[]{"backgroundName", "leftColour", "rightColour", "description"},
-                new int[]{R.id.backgroundName, R.id.leftColour, R.id.rightColour, R.id.description});*/
-        SimpleAdapter.ViewBinder binder = new SimpleAdapter.ViewBinder() {
-            @Override
-            public boolean setViewValue(View view, Object data, String textRepresentation) {
-                Log.e("ERR:", ""+view);
-                if (view.equals((ImageView)view.findViewById(R.id.backgroundGradient))){
-                    ImageView gradient = (ImageView)view.findViewById(R.id.backgroundGradient);
-                    /*GradientDrawable gradientDrawable = new GradientDrawable(
-                            GradientDrawable.Orientation.LEFT_RIGHT,
-                            new int[]{1867488, 70}
-                    );
-                    gradientDrawable.setShape(GradientDrawable.RECTANGLE);
-                    gradient.setBackground(gradientDrawable);*/
-                    //gradient.setBackgroundColor(Color.parseColor(Integer.toHexString(hexL)));
-                    Log.e("ERR:", "First if ran");
-                }
-                if (view instanceof ImageView){
-                    ImageView gradient = (ImageView)view.findViewById(R.id.backgroundGradient);
-                    GradientDrawable gradientDrawable = new GradientDrawable(
-                            GradientDrawable.Orientation.LEFT_RIGHT,
-                            new int[]{1867488, 70}
-                    );
-                    gradientDrawable.setShape(GradientDrawable.RECTANGLE);
-                    gradient.setBackground(gradientDrawable);
-                    Log.e("ERR:", "Second if ran");
-                    return true;
-                }
-                Log.e("ERR:", "No if ran");
-                return false;
-            }
-        };
-        //gridView.setAdapter(gridAdapter);
-        //Toast.makeText(this, "L: " + hexL + " R: " + hexR, Toast.LENGTH_SHORT).show();
-        //loading.dismiss();
         connectingDialog.dismiss();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -292,19 +223,108 @@ public class GradientsList extends AppCompatActivity {
         try {
             JSONObject jobj = new JSONObject(jsonResponse);
             JSONArray jarray = jobj.getJSONArray("items");
-            for (int i = 0; i < jarray.length(); i++){
+            for (int i = 0; i < jarray.length(); i++) {
                 JSONObject jo = jarray.getJSONObject(i);
                 String serverStatus = jo.getString("serverStatus");
                 String serverMessage = jo.getString("serverMessage");
             }
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
 
         Toast.makeText(this, "Status: " + list + "Message: ", Toast.LENGTH_SHORT).show();
     }
 
-    public void showConnectingDialog() {
+    public boolean isInterenetConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        //connectingDialog.setContentView(R.layout.dialog_connecting);
+        return cm.getActiveNetworkInfo() != null;
+    }
+
+    public boolean isNetworkTypeCellular() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        boolean isData = networkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+        Log.e("Connection", "" + isData);
+        return isData;
+    }
+
+    public void showNoConnectionDialog() {
+        noConnectionDialog.setContentView(R.layout.dialog_no_connection);
+        retry = noConnectionDialog.findViewById(R.id.retryButton);
+        openSystemSettingsNoConnection = noConnectionDialog.findViewById(R.id.openSystemSettingsButton);
+
+        WindowManager.LayoutParams lp = noConnectionDialog.getWindow().getAttributes();
+        Window window = noConnectionDialog.getWindow();
+        lp.dimAmount = 0.8f;
+        noConnectionDialog.getWindow().setAttributes(lp);
+        lp.gravity = Gravity.BOTTOM;
+        window.setAttributes(lp);
+
+        retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noConnectionDialog.dismiss();
+                if (isInterenetConnected()) {
+                    if (isNetworkTypeCellular()) {
+                        showCellularWarningDialog();
+                    } else {
+                        getItems();
+                    }
+                } else {
+                    showNoConnectionDialog();
+                }
+            }
+        });
+        openSystemSettingsNoConnection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noConnectionDialog.dismiss();
+                startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
+            }
+        });
+
+        noConnectionDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        noConnectionDialog.setCancelable(false);
+        noConnectionDialog.show();
+    }
+
+    public void showCellularWarningDialog() {
+        cellularDataDialog.setContentView(R.layout.dialog_cell_wifi_used);
+        continueButton = cellularDataDialog.findViewById(R.id.continueButton);
+        openSystemSettingsCellularData = cellularDataDialog.findViewById(R.id.openSystemSettingsButton);
+
+        WindowManager.LayoutParams lp = cellularDataDialog.getWindow().getAttributes();
+        Window window = cellularDataDialog.getWindow();
+        lp.dimAmount = 0.8f;
+        cellularDataDialog.getWindow().setAttributes(lp);
+        lp.gravity = Gravity.BOTTOM;
+        window.setAttributes(lp);
+
+        continueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cellularDataDialog.dismiss();
+                if (isInterenetConnected()) {
+                    getItems();
+                } else {
+                    showNoConnectionDialog();
+                }
+            }
+        });
+        openSystemSettingsCellularData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noConnectionDialog.dismiss();
+                startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
+            }
+        });
+
+        cellularDataDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        cellularDataDialog.setCancelable(false);
+        cellularDataDialog.show();
+    }
+
+    public void showConnectingDialog() {
         ImageView animationView = connectingDialog.findViewById(R.id.animationView);
 
         WindowManager.LayoutParams lp = connectingDialog.getWindow().getAttributes();
@@ -321,10 +341,6 @@ public class GradientsList extends AppCompatActivity {
         connectingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         connectingDialog.show();
 
-
-        /*LayoutInflater layoutInflater = LayoutInflater.from(DialogTestActivity.this);
-        View view = layoutInflater.inflate(R.layout.dialog_connecting, null);
-        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);*/
     }
 
     @Override
