@@ -4,4 +4,5 @@
     <attr name="ForegroundColour" format="reference|color"/>
     <attr name="PrimaryTextColour" format="reference|color"/>
     <attr name="SecondaryTextColour" format="reference|color"/>
+    <attr name="BlurColour" format="reference|color"/>
 </resources>

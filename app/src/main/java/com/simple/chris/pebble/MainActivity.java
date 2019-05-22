@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Values.loadValues(MainActivity.this);
         Intent GL = new Intent(MainActivity.this, GradientsList.class);
         startActivity(GL);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

@@ -4,41 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GradientsList"
-    android:background="@color/colorLightThemeBackground">
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:fontFamily="@font/googlesans_regular"
-        android:gravity="center"
-        android:letterSpacing=".2"
-        android:text="Gradients"
-        android:textAllCaps="true"
-        android:textColor="@color/colorLightThemeTextColour"
-        android:textSize="30sp"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="35dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="25dp"
-        app:layout_constraintBottom_toTopOf="@+id/swipeToRefresh"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon_settings"
-        android:tint="@color/colorLightThemeTextColour"/>
+    android:background="?BackgroundColour"
+    tools:context=".GradientsList">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeToRefresh"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4">
+        app:layout_constraintTop_toTopOf="parent">
 
         <GridView
             android:id="@+id/gv_items"
@@ -48,10 +25,83 @@
             android:gravity="center"
             android:horizontalSpacing="20dp"
             android:numColumns="2"
-            android:padding="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="110dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="20dp"
             android:scrollbars="none"
             android:verticalSpacing="20dp" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/blurView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:blurOverlayColor="?BlurColour"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:fontFamily="@font/googlesans_regular"
+            android:gravity="center"
+            android:letterSpacing=".2"
+            android:text="Gradients"
+            android:textAllCaps="true"
+            android:textColor="?PrimaryTextColour"
+            android:textSize="30sp"
+            app:layout_constraintTop_toTopOf="parent" />
+    </eightbitlab.com.blurview.BlurView>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="35dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="25dp"
+        android:tint="?PrimaryTextColour"
+        app:layout_constraintBottom_toBottomOf="@+id/blurView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/icon_settings"
+        android:visibility="invisible"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="#00ffffff"
+        app:cardCornerRadius="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible">
+
+        <eightbitlab.com.blurview.BlurView
+            android:id="@+id/FAB"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:blurOverlayColor="#99000000"
+            android:visibility="invisible">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/fab_stroke" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/icon_add" />
+            </FrameLayout>
+
+
+        </eightbitlab.com.blurview.BlurView>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

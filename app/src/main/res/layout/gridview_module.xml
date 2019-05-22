@@ -7,18 +7,19 @@
     android:layout_margin="8dp"
     android:background="#00ffffff"
     android:clickable="true"
-    android:foreground="?android:attr/selectableItemBackground"
+
     android:foregroundGravity="left"
     android:orientation="vertical"
     android:padding="8dp"
     app:cardCornerRadius="15dp"
     app:cardElevation="8dp"
-    app:layout_gravity="left">
+    app:layout_gravity="left"
+    app:cardPreventCornerOverlap="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorLightThemeForeground">
+        android:background="?ForegroundColour">
 
         <ImageView
             android:id="@+id/backgroundGradient"
@@ -39,11 +40,11 @@
             android:layout_marginBottom="5dp"
             android:ellipsize="end"
             android:fontFamily="@font/googlesans_medium"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:maxLines="2"
             android:minLines="2"
             android:text="Deep"
-            android:textColor="@color/colorLightThemeTextColour"
+            android:textColor="?PrimaryTextColour"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

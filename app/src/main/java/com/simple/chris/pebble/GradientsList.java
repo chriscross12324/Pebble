@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
@@ -26,6 +28,9 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -44,8 +49,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import eightbitlab.com.blurview.BlurView;
+import eightbitlab.com.blurview.RenderScriptBlur;
 
 public class GradientsList extends AppCompatActivity {
 
@@ -55,6 +60,7 @@ public class GradientsList extends AppCompatActivity {
     Dialog connectingDialog, noConnectionDialog, cellularDataDialog;
     Button openSystemSettingsNoConnection, openSystemSettingsCellularData, continueButton, retry;
     SwipeRefreshLayout swipeToRefresh;
+    BlurView title, FAB;
     List<String> backgroundNames = new ArrayList<String>();
     List<Integer> leftColours = new ArrayList<Integer>();
     List<Integer> rightColours = new ArrayList<Integer>();
@@ -67,7 +73,13 @@ public class GradientsList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Values.darkMode) {
+            setTheme(R.style.ThemeDark);
+        } else {
+            setTheme(R.style.ThemeLight);
+        }
         setContentView(R.layout.activity_gradients_grid);
+        Values.saveValues(GradientsList.this);
 
         //Create Dialogs
         noConnectionDialog = new Dialog(this);
@@ -78,13 +90,15 @@ public class GradientsList extends AppCompatActivity {
         display.getSize(size);
         colours = new ArrayList<Integer>();
 
+        title = (BlurView) findViewById(R.id.blurView);
+        FAB = (BlurView) findViewById(R.id.FAB);
         gridView = (GridView) findViewById(R.id.gv_items);
         swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeToRefresh);
         connectingDialog = new Dialog(this);
         connectingDialog.setContentView(R.layout.dialog_connecting);
         gridView.setAlpha(0);
         // gradientsFound = (TextView) connectingDialog.findViewById(R.id.gradientsFound);
-
+        setBlurView();
         swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -173,7 +187,7 @@ public class GradientsList extends AppCompatActivity {
                 /** Gets and parses description **/
                 descriptions.add(jarray.getJSONObject(i).getString("description"));
                 descriptionss = descriptions.toArray(new String[descriptions.size()]);
-                Log.e("Info", ""+backgroundNames);
+                Log.e("Info", "" + backgroundNames);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -182,6 +196,8 @@ public class GradientsList extends AppCompatActivity {
 
         GridAdapter gridAdapter = new GridAdapter(GradientsList.this, backgroundNamess, leftColourss, rightColourss);
         gridView.setAdapter(gridAdapter);
+
+        FAB.setVisibility(View.VISIBLE);
 
         connectingDialog.dismiss();
         Handler handler = new Handler();
@@ -342,6 +358,25 @@ public class GradientsList extends AppCompatActivity {
         connectingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         connectingDialog.show();
 
+    }
+
+    private void setBlurView() {
+        float radius = 25f;
+
+        View decorView = getWindow().getDecorView();
+
+        ViewGroup rootView = (ViewGroup) decorView.findViewById(android.R.id.content);
+        Drawable windowBackground = decorView.getBackground();
+        title.setupWith(rootView)
+                .setFrameClearDrawable(windowBackground)
+                .setBlurAlgorithm(new RenderScriptBlur(this))
+                .setBlurRadius(radius)
+                .setHasFixedTransformationMatrix(true);
+        FAB.setupWith(rootView)
+                .setFrameClearDrawable(windowBackground)
+                .setBlurAlgorithm(new RenderScriptBlur(this))
+                .setBlurRadius(radius)
+                .setHasFixedTransformationMatrix(true);
     }
 
     @Override

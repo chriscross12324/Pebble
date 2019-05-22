@@ -24,7 +24,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="35dp"
                 android:layout_marginBottom="25dp"
                 android:orientation="vertical">
 
@@ -34,27 +34,28 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:fontFamily="@font/googlesans_bold"
-                    android:text="Downloading Gradients..."
+                    android:text="Connecting"
                     android:textAlignment="center"
                     android:textColor="?PrimaryTextColour"
-                    android:textSize="25dp" />
+                    android:textSize="30dp" />
                 <TextView
                     android:id="@+id/gradientsFound"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="10dp"
                     android:fontFamily="@font/googlesans_regular"
-                    android:text="Gradients found: "
+                    android:text="We are connecting you to the\nserver"
                     android:textAlignment="center"
                     android:textColor="?PrimaryTextColour"
-                    android:textSize="15dp"
-                    android:visibility="gone"/>
+                    android:textSize="20dp" />
                 <ImageView
                     android:id="@+id/animationView"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:layout_marginTop="50dp"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
