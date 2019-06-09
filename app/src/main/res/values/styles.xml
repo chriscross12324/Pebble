@@ -42,5 +42,10 @@
 
     <style name="ThemeLight.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="verticalTextStyle"
+        parent="android:Widget.TextView">
+        <item name="android:textSize">20sp</item>
+    </style>
+
 
 </resources>

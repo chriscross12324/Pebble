@@ -7,14 +7,14 @@
     <color name="logoColourTopLeft">#F58A33</color>
     <color name="logoColourBottomRight">#D53593</color>
 
-    <color name="colorDarkThemeForeground">#21282f</color>
+    <color name="colorDarkThemeForeground">#222930</color><!--#2E303D-->
     <color name="colorDarkThemeBackground">#13191f</color>
     <color name="colorDarkThemeTextColour">#BEBEBE</color>
     <color name="colorDarkThemeBlurColour">#4013191f</color>
 
     <color name="colorLightThemeForeground">#FFFFFF</color>
     <color name="colorLightThemeBackground">#F8F8F8</color>
-    <color name="colorLightThemeTextColour">#565656</color>
+    <color name="colorLightThemeTextColour">#414141</color><!--#565656-->
     <color name="colorLightThemeBlurColour">#40FFFFFF</color>
 
     <!-- Login Screen -->

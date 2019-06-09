@@ -31,10 +31,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Values.loadValues(MainActivity.this);
-        Intent GL = new Intent(MainActivity.this, GradientsList.class);
-        startActivity(GL);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        finish();
+        if (Values.firstStart){
+            Intent P = new Intent(MainActivity.this, Permissions.class);
+            startActivity(P);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            finish();
+        }else {
+            Intent GL = new Intent(MainActivity.this, GradientsList.class);
+            startActivity(GL);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            finish();
+        }
+
         connectingDialog = new Dialog(this);
 
         ImageView pebbleLogo = findViewById(R.id.pebbleLogo);
@@ -79,23 +87,5 @@ public class MainActivity extends AppCompatActivity {
 
         connectingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         connectingDialog.show();
-
-
-        /*LayoutInflater layoutInflater = LayoutInflater.from(DialogTestActivity.this);
-        View view = layoutInflater.inflate(R.layout.dialog_connecting, null);
-        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);*/
     }
 }
-
-/*class MysqlCon{
-    public static void main(String args[]){
-        try {
-            Class.forName("com.simple.chris.pebble");
-            Connection connection = DriverManager.getConnection(
-                    "chris:mysql://"
-            )
-        }catch (Exception e){
-            System.out.println(e);
-        }
-    }
-}*/

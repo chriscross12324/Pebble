@@ -13,15 +13,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/ThemeLight">
-        <activity android:name=".Settings"></activity>
+        <activity android:name=".Permissions"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Settings" />
         <activity
             android:name=".GradientsList"
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true" />
-        <activity
-            android:name=".gradient_grid_test"
-            android:label="@string/title_activity_gradient_grid_test"
-            android:theme="@style/ThemeLight.NoActionBar" />
         <activity android:name=".DialogTestActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

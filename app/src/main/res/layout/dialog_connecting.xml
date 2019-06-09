@@ -24,7 +24,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="25dp"
                 android:orientation="vertical">
 
@@ -42,7 +42,7 @@
                     android:id="@+id/gradientsFound"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="10dp"
@@ -54,8 +54,8 @@
                 <ImageView
                     android:id="@+id/animationView"
                     android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="50dp"
+                    android:layout_height="56.2dp"
+                    android:layout_marginTop="25dp"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
