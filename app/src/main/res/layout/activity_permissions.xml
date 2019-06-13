@@ -13,4 +13,16 @@
         android:layout_height="match_parent"
         android:background="@drawable/placeholder_gradient_dark"/>
 
+    <TextView
+        android:id="@+id/asterisk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="* I am not responsible if you exceed your data limit"
+        android:textColor="?PrimaryTextColour"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="invisible"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

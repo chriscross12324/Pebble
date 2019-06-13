@@ -18,14 +18,17 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -72,6 +75,8 @@ public class GradientsList extends AppCompatActivity {
 
     int screenHeight;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +97,7 @@ public class GradientsList extends AppCompatActivity {
         titleHolder = findViewById(R.id.titleHolder);
         connectingDialog = findViewById(R.id.connectingDialog);
 
+
         //Create Dialogs
         noConnectionDialog = new Dialog(this);
         cellularDataDialog = new Dialog(this);
@@ -110,14 +116,15 @@ public class GradientsList extends AppCompatActivity {
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             screenHeight = displayMetrics.heightPixels;
             gridView.setTranslationY(screenHeight);
-            Log.e("TAG", "" + screenHeight);
         }, 10);
         gridView.setAlpha(1);
         titleHolder.setAlpha(0);
         // gradientsFound = (TextView) connectingDialog.findViewById(R.id.gradientsFound);
         //setBlurView();
         //setAddGradientBlur();
-        /*swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeToRefresh);
+        //swipeToRefresh.setVisibility(View.GONE);
+        swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 //Arrays.fill(backgroundNamess, null);
@@ -131,7 +138,7 @@ public class GradientsList extends AppCompatActivity {
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
             }
-        });*/
+        });
         if (isInterenetConnected()) {
             if (isNetworkTypeCellular()) {
                 showCellularWarningDialog();
@@ -202,11 +209,12 @@ public class GradientsList extends AppCompatActivity {
                 // Gets and parses description
                 descriptions.add(jarray.getJSONObject(i).getString("description"));
                 descriptionss = descriptions.toArray(new String[0]);
-                Log.e("Info", "" + backgroundNames);
             }
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("Info", "Failed " + e.getLocalizedMessage());
+        } catch (Exception ex){
+            Log.e("Info", "Failed " + ex.getLocalizedMessage());
         }
 
         if (Values.uiDesignerMode) {
@@ -223,6 +231,7 @@ public class GradientsList extends AppCompatActivity {
         Handler h1 = new Handler();
         h1.postDelayed(() -> {
             Handler h1I = new Handler();
+            swipeToRefresh.setVisibility(View.VISIBLE);
             h1I.postDelayed(() -> {
                 ObjectAnimator OA1 = ObjectAnimator.ofFloat(gridView, "translationY", 0);
                 OA1.setDuration(800);
@@ -289,7 +298,7 @@ public class GradientsList extends AppCompatActivity {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         boolean isData = networkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
-        Log.e("Connection", "" + isData);
+        //Log.e("Connection", "" + isData);
         return isData;
     }
 
@@ -384,9 +393,43 @@ public class GradientsList extends AppCompatActivity {
                 .setHasFixedTransformationMatrix(true);
     }*/
 
+    public void onModuleClick(AdapterView<?> parent, View view, int position, long id){
+        Intent intent = new Intent(this, GradientDetails.class);
+        HashMap<String, String> map = (HashMap) parent.getItemAtPosition(position);
+        String backgroundName = map.get("backgroundName").toString();
+        String leftColour = map.get("leftColour").toString();
+        String rightColour = map.get("rightColour").toString();
+        String description = map.get("description").toString();
+
+        intent.putExtra("backgroundName", backgroundName);
+        intent.putExtra("leftColour", leftColour);
+        intent.putExtra("rightColour", rightColour);
+        intent.putExtra("description", description);
+
+        startActivity(intent);
+
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         gridView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 2);
         super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    public static void appCrashReceiver(){
+        GradientsList gl = new GradientsList();
+        gl.appCrashHandler();
+    }
+    public void appCrashHandler(){
+        try {
+            titleHolder.setVisibility(View.INVISIBLE);
+        }catch (Exception e){
+            Log.e("TAG", ""+e.getLocalizedMessage());
+        }
     }
 }

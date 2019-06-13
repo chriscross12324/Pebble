@@ -75,7 +75,6 @@ public class GridAdapterUIDesigner extends ArrayAdapter<String> {
         mViewHolder.mTopColourHex.setText(topLeftHex[position]);
         mViewHolder.mBottomColourHex.setText(bottomRightHex[position]);
         //mViewHolder.mName.setText(names[position]);
-        Log.e("Info", ""+Color.parseColor(topLeftHex[position]));
         return convertView;
     }
 

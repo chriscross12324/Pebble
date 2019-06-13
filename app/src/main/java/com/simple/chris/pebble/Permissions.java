@@ -16,10 +16,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Permissions extends AppCompatActivity {
 
+    TextView asterisk;
     Dialog wifiPermission, dataWarning;
     LinearLayout understandButtonWifi, understandButtonData;
     int dialogWidth;
@@ -39,6 +41,8 @@ public class Permissions extends AppCompatActivity {
         } else {
             background.setBackgroundResource(R.drawable.placeholder_gradient_light);
         }
+
+        asterisk = findViewById(R.id.asterisk);
 
         wifiPermission = new Dialog(this);
         dataWarning = new Dialog(this);
@@ -80,6 +84,7 @@ public class Permissions extends AppCompatActivity {
     }
 
     public void showDataWarningDialog(){
+        asterisk.setVisibility(View.VISIBLE);
         WindowManager.LayoutParams layoutParams = dataWarning.getWindow().getAttributes();
         Window window = dataWarning.getWindow();
         layoutParams.dimAmount = 0f;

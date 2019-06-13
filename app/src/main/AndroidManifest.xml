@@ -13,8 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/ThemeLight">
-        <activity android:name=".Permissions"
-            android:screenOrientation="portrait"></activity>
+        <activity android:name=".GradientDetails"></activity>
+        <activity
+            android:name=".Permissions"
+            android:screenOrientation="portrait" />
         <activity android:name=".Settings" />
         <activity
             android:name=".GradientsList"

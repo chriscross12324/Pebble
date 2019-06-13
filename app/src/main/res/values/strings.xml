@@ -9,4 +9,6 @@
     <string name="title_activity_gradient_grid_test">gradient_grid_test</string>
     <string name="no_connection_body">Your device is not connected to a network, please connect to use Pebble</string>
     <string name="cell_wifi_body">You are trying to use cellular data, this can result in overage charges</string>
+    <string name="internetBody">We need an active internet connection in order to connect to the server</string>
+    <string name="dataBody">Using cellular data may result in overage fees, you will be warned before using data*</string>
 </resources>

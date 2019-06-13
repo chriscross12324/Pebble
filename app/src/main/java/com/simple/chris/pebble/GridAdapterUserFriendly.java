@@ -37,24 +37,29 @@ public class GridAdapterUserFriendly extends ArrayAdapter<String> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ViewHolder mViewHolder = new ViewHolder();
-        if (convertView == null) {
-            LayoutInflater mInflator = (LayoutInflater) mContext.
-                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflator.inflate(R.layout.gridview_module_user_friendly, parent, false);
-            mViewHolder.mGradient = (ImageView) convertView.findViewById(R.id.backgroundGradient);
-            mViewHolder.mName = (TextView) convertView.findViewById(R.id.backgroundName);
-            convertView.setTag(mViewHolder);
-        } else {
-            mViewHolder = (ViewHolder) convertView.getTag();
+        try {
+            ViewHolder mViewHolder = new ViewHolder();
+            if (convertView == null) {
+                LayoutInflater mInflator = (LayoutInflater) mContext.
+                        getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = mInflator.inflate(R.layout.gridview_module_user_friendly, parent, false);
+                mViewHolder.mGradient = (ImageView) convertView.findViewById(R.id.backgroundGradient);
+                mViewHolder.mName = (TextView) convertView.findViewById(R.id.backgroundName);
+                convertView.setTag(mViewHolder);
+            } else {
+                mViewHolder = (ViewHolder) convertView.getTag();
+            }
+            GradientDrawable gradientDrawable = new GradientDrawable(
+                    GradientDrawable.Orientation.TL_BR,
+                    new int[]{leftColour[position], rightColour[position]}
+            );
+            mViewHolder.mGradient.setBackgroundDrawable(gradientDrawable);
+            mViewHolder.mName.setText(names[position]);
+
+        }catch (Exception e){
+            Log.e("TAG", ""+e.getLocalizedMessage());
+            //GradientsList.appCrashReceiver();
         }
-        GradientDrawable gradientDrawable = new GradientDrawable(
-                GradientDrawable.Orientation.TL_BR,
-                new int[]{leftColour[position], rightColour[position]}
-        );
-        mViewHolder.mGradient.setBackgroundDrawable(gradientDrawable);
-        mViewHolder.mName.setText(names[position]);
-        Log.e("Info", ""+(names[position]));
         return convertView;
     }
 
