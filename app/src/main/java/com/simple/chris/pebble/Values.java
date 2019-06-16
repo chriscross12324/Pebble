@@ -13,6 +13,7 @@ public class Values {
 
     public static boolean darkMode = true;
     public static boolean uiDesignerMode = false;
+    public static boolean askData = true;
 
     public static void saveValues(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE);
@@ -20,6 +21,7 @@ public class Values {
         editor.putBoolean("firstStart", firstStart);
         editor.putBoolean("darkMode", darkMode);
         editor.putBoolean("uiDesignerMode", uiDesignerMode);
+        editor.putBoolean("askData", askData);
         editor.apply();
     }
 
@@ -28,5 +30,6 @@ public class Values {
         firstStart = sharedPreferences.getBoolean("firstStart", true);
         darkMode = sharedPreferences.getBoolean("darkMode", true);
         uiDesignerMode = sharedPreferences.getBoolean("uiDesignerMode", false);
+        askData = sharedPreferences.getBoolean("askData", true);
     }
 }

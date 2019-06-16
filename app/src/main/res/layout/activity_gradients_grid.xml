@@ -22,7 +22,8 @@
         android:layout_alignParentTop="true"
         android:layout_margin="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:alpha="0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -95,15 +96,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@color/colorLightThemeForeground" />
+
         <ImageView
             android:id="@+id/title"
             android:layout_width="120px"
             android:layout_height="660px"
             android:background="@drawable/gradients_title"
-            android:scaleType="fitXY"
             android:backgroundTint="?PrimaryTextColour"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/imageView8"
-            app:layout_constraintTop_toBottomOf="@+id/imageView9"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView9" />
 
         <!--<TextView
             android:id="@+id/textView5"

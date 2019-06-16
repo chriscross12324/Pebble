@@ -55,10 +55,10 @@ public class GradientsList extends AppCompatActivity {
     public ArrayList<Integer> colours;
     ImageView top, title, bottom;
     GridView gridView;
-    Dialog noConnectionDialog, cellularDataDialog;
-    Button openSystemSettingsNoConnection, openSystemSettingsCellularData, continueButton, retry;
+    Dialog noConnectionDialog, cellularDataWarningDialog;
+    Button openSystemSettingsNoConnection, openSystemSettingsCellularData, continueButton, dontAskAgain, tryWifi;
     ConstraintLayout titleHolder;
-    LinearLayout connectingDialog;
+    LinearLayout connectingDialog, retry, useButton;
     SwipeRefreshLayout swipeToRefresh;
     List<String> topLeftHex = new ArrayList<>();
     List<String> bottomRightHex = new ArrayList<>();
@@ -100,7 +100,7 @@ public class GradientsList extends AppCompatActivity {
 
         //Create Dialogs
         noConnectionDialog = new Dialog(this);
-        cellularDataDialog = new Dialog(this);
+        cellularDataWarningDialog = new Dialog(this);
         top = findViewById(R.id.imageView9);
         bottom = findViewById(R.id.imageView8);
         title = findViewById(R.id.title);
@@ -141,7 +141,11 @@ public class GradientsList extends AppCompatActivity {
         });
         if (isInterenetConnected()) {
             if (isNetworkTypeCellular()) {
-                showCellularWarningDialog();
+                if (Values.askData){
+                    showCellularWarningDialog();
+                }else {
+                    getItems();
+                }
             } else {
                 getItems();
             }
@@ -309,9 +313,9 @@ public class GradientsList extends AppCompatActivity {
 
         WindowManager.LayoutParams lp = noConnectionDialog.getWindow().getAttributes();
         Window window = noConnectionDialog.getWindow();
-        lp.dimAmount = 0.8f;
+        lp.dimAmount = 0f;
         noConnectionDialog.getWindow().setAttributes(lp);
-        lp.gravity = Gravity.BOTTOM;
+        lp.gravity = Gravity.CENTER;
         window.setAttributes(lp);
 
         retry.setOnClickListener(v -> {
@@ -337,36 +341,58 @@ public class GradientsList extends AppCompatActivity {
     }
 
     public void showCellularWarningDialog() {
-        cellularDataDialog.setContentView(R.layout.dialog_cell_wifi_used);
-        continueButton = cellularDataDialog.findViewById(R.id.continueButton);
-        openSystemSettingsCellularData = cellularDataDialog.findViewById(R.id.openSystemSettingsButton);
+        cellularDataWarningDialog.setContentView(R.layout.dialog_data_warning);
+        useButton = cellularDataWarningDialog.findViewById(R.id.useButton);
+        dontAskAgain = cellularDataWarningDialog.findViewById(R.id.dontAskAgain);
+        tryWifi = cellularDataWarningDialog.findViewById(R.id.tryWifi);
 
-        WindowManager.LayoutParams lp = cellularDataDialog.getWindow().getAttributes();
-        Window window = cellularDataDialog.getWindow();
-        lp.dimAmount = 0.8f;
-        cellularDataDialog.getWindow().setAttributes(lp);
-        lp.gravity = Gravity.BOTTOM;
+        WindowManager.LayoutParams lp = cellularDataWarningDialog.getWindow().getAttributes();
+        Window window = cellularDataWarningDialog.getWindow();
+        lp.dimAmount = 0f;
+        cellularDataWarningDialog.getWindow().setAttributes(lp);
+        lp.gravity = Gravity.CENTER;
         window.setAttributes(lp);
 
-        continueButton.setOnClickListener(v -> {
-            cellularDataDialog.dismiss();
+        useButton.setOnClickListener(v -> {
+            cellularDataWarningDialog.dismiss();
             if (isInterenetConnected()) {
                 getItems();
             } else {
                 showNoConnectionDialog();
             }
         });
-        openSystemSettingsCellularData.setOnClickListener(v -> {
-            noConnectionDialog.dismiss();
-            startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
+        dontAskAgain.setOnClickListener(v -> {
+            cellularDataWarningDialog.dismiss();
+            if (isInterenetConnected()) {
+                Values.askData = false;
+                getItems();
+            } else {
+                showNoConnectionDialog();
+            }
+        });
+        tryWifi.setOnClickListener(v -> {
+            cellularDataWarningDialog.dismiss();
+            if (isInterenetConnected()) {
+                if (isNetworkTypeCellular()) {
+                    showCellularWarningDialog();
+                } else {
+                    getItems();
+                }
+            } else {
+                showNoConnectionDialog();
+            }
         });
 
-        cellularDataDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        cellularDataDialog.setCancelable(false);
-        cellularDataDialog.show();
+        cellularDataWarningDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        cellularDataWarningDialog.setCancelable(false);
+        cellularDataWarningDialog.show();
     }
 
     public void playConnectingDialog() {
+        ObjectAnimator OA1 = ObjectAnimator.ofFloat(connectingDialog, "alpha", 1);
+        OA1.setDuration(300);
+        OA1.setInterpolator(new LinearInterpolator());
+        OA1.start();
         ImageView connectingAnimation = findViewById(R.id.animationView);
 
         connectingAnimation.setBackgroundResource(R.drawable.loading_animation);
@@ -396,10 +422,10 @@ public class GradientsList extends AppCompatActivity {
     public void onModuleClick(AdapterView<?> parent, View view, int position, long id){
         Intent intent = new Intent(this, GradientDetails.class);
         HashMap<String, String> map = (HashMap) parent.getItemAtPosition(position);
-        String backgroundName = map.get("backgroundName").toString();
-        String leftColour = map.get("leftColour").toString();
-        String rightColour = map.get("rightColour").toString();
-        String description = map.get("description").toString();
+        String backgroundName = map.get("backgroundName");
+        String leftColour = map.get("leftColour");
+        String rightColour = map.get("rightColour");
+        String description = map.get("description");
 
         intent.putExtra("backgroundName", backgroundName);
         intent.putExtra("leftColour", leftColour);

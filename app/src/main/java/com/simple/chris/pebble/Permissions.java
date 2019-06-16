@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,7 +16,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class Permissions extends AppCompatActivity {
 
@@ -47,8 +45,8 @@ public class Permissions extends AppCompatActivity {
         wifiPermission = new Dialog(this);
         dataWarning = new Dialog(this);
 
-        wifiPermission.setContentView(R.layout.dialog_permission_wifi);
-        dataWarning.setContentView(R.layout.dialog_warning_data);
+        wifiPermission.setContentView(R.layout.dialog_wifi);
+        dataWarning.setContentView(R.layout.dialog_data);
 
         understandButtonWifi = wifiPermission.findViewById(R.id.understandButton);
         understandButtonData = dataWarning.findViewById(R.id.understandButton);
