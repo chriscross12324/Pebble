@@ -11,13 +11,15 @@ public class Values {
 
     public static String currentActivity;
 
-    public static boolean darkMode = true;
-    public static boolean uiDesignerMode = false;
-    public static boolean askData = true;
+    public static boolean vibrations;
+    public static boolean darkMode;
+    public static boolean uiDesignerMode;
+    public static boolean askData;
 
     public static void saveValues(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("vibrations", vibrations);
         editor.putBoolean("firstStart", firstStart);
         editor.putBoolean("darkMode", darkMode);
         editor.putBoolean("uiDesignerMode", uiDesignerMode);
@@ -27,6 +29,7 @@ public class Values {
 
     public static void loadValues(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE);
+        vibrations = sharedPreferences.getBoolean("vibrations", true);
         firstStart = sharedPreferences.getBoolean("firstStart", true);
         darkMode = sharedPreferences.getBoolean("darkMode", true);
         uiDesignerMode = sharedPreferences.getBoolean("uiDesignerMode", false);

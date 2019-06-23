@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -16,6 +17,7 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -28,7 +30,6 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,30 +49,19 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-public class GradientsList extends AppCompatActivity {
+public class GradientsList extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
     public ArrayList<Integer> colours;
     ImageView top, title, bottom;
     GridView gridView;
     Dialog noConnectionDialog, cellularDataWarningDialog;
-    Button openSystemSettingsNoConnection, openSystemSettingsCellularData, continueButton, dontAskAgain, tryWifi;
+    Button openSystemSettingsNoConnection, dontAskAgain, tryWifi;
     ConstraintLayout titleHolder;
     LinearLayout connectingDialog, retry, useButton;
     SwipeRefreshLayout swipeToRefresh;
-    List<String> topLeftHex = new ArrayList<>();
-    List<String> bottomRightHex = new ArrayList<>();
-    List<String> backgroundNames = new ArrayList<>();
-    List<Integer> leftColours = new ArrayList<>();
-    List<Integer> rightColours = new ArrayList<>();
-    List<String> descriptions = new ArrayList<>();
-    String[] topLeftHexx;
-    String[] bottomRightHexx;
-    String[] backgroundNamess;
-    int[] leftColourss;
-    int[] rightColourss;
-    String[] descriptionss;
+
+    GridAdapterUserFriendly US;
 
     int screenHeight;
 
@@ -111,6 +101,10 @@ public class GradientsList extends AppCompatActivity {
         colours = new ArrayList<>();
 
         gridView = findViewById(R.id.gv_items);
+        gridView.setOnItemClickListener((parent, view, position, id) -> {
+            HashMap<String, String> map = (HashMap<String, String>)parent.getItemAtPosition(position);
+            Toast.makeText(this, ""+map.get("backgroundName"), Toast.LENGTH_SHORT).show();
+        });
         gridView.postDelayed(() -> {
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -119,25 +113,13 @@ public class GradientsList extends AppCompatActivity {
         }, 10);
         gridView.setAlpha(1);
         titleHolder.setAlpha(0);
-        // gradientsFound = (TextView) connectingDialog.findViewById(R.id.gradientsFound);
-        //setBlurView();
-        //setAddGradientBlur();
-        swipeToRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeToRefresh);
-        //swipeToRefresh.setVisibility(View.GONE);
-        swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //Arrays.fill(backgroundNamess, null);
-                //Arrays.fill(leftColourss, null);
-                //Arrays.fill(rightColourss, null);
-                //Arrays.fill(descriptionss, null);
-                //getItems();
-                //swipeToRefresh.setRefreshing(true);
-                Intent GL = new Intent(GradientsList.this, GradientsList.class);
-                startActivity(GL);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
-            }
+
+        swipeToRefresh = findViewById(R.id.swipeToRefresh);
+        swipeToRefresh.setOnRefreshListener(() -> {
+            Intent GL = new Intent(GradientsList.this, GradientsList.class);
+            startActivity(GL);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            finish();
         });
         if (isInterenetConnected()) {
             if (isNetworkTypeCellular()) {
@@ -157,9 +139,6 @@ public class GradientsList extends AppCompatActivity {
 
     private void getItems() {
         playConnectingDialog();
-        new Handler().postDelayed(() -> {
-            //swipeToRefresh.setRefreshing(false);
-        }, 50);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getItems",
                 this::parseItems,
@@ -169,7 +148,7 @@ public class GradientsList extends AppCompatActivity {
                 }
         );
 
-        int socketTimeOut = 30000;
+        int socketTimeOut = 10000;
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
         stringRequest.setRetryPolicy(policy);
@@ -182,37 +161,28 @@ public class GradientsList extends AppCompatActivity {
     private void parseItems(String jsonResponse) {
         //Log.e("Info", "Got to 'parseItems' with response: " + jsonResponse);
 
+        ArrayList<HashMap<String, String>> list = new ArrayList<>();
+
         try {
             JSONObject jobj = new JSONObject(jsonResponse);
             JSONArray jarray = jobj.getJSONArray("items");
 
             for (int i = jarray.length() - 1; i >= 0; i--) { //int i = 0; i < jarray.length(); i++
 
-                // Gets and parses topLeftHex
-                topLeftHex.add(jarray.getJSONObject(i).getString("leftColour"));
-                topLeftHexx = topLeftHex.toArray(new String[0]);
+                JSONObject jo = jarray.getJSONObject(i);
 
-                // Gets and parses bottomRightHex
-                bottomRightHex.add(jarray.getJSONObject(i).getString("rightColour"));
-                bottomRightHexx = bottomRightHex.toArray(new String[0]);
+                String backgroundName = jo.getString("backgroundName").replace(" ", "\n");
+                String leftColour = jo.getString("leftColour");
+                String rightColour = jo.getString("rightColour");
+                String description = jo.getString("description");
 
-                // Gets and parses backgroundName
-                backgroundNames.add(jarray.getJSONObject(i).getString("backgroundName").replace(" ", "\n"));
-                backgroundNamess = backgroundNames.toArray(new String[0]);
+                HashMap<String, String> item = new HashMap<>();
+                item.put("backgroundName", backgroundName);
+                item.put("leftColour", leftColour);
+                item.put("rightColour", rightColour);
+                item.put("description", description);
 
-                // Gets and parses leftColour
-                String left = jarray.getJSONObject(i).getString("leftColour");
-                leftColours.add(Color.parseColor(left));
-                leftColourss = leftColours.stream().mapToInt(Integer::intValue).toArray();
-
-                // Gets and parses rightColour
-                String right = jarray.getJSONObject(i).getString("rightColour");
-                rightColours.add(Color.parseColor(right));
-                rightColourss = rightColours.stream().mapToInt(Integer::intValue).toArray();
-
-                // Gets and parses description
-                descriptions.add(jarray.getJSONObject(i).getString("description"));
-                descriptionss = descriptions.toArray(new String[0]);
+                list.add(item);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -222,16 +192,24 @@ public class GradientsList extends AppCompatActivity {
         }
 
         if (Values.uiDesignerMode) {
-            GridAdapterUIDesigner gridAdapterUIDesigner = new GridAdapterUIDesigner(GradientsList.this, topLeftHexx, bottomRightHexx, backgroundNamess, leftColourss, rightColourss);
-            gridView.setAdapter(gridAdapterUIDesigner);
+            try {
+                GridAdapterUIDesigner gridAdapterUIDesigner = new GridAdapterUIDesigner(GradientsList.this, list);
+                gridView.setAdapter(gridAdapterUIDesigner);
+            }catch (Exception e){
+                Log.e("Err", ""+e.getLocalizedMessage());
+            }
+
         } else {
-            GridAdapterUserFriendly gridAdapterUserFriendly = new GridAdapterUserFriendly(GradientsList.this, backgroundNamess, leftColourss, rightColourss);
-            gridView.setAdapter(gridAdapterUserFriendly);
+            try {
+                GridAdapterUserFriendly gridAdapterUserFriendly = new GridAdapterUserFriendly(GradientsList.this, list);
+                gridView.setAdapter(gridAdapterUserFriendly);
+            }catch (Exception e){
+                Log.e("Err", ""+e.getLocalizedMessage());
+            }
+
         }
 
-
         //FAB.setVisibility(View.VISIBLE);
-
         Handler h1 = new Handler();
         h1.postDelayed(() -> {
             Handler h1I = new Handler();
@@ -400,29 +378,24 @@ public class GradientsList extends AppCompatActivity {
         animationDrawable.start();
     }
 
-    /*private void setBlurView() {
-        float radius = 25f;
 
-        View decorView = getWindow().getDecorView();
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 
-        ViewGroup rootView = (ViewGroup) decorView.findViewById(android.R.id.content);
-        Drawable windowBackground = decorView.getBackground();
-        title.setupWith(rootView)
-                .setFrameClearDrawable(windowBackground)
-                .setBlurAlgorithm(new RenderScriptBlur(this))
-                .setBlurRadius(radius)
-                .setHasFixedTransformationMatrix(true);
-        FAB.setupWith(rootView)
-                .setFrameClearDrawable(windowBackground)
-                .setBlurAlgorithm(new RenderScriptBlur(this))
-                .setBlurRadius(radius)
-                .setHasFixedTransformationMatrix(true);
-    }*/
+        Log.e("INFO", "Parent: "+parent+" View: "+view+" Position: "+position+" ID: "+id);
+        //Intent intent = new Intent(this, GradientDetails.class);
+        //@SuppressWarnings("unchecked")
 
-    public void onModuleClick(AdapterView<?> parent, View view, int position, long id){
-        Intent intent = new Intent(this, GradientDetails.class);
-        HashMap<String, String> map = (HashMap) parent.getItemAtPosition(position);
-        String backgroundName = map.get("backgroundName");
+        try{
+            //Pair<String,String> map = new Pair<>();
+            //map = parent.getItemAtPosition(position);
+        }catch (Exception e){
+            Log.e("ERR", ""+e.getLocalizedMessage());
+        }
+
+
+
+        /*String backgroundName = map.get("backgroundName");
         String leftColour = map.get("leftColour");
         String rightColour = map.get("rightColour");
         String description = map.get("description");
@@ -432,7 +405,10 @@ public class GradientsList extends AppCompatActivity {
         intent.putExtra("rightColour", rightColour);
         intent.putExtra("description", description);
 
-        startActivity(intent);
+        startActivity(intent);*/
+
+        Toast.makeText(this, "Clicked: ", Toast.LENGTH_SHORT).show();
+
 
     }
 
@@ -458,4 +434,5 @@ public class GradientsList extends AppCompatActivity {
             Log.e("TAG", ""+e.getLocalizedMessage());
         }
     }
+
 }
