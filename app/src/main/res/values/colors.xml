@@ -8,7 +8,7 @@
     <color name="logoColourBottomRight">#D53593</color>
 
     <color name="colorDarkThemeForeground">#222930</color><!--#2E303D-->
-    <color name="colorDarkThemeBackground">#13191f</color>
+    <color name="colorDarkThemeBackground">#000000</color>
     <color name="colorDarkThemeTextColour">#BEBEBE</color>
     <color name="colorDarkThemeBlurColour">#4013191f</color>
 
@@ -20,6 +20,7 @@
     <!-- Login Screen -->
     <color name="editTextColour">#80FFFFFF</color>
     <color name="editTextLineColour">#90FFFFFF</color>
+    <color name="Colour_Placeholder">#76E646</color>
 
 
 </resources>

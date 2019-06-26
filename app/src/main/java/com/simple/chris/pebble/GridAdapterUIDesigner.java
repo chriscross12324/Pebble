@@ -74,6 +74,7 @@ public class GridAdapterUIDesigner extends BaseAdapter {
                     new int[]{leftColour, rightColour}
             );
             mViewHolder.mGradient.setBackgroundDrawable(gradientDrawable);
+            mViewHolder.mGradient.setTransitionName(details.get("backgroundName"));
             GradientDrawable topColourCircle = new GradientDrawable();
             topColourCircle.setShape(GradientDrawable.OVAL);
             topColourCircle.setStroke(5, leftColour);

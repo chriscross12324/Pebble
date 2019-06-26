@@ -7,17 +7,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class GridAdapterUserFriendly extends BaseAdapter {
 
@@ -61,8 +60,9 @@ public class GridAdapterUserFriendly extends BaseAdapter {
                 LayoutInflater mInflator = (LayoutInflater) mContext.
                         getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = mInflator.inflate(R.layout.gridview_module_user_friendly, parent, false);
+                mViewHolder.cardView = convertView.findViewById(R.id.cardView);
                 mViewHolder.mGradient = (ImageView) convertView.findViewById(R.id.backgroundGradient);
-                mViewHolder.mName = (TextView) convertView.findViewById(R.id.backgroundName);
+                mViewHolder.mName = (TextView) convertView.findViewById(R.id.backgroundNameTextView);
                 convertView.setTag(mViewHolder);
             } else {
                 mViewHolder = (ViewHolder) convertView.getTag();
@@ -71,7 +71,11 @@ public class GridAdapterUserFriendly extends BaseAdapter {
                     GradientDrawable.Orientation.TL_BR,
                     new int[]{leftColour, rightColour}
             );
+            mViewHolder.cardView.setTransitionName(details.get("backgroundName"));
+            mViewHolder.mGradient.setTransitionName(details.get("backgroundName"));
             mViewHolder.mGradient.setBackgroundDrawable(gradientDrawable);
+            mViewHolder.mGradient.setTransitionName(details.get("backgroundName"));
+            Log.e("ERR", mViewHolder.mGradient.getTransitionName());
             mViewHolder.mName.setText(details.get("backgroundName"));
 
         }catch (Exception e){
@@ -82,6 +86,7 @@ public class GridAdapterUserFriendly extends BaseAdapter {
     }
 
     static class ViewHolder {
+        CardView cardView;
         ImageView mGradient;
         TextView mName;
     }

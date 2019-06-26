@@ -1,6 +1,9 @@
 package com.simple.chris.pebble;
 
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.app.ActivityOptions;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +26,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
@@ -34,6 +38,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -52,7 +57,6 @@ import java.util.HashMap;
 
 public class GradientsList extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
-    public ArrayList<Integer> colours;
     ImageView top, title, bottom;
     GridView gridView;
     Dialog noConnectionDialog, cellularDataWarningDialog;
@@ -61,9 +65,11 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
     LinearLayout connectingDialog, retry, useButton;
     SwipeRefreshLayout swipeToRefresh;
 
-    GridAdapterUserFriendly US;
-
     int screenHeight;
+    int imageViewHeight;
+
+    Object module;
+    View moduleView;
 
 
 
@@ -98,13 +104,9 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        colours = new ArrayList<>();
 
         gridView = findViewById(R.id.gv_items);
-        gridView.setOnItemClickListener((parent, view, position, id) -> {
-            HashMap<String, String> map = (HashMap<String, String>)parent.getItemAtPosition(position);
-            Toast.makeText(this, ""+map.get("backgroundName"), Toast.LENGTH_SHORT).show();
-        });
+        gridView.setOnItemClickListener(this);
         gridView.postDelayed(() -> {
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -381,21 +383,15 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+        Intent intent = new Intent(GradientsList.this, GradientDetails.class);
+        HashMap<String, String> map = (HashMap<String, String>)parent.getItemAtPosition(position);
 
-        Log.e("INFO", "Parent: "+parent+" View: "+view+" Position: "+position+" ID: "+id);
-        //Intent intent = new Intent(this, GradientDetails.class);
-        //@SuppressWarnings("unchecked")
+        gridView.setEnabled(false);
 
-        try{
-            //Pair<String,String> map = new Pair<>();
-            //map = parent.getItemAtPosition(position);
-        }catch (Exception e){
-            Log.e("ERR", ""+e.getLocalizedMessage());
-        }
+        moduleView = view;
+        module = parent;
 
-
-
-        /*String backgroundName = map.get("backgroundName");
+        String backgroundName = map.get("backgroundName");
         String leftColour = map.get("leftColour");
         String rightColour = map.get("rightColour");
         String description = map.get("description");
@@ -405,11 +401,63 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
         intent.putExtra("rightColour", rightColour);
         intent.putExtra("description", description);
 
-        startActivity(intent);*/
+        ImageView imageView = view.findViewById(R.id.backgroundGradient);
+        ConstraintLayout constraintLayout = view.findViewById(R.id.holder);
+        ValueAnimator slideAnimation = ValueAnimator.ofInt(imageView.getHeight(), constraintLayout.getHeight()).setDuration(600);
+        slideAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Integer value = (Integer) animation.getAnimatedValue();
+                imageView.getLayoutParams().height = value.intValue();
+                imageView.requestLayout();
+            }
+        });
+        AnimatorSet set = new AnimatorSet();
+        set.play(slideAnimation);
+        set.setInterpolator(new DecelerateInterpolator(2));
+        set.start();
+        imageViewHeight = imageView.getHeight();
 
-        Toast.makeText(this, "Clicked: ", Toast.LENGTH_SHORT).show();
+        Pair<View, String> cardView = Pair.create(view.findViewById(R.id.cardView), backgroundName);
+        Pair<View, String> gradientView = Pair.create(view.findViewById(R.id.backgroundGradient), backgroundName);
 
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(GradientsList.this, view.findViewById(R.id.cardView), backgroundName);
+                startActivity(intent, options.toBundle());
+            }
+        }, 600);
 
+    }
+
+    @Override
+    protected void onResume() {
+        if (Values.currentActivity != null && Values.currentActivity.equals("GradientDetails")){
+            ImageView imageView = moduleView.findViewById(R.id.backgroundGradient);
+            imageView.getLayoutParams().height = imageViewHeight;
+            imageView.requestLayout();
+            Log.e("INFO", "Resumed");
+
+            ValueAnimator slideAnimation = ValueAnimator.ofInt(imageView.getHeight(), imageViewHeight).setDuration(600);
+            slideAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    Integer value = (Integer) animation.getAnimatedValue();
+                    imageView.getLayoutParams().height = value.intValue();
+                    imageView.requestLayout();
+                }
+            });
+            AnimatorSet set = new AnimatorSet();
+            set.play(slideAnimation);
+            set.setInterpolator(new DecelerateInterpolator(3));
+            set.start();
+
+            Values.currentActivity = "GradientsList";
+            gridView.setEnabled(true);
+        }
+        super.onResume();
     }
 
     @Override
