@@ -8,8 +8,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -18,12 +20,15 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.transition.PathMotion;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
@@ -282,7 +287,6 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         boolean isData = networkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
-        //Log.e("Connection", "" + isData);
         return isData;
     }
 
@@ -438,7 +442,6 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
             ImageView imageView = moduleView.findViewById(R.id.backgroundGradient);
             imageView.getLayoutParams().height = imageViewHeight;
             imageView.requestLayout();
-            Log.e("INFO", "Resumed");
 
             ValueAnimator slideAnimation = ValueAnimator.ofInt(imageView.getHeight(), imageViewHeight).setDuration(600);
             slideAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -482,5 +485,7 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
             Log.e("TAG", ""+e.getLocalizedMessage());
         }
     }
+
+
 
 }

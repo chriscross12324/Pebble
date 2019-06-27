@@ -5,6 +5,7 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/new_activity_transition</item>
     </style>
 
     <style name="ThemeLight" parent="Main">
@@ -53,6 +54,7 @@
         <item name="android:fitsSystemWindows">true</item>
         <item name="android:windowFullscreen">true</item>
     </style>
+
 
 
 </resources>

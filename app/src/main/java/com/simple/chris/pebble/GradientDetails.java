@@ -9,6 +9,8 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +27,7 @@ public class GradientDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         isDarkTheme();
         setContentView(R.layout.activity_gradient_details);
-
+        postponeEnterTransition();
         Values.currentActivity = "GradientDetails";
 
         /** Declare UI Elements */
@@ -38,19 +40,12 @@ public class GradientDetails extends AppCompatActivity {
         backgroundNameTextView = findViewById(R.id.backgroundNameTextView);
         descriptionTextView = findViewById(R.id.descriptionTextView);
 
-
-        if (isDarkTheme()){
-            cardView.setBackgroundResource(R.drawable.placeholder_gradient_dark);
-        }else {
-            cardView.setBackgroundResource(R.drawable.placeholder_gradient_light);
-        }
-
         Intent intent = getIntent();
         backgroundName = intent.getStringExtra("backgroundName");
         leftColour = intent.getStringExtra("leftColour");
         rightColour = intent.getStringExtra("rightColour");
         description = intent.getStringExtra("description");
-        Toast.makeText(this, ""+backgroundName, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, ""+backgroundName, Toast.LENGTH_SHORT).show();
         //Log.e("INFO", backgroundName);
 
         int left = Color.parseColor(leftColour);
@@ -61,10 +56,18 @@ public class GradientDetails extends AppCompatActivity {
                 new int[]{left, right}
         );
         gradientViewer.setBackgroundDrawable(gradientDrawable);
+        //cardView.setCardBackgroundColor(right);
         backgroundNameTextView.setText(backgroundName);
         descriptionTextView.setText(description);
         cardView.setTransitionName(backgroundName);
-        gradientViewer.setTransitionName(backgroundName);
+        gradientViewer.setTransitionName(backgroundName+"1");
+
+        gradientViewer.post(new Runnable() {
+            @Override
+            public void run() {
+                scheduledStartPostponedTransition(cardView);
+            }
+        });
 
     }
 
@@ -76,6 +79,19 @@ public class GradientDetails extends AppCompatActivity {
             setTheme(R.style.ThemeLight);
             return false;
         }
+    }
+
+    private void scheduledStartPostponedTransition(final View sharedElement){
+        sharedElement.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        sharedElement.getViewTreeObserver().removeOnPreDrawListener(this);
+                        startPostponedEnterTransition();
+                        return true;
+                    }
+                }
+        );
     }
 
     /*@Override

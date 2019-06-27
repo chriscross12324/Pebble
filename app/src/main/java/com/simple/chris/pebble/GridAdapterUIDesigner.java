@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,12 +55,13 @@ public class GridAdapterUIDesigner extends BaseAdapter {
             details = map.get(position);
             leftColour = Color.parseColor(details.get("leftColour"));
             rightColour = Color.parseColor(details.get("rightColour"));
-
             ViewHolder mViewHolder = new ViewHolder();
+
             if (convertView == null) {
                 LayoutInflater mInflator = (LayoutInflater) mContext.
                         getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = mInflator.inflate(R.layout.gridview_module_ui_designer, parent, false);
+                mViewHolder.cardView = convertView.findViewById(R.id.cardView);
                 mViewHolder.mGradient = (ImageView) convertView.findViewById(R.id.backgroundGradient);
                 mViewHolder.mTopColourHex = (TextView) convertView.findViewById(R.id.topColourHex);
                 mViewHolder.mBottomColourHex = (TextView) convertView.findViewById(R.id.bottomColourHex);
@@ -88,13 +90,11 @@ public class GridAdapterUIDesigner extends BaseAdapter {
         }catch (Exception e){
             Log.e("UID", ""+e.getLocalizedMessage());
         }
-
-
-        //mViewHolder.mName.setText(names[position]);
         return convertView;
     }
 
     static class ViewHolder {
+        CardView cardView;
         ImageView mGradient;
         TextView mTopColourHex;
         TextView mBottomColourHex;

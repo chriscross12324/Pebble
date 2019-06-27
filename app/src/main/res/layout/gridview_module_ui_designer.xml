@@ -17,18 +17,20 @@
     app:cardCornerRadius="15dp"
     app:cardElevation="8dp"
     app:cardPreventCornerOverlap="true"
-    app:layout_gravity="left">
+    app:layout_gravity="left"
+    android:id="@+id/cardView">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/holder"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="196dp"
         android:background="@drawable/module_background">
 
         <ImageView
             android:id="@+id/backgroundGradient"
             android:layout_width="0dp"
             android:layout_height="120dp"
-            android:background="#76E646"
+            android:background="@color/Colour_Placeholder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -64,7 +66,7 @@
                     android:layout_marginStart="8dp"
                     android:fontFamily="@font/googlesans_bold"
                     android:gravity="center_vertical"
-                    android:text="#FFFFFF"
+                    android:text="#76E646"
                     android:textAlignment="center"
                     android:textColor="?PrimaryTextColour"
                     android:textSize="16sp"
@@ -92,7 +94,7 @@
                     android:layout_marginStart="8dp"
                     android:fontFamily="@font/googlesans_bold"
                     android:gravity="center_vertical"
-                    android:text="#000000"
+                    android:text="#76E646"
                     android:textAlignment="center"
                     android:textColor="?PrimaryTextColour"
                     android:textSize="16sp"

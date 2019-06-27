@@ -71,11 +71,8 @@ public class GridAdapterUserFriendly extends BaseAdapter {
                     GradientDrawable.Orientation.TL_BR,
                     new int[]{leftColour, rightColour}
             );
-            mViewHolder.cardView.setTransitionName(details.get("backgroundName"));
-            mViewHolder.mGradient.setTransitionName(details.get("backgroundName"));
             mViewHolder.mGradient.setBackgroundDrawable(gradientDrawable);
-            mViewHolder.mGradient.setTransitionName(details.get("backgroundName"));
-            Log.e("ERR", mViewHolder.mGradient.getTransitionName());
+            mViewHolder.cardView.setTransitionName(details.get("backgroundName"));
             mViewHolder.mName.setText(details.get("backgroundName"));
 
         }catch (Exception e){
