@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -11,12 +12,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class GradientDetails extends AppCompatActivity {
-    ConstraintLayout background;
     CardView cardView;
     ImageView backButton, gradientViewer;
     TextView backgroundNameTextView, descriptionTextView;
@@ -35,6 +36,7 @@ public class GradientDetails extends AppCompatActivity {
         //CardView
         cardView = findViewById(R.id.cardView);
         //ImageView
+        backButton = findViewById(R.id.backButton);
         gradientViewer = findViewById(R.id.gradientViewer);
         //TextView
         backgroundNameTextView = findViewById(R.id.backgroundNameTextView);
@@ -66,9 +68,21 @@ public class GradientDetails extends AppCompatActivity {
             @Override
             public void run() {
                 scheduledStartPostponedTransition(cardView);
+                ObjectAnimator OA1 = ObjectAnimator.ofFloat(backButton, "alpha", 1);
+                OA1.setDuration(200);
+                OA1.setInterpolator(new LinearInterpolator());
+                OA1.start();
             }
         });
 
+        backButton.setOnClickListener(v -> {
+            ObjectAnimator OA2 = ObjectAnimator.ofFloat(backButton, "alpha", 0);
+            OA2.setDuration(200);
+            OA2.setInterpolator(new LinearInterpolator());
+            OA2.start();
+            this.onBackPressed();
+
+        });
     }
 
     public boolean isDarkTheme(){

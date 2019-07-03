@@ -8,10 +8,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -20,18 +17,13 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.transition.PathMotion;
-import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.Pair;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
@@ -39,11 +31,10 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -59,8 +50,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
-public class GradientsList extends AppCompatActivity implements AdapterView.OnItemClickListener{
+public class GradientsList extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     ImageView top, title, bottom;
     GridView gridView;
@@ -75,8 +67,6 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
 
     Object module;
     View moduleView;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +113,7 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
 
         swipeToRefresh = findViewById(R.id.swipeToRefresh);
         swipeToRefresh.setOnRefreshListener(() -> {
+            gridView.setEnabled(false);
             Intent GL = new Intent(GradientsList.this, GradientsList.class);
             startActivity(GL);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -130,9 +121,9 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
         });
         if (isInterenetConnected()) {
             if (isNetworkTypeCellular()) {
-                if (Values.askData){
+                if (Values.askData) {
                     showCellularWarningDialog();
-                }else {
+                } else {
                     getItems();
                 }
             } else {
@@ -166,8 +157,6 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void parseItems(String jsonResponse) {
-        //Log.e("Info", "Got to 'parseItems' with response: " + jsonResponse);
-
         ArrayList<HashMap<String, String>> list = new ArrayList<>();
 
         try {
@@ -194,7 +183,7 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("Info", "Failed " + e.getLocalizedMessage());
-        } catch (Exception ex){
+        } catch (Exception ex) {
             Log.e("Info", "Failed " + ex.getLocalizedMessage());
         }
 
@@ -202,21 +191,20 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
             try {
                 GridAdapterUIDesigner gridAdapterUIDesigner = new GridAdapterUIDesigner(GradientsList.this, list);
                 gridView.setAdapter(gridAdapterUIDesigner);
-            }catch (Exception e){
-                Log.e("Err", ""+e.getLocalizedMessage());
+            } catch (Exception e) {
+                Log.e("Err", "" + e.getLocalizedMessage());
             }
 
         } else {
             try {
                 GridAdapterUserFriendly gridAdapterUserFriendly = new GridAdapterUserFriendly(GradientsList.this, list);
                 gridView.setAdapter(gridAdapterUserFriendly);
-            }catch (Exception e){
-                Log.e("Err", ""+e.getLocalizedMessage());
+            } catch (Exception e) {
+                Log.e("Err", "" + e.getLocalizedMessage());
             }
 
         }
 
-        //FAB.setVisibility(View.VISIBLE);
         Handler h1 = new Handler();
         h1.postDelayed(() -> {
             Handler h1I = new Handler();
@@ -247,55 +235,12 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
 
     }
 
-    private void getServerStatus() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://script.google.com/macros/s/AKfycbwAP_xOtxMg25Pi7kqqSkjRJtz8B_VHcJRdiTYXqEWd02yJUGg/exec?action=getStatus",
-                this::parseStatus,
-
-                error -> {
-
-                });
-        int socketTimeOut = 15000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(policy);
-        RequestQueue queue = Volley.newRequestQueue(this);
-        queue.add(stringRequest);
-    }
-
-    private void parseStatus(String jsonResponse) {
-        ArrayList<HashMap<String, String>> list = new ArrayList<>();
-        try {
-            JSONObject jobj = new JSONObject(jsonResponse);
-            JSONArray jarray = jobj.getJSONArray("items");
-            for (int i = 0; i < jarray.length(); i++) {
-                JSONObject jo = jarray.getJSONObject(i);
-                String serverStatus = jo.getString("serverStatus");
-                String serverMessage = jo.getString("serverMessage");
-            }
-        } catch (Exception ignored) {
-        }
-
-        Toast.makeText(this, "Status: " + list + "Message: ", Toast.LENGTH_SHORT).show();
-    }
-
-    public boolean isInterenetConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null;
-    }
-
-    public boolean isNetworkTypeCellular() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        boolean isData = networkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
-        return isData;
-    }
-
     public void showNoConnectionDialog() {
         noConnectionDialog.setContentView(R.layout.dialog_no_connection);
         retry = noConnectionDialog.findViewById(R.id.retryButton);
         openSystemSettingsNoConnection = noConnectionDialog.findViewById(R.id.openSystemSettingsButton);
 
-        WindowManager.LayoutParams lp = noConnectionDialog.getWindow().getAttributes();
+        WindowManager.LayoutParams lp = Objects.requireNonNull(noConnectionDialog.getWindow()).getAttributes();
         Window window = noConnectionDialog.getWindow();
         lp.dimAmount = 0f;
         noConnectionDialog.getWindow().setAttributes(lp);
@@ -330,7 +275,7 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
         dontAskAgain = cellularDataWarningDialog.findViewById(R.id.dontAskAgain);
         tryWifi = cellularDataWarningDialog.findViewById(R.id.tryWifi);
 
-        WindowManager.LayoutParams lp = cellularDataWarningDialog.getWindow().getAttributes();
+        WindowManager.LayoutParams lp = Objects.requireNonNull(cellularDataWarningDialog.getWindow()).getAttributes();
         Window window = cellularDataWarningDialog.getWindow();
         lp.dimAmount = 0f;
         cellularDataWarningDialog.getWindow().setAttributes(lp);
@@ -384,11 +329,12 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
         animationDrawable.start();
     }
 
-
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(GradientsList.this, GradientDetails.class);
-        HashMap<String, String> map = (HashMap<String, String>)parent.getItemAtPosition(position);
+
+        @SuppressWarnings("unchecked")
+        HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
 
         gridView.setEnabled(false);
 
@@ -408,49 +354,38 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
         ImageView imageView = view.findViewById(R.id.backgroundGradient);
         ConstraintLayout constraintLayout = view.findViewById(R.id.holder);
         ValueAnimator slideAnimation = ValueAnimator.ofInt(imageView.getHeight(), constraintLayout.getHeight()).setDuration(600);
-        slideAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                Integer value = (Integer) animation.getAnimatedValue();
-                imageView.getLayoutParams().height = value.intValue();
-                imageView.requestLayout();
-            }
+        slideAnimation.addUpdateListener(animation -> {
+            imageView.getLayoutParams().height = (Integer) animation.getAnimatedValue();
+            imageView.requestLayout();
         });
         AnimatorSet set = new AnimatorSet();
         set.play(slideAnimation);
         set.setInterpolator(new DecelerateInterpolator(2));
         set.start();
-        imageViewHeight = imageView.getHeight();
+        if (imageViewHeight == 0){
+            imageViewHeight = imageView.getHeight();
+        }
 
-        Pair<View, String> cardView = Pair.create(view.findViewById(R.id.cardView), backgroundName);
-        Pair<View, String> gradientView = Pair.create(view.findViewById(R.id.backgroundGradient), backgroundName);
 
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(GradientsList.this, view.findViewById(R.id.cardView), backgroundName);
-                startActivity(intent, options.toBundle());
-            }
+        handler.postDelayed(() -> {
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(GradientsList.this, view.findViewById(R.id.cardView), backgroundName);
+            startActivity(intent, options.toBundle());
         }, 600);
 
     }
 
     @Override
     protected void onResume() {
-        if (Values.currentActivity != null && Values.currentActivity.equals("GradientDetails")){
+        if (Values.currentActivity != null && Values.currentActivity.equals("GradientDetails")) {
             ImageView imageView = moduleView.findViewById(R.id.backgroundGradient);
             imageView.getLayoutParams().height = imageViewHeight;
             imageView.requestLayout();
 
             ValueAnimator slideAnimation = ValueAnimator.ofInt(imageView.getHeight(), imageViewHeight).setDuration(600);
-            slideAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    Integer value = (Integer) animation.getAnimatedValue();
-                    imageView.getLayoutParams().height = value.intValue();
-                    imageView.requestLayout();
-                }
+            slideAnimation.addUpdateListener(animation -> {
+                imageView.getLayoutParams().height = (Integer) animation.getAnimatedValue();
+                imageView.requestLayout();
             });
             AnimatorSet set = new AnimatorSet();
             set.play(slideAnimation);
@@ -464,7 +399,7 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         gridView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 2);
         super.onConfigurationChanged(newConfig);
     }
@@ -474,18 +409,24 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
 
     }
 
-    public static void appCrashReceiver(){
-        GradientsList gl = new GradientsList();
-        gl.appCrashHandler();
-    }
-    public void appCrashHandler(){
+    /*public void appCrashHandler() {
         try {
             titleHolder.setVisibility(View.INVISIBLE);
-        }catch (Exception e){
-            Log.e("TAG", ""+e.getLocalizedMessage());
+        } catch (Exception e) {
+            Log.e("TAG", "" + e.getLocalizedMessage());
         }
+    }*/
+
+    public boolean isInterenetConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
     }
 
+    public boolean isNetworkTypeCellular() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        return networkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+    }
 
 
 }

@@ -5,170 +5,173 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context=".GradientsList">
+    tools:context=".GradientsList"
+    android:background="#000000">
 
-    <ImageView
-        android:id="@+id/background"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/placeholder_gradient_dark"/>
-
-    <LinearLayout
-        android:id="@+id/connectingDialog"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:alpha="0">
-
-        <LinearLayout
+        app:cardCornerRadius="15dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="#000000">
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/background"
+                android:contentDescription="@string/descriptionBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/placeholder_gradient_dark"/>
 
             <LinearLayout
+                android:id="@+id/connectingDialog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical">
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:alpha="0">
 
-                <TextView
-                    android:id="@+id/connectingDialogTitle"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:fontFamily="@font/googlesans_bold"
-                    android:text="Connecting"
-                    android:textAlignment="center"
-                    android:textColor="?PrimaryTextColour"
-                    android:textSize="30dp" />
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
+                    tools:ignore="UselessParent">
 
-                <TextView
-                    android:id="@+id/connectingDialogBody"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:fontFamily="@font/googlesans_regular"
-                    android:text="We are connecting you to the\nserver"
-                    android:textAlignment="center"
-                    android:textColor="?PrimaryTextColour"
-                    android:textSize="20dp" />
+                    <TextView
+                        android:id="@+id/connectingDialogTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:fontFamily="@font/googlesans_bold"
+                        android:text="@string/connectingDialogTitle"
+                        android:textAlignment="center"
+                        android:textColor="?PrimaryTextColour"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:id="@+id/connectingDialogBody"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/googlesans_regular"
+                        android:text="@string/connectingDialogBody"
+                        android:textAlignment="center"
+                        android:textColor="?PrimaryTextColour"
+                        android:textSize="20sp" />
+
+                    <ImageView
+                        android:id="@+id/animationView"
+                        android:contentDescription="@string/descriptionAnimation"
+                        android:layout_width="100dp"
+                        android:layout_height="56.2dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="25dp"
+                        android:tint="?PrimaryTextColour"
+                        android:background="@drawable/loading_animation"
+                        android:backgroundTint="?PrimaryTextColour"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/titleHolder"
+                android:layout_width="120px"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="PxUsage">
 
                 <ImageView
-                    android:id="@+id/animationView"
-                    android:layout_width="100dp"
-                    android:layout_height="56.2dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="25dp"
+                    android:id="@+id/imageView9"
+                    android:contentDescription="@string/descriptionDecoration"
+                    android:layout_width="2dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="16dp"
                     android:tint="?PrimaryTextColour"
-                    android:background="@drawable/loading_animation"
-                    android:backgroundTint="?PrimaryTextColour"/>
+                    app:layout_constraintBottom_toTopOf="@+id/title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@color/colorLightThemeForeground" />
 
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
+                <ImageView
+                    android:id="@+id/title"
+                    android:contentDescription="@string/descriptionTitleGradients"
+                    android:layout_width="120px"
+                    android:layout_height="660px"
+                    android:background="@drawable/gradients_title"
+                    android:backgroundTint="?PrimaryTextColour"
+                    android:scaleType="fitXY"
+                    app:layout_constraintBottom_toTopOf="@+id/imageView8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView9"
+                    tools:ignore="PxUsage" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/titleHolder"
-        android:layout_width="120px"
-        android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent">
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:contentDescription="@string/descriptionDecoration"
+                    android:layout_width="2dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="32dp"
+                    android:tint="?PrimaryTextColour"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/title"
+                    app:srcCompat="@color/colorLightThemeForeground" />
 
-        <ImageView
-            android:id="@+id/imageView9"
-            android:layout_width="2dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="16dp"
-            android:tint="?PrimaryTextColour"
-            app:layout_constraintBottom_toTopOf="@+id/title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@color/colorLightThemeForeground" />
-
-        <ImageView
-            android:id="@+id/title"
-            android:layout_width="120px"
-            android:layout_height="660px"
-            android:background="@drawable/gradients_title"
-            android:backgroundTint="?PrimaryTextColour"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toTopOf="@+id/imageView8"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView9" />
-
-        <!--<TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/googlesans_bold"
-            android:gravity="center"
-            android:rotation="-90"
-            android:text="GRADIENTS"
-            android:textColor="#FFFFFF"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toTopOf="@+id/imageView8"
-            app:layout_constraintTop_toBottomOf="@+id/imageView9"
-            tools:layout_editor_absoluteY="302dp" />-->
-
-        <ImageView
-            android:id="@+id/imageView8"
-            android:layout_width="2dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="32dp"
-            android:tint="?PrimaryTextColour"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            app:srcCompat="@color/colorLightThemeForeground" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeToRefresh"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/titleHolder"
-        app:layout_constraintTop_toTopOf="parent">
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeToRefresh"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/titleHolder"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <GridView
-            android:id="@+id/gv_items"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:clipToPadding="false"
-            android:gravity="center"
-            android:horizontalSpacing="20dp"
-            android:numColumns="2"
-            android:overScrollMode="never"
-            android:paddingLeft="10dp"
-            android:paddingTop="32dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="32dp"
-            android:scrollbars="none"
-            android:verticalSpacing="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/titleHolder"
-            app:layout_constraintTop_toTopOf="parent" />
+                <GridView
+                    android:id="@+id/gv_items"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:clipToPadding="false"
+                    android:gravity="center"
+                    android:horizontalSpacing="20dp"
+                    android:numColumns="2"
+                    android:overScrollMode="never"
+                    android:paddingStart="10dp"
+                    android:paddingTop="32dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="32dp"
+                    android:scrollbars="none"
+                    android:verticalSpacing="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/titleHolder"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

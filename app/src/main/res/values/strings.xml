@@ -11,4 +11,10 @@
     <string name="dataWarningBody">You are trying to use cellular data, this can result in overage charges</string>
     <string name="internetBody">We need an active internet connection in order to connect to the server</string>
     <string name="dataBody">Using cellular data may result in overage fees, you will be warned before using data*</string>
+    <string name="descriptionDecoration">Decoration</string>
+    <string name="descriptionTitleGradients">Title</string>
+    <string name="descriptionAnimation">Animation</string>
+    <string name="connectingDialogBody">We are connecting you to the server</string>
+    <string name="connectingDialogTitle">Connecting</string>
+    <string name="descriptionBackground">background</string>
 </resources>

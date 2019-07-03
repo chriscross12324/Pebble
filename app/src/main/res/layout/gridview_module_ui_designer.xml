@@ -23,8 +23,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/holder"
         android:layout_width="match_parent"
-        android:layout_height="196dp"
-        android:background="@drawable/module_background">
+        android:layout_height="196dp">
 
         <ImageView
             android:id="@+id/backgroundGradient"

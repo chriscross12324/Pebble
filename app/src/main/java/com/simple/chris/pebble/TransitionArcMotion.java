@@ -6,7 +6,7 @@ import android.graphics.Path;
 import android.transition.PathMotion;
 import android.util.AttributeSet;
 
-/*public class TransitionArcMotion extends PathMotion {
+public class TransitionArcMotion extends PathMotion {
     private static int DEFAULT_RADIUS = 500;
     private float curveRadius;
 
@@ -40,4 +40,4 @@ import android.util.AttributeSet;
         arcPath.cubicTo(startX,startY,pointX, pointY, endX, endY);
         return arcPath;
     }
-}*/
+}

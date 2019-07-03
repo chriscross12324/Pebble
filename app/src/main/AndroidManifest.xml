@@ -29,7 +29,6 @@
             android:name=".GradientsList"
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true" />
-        <activity android:name=".DialogTestActivity" />
         <activity android:name=".MainActivity"></activity>
     </application>
 
