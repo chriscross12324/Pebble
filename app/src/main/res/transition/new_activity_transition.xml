@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:duration="200">
+    android:duration="350">
     <changeImageTransform
         android:interpolator="@android:interpolator/fast_out_slow_in"
         />
     <arcMotion
         android:interpolator="@android:interpolator/fast_out_slow_in"/>
     <changeBounds
-        android:duration="300"
         android:interpolator="@android:interpolator/fast_out_slow_in"/>
 </transitionSet>

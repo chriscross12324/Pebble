@@ -19,9 +19,11 @@ import android.widget.Toast;
 
 public class GradientDetails extends AppCompatActivity {
     CardView cardView;
-    ImageView backButton, gradientViewer;
-    TextView backgroundNameTextView, descriptionTextView;
+    ConstraintLayout detailsHolder;
+    ImageView backButton, gradientViewer, topColourCircle, bottomColourCircle;
+    TextView detailsTitle, detailsDescription, topColourHex, bottomColourHex;
     String backgroundName, leftColour, rightColour, description;
+    int leftColourInt, rightColourInt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,20 +35,31 @@ public class GradientDetails extends AppCompatActivity {
 
         /** Declare UI Elements */
         //ConstraintLayout
+        detailsHolder = findViewById(R.id.detailsHolder);
+
         //CardView
         cardView = findViewById(R.id.cardView);
         //ImageView
         backButton = findViewById(R.id.backButton);
         gradientViewer = findViewById(R.id.gradientViewer);
+        topColourCircle = findViewById(R.id.topColourCircle);
+        bottomColourCircle = findViewById(R.id.bottomColourCircle);
+
         //TextView
-        backgroundNameTextView = findViewById(R.id.backgroundNameTextView);
-        descriptionTextView = findViewById(R.id.descriptionTextView);
+        detailsTitle = findViewById(R.id.detailsTitle);
+        detailsDescription = findViewById(R.id.detailsDescription);
+        topColourHex = findViewById(R.id.topColourHex);
+        bottomColourHex = findViewById(R.id.bottomColourHex);
+
 
         Intent intent = getIntent();
         backgroundName = intent.getStringExtra("backgroundName");
+        Log.e("INFO", backgroundName);
         leftColour = intent.getStringExtra("leftColour");
         rightColour = intent.getStringExtra("rightColour");
         description = intent.getStringExtra("description");
+        rightColourInt = Color.parseColor(rightColour);
+        leftColourInt = Color.parseColor(leftColour);
         //Toast.makeText(this, ""+backgroundName, Toast.LENGTH_SHORT).show();
         //Log.e("INFO", backgroundName);
 
@@ -59,30 +72,46 @@ public class GradientDetails extends AppCompatActivity {
         );
         gradientViewer.setBackgroundDrawable(gradientDrawable);
         //cardView.setCardBackgroundColor(right);
-        backgroundNameTextView.setText(backgroundName);
-        descriptionTextView.setText(description);
         cardView.setTransitionName(backgroundName);
         gradientViewer.setTransitionName(backgroundName+"1");
-
-        gradientViewer.post(new Runnable() {
-            @Override
-            public void run() {
-                scheduledStartPostponedTransition(cardView);
-                ObjectAnimator OA1 = ObjectAnimator.ofFloat(backButton, "alpha", 1);
-                OA1.setDuration(200);
-                OA1.setInterpolator(new LinearInterpolator());
-                OA1.start();
-            }
-        });
 
         backButton.setOnClickListener(v -> {
             ObjectAnimator OA2 = ObjectAnimator.ofFloat(backButton, "alpha", 0);
             OA2.setDuration(200);
             OA2.setInterpolator(new LinearInterpolator());
             OA2.start();
+            ObjectAnimator OA3 = ObjectAnimator.ofFloat(detailsHolder, "alpha", 0);
+            OA3.setDuration(300);
+            OA3.setInterpolator(new LinearInterpolator());
+            OA3.start();
             this.onBackPressed();
 
         });
+
+        gradientViewer.post(() -> {
+            scheduledStartPostponedTransition(cardView);
+            /*ObjectAnimator OA1 = ObjectAnimator.ofFloat(backButton, "alpha", 1);
+            OA1.setDuration(200);
+            OA1.setInterpolator(new LinearInterpolator());
+            OA1.start();*/
+            ObjectAnimator OA3 = ObjectAnimator.ofFloat(detailsHolder, "alpha", 1);
+            OA3.setDuration(300);
+            OA3.setInterpolator(new LinearInterpolator());
+            OA3.start();
+        });
+
+        detailsTitle.setText(backgroundName.replace("\n", " "));
+        detailsDescription.setText(description);
+        topColourHex.setText(leftColour);
+        bottomColourHex.setText(rightColour);
+        GradientDrawable topColourCircleDrawable = new GradientDrawable();
+        topColourCircleDrawable.setShape(GradientDrawable.OVAL);
+        topColourCircleDrawable.setStroke(5, leftColourInt);
+        GradientDrawable bottomColourCircleDrawable = new GradientDrawable();
+        bottomColourCircleDrawable.setShape(GradientDrawable.OVAL);
+        bottomColourCircleDrawable.setStroke(5, rightColourInt);
+        topColourCircle.setBackgroundDrawable(topColourCircleDrawable);
+        bottomColourCircle.setBackgroundDrawable(bottomColourCircleDrawable);
     }
 
     public boolean isDarkTheme(){

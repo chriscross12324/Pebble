@@ -15,6 +15,10 @@
         <item name="ForegroundColour">@color/colorLightThemeForeground</item>
         <item name="PrimaryTextColour">@color/colorDarkThemeBackground</item>
         <item name="SecondaryTextColour">@color/colorDarkThemeForeground</item>
+        <item name="DetailsTitleTextColour">@color/colorLightThemeDetailsTitleTextColour</item>
+        <item name="DetailsDescriptionTextColour">@color/colorLightThemeDetailsDescriptionTextColour</item>
+        <item name="DetailsHEXTextColour">@color/colorLightThemeDetailsHEXTextColour</item>
+        <item name="DetailsDividerColour">@color/colorLightThemeDetailsDividerColour</item>
         <item name="BlurColour">@color/colorLightThemeBlurColour</item>
     </style>
 

@@ -98,6 +98,7 @@ public class Permissions extends AppCompatActivity {
                 Intent GL = new Intent(Permissions.this, GradientsList.class);
                 startActivity(GL);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                Values.firstStart = false;
                 finish();
             }
         });

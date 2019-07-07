@@ -15,12 +15,18 @@
     <color name="colorLightThemeForeground">#FFFFFF</color>
     <color name="colorLightThemeBackground">#F8F8F8</color>
     <color name="colorLightThemeTextColour">#414141</color><!--#565656-->
+    <color name="colorLightThemeDetailsTitleTextColour">#212121</color>
+    <color name="colorLightThemeDetailsDescriptionTextColour">#9d9d9d</color>
+    <color name="colorLightThemeDetailsHEXTextColour">#505050</color>
+    <color name="colorLightThemeDetailsDividerColour">#dadada</color>
     <color name="colorLightThemeBlurColour">#40FFFFFF</color>
 
     <!-- Login Screen -->
     <color name="editTextColour">#80FFFFFF</color>
     <color name="editTextLineColour">#90FFFFFF</color>
     <color name="Colour_Placeholder">#76E646</color>
+    <color name="Colour_Placeholder2">#4693E6</color>
+    <color name="Colour_Placeholder3">#E67946</color>
 
 
 </resources>

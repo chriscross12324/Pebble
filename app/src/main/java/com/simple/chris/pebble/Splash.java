@@ -13,8 +13,15 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         Values.loadValues(Splash.this);
 
-        startActivity(new Intent(Splash.this, GradientsList.class));
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        finish();
+        if (!Values.firstStart){
+            startActivity(new Intent(Splash.this, GradientsList.class));
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            finish();
+        }else {
+            startActivity(new Intent(Splash.this, Permissions.class));
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_in);
+            finish();
+        }
+
     }
 }
