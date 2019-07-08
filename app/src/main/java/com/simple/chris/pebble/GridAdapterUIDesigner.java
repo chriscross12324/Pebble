@@ -53,8 +53,14 @@ public class GridAdapterUIDesigner extends BaseAdapter {
         try {
             HashMap<String, String> details;
             details = map.get(position);
-            leftColour = Color.parseColor(details.get("leftColour"));
-            rightColour = Color.parseColor(details.get("rightColour"));
+            if (Values.uppercaseHEX){
+                leftColour = Color.parseColor(details.get("leftColour").toUpperCase());
+                rightColour = Color.parseColor(details.get("rightColour").toUpperCase());
+            }else {
+                leftColour = Color.parseColor(details.get("leftColour").toLowerCase());
+                rightColour = Color.parseColor(details.get("rightColour").toLowerCase());
+            }
+
             ViewHolder mViewHolder = new ViewHolder();
 
             if (convertView == null) {

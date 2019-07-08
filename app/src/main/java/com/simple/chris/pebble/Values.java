@@ -14,6 +14,7 @@ public class Values {
     public static boolean vibrations;
     public static boolean darkMode;
     public static boolean uiDesignerMode;
+    public static boolean uppercaseHEX;
     public static boolean askData;
 
     public static void saveValues(Context context){
@@ -23,6 +24,7 @@ public class Values {
         editor.putBoolean("firstStart", firstStart);
         editor.putBoolean("darkMode", darkMode);
         editor.putBoolean("uiDesignerMode", uiDesignerMode);
+        editor.putBoolean("uppercaseHEX", uppercaseHEX);
         editor.putBoolean("askData", askData);
         editor.apply();
     }
@@ -31,8 +33,9 @@ public class Values {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE);
         vibrations = sharedPreferences.getBoolean("vibrations", true);
         firstStart = sharedPreferences.getBoolean("firstStart", true);
-        darkMode = sharedPreferences.getBoolean("darkMode", true);
+        darkMode = sharedPreferences.getBoolean("darkMode", false);
         uiDesignerMode = sharedPreferences.getBoolean("uiDesignerMode", false);
+        uppercaseHEX = sharedPreferences.getBoolean("uppercaseHEX", true);
         askData = sharedPreferences.getBoolean("askData", true);
     }
 }

@@ -10,6 +10,10 @@
     <color name="colorDarkThemeForeground">#222930</color><!--#2E303D-->
     <color name="colorDarkThemeBackground">#000000</color>
     <color name="colorDarkThemeTextColour">#BEBEBE</color>
+    <color name="colorDarkThemeDetailsTitleTextColour">#e3e3e3</color>
+    <color name="colorDarkThemeDetailsDescriptionTextColour">#8c8c8c</color>
+    <color name="colorDarkThemeDetailsHEXTextColour">#bababa</color>
+    <color name="colorDarkThemeDetailsDividerColour">#4f4f4f</color>
     <color name="colorDarkThemeBlurColour">#4013191f</color>
 
     <color name="colorLightThemeForeground">#FFFFFF</color>

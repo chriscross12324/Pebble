@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style name="Main" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowSharedElementEnterTransition">@transition/new_activity_transition</item>
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -27,6 +27,10 @@
         <item name="ForegroundColour">@color/colorDarkThemeForeground</item>
         <item name="PrimaryTextColour">@color/colorLightThemeForeground</item>
         <item name="SecondaryTextColour">@color/colorLightThemeBackground</item>
+        <item name="DetailsTitleTextColour">@color/colorDarkThemeDetailsTitleTextColour</item>
+        <item name="DetailsDescriptionTextColour">@color/colorDarkThemeDetailsDescriptionTextColour</item>
+        <item name="DetailsHEXTextColour">@color/colorDarkThemeDetailsHEXTextColour</item>
+        <item name="DetailsDividerColour">@color/colorDarkThemeDetailsDividerColour</item>
         <item name="BlurColour">@color/colorDarkThemeBlurColour</item>
     </style>
 
