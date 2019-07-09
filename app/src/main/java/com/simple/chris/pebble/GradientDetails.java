@@ -6,6 +6,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -24,14 +27,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class GradientDetails extends AppCompatActivity {
-    CardView cardView;
-    ConstraintLayout detailsHolder, actionsHolder;
-    LinearLayout hexHolder, backButton, expandButton;
+    CardView corners;
+    ConstraintLayout detailsHolder, actionsHolder, copiedNotification;
+    LinearLayout backButton, hideButton, startHex, endHex;
     ImageView gradientViewer, topColourCircle, bottomColourCircle, arrow;
     TextView detailsTitle, detailsDescription, topColourHex, bottomColourHex;
     String backgroundName, leftColour, rightColour, description;
     int leftColourInt, rightColourInt, detailsDefaultHeight;
     boolean expanded = false;
+    boolean playingCopiedAnimation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +49,16 @@ public class GradientDetails extends AppCompatActivity {
         //ConstraintLayout
         detailsHolder = findViewById(R.id.detailsHolder);
         actionsHolder = findViewById(R.id.actionsHolder);
+        copiedNotification = findViewById(R.id.copiedNotification);
 
         //LinearLayout
         backButton = findViewById(R.id.backButton);
-        expandButton = findViewById(R.id.expandButton);
+        hideButton = findViewById(R.id.hideButton);
+        startHex = findViewById(R.id.startHex);
+        endHex = findViewById(R.id.endHex);
 
         //CardView
-        cardView = findViewById(R.id.cardView);
+        corners = findViewById(R.id.corners);
 
         //ImageView
         gradientViewer = findViewById(R.id.gradientViewer);
@@ -91,25 +98,80 @@ public class GradientDetails extends AppCompatActivity {
         );
         gradientViewer.setBackgroundDrawable(gradientDrawable);
         //cardView.setCardBackgroundColor(right);
-        cardView.setTransitionName(backgroundName);
+        corners.setTransitionName(backgroundName);
         gradientViewer.setTransitionName(backgroundName+"1");
+
+        startHex.setOnClickListener(v -> {
+            ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText("startHex", leftColour);
+            clipboardManager.setPrimaryClip(clipData);
+            copiedNotification.setAlpha(1);
+            if (!playingCopiedAnimation){
+                UIAnimations.constraintLayoutObjectAnimator(copiedNotification,
+                        "translationY",
+                        0,
+                        500,
+                        new DecelerateInterpolator(3));
+                Handler copiedUp =  new Handler();
+                copiedUp.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        UIAnimations.constraintLayoutObjectAnimator(copiedNotification,
+                                "translationY",
+                                Math.round(-45 * getResources().getDisplayMetrics().density),
+                                500,
+                                new DecelerateInterpolator(3));
+                        Handler copiedHide = new Handler();
+                        copiedHide.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                copiedNotification.setAlpha(0);
+                            }
+                        }, 500);
+                    }
+                }, 2000);
+            }
+        });
+        endHex.setOnClickListener(v -> {
+            ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText("endHex", rightColour);
+            clipboardManager.setPrimaryClip(clipData);
+            copiedNotification.setAlpha(1);
+            if (!playingCopiedAnimation){
+                UIAnimations.constraintLayoutObjectAnimator(copiedNotification,
+                        "translationY",
+                        0,
+                        500,
+                        new DecelerateInterpolator(3));
+                Handler copiedUp =  new Handler();
+                copiedUp.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        UIAnimations.constraintLayoutObjectAnimator(copiedNotification,
+                                "translationY",
+                                Math.round(-45 * getResources().getDisplayMetrics().density),
+                                500,
+                                new DecelerateInterpolator(3));
+                        Handler copiedHide = new Handler();
+                        copiedHide.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                copiedNotification.setAlpha(0);
+                            }
+                        }, 500);
+                    }
+                }, 2000);
+            }
+        });
 
         detailsHolder.setOnClickListener(v -> {
             if (expanded){
                 expanded = false;
-                ValueAnimator show = ValueAnimator.ofInt(Math.round(50 * getResources().getDisplayMetrics().density), detailsDefaultHeight);
-                show.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        int val = (Integer) animation.getAnimatedValue();
-                        ViewGroup.LayoutParams layoutParams = detailsHolder.getLayoutParams();
-                        layoutParams.height = val;
-                        detailsHolder.setLayoutParams(layoutParams);
-                    }
-                });
-                show.setInterpolator(new DecelerateInterpolator(3));
-                show.setDuration(700);
-                show.start();
+                UIAnimations.constraintLayoutValueAnimator(detailsHolder,
+                        50 * getResources().getDisplayMetrics().density,
+                        detailsDefaultHeight,
+                        700,
+                        new DecelerateInterpolator(3));
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -173,13 +235,14 @@ public class GradientDetails extends AppCompatActivity {
                 public void run() {
                     detailsHolder.setAlpha(0);
                     actionsHolder.setAlpha(0);
+                    copiedNotification.setAlpha(1);
                     GradientDetails.super.onBackPressed();
                 }
             }, 350);
             //this.onBackPressed();
 
         });
-        expandButton.setOnClickListener(v -> {
+        hideButton.setOnClickListener(v -> {
             /*float newHeight = 50 * getResources().getDisplayMetrics().density;
             Toast.makeText(this, ""+newHeight, Toast.LENGTH_SHORT).show();
             ObjectAnimator hide = ObjectAnimator.ofInt(detailsHolder, detailsTitle.getHeight(), detailsHolder.getHeight(), 50);
@@ -234,13 +297,15 @@ public class GradientDetails extends AppCompatActivity {
         });
 
         gradientViewer.post(() -> {
-            scheduledStartPostponedTransition(cardView);
+            scheduledStartPostponedTransition(corners);
             /*ObjectAnimator OA1 = ObjectAnimator.ofFloat(backButton, "alpha", 1);
             OA1.setDuration(200);
             OA1.setInterpolator(new LinearInterpolator());
             OA1.start();*/
+
             detailsHolder.setTranslationY((90 * getResources().getDisplayMetrics().density)+detailsHolder.getHeight());
             actionsHolder.setTranslationY((74 * getResources().getDisplayMetrics().density)+detailsHolder.getHeight());
+            copiedNotification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
             Handler handlerMain = new Handler();
             handlerMain.postDelayed(new Runnable() {
                 @Override
@@ -263,7 +328,6 @@ public class GradientDetails extends AppCompatActivity {
                     shiftUp2.start();
                 }
             }, 500);
-
             detailsDefaultHeight = detailsHolder.getHeight();
         });
 
@@ -307,9 +371,8 @@ public class GradientDetails extends AppCompatActivity {
         );
     }
 
-    /*@Override
+    @Override
     public void onBackPressed() {
-        finish();
         return;
-    }*/
+    }
 }

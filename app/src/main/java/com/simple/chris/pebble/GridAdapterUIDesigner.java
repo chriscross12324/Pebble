@@ -53,13 +53,8 @@ public class GridAdapterUIDesigner extends BaseAdapter {
         try {
             HashMap<String, String> details;
             details = map.get(position);
-            if (Values.uppercaseHEX){
-                leftColour = Color.parseColor(details.get("leftColour").toUpperCase());
-                rightColour = Color.parseColor(details.get("rightColour").toUpperCase());
-            }else {
-                leftColour = Color.parseColor(details.get("leftColour").toLowerCase());
-                rightColour = Color.parseColor(details.get("rightColour").toLowerCase());
-            }
+            leftColour = Color.parseColor(details.get("leftColour"));
+            rightColour = Color.parseColor(details.get("rightColour"));
 
             ViewHolder mViewHolder = new ViewHolder();
 
@@ -68,11 +63,11 @@ public class GridAdapterUIDesigner extends BaseAdapter {
                         getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = mInflator.inflate(R.layout.gridview_module_ui_designer, parent, false);
                 mViewHolder.cardView = convertView.findViewById(R.id.cardView);
-                mViewHolder.mGradient = (ImageView) convertView.findViewById(R.id.backgroundGradient);
-                mViewHolder.mTopColourHex = (TextView) convertView.findViewById(R.id.topColourHex);
-                mViewHolder.mBottomColourHex = (TextView) convertView.findViewById(R.id.bottomColourHex);
-                mViewHolder.mTopColourCircle = (ImageView) convertView.findViewById(R.id.topColourCircle);
-                mViewHolder.mBottomColourCircle = (ImageView) convertView.findViewById(R.id.bottomColourCircle);
+                mViewHolder.mGradient = convertView.findViewById(R.id.backgroundGradient);
+                mViewHolder.mTopColourHex = convertView.findViewById(R.id.topColourHex);
+                mViewHolder.mBottomColourHex = convertView.findViewById(R.id.bottomColourHex);
+                mViewHolder.mTopColourCircle = convertView.findViewById(R.id.topColourCircle);
+                mViewHolder.mBottomColourCircle = convertView.findViewById(R.id.bottomColourCircle);
                 convertView.setTag(mViewHolder);
             } else {
                 mViewHolder = (ViewHolder) convertView.getTag();
@@ -91,8 +86,14 @@ public class GridAdapterUIDesigner extends BaseAdapter {
             bottomColourCircle.setStroke(5, rightColour);
             mViewHolder.mTopColourCircle.setBackground(topColourCircle);
             mViewHolder.mBottomColourCircle.setBackground(bottomColourCircle);
-            mViewHolder.mTopColourHex.setText(details.get("leftColour"));
-            mViewHolder.mBottomColourHex.setText(details.get("rightColour"));
+            if (Values.uppercaseHEX){
+                mViewHolder.mTopColourHex.setText(details.get("leftColour").toUpperCase());
+                mViewHolder.mBottomColourHex.setText(details.get("rightColour").toUpperCase());
+            }else {
+                mViewHolder.mTopColourHex.setText(details.get("leftColour").toLowerCase());
+                mViewHolder.mBottomColourHex.setText(details.get("rightColour").toLowerCase());
+            }
+
         }catch (Exception e){
             Log.e("UID", ""+e.getLocalizedMessage());
         }
