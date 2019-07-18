@@ -4,16 +4,20 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.ActivityOptions;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -22,6 +26,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
@@ -52,18 +57,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import eightbitlab.com.blurview.BlurView;
+import eightbitlab.com.blurview.RenderScriptBlur;
+
 public class GradientsList extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
+    BlurView changelogBlur;
     ImageView top, title, bottom;
     GridView gridView;
     Dialog noConnectionDialog, cellularDataWarningDialog;
     Button openSystemSettingsNoConnection, dontAskAgain, tryWifi;
-    ConstraintLayout titleHolder;
-    LinearLayout connectingDialog, retry, useButton;
+    ConstraintLayout titleHolder, changelogHolder;
+    LinearLayout connectingDialog, retry, useButton, hideChangelogButton;
     SwipeRefreshLayout swipeToRefresh;
 
     int screenHeight;
     int imageViewHeight;
+
+    int appVersion;
 
     Object module;
     View moduleView;
@@ -84,6 +95,11 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
             background.setBackgroundResource(R.drawable.placeholder_gradient_light);
         }
         Values.saveValues(GradientsList.this);
+
+        appVersion = BuildConfig.VERSION_CODE;
+        changelogBlur = findViewById(R.id.changelogBlur);
+        changelogHolder = findViewById(R.id.changelogHolder);
+        hideChangelogButton = findViewById(R.id.hideChangelogButton);
 
         titleHolder = findViewById(R.id.titleHolder);
         connectingDialog = findViewById(R.id.connectingDialog);
@@ -231,7 +247,38 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
         Handler handler = new Handler();
         handler.postDelayed(() -> {
 
-        }, 150);
+            View decorView = getWindow().getDecorView();
+            ViewGroup rootView = decorView.findViewById(android.R.id.content);
+            Drawable windowBackground = decorView.getBackground();
+            changelogBlur.setupWith(rootView)
+                    .setFrameClearDrawable(windowBackground)
+                    .setBlurAlgorithm(new RenderScriptBlur(GradientsList.this))
+                    .setBlurRadius(15f)
+                    .setHasFixedTransformationMatrix(false);
+
+
+            if (Values.lastVersion != appVersion){
+                UIAnimations.blurViewObjectAnimator(changelogBlur, "alpha", 1, 500, 0, new DecelerateInterpolator());
+                ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(changelogHolder, "alpha", 1);
+                objectAnimator.setDuration(500);
+                objectAnimator.setInterpolator(new DecelerateInterpolator());
+                objectAnimator.start();
+                swipeToRefresh.setEnabled(false);
+                gridView.setEnabled(false);
+            }
+            hideChangelogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UIAnimations.blurViewObjectAnimator(changelogBlur, "alpha", 0, 1000, 0, new DecelerateInterpolator());
+                    ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(changelogHolder, "alpha", 0);
+                    objectAnimator.setDuration(500);
+                    objectAnimator.setInterpolator(new DecelerateInterpolator());
+                    objectAnimator.start();
+                    swipeToRefresh.setEnabled(true);
+                    gridView.setEnabled(true);
+                }
+            });
+        }, 2000);
 
     }
 

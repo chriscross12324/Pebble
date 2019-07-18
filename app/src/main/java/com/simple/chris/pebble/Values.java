@@ -16,6 +16,7 @@ public class Values {
     public static boolean uiDesignerMode;
     public static boolean uppercaseHEX;
     public static boolean askData;
+    public static int lastVersion;
 
     public static void saveValues(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE);
@@ -26,6 +27,7 @@ public class Values {
         editor.putBoolean("uiDesignerMode", uiDesignerMode);
         editor.putBoolean("uppercaseHEX", uppercaseHEX);
         editor.putBoolean("askData", askData);
+        editor.putInt("lastVersion", lastVersion);
         editor.apply();
     }
 
@@ -37,5 +39,6 @@ public class Values {
         uiDesignerMode = sharedPreferences.getBoolean("uiDesignerMode", false);
         uppercaseHEX = sharedPreferences.getBoolean("uppercaseHEX", true);
         askData = sharedPreferences.getBoolean("askData", true);
+        lastVersion = sharedPreferences.getInt("lastVersion", 0);
     }
 }

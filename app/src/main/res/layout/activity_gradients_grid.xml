@@ -4,25 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     android:orientation="horizontal"
-    tools:context=".GradientsList"
-    android:background="#000000">
+    tools:context=".GradientsList">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:cardBackgroundColor="#000000"
         app:cardCornerRadius="15dp"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="#000000">
+        app:cardElevation="0dp">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ImageView
                 android:id="@+id/background"
-                android:contentDescription="@string/descriptionBackground"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/placeholder_gradient_dark"/>
+                android:background="@drawable/placeholder_gradient_dark"
+                android:contentDescription="@string/descriptionBackground" />
 
             <LinearLayout
                 android:id="@+id/connectingDialog"
@@ -31,9 +33,9 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_margin="24dp"
+                android:alpha="0"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:alpha="0">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -70,14 +72,14 @@
 
                     <ImageView
                         android:id="@+id/animationView"
-                        android:contentDescription="@string/descriptionAnimation"
                         android:layout_width="100dp"
                         android:layout_height="56.2dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="25dp"
-                        android:tint="?PrimaryTextColour"
                         android:background="@drawable/loading_animation"
-                        android:backgroundTint="?PrimaryTextColour"/>
+                        android:backgroundTint="?PrimaryTextColour"
+                        android:contentDescription="@string/descriptionAnimation"
+                        android:tint="?PrimaryTextColour" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -94,11 +96,11 @@
 
                 <ImageView
                     android:id="@+id/imageView9"
-                    android:contentDescription="@string/descriptionDecoration"
                     android:layout_width="2dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="32dp"
                     android:layout_marginBottom="16dp"
+                    android:contentDescription="@string/descriptionDecoration"
                     android:tint="?PrimaryTextColour"
                     app:layout_constraintBottom_toTopOf="@+id/title"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -108,11 +110,11 @@
 
                 <ImageView
                     android:id="@+id/title"
-                    android:contentDescription="@string/descriptionTitleGradients"
                     android:layout_width="120px"
                     android:layout_height="660px"
                     android:background="@drawable/gradients_title"
                     android:backgroundTint="?PrimaryTextColour"
+                    android:contentDescription="@string/descriptionTitleGradients"
                     android:scaleType="fitXY"
                     app:layout_constraintBottom_toTopOf="@+id/imageView8"
                     app:layout_constraintStart_toStartOf="parent"
@@ -121,11 +123,11 @@
 
                 <ImageView
                     android:id="@+id/imageView8"
-                    android:contentDescription="@string/descriptionDecoration"
                     android:layout_width="2dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="32dp"
+                    android:contentDescription="@string/descriptionDecoration"
                     android:tint="?PrimaryTextColour"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -134,7 +136,6 @@
                     app:srcCompat="@color/colorLightThemeForeground" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -172,6 +173,200 @@
 
     </androidx.cardview.widget.CardView>
 
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/changelogBlur"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:blurOverlayColor="?BlurColour"
+        android:alpha="0"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/changelogHolder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="11dp"
+            android:fontFamily="@font/googlesans_medium"
+            android:text="Added Gradient Details screen; just tap a module"
+            android:textAlignment="viewStart"
+            android:textColor="?SecondaryTextColour"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/imageView14"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+        <ImageView
+            android:id="@+id/imageView14"
+            android:layout_width="7dp"
+            android:layout_height="7dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/circle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+        <ImageView
+            android:id="@+id/imageView12"
+            android:layout_width="7dp"
+            android:layout_height="7dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/circle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/googlesans_medium"
+            android:text="Added Splash Screen when opening app"
+            android:textAlignment="viewStart"
+            android:textColor="?SecondaryTextColour"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/imageView12"
+            app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/googlesans_medium"
+            android:text="Pebble Updated!!!"
+            android:textColor="?PrimaryTextColour"
+            android:textSize="30sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detailsDivider" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icon_pebble_foreground" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/googlesans_medium"
+            android:gravity="center"
+            android:text="@string/pebble"
+            android:textColor="?SecondaryTextColour"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/detailsDivider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:background="?DetailsDividerColour"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <ImageView
+            android:id="@+id/detailsDivider2"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:background="?DetailsDividerColour"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="4dp"
+            android:text="Here are the latest changes with Pebble."
+            android:textColor="?SecondaryTextColour"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/googlesans_bold"
+            android:text="July 18, 2019"
+            android:textColor="?PrimaryTextColour"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detailsDivider2" />
+
+        <ImageView
+            android:id="@+id/imageView10"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView8"
+            app:srcCompat="@drawable/icon_changelog_new" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/googlesans_regular"
+            android:gravity="center"
+            android:text="1.0.0-beta.2"
+            android:textColor="?SecondaryTextColour"
+            app:layout_constraintStart_toEndOf="@+id/imageView10"
+            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+        <LinearLayout
+            android:id="@+id/hideChangelogButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/button_dialog_permission"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:fontFamily="@font/googlesans_medium"
+                android:text="Got it!"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

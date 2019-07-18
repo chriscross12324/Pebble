@@ -1,11 +1,5 @@
 package com.simple.chris.pebble;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -14,17 +8,16 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class GradientDetails extends AppCompatActivity {
     CardView corners;
@@ -72,64 +65,46 @@ public class GradientDetails extends AppCompatActivity {
         topColourHex = findViewById(R.id.topColourHex);
         bottomColourHex = findViewById(R.id.bottomColourHex);
 
-
+        //Get-Set values from previous activity
         Intent intent = getIntent();
         backgroundName = intent.getStringExtra("backgroundName");
-        Log.e("INFO", backgroundName);
-        if (Values.uppercaseHEX){
+
+        //Determines if uppercase HEX value
+        if (Values.uppercaseHEX) {
             leftColour = intent.getStringExtra("leftColour").toUpperCase();
             rightColour = intent.getStringExtra("rightColour").toUpperCase();
-        }else {
+        } else {
             leftColour = intent.getStringExtra("leftColour").toLowerCase();
             rightColour = intent.getStringExtra("rightColour").toLowerCase();
         }
         description = intent.getStringExtra("description");
         rightColourInt = Color.parseColor(rightColour);
         leftColourInt = Color.parseColor(leftColour);
-        //Toast.makeText(this, ""+backgroundName, Toast.LENGTH_SHORT).show();
-        //Log.e("INFO", backgroundName);
-
         int left = Color.parseColor(leftColour);
         int right = Color.parseColor(rightColour);
 
+        //Sets background gradient
         GradientDrawable gradientDrawable = new GradientDrawable(
                 GradientDrawable.Orientation.TL_BR,
                 new int[]{left, right}
         );
         gradientViewer.setBackgroundDrawable(gradientDrawable);
-        //cardView.setCardBackgroundColor(right);
         corners.setTransitionName(backgroundName);
-        gradientViewer.setTransitionName(backgroundName+"1");
+        gradientViewer.setTransitionName(backgroundName + "1");
 
         startHex.setOnClickListener(v -> {
             ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText("startHex", leftColour);
             clipboardManager.setPrimaryClip(clipData);
             copiedNotification.setAlpha(1);
-            if (!playingCopiedAnimation){
-                UIAnimations.constraintLayoutObjectAnimator(copiedNotification,
-                        "translationY",
-                        0,
-                        500,
-                        new DecelerateInterpolator(3));
-                Handler copiedUp =  new Handler();
-                copiedUp.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        UIAnimations.constraintLayoutObjectAnimator(copiedNotification,
-                                "translationY",
-                                Math.round(-45 * getResources().getDisplayMetrics().density),
-                                500,
-                                new DecelerateInterpolator(3));
-                        Handler copiedHide = new Handler();
-                        copiedHide.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                copiedNotification.setAlpha(0);
-                            }
-                        }, 500);
-                    }
-                }, 2000);
+            if (!playingCopiedAnimation) {
+                UIAnimations.constraintLayoutObjectAnimator(copiedNotification, "translationY",
+                        0, 500,
+                        0, new DecelerateInterpolator(3));
+                UIAnimations.constraintLayoutObjectAnimator(copiedNotification, "translationY",
+                        Math.round(-45 * getResources().getDisplayMetrics().density), 500,
+                        2000, new DecelerateInterpolator(3));
+                UIAnimations.constraintLayoutAlpha(copiedNotification, 0, 3000);
             }
         });
         endHex.setOnClickListener(v -> {
@@ -137,203 +112,100 @@ public class GradientDetails extends AppCompatActivity {
             ClipData clipData = ClipData.newPlainText("endHex", rightColour);
             clipboardManager.setPrimaryClip(clipData);
             copiedNotification.setAlpha(1);
-            if (!playingCopiedAnimation){
-                UIAnimations.constraintLayoutObjectAnimator(copiedNotification,
-                        "translationY",
-                        0,
-                        500,
-                        new DecelerateInterpolator(3));
-                Handler copiedUp =  new Handler();
-                copiedUp.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        UIAnimations.constraintLayoutObjectAnimator(copiedNotification,
-                                "translationY",
-                                Math.round(-45 * getResources().getDisplayMetrics().density),
-                                500,
-                                new DecelerateInterpolator(3));
-                        Handler copiedHide = new Handler();
-                        copiedHide.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                copiedNotification.setAlpha(0);
-                            }
-                        }, 500);
-                    }
-                }, 2000);
+            if (!playingCopiedAnimation) {
+                UIAnimations.constraintLayoutObjectAnimator(copiedNotification, "translationY",
+                        0, 500,
+                        0, new DecelerateInterpolator(3));
+                UIAnimations.constraintLayoutObjectAnimator(copiedNotification, "translationY",
+                        Math.round(-45 * getResources().getDisplayMetrics().density), 500,
+                        2000, new DecelerateInterpolator(3));
+                UIAnimations.constraintLayoutAlpha(copiedNotification, 0, 3000);
             }
         });
 
         detailsHolder.setOnClickListener(v -> {
-            if (expanded){
+            if (expanded) {
                 expanded = false;
-                UIAnimations.constraintLayoutValueAnimator(detailsHolder,
-                        50 * getResources().getDisplayMetrics().density,
-                        detailsDefaultHeight,
-                        700,
-                        new DecelerateInterpolator(3));
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ObjectAnimator shiftUp = ObjectAnimator.ofFloat(actionsHolder, "translationY", 0);
-                        shiftUp.setInterpolator(new DecelerateInterpolator());
-                        shiftUp.setDuration(400);
-                        shiftUp.start();
-                    }
-                }, 50);
-                ObjectAnimator shiftUp2 = ObjectAnimator.ofFloat(detailsHolder, "translationY", 0);
-                shiftUp2.setInterpolator(new DecelerateInterpolator());
-                shiftUp2.setDuration(400);
-                shiftUp2.start();
+                UIAnimations.constraintLayoutValueAnimator(detailsHolder, 50 * getResources().getDisplayMetrics().density,
+                        detailsDefaultHeight, 700,
+                        0, new DecelerateInterpolator(3));
+                UIAnimations.constraintLayoutObjectAnimator(actionsHolder, "translationY",
+                        0, 400,
+                        50, new DecelerateInterpolator());
+                UIAnimations.constraintLayoutObjectAnimator(detailsHolder, "translationY",
+                        0, 400,
+                        0, new DecelerateInterpolator());
+                UIAnimations.imageViewObjectAnimator(arrow, "alpha",
+                        0, 200,
+                        0, new DecelerateInterpolator());
+                UIAnimations.textViewObjectAnimator(detailsTitle, "alpha",
+                        1, 200,
+                        100, new DecelerateInterpolator());
                 expanded = false;
-                ObjectAnimator OA1 = ObjectAnimator.ofFloat(arrow, "alpha", 0);
-                OA1.setDuration(200);
-                OA1.setInterpolator(new DecelerateInterpolator());
-                OA1.start();
-                Handler handler3 = new Handler();
-                handler3.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ObjectAnimator OA2 = ObjectAnimator.ofFloat(detailsTitle, "alpha", 1);
-                        OA2.setDuration(200);
-                        OA2.setInterpolator(new DecelerateInterpolator());
-                        OA2.start();
-                    }
-                }, 100);
-            }else {
-                Toast.makeText(this, "Not expanded", Toast.LENGTH_SHORT).show();
             }
         });
 
         backButton.setOnClickListener(v -> {
-            /*ObjectAnimator OA3 = ObjectAnimator.ofFloat(detailsHolder, "alpha", 0);
-            OA3.setDuration(2000);
-            OA3.setInterpolator(new LinearInterpolator());
-            OA3.start();
-            ObjectAnimator OA4 = ObjectAnimator.ofFloat(actionsHolder, "alpha", 0);
-            OA4.setDuration(2000);
-            OA4.setInterpolator(new LinearInterpolator());
-            OA4.start();*/
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    ObjectAnimator shiftUp2 = ObjectAnimator.ofFloat(detailsHolder, "translationY", (90 * getResources().getDisplayMetrics().density)+detailsHolder.getHeight());
-                    shiftUp2.setInterpolator(new DecelerateInterpolator());
-                    shiftUp2.setDuration(300);
-                    shiftUp2.start();
-                }
-            }, 50);
-            ObjectAnimator shiftUp = ObjectAnimator.ofFloat(actionsHolder, "translationY", (74 * getResources().getDisplayMetrics().density)+detailsHolder.getHeight());
-            shiftUp.setInterpolator(new DecelerateInterpolator());
-            shiftUp.setDuration(300);
-            shiftUp.start();
+            UIAnimations.constraintLayoutObjectAnimator(detailsHolder, "translationY",
+                    Math.round((90 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight()), 300,
+                    50, new DecelerateInterpolator()
+            );
+            UIAnimations.constraintLayoutObjectAnimator(actionsHolder, "translationY",
+                    Math.round((74 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight()), 300,
+                    0, new DecelerateInterpolator()
+            );
+            UIAnimations.constraintLayoutAlpha(detailsHolder, 0, 350);
+            UIAnimations.constraintLayoutAlpha(actionsHolder, 0, 350);
+            UIAnimations.constraintLayoutAlpha(copiedNotification, 0, 350);
             Handler handler1 = new Handler();
-            handler1.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    detailsHolder.setAlpha(0);
-                    actionsHolder.setAlpha(0);
-                    copiedNotification.setAlpha(1);
-                    GradientDetails.super.onBackPressed();
-                }
-            }, 350);
-            //this.onBackPressed();
+            handler1.postDelayed(() -> GradientDetails.super.onBackPressed(), 350);
 
         });
         hideButton.setOnClickListener(v -> {
-            /*float newHeight = 50 * getResources().getDisplayMetrics().density;
-            Toast.makeText(this, ""+newHeight, Toast.LENGTH_SHORT).show();
-            ObjectAnimator hide = ObjectAnimator.ofInt(detailsHolder, detailsTitle.getHeight(), detailsHolder.getHeight(), 50);
-            hide.setInterpolator(new DecelerateInterpolator());
-            hide.setDuration(5000);
-            hide.start();*/
-            ValueAnimator hide = ValueAnimator.ofInt(detailsHolder.getMeasuredHeight(), Math.round(50 * getResources().getDisplayMetrics().density));
-            hide.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    int val = (Integer) animation.getAnimatedValue();
-                    ViewGroup.LayoutParams layoutParams = detailsHolder.getLayoutParams();
-                    layoutParams.height = val;
-                    detailsHolder.setLayoutParams(layoutParams);
-                }
-            });
-            hide.setInterpolator(new DecelerateInterpolator(3));
-            hide.setDuration(700);
-            hide.start();
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    ObjectAnimator shiftDown = ObjectAnimator.ofFloat(detailsHolder, "translationY", 74 * getResources().getDisplayMetrics().density);
-                    shiftDown.setInterpolator(new DecelerateInterpolator());
-                    shiftDown.setDuration(400);
-                    shiftDown.start();
-                }
-            }, 50);
-            ObjectAnimator shiftDown2 = ObjectAnimator.ofFloat(actionsHolder, "translationY", 74 * getResources().getDisplayMetrics().density);
-            shiftDown2.setInterpolator(new DecelerateInterpolator());
-            shiftDown2.setDuration(400);
-            shiftDown2.start();
+            UIAnimations.constraintLayoutValueAnimator(detailsHolder, detailsHolder.getMeasuredHeight(),
+                    50 * getResources().getDisplayMetrics().density, 700,
+                    0, new DecelerateInterpolator(3));
+            UIAnimations.constraintLayoutObjectAnimator(detailsHolder, "translationY",
+                    74 * getResources().getDisplayMetrics().density, 400,
+                    0, new DecelerateInterpolator());
+            UIAnimations.constraintLayoutObjectAnimator(actionsHolder, "translationY",
+                    74 * getResources().getDisplayMetrics().density, 400,
+                    25, new DecelerateInterpolator());
+            UIAnimations.textViewObjectAnimator(detailsTitle, "alpha",
+                    0, 200,
+                    0, new DecelerateInterpolator());
+            UIAnimations.imageViewObjectAnimator(arrow, "alpha",
+                    1, 200,
+                    200, new DecelerateInterpolator());
             expanded = true;
-            ObjectAnimator OA1 = ObjectAnimator.ofFloat(detailsTitle, "alpha", 0);
-            OA1.setDuration(200);
-            OA1.setInterpolator(new DecelerateInterpolator());
-            OA1.start();
-            Handler handler2 = new Handler();
-            handler2.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    ObjectAnimator OA2 = ObjectAnimator.ofFloat(arrow, "alpha", 1);
-                    OA2.setDuration(200);
-                    OA2.setInterpolator(new DecelerateInterpolator());
-                    OA2.start();
-                }
-            }, 200);
-            /*ViewGroup.LayoutParams params = detailsHolder.getLayoutParams();
-            params.height = Math.round(50*getResources().getDisplayMetrics().density);
-            detailsHolder.setLayoutParams(params); */
         });
 
         gradientViewer.post(() -> {
+            //Start sharedElement transition
             scheduledStartPostponedTransition(corners);
-            /*ObjectAnimator OA1 = ObjectAnimator.ofFloat(backButton, "alpha", 1);
-            OA1.setDuration(200);
-            OA1.setInterpolator(new LinearInterpolator());
-            OA1.start();*/
 
-            detailsHolder.setTranslationY((90 * getResources().getDisplayMetrics().density)+detailsHolder.getHeight());
-            actionsHolder.setTranslationY((74 * getResources().getDisplayMetrics().density)+detailsHolder.getHeight());
+            //Set UI Elements position
+            detailsHolder.setTranslationY((90 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight());
+            actionsHolder.setTranslationY((74 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight());
             copiedNotification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
-            Handler handlerMain = new Handler();
-            handlerMain.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    detailsHolder.setAlpha(1);
-                    actionsHolder.setAlpha(1);
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            ObjectAnimator shiftUp = ObjectAnimator.ofFloat(actionsHolder, "translationY", 0);
-                            shiftUp.setInterpolator(new DecelerateInterpolator(3));
-                            shiftUp.setDuration(700);
-                            shiftUp.start();
-                        }
-                    }, 50);
-                    ObjectAnimator shiftUp2 = ObjectAnimator.ofFloat(detailsHolder, "translationY", 0);
-                    shiftUp2.setInterpolator(new DecelerateInterpolator(3));
-                    shiftUp2.setDuration(700);
-                    shiftUp2.start();
-                }
-            }, 500);
+
+            //Animate UI Elements
+            UIAnimations.constraintLayoutAlpha(detailsHolder, 1, 500);
+            UIAnimations.constraintLayoutAlpha(actionsHolder, 1, 500);
+            UIAnimations.constraintLayoutObjectAnimator(actionsHolder, "translationY",
+                    0, 700,
+                    550, new DecelerateInterpolator(3));
+            UIAnimations.constraintLayoutObjectAnimator(detailsHolder, "translationY",
+                    0, 700,
+                    500, new DecelerateInterpolator(3));
+
+            //Store detailsHolder height
             detailsDefaultHeight = detailsHolder.getHeight();
         });
 
         detailsTitle.setText(backgroundName.replace("\n", " "));
         detailsDescription.setText(description);
-        if (description == null){
+        if (description == null) {
             detailsDescription.setVisibility(View.GONE);
         }
         topColourHex.setText(leftColour);
@@ -348,7 +220,7 @@ public class GradientDetails extends AppCompatActivity {
         bottomColourCircle.setBackgroundDrawable(bottomColourCircleDrawable);
     }
 
-    public boolean isDarkTheme(){
+    public boolean isDarkTheme() {
         if (Values.darkMode) {
             setTheme(R.style.ThemeDark);
             return true;
@@ -358,7 +230,7 @@ public class GradientDetails extends AppCompatActivity {
         }
     }
 
-    private void scheduledStartPostponedTransition(final View sharedElement){
+    private void scheduledStartPostponedTransition(final View sharedElement) {
         sharedElement.getViewTreeObserver().addOnPreDrawListener(
                 new ViewTreeObserver.OnPreDrawListener() {
                     @Override

@@ -272,12 +272,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="28dp"
                 android:layout_marginTop="16dp"
+                android:alpha="0"
                 android:background="@drawable/details_background"
                 android:elevation="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/gradientViewer"
-                android:alpha="0">
+                app:layout_constraintTop_toTopOf="@+id/gradientViewer">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -299,11 +299,11 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
+                    android:tint="?SecondaryTextColour"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/icon_copy"
-                    android:tint="?SecondaryTextColour"/>
+                    app:srcCompat="@drawable/icon_copy" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -14,7 +14,7 @@
     <color name="colorDarkThemeDetailsDescriptionTextColour">#8c8c8c</color>
     <color name="colorDarkThemeDetailsHEXTextColour">#bababa</color>
     <color name="colorDarkThemeDetailsDividerColour">#4f4f4f</color>
-    <color name="colorDarkThemeBlurColour">#4013191f</color>
+    <color name="colorDarkThemeBlurColour">#8013191F</color>
 
     <color name="colorLightThemeForeground">#FFFFFF</color>
     <color name="colorLightThemeBackground">#F8F8F8</color>
@@ -23,7 +23,7 @@
     <color name="colorLightThemeDetailsDescriptionTextColour">#9d9d9d</color>
     <color name="colorLightThemeDetailsHEXTextColour">#505050</color>
     <color name="colorLightThemeDetailsDividerColour">#dadada</color>
-    <color name="colorLightThemeBlurColour">#40FFFFFF</color>
+    <color name="colorLightThemeBlurColour">#80FFFFFF</color>
 
     <!-- Login Screen -->
     <color name="editTextColour">#80FFFFFF</color>
