@@ -125,6 +125,7 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
             gridView.setTranslationY(screenHeight);
         }, 10);
         gridView.setAlpha(1);
+        gridView.setEnabled(false);
         titleHolder.setAlpha(0);
 
         swipeToRefresh = findViewById(R.id.swipeToRefresh);
@@ -260,22 +261,25 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
             if (Values.lastVersion != appVersion){
                 UIAnimations.blurViewObjectAnimator(changelogBlur, "alpha", 1, 500, 0, new DecelerateInterpolator());
                 ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(changelogHolder, "alpha", 1);
-                objectAnimator.setDuration(500);
+                objectAnimator.setDuration(200);
                 objectAnimator.setInterpolator(new DecelerateInterpolator());
                 objectAnimator.start();
                 swipeToRefresh.setEnabled(false);
                 gridView.setEnabled(false);
-            }
+            }else {gridView.setEnabled(true);UIAnimations.constraintLayoutVisibility(changelogHolder, View.GONE, 0);}
             hideChangelogButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     UIAnimations.blurViewObjectAnimator(changelogBlur, "alpha", 0, 1000, 0, new DecelerateInterpolator());
                     ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(changelogHolder, "alpha", 0);
-                    objectAnimator.setDuration(500);
+                    objectAnimator.setDuration(200);
                     objectAnimator.setInterpolator(new DecelerateInterpolator());
                     objectAnimator.start();
                     swipeToRefresh.setEnabled(true);
                     gridView.setEnabled(true);
+                    UIAnimations.constraintLayoutVisibility(changelogHolder, View.GONE, 200);
+                    Values.lastVersion = appVersion;
+                    Values.saveValues(GradientsList.this);
                 }
             });
         }, 2000);
@@ -341,6 +345,7 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
             cellularDataWarningDialog.dismiss();
             if (isInterenetConnected()) {
                 Values.askData = false;
+                Values.saveValues(GradientsList.this);
                 getItems();
             } else {
                 showNoConnectionDialog();

@@ -26,6 +26,11 @@ public class UIAnimations {
         }, delay);
     }
 
+    public static void constraintLayoutVisibility(ConstraintLayout layout, int visibility, int delay){
+        Handler handler = new Handler();
+        handler.postDelayed(() -> layout.setVisibility(visibility), delay);
+    }
+
     public static void constraintLayoutAlpha(ConstraintLayout layout, int value, int delay){
         Handler handler = new Handler();
         handler.postDelayed(() -> {

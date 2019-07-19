@@ -35,7 +35,7 @@ public class Values {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE);
         vibrations = sharedPreferences.getBoolean("vibrations", true);
         firstStart = sharedPreferences.getBoolean("firstStart", true);
-        darkMode = sharedPreferences.getBoolean("darkMode", false);
+        darkMode = sharedPreferences.getBoolean("darkMode", true);
         uiDesignerMode = sharedPreferences.getBoolean("uiDesignerMode", false);
         uppercaseHEX = sharedPreferences.getBoolean("uppercaseHEX", true);
         askData = sharedPreferences.getBoolean("askData", true);

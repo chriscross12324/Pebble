@@ -8,70 +8,8 @@
     android:orientation="vertical"
     android:padding="20dp">
 
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="11dp"
-        android:fontFamily="@font/googlesans_medium"
-        android:text="Added Gradient Details screen; just tap a module"
-        android:textAlignment="viewStart"
-        android:textColor="?SecondaryTextColour"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView14"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
     <ImageView
-        android:id="@+id/imageView14"
-        android:layout_width="7dp"
-        android:layout_height="7dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/circle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-    <ImageView
-        android:id="@+id/imageView12"
-        android:layout_width="7dp"
-        android:layout_height="7dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/circle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView10" />
-
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="280dp"
-        android:fontFamily="@font/googlesans_medium"
-        android:text="Added Splash Screen when opening app"
-        android:textAlignment="viewStart"
-        android:textColor="?SecondaryTextColour"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView12"
-        app:layout_constraintTop_toBottomOf="@+id/imageView10" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/googlesans_medium"
-        android:text="Pebble Updated!!!"
-        android:textColor="?PrimaryTextColour"
-        android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detailsDivider" />
-
-    <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/pebbleLogo"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
@@ -81,7 +19,7 @@
         app:srcCompat="@drawable/icon_pebble_foreground" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/pebbleTitle"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
@@ -90,11 +28,11 @@
         android:text="@string/pebble"
         android:textColor="?SecondaryTextColour"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/pebbleLogo"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/detailsDivider"
+        android:id="@+id/dividerOne"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginStart="8dp"
@@ -103,10 +41,34 @@
         android:background="?DetailsDividerColour"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/pebbleLogo" />
+
+    <TextView
+        android:id="@+id/updatedTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/googlesans_medium"
+        android:text="Pebble Updated!!!"
+        android:textColor="?PrimaryTextColour"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dividerOne" />
+
+    <TextView
+        android:id="@+id/updatedBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
+        android:text="Here are the latest changes to Pebble."
+        android:textColor="?SecondaryTextColour"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/updatedTitle" />
 
     <ImageView
-        android:id="@+id/detailsDivider2"
+        android:id="@+id/dividerTwo"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginStart="8dp"
@@ -116,53 +78,234 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        app:layout_constraintTop_toBottomOf="@+id/updatedBody" />
 
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="4dp"
-        android:text="Here are the latest changes with Pebble."
-        android:textColor="?SecondaryTextColour"
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/dividerTwo">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/googlesans_bold"
+                android:text="July 17, 2019"
+                android:textColor="?PrimaryTextColour"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/googlesans_bold"
-        android:text="July 17, 2019"
-        android:textColor="?PrimaryTextColour"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detailsDivider2" />
+            <ImageView
+                android:id="@+id/newBadge"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/date"
+                app:srcCompat="@drawable/icon_changelog_new" />
 
-    <ImageView
-        android:id="@+id/imageView10"
-        android:layout_width="40dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8"
-        app:srcCompat="@drawable/icon_changelog_new" />
+            <TextView
+                android:id="@+id/version"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/googlesans_regular"
+                android:gravity="center"
+                android:text="1.0.0-beta.2"
+                android:textColor="?SecondaryTextColour"
+                app:layout_constraintStart_toEndOf="@+id/newBadge"
+                app:layout_constraintTop_toBottomOf="@+id/date" />
 
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/googlesans_regular"
-        android:gravity="center"
-        android:text="1.0.0-beta.2"
-        android:textColor="?SecondaryTextColour"
-        app:layout_constraintStart_toEndOf="@+id/imageView10"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+            <ImageView
+                android:id="@+id/dotOne"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/newBadge" />
+
+            <TextView
+                android:id="@+id/newOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="11dp"
+                android:fontFamily="@font/googlesans_medium"
+                android:text="Added Splash Screen when opening app"
+                android:textAlignment="viewStart"
+                android:textColor="?SecondaryTextColour"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/dotOne"
+                app:layout_constraintTop_toBottomOf="@+id/newBadge" />
+
+            <ImageView
+                android:id="@+id/dotTwo"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/newOne" />
+
+            <TextView
+                android:id="@+id/newTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="11dp"
+                android:fontFamily="@font/googlesans_medium"
+                android:text="Added Gradient Details screen; just tap a module"
+                android:textAlignment="viewStart"
+                android:textColor="?SecondaryTextColour"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/dotTwo"
+                app:layout_constraintTop_toBottomOf="@+id/newOne" />
+
+            <ImageView
+                android:id="@+id/changedBadge"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/newTwo"
+                app:srcCompat="@drawable/icon_changelog_changed" />
+
+            <ImageView
+                android:id="@+id/dotThree"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/changedBadge" />
+
+            <TextView
+                android:id="@+id/changedOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="11dp"
+                android:fontFamily="@font/googlesans_medium"
+                android:text="Updated the design of data/no connection\nscreens"
+                android:textAlignment="viewStart"
+                android:textColor="?SecondaryTextColour"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/dotThree"
+                app:layout_constraintTop_toBottomOf="@+id/changedBadge" />
+
+            <ImageView
+                android:id="@+id/dotFour"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/changedOne" />
+
+            <TextView
+                android:id="@+id/changedTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="11dp"
+                android:fontFamily="@font/googlesans_medium"
+                android:text="Changed the way animations work"
+                android:textAlignment="viewStart"
+                android:textColor="?SecondaryTextColour"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/dotFour"
+                app:layout_constraintTop_toBottomOf="@+id/changedOne" />
+
+            <ImageView
+                android:id="@+id/dotFive"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/changedTwo" />
+
+            <TextView
+                android:id="@+id/changedThree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="11dp"
+                android:fontFamily="@font/googlesans_medium"
+                android:text="Fixed an issue where the 'Wi-Fi' and 'Data'\nscreens would show evertime the app\nwas opened"
+                android:textAlignment="viewStart"
+                android:textColor="?SecondaryTextColour"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/dotFive"
+                app:layout_constraintTop_toBottomOf="@+id/changedTwo" />
+
+            <ImageView
+                android:id="@+id/dotSix"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/changedThree" />
+
+            <TextView
+                android:id="@+id/changedFour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="11dp"
+                android:fontFamily="@font/googlesans_medium"
+                android:text="Fixed an issue with some UI Elements"
+                android:textAlignment="viewStart"
+                android:textColor="?SecondaryTextColour"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/dotSix"
+                app:layout_constraintTop_toBottomOf="@+id/changedThree" />
+
+            <ImageView
+                android:id="@+id/dotSeven"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/changedFour" />
+
+            <TextView
+                android:id="@+id/changedFive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="11dp"
+                android:fontFamily="@font/googlesans_medium"
+                android:text="Updated app icon"
+                android:textAlignment="viewStart"
+                android:textColor="?SecondaryTextColour"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/dotSeven"
+                app:layout_constraintTop_toBottomOf="@+id/changedFour" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
