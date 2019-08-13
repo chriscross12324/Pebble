@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.os.Handler;
 import android.widget.ImageView;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -93,4 +94,10 @@ public class UIAnimations {
             objectAnimator.start();
         }, delay);
     }
+
+    public static void textViewChanger(TextView layout, String text, int delay){
+        Handler handler = new Handler();
+        handler.postDelayed(() -> layout.setText(text), delay);
+    }
+
 }

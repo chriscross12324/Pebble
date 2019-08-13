@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
         } else {
-            Intent GL = new Intent(MainActivity.this, GradientsList.class);
+            Intent GL = new Intent(MainActivity.this, GradientsScreen.class);
             startActivity(GL);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //showConnectingDialog();
-                Intent gradients = new Intent(MainActivity.this, GradientsList.class);
+                Intent gradients = new Intent(MainActivity.this, GradientsScreen.class);
                 startActivity(gradients);
                 //MainActivity.this.finish();
             }

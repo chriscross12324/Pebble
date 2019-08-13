@@ -8,6 +8,10 @@ public class Values {
     public static final String SAVE = "SavedValues";
     public static boolean firstStart;
 
+    //Vibrations
+    public static long[] notification = {0,5,5,5};
+    public static long hapticFeedback = 5;
+
 
     public static String currentActivity;
 

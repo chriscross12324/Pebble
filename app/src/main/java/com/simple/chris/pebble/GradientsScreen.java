@@ -4,10 +4,8 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.ActivityOptions;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -17,7 +15,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -36,6 +33,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -60,19 +58,22 @@ import java.util.Objects;
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
 
-public class GradientsList extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class GradientsScreen extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     BlurView changelogBlur;
     ImageView top, title, bottom;
     GridView gridView;
     Dialog noConnectionDialog, cellularDataWarningDialog;
     Button openSystemSettingsNoConnection, dontAskAgain, tryWifi;
-    ConstraintLayout titleHolder, changelogHolder;
+    ConstraintLayout titleHolder, changelogHolder, connectionNotification;
     LinearLayout connectingDialog, retry, useButton, hideChangelogButton;
     SwipeRefreshLayout swipeToRefresh;
+    TextView connectingDialogBody, connectionStatusText;
 
     int screenHeight;
     int imageViewHeight;
+    boolean connected = false;
+    String connectionType;
 
     int appVersion;
 
@@ -94,7 +95,7 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
         } else {
             background.setBackgroundResource(R.drawable.placeholder_gradient_light);
         }
-        Values.saveValues(GradientsList.this);
+        Values.saveValues(GradientsScreen.this);
 
         appVersion = BuildConfig.VERSION_CODE;
         changelogBlur = findViewById(R.id.changelogBlur);
@@ -103,6 +104,11 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
 
         titleHolder = findViewById(R.id.titleHolder);
         connectingDialog = findViewById(R.id.connectingDialog);
+        connectingDialogBody = findViewById(R.id.connectingDialogBody);
+        connectionNotification = findViewById(R.id.connectionNotification);
+        connectionStatusText = findViewById(R.id.connectionStatusText);
+
+        connectionNotification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
 
 
         //Create Dialogs
@@ -129,9 +135,10 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
         titleHolder.setAlpha(0);
 
         swipeToRefresh = findViewById(R.id.swipeToRefresh);
+        swipeToRefresh.setEnabled(false);
         swipeToRefresh.setOnRefreshListener(() -> {
             gridView.setEnabled(false);
-            Intent GL = new Intent(GradientsList.this, GradientsList.class);
+            Intent GL = new Intent(GradientsScreen.this, GradientsScreen.class);
             startActivity(GL);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
@@ -140,15 +147,21 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
             if (isNetworkTypeCellular()) {
                 if (Values.askData) {
                     showCellularWarningDialog();
+                    connectionType = "Cellular";
                 } else {
                     getItems();
+                    connectionType = "Cellular";
                 }
             } else {
                 getItems();
+                connectionType = "Wi-Fi";
             }
         } else {
-            showNoConnectionDialog();
+            getItems();
+            connectionType = "Null";
+            //showNoConnectionDialog();
         }
+        connectionChecker();
 
     }
 
@@ -174,7 +187,10 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void parseItems(String jsonResponse) {
+        connected = true;
+        swipeToRefresh.setEnabled(true);
         ArrayList<HashMap<String, String>> list = new ArrayList<>();
+        ArrayList<HashMap<String, String>> featuredList = new ArrayList<>();
 
         try {
             JSONObject jobj = new JSONObject(jsonResponse);
@@ -188,14 +204,19 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
                 String leftColour = jo.getString("leftColour");
                 String rightColour = jo.getString("rightColour");
                 String description = jo.getString("description");
+                String featured = jo.getString("featured");
 
                 HashMap<String, String> item = new HashMap<>();
                 item.put("backgroundName", backgroundName);
                 item.put("leftColour", leftColour);
                 item.put("rightColour", rightColour);
                 item.put("description", description);
+                HashMap<String, String> flist = new HashMap<>();
+                flist.put("featured", featured);
 
                 list.add(item);
+                featuredList.add(flist);
+                //Log.e("INFO", ""+featuredList);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -206,7 +227,7 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
 
         if (Values.uiDesignerMode) {
             try {
-                GridAdapterUIDesigner gridAdapterUIDesigner = new GridAdapterUIDesigner(GradientsList.this, list);
+                GridAdapterUIDesigner gridAdapterUIDesigner = new GridAdapterUIDesigner(GradientsScreen.this, list);
                 gridView.setAdapter(gridAdapterUIDesigner);
             } catch (Exception e) {
                 Log.e("Err", "" + e.getLocalizedMessage());
@@ -214,7 +235,7 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
 
         } else {
             try {
-                GridAdapterUserFriendly gridAdapterUserFriendly = new GridAdapterUserFriendly(GradientsList.this, list);
+                GridAdapterUserFriendly gridAdapterUserFriendly = new GridAdapterUserFriendly(GradientsScreen.this, list);
                 gridView.setAdapter(gridAdapterUserFriendly);
             } catch (Exception e) {
                 Log.e("Err", "" + e.getLocalizedMessage());
@@ -253,12 +274,12 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
             Drawable windowBackground = decorView.getBackground();
             changelogBlur.setupWith(rootView)
                     .setFrameClearDrawable(windowBackground)
-                    .setBlurAlgorithm(new RenderScriptBlur(GradientsList.this))
+                    .setBlurAlgorithm(new RenderScriptBlur(GradientsScreen.this))
                     .setBlurRadius(15f)
                     .setHasFixedTransformationMatrix(false);
 
 
-            if (Values.lastVersion != appVersion){
+            if (Values.lastVersion != appVersion) {
                 UIAnimations.blurViewObjectAnimator(changelogBlur, "alpha", 1, 500, 0, new DecelerateInterpolator());
                 ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(changelogHolder, "alpha", 1);
                 objectAnimator.setDuration(200);
@@ -266,7 +287,10 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
                 objectAnimator.start();
                 swipeToRefresh.setEnabled(false);
                 gridView.setEnabled(false);
-            }else {gridView.setEnabled(true);UIAnimations.constraintLayoutVisibility(changelogHolder, View.GONE, 0);}
+            } else {
+                gridView.setEnabled(true);
+                UIAnimations.constraintLayoutVisibility(changelogHolder, View.GONE, 0);
+            }
             hideChangelogButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -279,7 +303,7 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
                     gridView.setEnabled(true);
                     UIAnimations.constraintLayoutVisibility(changelogHolder, View.GONE, 200);
                     Values.lastVersion = appVersion;
-                    Values.saveValues(GradientsList.this);
+                    Values.saveValues(GradientsScreen.this);
                 }
             });
         }, 2000);
@@ -345,7 +369,7 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
             cellularDataWarningDialog.dismiss();
             if (isInterenetConnected()) {
                 Values.askData = false;
-                Values.saveValues(GradientsList.this);
+                Values.saveValues(GradientsScreen.this);
                 getItems();
             } else {
                 showNoConnectionDialog();
@@ -379,16 +403,51 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
         connectingAnimation.setBackgroundResource(R.drawable.loading_animation);
         AnimationDrawable animationDrawable = (AnimationDrawable) connectingAnimation.getBackground();
         animationDrawable.start();
+
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            if (!connected) {
+                connectionNotification.setAlpha(1);
+                UIAnimations.constraintLayoutObjectAnimator(connectionNotification, "translationY",
+                        0, 500,
+                        0, new DecelerateInterpolator(3));
+                UIAnimations.constraintLayoutObjectAnimator(connectionNotification, "translationY",
+                        Math.round(-45 * getResources().getDisplayMetrics().density), 500,
+                        7000, new DecelerateInterpolator(3));
+                UIAnimations.textViewChanger(connectionStatusText, "Trying a self fix", 7500);
+                UIAnimations.constraintLayoutObjectAnimator(connectionNotification, "translationY",
+                        0, 500,
+                        8300, new DecelerateInterpolator(3));
+                UIAnimations.constraintLayoutObjectAnimator(connectionNotification, "translationY",
+                        Math.round(-45 * getResources().getDisplayMetrics().density), 500,
+                        14300, new DecelerateInterpolator(3));
+            }
+
+        }, 8000);
+
+
+        Handler handler2 = new Handler();
+        handler2.postDelayed(() -> {
+            if (!connected) {
+                Intent reload = new Intent(GradientsScreen.this, GradientsScreen.class);
+                startActivity(reload);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
+            }
+        }, 25000);
+
+
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(GradientsList.this, GradientDetails.class);
+        Intent intent = new Intent(GradientsScreen.this, GradientDetails.class);
 
         @SuppressWarnings("unchecked")
         HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
 
         gridView.setEnabled(false);
+        swipeToRefresh.setEnabled(false);
 
         moduleView = view;
         module = parent;
@@ -413,17 +472,18 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
         AnimatorSet set = new AnimatorSet();
         set.play(slideAnimation);
         set.setInterpolator(new DecelerateInterpolator(2));
+        set.setDuration(350);
         set.start();
-        if (imageViewHeight == 0){
+        if (imageViewHeight == 0) {
             imageViewHeight = imageView.getHeight();
         }
 
 
         Handler handler = new Handler();
         handler.postDelayed(() -> {
-            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(GradientsList.this, view.findViewById(R.id.cardView), backgroundName);
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(GradientsScreen.this, view.findViewById(R.id.cardView), backgroundName);
             startActivity(intent, options.toBundle());
-        }, 600);
+        }, 400);
 
     }
 
@@ -444,8 +504,9 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
             set.setInterpolator(new DecelerateInterpolator(3));
             set.start();
 
-            Values.currentActivity = "GradientsList";
+            Values.currentActivity = "GradientsScreen";
             gridView.setEnabled(true);
+            swipeToRefresh.setEnabled(true);
         }
         super.onResume();
     }
@@ -480,5 +541,45 @@ public class GradientsList extends AppCompatActivity implements AdapterView.OnIt
         return networkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
     }
 
+    public void connectionChecker() {
+        connectionNotification.setAlpha(1);
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            if (connected) {
+                if (isInterenetConnected()) {
+                    if (isNetworkTypeCellular()) {
+                        if (!connectionType.equals("Cellular")) {
+                            connectionStatusText.setText("Connection: Cellular");
+                            playAnimation();
+                            connectionType = "Cellular";
+                        }
+                    } else {
+                        if (!connectionType.equals("Wi-Fi")) {
+                            connectionStatusText.setText("Connection: Wi-Fi");
+                            playAnimation();
+                            connectionType = "Wi-Fi";
+                        }
+                    }
+                } else {
+                    if (!connectionType.equals("Null")) {
+                        connectionStatusText.setText("No Connection");
+                        playAnimation();
+                        connectionType = "Null";
+                    }
+                }
+            }
+            connectionChecker();
+        }, 5000);
+    }
+
+    public void playAnimation() {
+        Vibration.INSTANCE.notification(GradientsScreen.this);
+        UIAnimations.constraintLayoutObjectAnimator(connectionNotification, "translationY",
+                0, 500,
+                0, new DecelerateInterpolator(3));
+        UIAnimations.constraintLayoutObjectAnimator(connectionNotification, "translationY",
+                Math.round(-45 * getResources().getDisplayMetrics().density), 500,
+                3000, new DecelerateInterpolator(3));
+    }
 
 }

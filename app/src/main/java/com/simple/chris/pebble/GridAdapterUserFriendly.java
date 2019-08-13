@@ -77,7 +77,7 @@ public class GridAdapterUserFriendly extends BaseAdapter {
 
         }catch (Exception e){
             Log.e("TAG", ""+e.getLocalizedMessage());
-            //GradientsList.appCrashReceiver();
+            //GradientsScreen.appCrashReceiver();
         }
         return convertView;
     }

@@ -1,6 +1,7 @@
 package com.simple.chris.pebble;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -8,11 +9,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,6 +25,7 @@ public class Permissions extends AppCompatActivity {
     TextView asterisk;
     Dialog wifiPermission, dataWarning;
     LinearLayout understandButtonWifi, understandButtonData;
+    ConstraintLayout warningNotification;
     int dialogWidth;
 
     @Override
@@ -33,14 +37,14 @@ public class Permissions extends AppCompatActivity {
             setTheme(R.style.ThemeLight);
         }
         setContentView(R.layout.activity_permissions);
-        ImageView background = (ImageView) findViewById(R.id.background);
+        ImageView background = findViewById(R.id.background);
         if (Values.darkMode) {
             background.setBackgroundResource(R.drawable.placeholder_gradient_dark);
         } else {
             background.setBackgroundResource(R.drawable.placeholder_gradient_light);
         }
 
-        asterisk = findViewById(R.id.asterisk);
+
 
         wifiPermission = new Dialog(this);
         dataWarning = new Dialog(this);
@@ -50,6 +54,9 @@ public class Permissions extends AppCompatActivity {
 
         understandButtonWifi = wifiPermission.findViewById(R.id.understandButton);
         understandButtonData = dataWarning.findViewById(R.id.understandButton);
+        warningNotification = findViewById(R.id.warningNotification);
+
+        warningNotification.setTranslationY(-90 * getResources().getDisplayMetrics().density);
 
         WindowManager.LayoutParams layoutParams = wifiPermission.getWindow().getAttributes();
         Window window = wifiPermission.getWindow();
@@ -63,6 +70,7 @@ public class Permissions extends AppCompatActivity {
             public void onClick(View v) {
                 wifiPermission.dismiss();
                 showDataWarningDialog();
+                warningNotification.setAlpha(1);
             }
         });
 
@@ -82,7 +90,7 @@ public class Permissions extends AppCompatActivity {
     }
 
     public void showDataWarningDialog(){
-        asterisk.setVisibility(View.VISIBLE);
+        //asterisk.setVisibility(View.VISIBLE);
         WindowManager.LayoutParams layoutParams = dataWarning.getWindow().getAttributes();
         Window window = dataWarning.getWindow();
         layoutParams.dimAmount = 0f;
@@ -91,17 +99,32 @@ public class Permissions extends AppCompatActivity {
         layoutParams.gravity = Gravity.CENTER;
         window.setAttributes(layoutParams);
 
+        UIAnimations.constraintLayoutObjectAnimator(warningNotification, "translationY",
+                0, 500,
+                500, new DecelerateInterpolator(3));
+
         understandButtonData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                UIAnimations.constraintLayoutObjectAnimator(warningNotification, "translationY",
+                        Math.round(-90 * getResources().getDisplayMetrics().density), 500,
+                        0, new DecelerateInterpolator(3));
                 dataWarning.dismiss();
-                Intent GL = new Intent(Permissions.this, GradientsList.class);
-                startActivity(GL);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                Values.firstStart = false;
-                finish();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent GL = new Intent(Permissions.this, GradientsScreen.class);
+                        startActivity(GL);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        Values.firstStart = false;
+                        finish();
+                    }
+                },700);
+
             }
         });
+
 
         dataWarning.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dataWarning.setCancelable(false);

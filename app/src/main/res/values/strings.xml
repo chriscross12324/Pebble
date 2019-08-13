@@ -10,7 +10,7 @@
     <string name="noConnectionBody">Your device is not connected to a network, please connect to use Pebble</string>
     <string name="dataWarningBody">You are trying to use cellular data, this can result in overage charges</string>
     <string name="internetBody">We need an active internet connection in order to connect to the server</string>
-    <string name="dataBody">Using cellular data may result in overage fees, you will be warned before using data*</string>
+    <string name="dataBody">Using cellular data may result in overage fees, you will be warned before using data</string>
     <string name="descriptionDecoration">Decoration</string>
     <string name="descriptionTitleGradients">Title</string>
     <string name="descriptionAnimation">Animation</string>

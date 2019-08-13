@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
@@ -24,7 +25,7 @@ public class GradientDetails extends AppCompatActivity {
     ConstraintLayout detailsHolder, actionsHolder, copiedNotification;
     LinearLayout backButton, hideButton, startHex, endHex;
     ImageView gradientViewer, topColourCircle, bottomColourCircle, arrow;
-    TextView detailsTitle, detailsDescription, topColourHex, bottomColourHex;
+    TextView detailsTitle, detailsDescription, topColourHex, bottomColourHex, copiedText;
     String backgroundName, leftColour, rightColour, description;
     int leftColourInt, rightColourInt, detailsDefaultHeight;
     boolean expanded = false;
@@ -64,6 +65,7 @@ public class GradientDetails extends AppCompatActivity {
         detailsDescription = findViewById(R.id.detailsDescription);
         topColourHex = findViewById(R.id.topColourHex);
         bottomColourHex = findViewById(R.id.bottomColourHex);
+        copiedText = findViewById(R.id.copiedText);
 
         //Get-Set values from previous activity
         Intent intent = getIntent();
@@ -98,13 +100,18 @@ public class GradientDetails extends AppCompatActivity {
             clipboardManager.setPrimaryClip(clipData);
             copiedNotification.setAlpha(1);
             if (!playingCopiedAnimation) {
+                playingCopiedAnimation = true;
+                Vibration.INSTANCE.hFeedack(GradientDetails.this);
                 UIAnimations.constraintLayoutObjectAnimator(copiedNotification, "translationY",
                         0, 500,
                         0, new DecelerateInterpolator(3));
                 UIAnimations.constraintLayoutObjectAnimator(copiedNotification, "translationY",
                         Math.round(-45 * getResources().getDisplayMetrics().density), 500,
                         2000, new DecelerateInterpolator(3));
-                UIAnimations.constraintLayoutAlpha(copiedNotification, 0, 3000);
+                UIAnimations.constraintLayoutAlpha(copiedNotification, 0, 2500);
+                boolean handler = new Handler().postDelayed(() -> {
+                    playingCopiedAnimation = false;
+                }, 2500);
             }
         });
         endHex.setOnClickListener(v -> {
@@ -113,14 +120,20 @@ public class GradientDetails extends AppCompatActivity {
             clipboardManager.setPrimaryClip(clipData);
             copiedNotification.setAlpha(1);
             if (!playingCopiedAnimation) {
+                playingCopiedAnimation = true;
+                Vibration.INSTANCE.hFeedack(GradientDetails.this);
                 UIAnimations.constraintLayoutObjectAnimator(copiedNotification, "translationY",
                         0, 500,
                         0, new DecelerateInterpolator(3));
                 UIAnimations.constraintLayoutObjectAnimator(copiedNotification, "translationY",
                         Math.round(-45 * getResources().getDisplayMetrics().density), 500,
                         2000, new DecelerateInterpolator(3));
-                UIAnimations.constraintLayoutAlpha(copiedNotification, 0, 3000);
+                UIAnimations.constraintLayoutAlpha(copiedNotification, 0, 2500);
+                boolean handler = new Handler().postDelayed(() -> {
+                    playingCopiedAnimation = false;
+                }, 2500);
             }
+            Log.e("TAG", ""+copiedText.getTextSize());
         });
 
         detailsHolder.setOnClickListener(v -> {
@@ -242,6 +255,7 @@ public class GradientDetails extends AppCompatActivity {
                 }
         );
     }
+
 
     @Override
     public void onBackPressed() {
