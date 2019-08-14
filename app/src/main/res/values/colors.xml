@@ -30,7 +30,46 @@
     <color name="editTextLineColour">#90FFFFFF</color>
     <color name="Colour_Placeholder">#76E646</color>
     <color name="Colour_Placeholder2">#4693E6</color>
-    <color name="Colour_Placeholder3">#E67946</color>
+    <color name="Colour_Placeholder3">#E67946</color>\
+
+    <color name="wintersDayTL">#c2e9fb</color>
+    <color name="wintersDayBR">#a1c4fd</color>
+
+    <!-- Shallow Lake -->
+    <color name="shallowLakeTL">#89f7fe</color>
+    <color name="shallowLakeBR">#66a6ff</color>
+
+    <!-- Tropic Ocean -->
+    <color name="tropicalOceanTL">#84fab0</color>
+    <color name="tropicalOceanBR">#8fd3f4</color>
+
+    <!-- Green Grass -->
+    <color name="greenGrassTL">#d4fc79</color>
+    <color name="greenGrassBR">#96e6a1</color>
+
+    <!-- Sunshine -->
+    <color name="sunshineTL">#f6d365</color>
+    <color name="sunshineBR">#fda085</color>
+
+    <!-- Forest -->
+    <color name="forestTL">#3cba92</color>
+    <color name="forestBR">#0ba360</color>
+
+    <!-- Atmosphere -->
+    <color name="atmosphereTL">#6f86d6</color>
+    <color name="atmosphereBR">#48c6ef</color>
+
+    <!-- Purple Haze -->
+    <color name="purpleHazeTL">#88d3ce</color>
+    <color name="purpleHazeBR">#6e45e2</color>
+
+    <!-- Cold Night -->
+    <color name="coldNightTL">#A2B5DC</color>
+    <color name="coldNightBR">#163581</color>
+
+    <!-- Eternal Space -->
+    <color name="eternalSpaceTL">#537895</color>
+    <color name="eternalSpaceBR">#09203f</color>
 
 
 </resources>

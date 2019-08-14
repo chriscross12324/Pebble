@@ -33,12 +33,16 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -62,13 +66,17 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
 
     BlurView changelogBlur;
     ImageView top, title, bottom;
-    GridView gridView;
+    ExpandedHeightScrollView gridView;
     Dialog noConnectionDialog, cellularDataWarningDialog;
     Button openSystemSettingsNoConnection, dontAskAgain, tryWifi;
     ConstraintLayout titleHolder, changelogHolder, connectionNotification;
     LinearLayout connectingDialog, retry, useButton, hideChangelogButton;
     SwipeRefreshLayout swipeToRefresh;
+    ScrollView scrollView;
     TextView connectingDialogBody, connectionStatusText;
+    private ViewPager featuredGradients;
+    private ViewPagerAdapter featuredAdapter;
+    private ArrayList<ViewPagerModel> featuredContents;
 
     int screenHeight;
     int imageViewHeight;
@@ -107,6 +115,39 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         connectingDialogBody = findViewById(R.id.connectingDialogBody);
         connectionNotification = findViewById(R.id.connectionNotification);
         connectionStatusText = findViewById(R.id.connectionStatusText);
+        scrollView = findViewById(R.id.scrollView);
+
+        featuredGradients = findViewById(R.id.featuredGradients);
+        featuredContents = new ArrayList<>();
+        int startColours[] = {ContextCompat.getColor(GradientsScreen.this, R.color.atmosphereTL),
+                ContextCompat.getColor(GradientsScreen.this, R.color.coldNightTL),
+                ContextCompat.getColor(GradientsScreen.this, R.color.sunshineTL),
+                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayTL),
+                ContextCompat.getColor(GradientsScreen.this, R.color.shallowLakeTL),
+                ContextCompat.getColor(GradientsScreen.this, R.color.greenGrassTL)};
+        int endColours[] = {ContextCompat.getColor(GradientsScreen.this, R.color.atmosphereBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.coldNightBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.sunshineBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.shallowLakeBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.greenGrassBR)};
+        String names[] = {"Atmosphere", "Cold Night", "Sunshine", "Winters Day", "Shallow Lake", "Green Grass"};
+
+        for (int i = 0; i < names.length; i++) {
+            ViewPagerModel viewPagerModel = new ViewPagerModel();
+
+            viewPagerModel.startColour = startColours[i];
+            viewPagerModel.endColour = endColours[i];
+            viewPagerModel.name = names[i];
+
+            featuredContents.add(viewPagerModel);
+        }
+
+        featuredAdapter = new ViewPagerAdapter(featuredContents, GradientsScreen.this);
+        featuredGradients.setPageTransformer(true, new ViewPagerStack());
+        featuredGradients.setOffscreenPageLimit(4);
+        featuredGradients.setAdapter(featuredAdapter);
+
 
         connectionNotification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
 
@@ -133,6 +174,8 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         gridView.setAlpha(1);
         gridView.setEnabled(false);
         titleHolder.setAlpha(0);
+
+        scrollView.setEnabled(false);
 
         swipeToRefresh = findViewById(R.id.swipeToRefresh);
         swipeToRefresh.setEnabled(false);
@@ -189,6 +232,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
     private void parseItems(String jsonResponse) {
         connected = true;
         swipeToRefresh.setEnabled(true);
+        scrollView.setEnabled(true);
         ArrayList<HashMap<String, String>> list = new ArrayList<>();
         ArrayList<HashMap<String, String>> featuredList = new ArrayList<>();
 
@@ -286,6 +330,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                 objectAnimator.setInterpolator(new DecelerateInterpolator());
                 objectAnimator.start();
                 swipeToRefresh.setEnabled(false);
+                scrollView.setEnabled(false);
                 gridView.setEnabled(false);
             } else {
                 gridView.setEnabled(true);
@@ -300,6 +345,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                     objectAnimator.setInterpolator(new DecelerateInterpolator());
                     objectAnimator.start();
                     swipeToRefresh.setEnabled(true);
+                    scrollView.setEnabled(true);
                     gridView.setEnabled(true);
                     UIAnimations.constraintLayoutVisibility(changelogHolder, View.GONE, 200);
                     Values.lastVersion = appVersion;
@@ -408,19 +454,9 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         handler.postDelayed(() -> {
             if (!connected) {
                 connectionNotification.setAlpha(1);
-                UIAnimations.constraintLayoutObjectAnimator(connectionNotification, "translationY",
-                        0, 500,
-                        0, new DecelerateInterpolator(3));
-                UIAnimations.constraintLayoutObjectAnimator(connectionNotification, "translationY",
-                        Math.round(-45 * getResources().getDisplayMetrics().density), 500,
-                        7000, new DecelerateInterpolator(3));
+                playAnimation(0);
                 UIAnimations.textViewChanger(connectionStatusText, "Trying a self fix", 7500);
-                UIAnimations.constraintLayoutObjectAnimator(connectionNotification, "translationY",
-                        0, 500,
-                        8300, new DecelerateInterpolator(3));
-                UIAnimations.constraintLayoutObjectAnimator(connectionNotification, "translationY",
-                        Math.round(-45 * getResources().getDisplayMetrics().density), 500,
-                        14300, new DecelerateInterpolator(3));
+                playAnimation(8000);
             }
 
         }, 8000);
@@ -442,12 +478,14 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(GradientsScreen.this, GradientDetails.class);
+        Toast.makeText(this, "" + gridView.getHeight(), Toast.LENGTH_SHORT).show();
 
         @SuppressWarnings("unchecked")
         HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
 
         gridView.setEnabled(false);
         swipeToRefresh.setEnabled(false);
+        scrollView.setEnabled(false);
 
         moduleView = view;
         module = parent;
@@ -507,6 +545,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
             Values.currentActivity = "GradientsScreen";
             gridView.setEnabled(true);
             swipeToRefresh.setEnabled(true);
+            scrollView.setEnabled(true);
         }
         super.onResume();
     }
@@ -547,39 +586,109 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         handler.postDelayed(() -> {
             if (connected) {
                 if (isInterenetConnected()) {
+                    swipeToRefresh.setEnabled(true);
+                    scrollView.setEnabled(true);
                     if (isNetworkTypeCellular()) {
                         if (!connectionType.equals("Cellular")) {
                             connectionStatusText.setText("Connection: Cellular");
-                            playAnimation();
+                            playAnimation(0);
                             connectionType = "Cellular";
                         }
                     } else {
                         if (!connectionType.equals("Wi-Fi")) {
                             connectionStatusText.setText("Connection: Wi-Fi");
-                            playAnimation();
+                            playAnimation(0);
                             connectionType = "Wi-Fi";
                         }
                     }
                 } else {
                     if (!connectionType.equals("Null")) {
                         connectionStatusText.setText("No Connection");
-                        playAnimation();
+                        playAnimation(0);
                         connectionType = "Null";
                     }
+                    swipeToRefresh.setEnabled(false);
+                    scrollView.setEnabled(false);
                 }
             }
+
             connectionChecker();
         }, 5000);
     }
 
-    public void playAnimation() {
-        Vibration.INSTANCE.notification(GradientsScreen.this);
-        UIAnimations.constraintLayoutObjectAnimator(connectionNotification, "translationY",
-                0, 500,
-                0, new DecelerateInterpolator(3));
-        UIAnimations.constraintLayoutObjectAnimator(connectionNotification, "translationY",
-                Math.round(-45 * getResources().getDisplayMetrics().density), 500,
-                3000, new DecelerateInterpolator(3));
+    public void playAnimation(int delay) {
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            Vibration.INSTANCE.notification(GradientsScreen.this);
+            UIAnimations.constraintLayoutObjectAnimator(connectionNotification, "translationY",
+                    0, 500,
+                    0, new DecelerateInterpolator(3));
+            UIAnimations.constraintLayoutObjectAnimator(connectionNotification, "translationY",
+                    Math.round(-45 * getResources().getDisplayMetrics().density), 500,
+                    3000, new DecelerateInterpolator(3));
+        }, delay);
+
+    }
+
+    private class ViewPagerStack implements ViewPager.PageTransformer {
+
+        @Override
+        public void transformPage(@NonNull View page, float position) {
+            switch (Math.round(position)){
+                case 0:
+                    page.setScaleX(1f - 0.05f * position);
+                    page.setScaleY(1f);
+
+                    page.setTranslationX(-page.getWidth() * position);
+                    page.setTranslationY(-30 * position);
+                    Log.e("INFO", ""+position);
+                    break;
+                case 1:
+                    page.setScaleX(1f - 0.05f * position);
+                    page.setScaleY(1f);
+
+                    page.setTranslationX(-page.getWidth() * position);
+                    page.setTranslationY(-30 * position);
+                    Log.e("INFO", ""+position);
+                    break;
+                case 2:
+                    page.setScaleX(1f - 0.05f * position);
+                    page.setScaleY(1f);
+
+                    page.setTranslationX(-page.getWidth() * position);
+                    page.setTranslationY(-20 * position);
+                    Log.e("INFO", ""+position);
+                    break;
+                case 3:
+                    page.setScaleX(1f - 0.05f * position);
+                    page.setScaleY(1f);
+
+                    page.setTranslationX(-page.getWidth() * position);
+                    page.setTranslationY(-10 * position);
+                    Log.e("INFO", ""+position);
+                    break;
+                case 4:
+                    page.setScaleX(1f - 0.05f * position);
+                    page.setScaleY(1f);
+
+                    page.setTranslationX(-page.getWidth() * position);
+                    page.setTranslationY(0 * position);
+                    Log.e("INFO", ""+position);
+                    break;
+                default:
+                    page.setScaleX(1f - 0.05f * position);
+                    page.setScaleY(1f);
+
+                    page.setTranslationX(-page.getWidth() * position);
+                    page.setTranslationY(0 * position);
+                    Log.e("INFO", ""+position);
+                    break;
+
+            }
+            if (position >= 0){
+
+            }
+        }
     }
 
 }

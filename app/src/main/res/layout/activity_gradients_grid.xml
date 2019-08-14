@@ -151,25 +151,75 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <GridView
-                    android:id="@+id/gv_items"
+                <ScrollView
+                    android:id="@+id/scrollView"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:clipToPadding="false"
-                    android:gravity="center"
-                    android:horizontalSpacing="20dp"
-                    android:numColumns="2"
-                    android:overScrollMode="never"
-                    android:paddingStart="30dp"
-                    android:paddingTop="32dp"
-                    android:paddingEnd="30dp"
-                    android:paddingBottom="32dp"
-                    android:scrollbars="none"
-                    android:verticalSpacing="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/titleHolder"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/featuredTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginTop="32dp"
+                            android:fontFamily="@font/googlesans_bold"
+                            android:text="Featured"
+                            android:textColor="?PrimaryTextColour"
+                            android:textSize="36sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.viewpager.widget.ViewPager
+                            android:id="@+id/featuredGradients"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:layout_marginTop="16dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/featuredTitle" />
+
+                        <TextView
+                            android:id="@+id/browseTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/googlesans_bold"
+                            android:text="Browse"
+                            android:textColor="?PrimaryTextColour"
+                            android:textSize="36sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/featuredGradients" />
+
+                        <com.simple.chris.pebble.ExpandedHeightScrollView
+                            android:id="@+id/gv_items"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:clipToPadding="false"
+                            android:gravity="center"
+                            android:horizontalSpacing="20dp"
+                            android:numColumns="2"
+                            android:overScrollMode="never"
+                            android:paddingStart="30dp"
+                            android:paddingTop="24dp"
+                            android:paddingEnd="30dp"
+                            android:paddingBottom="32dp"
+                            android:scrollbars="none"
+                            android:verticalSpacing="20dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/browseTitle" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </ScrollView>
+
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -284,7 +334,7 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="24dp"
                     android:fontFamily="@font/googlesans_bold"
-                    android:text="July 18, 2019"
+                    android:text="August 13, 2019"
                     android:textColor="?PrimaryTextColour"
                     android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -308,7 +358,7 @@
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/googlesans_regular"
                     android:gravity="center"
-                    android:text="1.0.0-beta.2"
+                    android:text="1.0.0-beta.3"
                     android:textColor="?SecondaryTextColour"
                     app:layout_constraintStart_toEndOf="@+id/newBadge"
                     app:layout_constraintTop_toBottomOf="@+id/date" />
