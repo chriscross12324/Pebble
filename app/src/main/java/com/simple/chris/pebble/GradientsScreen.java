@@ -3,6 +3,7 @@ package com.simple.chris.pebble;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.app.Dialog;
 import android.content.Context;
@@ -18,10 +19,13 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -73,7 +77,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
     LinearLayout connectingDialog, retry, useButton, hideChangelogButton;
     SwipeRefreshLayout swipeToRefresh;
     ScrollView scrollView;
-    TextView connectingDialogBody, connectionStatusText;
+    TextView connectingDialogBody, connectionStatusText, featuredTitle, browseTitle;
     private ViewPager featuredGradients;
     private ViewPagerAdapter featuredAdapter;
     private ArrayList<ViewPagerModel> featuredContents;
@@ -88,6 +92,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
     Object module;
     View moduleView;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,37 +121,68 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         connectionNotification = findViewById(R.id.connectionNotification);
         connectionStatusText = findViewById(R.id.connectionStatusText);
         scrollView = findViewById(R.id.scrollView);
+        featuredTitle = findViewById(R.id.featuredTitle);
+        browseTitle = findViewById(R.id.browseTitle);
 
         featuredGradients = findViewById(R.id.featuredGradients);
+
         featuredContents = new ArrayList<>();
-        int startColours[] = {ContextCompat.getColor(GradientsScreen.this, R.color.atmosphereTL),
-                ContextCompat.getColor(GradientsScreen.this, R.color.coldNightTL),
-                ContextCompat.getColor(GradientsScreen.this, R.color.sunshineTL),
-                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayTL),
-                ContextCompat.getColor(GradientsScreen.this, R.color.shallowLakeTL),
-                ContextCompat.getColor(GradientsScreen.this, R.color.greenGrassTL)};
-        int endColours[] = {ContextCompat.getColor(GradientsScreen.this, R.color.atmosphereBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.coldNightBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.sunshineBR),
+        int startColours[] = {ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
                 ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.shallowLakeBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.greenGrassBR)};
-        String names[] = {"Atmosphere", "Cold Night", "Sunshine", "Winters Day", "Shallow Lake", "Green Grass"};
+                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR)};
+        int endColours[] = {ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR)
+        };
+        String names[] = {"Winters Day","Winters Day","Winters Day","Winters Day","Winters Day","Winters Day"};
+        //Log.e("C", ""+startColours[i]);
 
-        for (int i = 0; i < names.length; i++) {
+
+        for (int s = 0; s < startColours.length; s++) {
             ViewPagerModel viewPagerModel = new ViewPagerModel();
-
-            viewPagerModel.startColour = startColours[i];
-            viewPagerModel.endColour = endColours[i];
-            viewPagerModel.name = names[i];
+            Log.e("I", "Start: "+startColours[s]+" End: "+endColours[s]+" Name: "+names[s]);
+            viewPagerModel.startColour = startColours[s];
+            viewPagerModel.endColour = endColours[s];
+            viewPagerModel.name = names[s];
 
             featuredContents.add(viewPagerModel);
-        }
 
+        }
+        Log.e("K", ""+featuredContents);
         featuredAdapter = new ViewPagerAdapter(featuredContents, GradientsScreen.this);
         featuredGradients.setPageTransformer(true, new ViewPagerStack());
         featuredGradients.setOffscreenPageLimit(4);
         featuredGradients.setAdapter(featuredAdapter);
+        featuredGradients.setTranslationY(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -50,
+                GradientsScreen.this.getResources().getDisplayMetrics()));
+
+
+
+        featuredGradients.setOnTouchListener((view, motionEvent) -> {
+            view.getParent().requestDisallowInterceptTouchEvent(true);
+            swipeToRefresh.setEnabled(false);
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_UP:
+                    swipeToRefresh.setEnabled(true);
+                    break;
+            }
+            return false;
+        });
+
+        featuredGradients.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                featuredGradients.getParent().requestDisallowInterceptTouchEvent(true);
+                swipeToRefresh.requestDisallowInterceptTouchEvent(true);
+            }
+        });
+
 
 
         connectionNotification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
@@ -211,8 +247,15 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
     private void getItems() {
         playConnectingDialog();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getItems",
+        StringRequest gradientGridItems = new StringRequest(Request.Method.GET, "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getItems",
                 this::parseItems,
+
+                error -> {
+
+                }
+        );
+        StringRequest featuredGradients = new StringRequest(Request.Method.GET, "https://script.google.com/macros/s/AKfycbxBCTFbNajBCakcj90cFSEhKdoFza2y2IrSNBPC/exec?action=getItems",
+                this::parseFeatured,
 
                 error -> {
 
@@ -222,10 +265,14 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         int socketTimeOut = 10000;
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
-        stringRequest.setRetryPolicy(policy);
+        gradientGridItems.setRetryPolicy(policy);
+        featuredGradients.setRetryPolicy(policy);
 
-        RequestQueue queue = Volley.newRequestQueue(this);
-        queue.add(stringRequest);
+        RequestQueue mainQueue = Volley.newRequestQueue(this);
+        mainQueue.add(gradientGridItems);
+
+        RequestQueue featuredQueue = Volley.newRequestQueue(this);
+        featuredQueue.add(featuredGradients);
 
     }
 
@@ -234,7 +281,6 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         swipeToRefresh.setEnabled(true);
         scrollView.setEnabled(true);
         ArrayList<HashMap<String, String>> list = new ArrayList<>();
-        ArrayList<HashMap<String, String>> featuredList = new ArrayList<>();
 
         try {
             JSONObject jobj = new JSONObject(jsonResponse);
@@ -248,18 +294,15 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                 String leftColour = jo.getString("leftColour");
                 String rightColour = jo.getString("rightColour");
                 String description = jo.getString("description");
-                String featured = jo.getString("featured");
+                //String featured = jo.getString("featured");
 
                 HashMap<String, String> item = new HashMap<>();
                 item.put("backgroundName", backgroundName);
                 item.put("leftColour", leftColour);
                 item.put("rightColour", rightColour);
                 item.put("description", description);
-                HashMap<String, String> flist = new HashMap<>();
-                flist.put("featured", featured);
 
                 list.add(item);
-                featuredList.add(flist);
                 //Log.e("INFO", ""+featuredList);
             }
         } catch (JSONException e) {
@@ -308,6 +351,12 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
             OA3.setDuration(300);
             OA3.setInterpolator(new LinearInterpolator());
             OA3.start();
+
+            UIAnimations.textViewObjectAnimator(featuredTitle, "alpha", 1, 800, 300, new DecelerateInterpolator());
+            UIAnimations.textViewObjectAnimator(browseTitle, "alpha", 1, 800, 300, new DecelerateInterpolator());
+            UIAnimations.viewPagerObjectAnimator(featuredGradients, "alpha", 1, 800, 300, new DecelerateInterpolator());
+            UIAnimations.viewPagerObjectAnimator(featuredGradients, "translationY", 0, 700, 300, new DecelerateInterpolator());
+
         }, 300);
 
         Handler handler = new Handler();
@@ -353,6 +402,58 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                 }
             });
         }, 2000);
+
+    }
+
+    private void parseFeatured(String jsonResponse) {
+        ArrayList<HashMap<String, String>> featuredList = new ArrayList<>();
+
+        try {
+            JSONObject fjobj = new JSONObject(jsonResponse);
+            JSONArray fjarray = fjobj.getJSONArray("items");
+
+
+            /*for (int i = 0; i < fjarray.length(); i++) { //int i = 0; i < fjarray.length(); i++ //int i = fjarray.length() - 1; i >= 0; i--
+                JSONObject jo = fjarray.getJSONObject(i);
+
+                String backgroundName = jo.getString("backgroundName");
+                String leftColour = jo.getString("leftColour");
+                String rightColour = jo.getString("rightColour");
+                String description = jo.getString("description");
+
+
+                featuredContents = new ArrayList<>();
+                int startColours[] = {Color.parseColor(leftColour)};
+                int endColours[] = {Color.parseColor(rightColour)};
+                String names[] = {backgroundName};
+                //Log.e("C", ""+startColours[i]);
+
+
+                for (int s = 0; s < startColours.length; s++) {
+                    ViewPagerModel viewPagerModel = new ViewPagerModel();
+                    Log.e("I", "Start: "+startColours[s]+" End: "+endColours[s]+" Name: "+names[s]);
+                    viewPagerModel.startColour = startColours[s];
+                    viewPagerModel.endColour = endColours[s];
+                    viewPagerModel.name = names[s];
+
+                    featuredContents.add(viewPagerModel);
+
+                }
+                Log.e("K", ""+featuredContents);
+                featuredAdapter = new ViewPagerAdapter(featuredContents, GradientsScreen.this);
+                featuredGradients.setPageTransformer(true, new ViewPagerStack());
+                featuredGradients.setOffscreenPageLimit(4);
+                featuredGradients.setAdapter(featuredAdapter);
+                featuredGradients.setTranslationY(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -50,
+                        GradientsScreen.this.getResources().getDisplayMetrics()));
+
+            }*/
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("Info", "Failed " + e.getLocalizedMessage());
+        } catch (Exception ex) {
+            Log.e("Info", "Failed " + ex.getLocalizedMessage());
+        }
 
     }
 
@@ -634,60 +735,29 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
 
         @Override
         public void transformPage(@NonNull View page, float position) {
-            switch (Math.round(position)){
-                case 0:
-                    page.setScaleX(1f - 0.05f * position);
-                    page.setScaleY(1f);
+            if (position >= 0) {
 
-                    page.setTranslationX(-page.getWidth() * position);
-                    page.setTranslationY(-30 * position);
-                    Log.e("INFO", ""+position);
-                    break;
-                case 1:
-                    page.setScaleX(1f - 0.05f * position);
-                    page.setScaleY(1f);
+                float scale = 1f - 0.25f * position;
+                if (scale >= 0) {
+                    page.setScaleX(1f - 0.25f * position);
+                } else {
+                    page.setScaleX(0f);
+                }
 
-                    page.setTranslationX(-page.getWidth() * position);
-                    page.setTranslationY(-30 * position);
-                    Log.e("INFO", ""+position);
-                    break;
-                case 2:
-                    page.setScaleX(1f - 0.05f * position);
-                    page.setScaleY(1f);
+                page.setScaleY(1f);
 
-                    page.setTranslationX(-page.getWidth() * position);
-                    page.setTranslationY(-20 * position);
-                    Log.e("INFO", ""+position);
-                    break;
-                case 3:
-                    page.setScaleX(1f - 0.05f * position);
-                    page.setScaleY(1f);
-
-                    page.setTranslationX(-page.getWidth() * position);
-                    page.setTranslationY(-10 * position);
-                    Log.e("INFO", ""+position);
-                    break;
-                case 4:
-                    page.setScaleX(1f - 0.05f * position);
-                    page.setScaleY(1f);
-
-                    page.setTranslationX(-page.getWidth() * position);
-                    page.setTranslationY(0 * position);
-                    Log.e("INFO", ""+position);
-                    break;
-                default:
-                    page.setScaleX(1f - 0.05f * position);
-                    page.setScaleY(1f);
-
-                    page.setTranslationX(-page.getWidth() * position);
-                    page.setTranslationY(0 * position);
-                    Log.e("INFO", ""+position);
-                    break;
+                page.setTranslationX(-page.getWidth() * position);
+                double val = (-30 * (Math.pow(0.5, position) - 1) / (0.5 - 1));
+                page.setTranslationY((float) val);
+                Log.e("INFO", "" + position);
 
             }
-            if (position >= 0){
-
-            }
+            page.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.e("INFO", "" + position);
+                }
+            });
         }
     }
 

@@ -27,7 +27,6 @@
                 android:contentDescription="@string/descriptionBackground" />
 
             <LinearLayout
-                android:visibility="visible"
                 android:id="@+id/connectingDialog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,9 +34,10 @@
                 android:layout_alignParentTop="true"
                 android:layout_margin="24dp"
                 android:alpha="0"
+                android:animateLayoutChanges="true"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:animateLayoutChanges="true">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -88,12 +88,12 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:visibility="gone"
                 android:id="@+id/titleHolder"
                 android:layout_width="120px"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:orientation="vertical"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:ignore="PxUsage">
 
@@ -159,6 +159,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -169,6 +170,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="30dp"
                             android:layout_marginTop="32dp"
+                            android:alpha="0"
                             android:fontFamily="@font/googlesans_bold"
                             android:text="Featured"
                             android:textColor="?PrimaryTextColour"
@@ -181,6 +183,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="250dp"
                             android:layout_marginTop="16dp"
+                            android:alpha="0"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/featuredTitle" />
@@ -191,6 +194,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="30dp"
                             android:layout_marginTop="16dp"
+                            android:alpha="0"
                             android:fontFamily="@font/googlesans_bold"
                             android:text="Browse"
                             android:textColor="?PrimaryTextColour"
@@ -227,21 +231,21 @@
     </androidx.cardview.widget.CardView>
 
     <eightbitlab.com.blurview.BlurView
-        android:visibility="visible"
         android:id="@+id/changelogBlur"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0"
+        android:visibility="visible"
         app:blurOverlayColor="?BlurColour" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:visibility="visible"
         android:id="@+id/changelogHolder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="20dp"
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/pebbleLogo"
@@ -586,8 +590,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/googlesans_medium"
-            android:text="It's taking a bit longer than usual"
             android:gravity="center"
+            android:text="It's taking a bit longer than usual"
             android:textColor="?SecondaryTextColour"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -608,7 +612,6 @@
             app:srcCompat="@drawable/icon_error" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

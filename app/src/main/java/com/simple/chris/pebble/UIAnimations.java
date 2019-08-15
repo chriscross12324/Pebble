@@ -11,6 +11,7 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.viewpager.widget.ViewPager;
 
 import eightbitlab.com.blurview.BlurView;
 
@@ -72,6 +73,16 @@ public class UIAnimations {
             valueAnimator.setInterpolator(interpolator);
             valueAnimator.setDuration(duration);
             valueAnimator.start();
+        }, delay);
+    }
+
+    public static void viewPagerObjectAnimator(ViewPager layout, String propertyName, int value, int duration, int delay, TimeInterpolator interpolator) {
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(layout, propertyName, value);
+            objectAnimator.setDuration(duration);
+            objectAnimator.setInterpolator(interpolator);
+            objectAnimator.start();
         }, delay);
     }
 
