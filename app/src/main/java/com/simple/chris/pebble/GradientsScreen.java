@@ -68,20 +68,19 @@ import eightbitlab.com.blurview.RenderScriptBlur;
 
 public class GradientsScreen extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
+    ConstraintLayout changelogHolder, connectionNotification;
+    LinearLayout connectingDialog, hideChangelogButton;
+    TextView connectingDialogBody, connectionStatusText, featuredTitle, browseTitle;
     BlurView changelogBlur;
-    ImageView top, title, bottom;
-    ExpandedHeightScrollView gridView;
-    Dialog noConnectionDialog, cellularDataWarningDialog;
-    Button openSystemSettingsNoConnection, dontAskAgain, tryWifi;
-    ConstraintLayout titleHolder, changelogHolder, connectionNotification;
-    LinearLayout connectingDialog, retry, useButton, hideChangelogButton;
+    ExpandedHeightScrollView gridView, blocker;
     SwipeRefreshLayout swipeToRefresh;
     ScrollView scrollView;
-    TextView connectingDialogBody, connectionStatusText, featuredTitle, browseTitle;
+
     private ViewPager featuredGradients;
     private ViewPagerAdapter featuredAdapter;
     private ArrayList<ViewPagerModel> featuredContents;
 
+    int screenWidth;
     int screenHeight;
     int imageViewHeight;
     boolean connected = false;
@@ -91,6 +90,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
 
     Object module;
     View moduleView;
+    DisplayMetrics displayMetrics;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -110,43 +110,80 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         }
         Values.saveValues(GradientsScreen.this);
 
-        appVersion = BuildConfig.VERSION_CODE;
-        changelogBlur = findViewById(R.id.changelogBlur);
+        /** Declare UI Elements*/
+        //Constraint Layout
         changelogHolder = findViewById(R.id.changelogHolder);
+        connectionNotification = findViewById(R.id.connectionNotification);
+
+        //Linear Layout
+        connectingDialog = findViewById(R.id.connectingDialog);
         hideChangelogButton = findViewById(R.id.hideChangelogButton);
 
-        titleHolder = findViewById(R.id.titleHolder);
-        connectingDialog = findViewById(R.id.connectingDialog);
+        //TextView
         connectingDialogBody = findViewById(R.id.connectingDialogBody);
-        connectionNotification = findViewById(R.id.connectionNotification);
         connectionStatusText = findViewById(R.id.connectionStatusText);
-        scrollView = findViewById(R.id.scrollView);
         featuredTitle = findViewById(R.id.featuredTitle);
         browseTitle = findViewById(R.id.browseTitle);
 
+        //ExpandedHeightScrollView
+        gridView = findViewById(R.id.gv_items);
+        blocker = findViewById(R.id.blocker);
+
+        //ViewPager
         featuredGradients = findViewById(R.id.featuredGradients);
 
+        //Misc.
+        changelogBlur = findViewById(R.id.changelogBlur);
+        swipeToRefresh = findViewById(R.id.swipeToRefresh);
+        scrollView = findViewById(R.id.scrollView);
+
+        //Values
+        displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        appVersion = BuildConfig.VERSION_CODE;
+        connectionNotification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
+        screenWidth = displayMetrics.widthPixels;
+        screenHeight = displayMetrics.heightPixels;
+        int maxNumColumns = screenWidth / 418;
+        Log.e("TAG", "" + maxNumColumns + screenWidth);
+        gridView.setNumColumns(maxNumColumns);
+
+        ArrayList<HashMap<String, String>> list = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("items");
+        //ArrayList<HashMap<String, String>> flist = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("featured");
+        connectionChecker();
+
+
         featuredContents = new ArrayList<>();
-        int startColours[] = {ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR)};
+        int startColours[] = {ContextCompat.getColor(GradientsScreen.this, R.color.shallowLakeTL),
+                ContextCompat.getColor(GradientsScreen.this, R.color.purpleHazeTL),
+                ContextCompat.getColor(GradientsScreen.this, R.color.forestTL),
+                ContextCompat.getColor(GradientsScreen.this, R.color.sunshineTL),
+                ContextCompat.getColor(GradientsScreen.this, R.color.atmosphereTL),
+                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayTL)};
+        int endColours[] = {ContextCompat.getColor(GradientsScreen.this, R.color.shallowLakeBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.purpleHazeBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.forestBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.sunshineBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.atmosphereBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR)
+        };
+        String names[] = {"Shallow Lake", "Purple Haze", "Forest", "Sunshine", "Atmosphere", "Winters Day"};
+        /*HashMap<String, String> f = flist.get(0);
+        featuredContents = new ArrayList<>();
+        String startColours[] = new String[flist.get(0).get("leftColour")]];
         int endColours[] = {ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.sunshineBR),
+                ContextCompat.getColor(GradientsScreen.this, R.color.forestBR),
                 ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
                 ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
                 ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR)
         };
-        String names[] = {"Winters Day","Winters Day","Winters Day","Winters Day","Winters Day","Winters Day"};
-        //Log.e("C", ""+startColours[i]);
+        String names[] = {"Winters Day","Sunshine","Forest","Winters Day","Winters Day","Winters Day"};*/
 
 
         for (int s = 0; s < startColours.length; s++) {
             ViewPagerModel viewPagerModel = new ViewPagerModel();
-            Log.e("I", "Start: "+startColours[s]+" End: "+endColours[s]+" Name: "+names[s]);
+            Log.e("I", "Start: " + startColours[s] + " End: " + endColours[s] + " Name: " + names[s]);
             viewPagerModel.startColour = startColours[s];
             viewPagerModel.endColour = endColours[s];
             viewPagerModel.name = names[s];
@@ -154,7 +191,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
             featuredContents.add(viewPagerModel);
 
         }
-        Log.e("K", ""+featuredContents);
+        //Log.e("K", ""+featuredContents);
         featuredAdapter = new ViewPagerAdapter(featuredContents, GradientsScreen.this);
         featuredGradients.setPageTransformer(true, new ViewPagerStack());
         featuredGradients.setOffscreenPageLimit(4);
@@ -163,9 +200,8 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                 GradientsScreen.this.getResources().getDisplayMetrics()));
 
 
-
         featuredGradients.setOnTouchListener((view, motionEvent) -> {
-            view.getParent().requestDisallowInterceptTouchEvent(true);
+            //view.getParent().requestDisallowInterceptTouchEvent(true);
             swipeToRefresh.setEnabled(false);
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_UP:
@@ -178,139 +214,26 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         featuredGradients.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                featuredGradients.getParent().requestDisallowInterceptTouchEvent(true);
-                swipeToRefresh.requestDisallowInterceptTouchEvent(true);
+                //featuredGradients.getParent().requestDisallowInterceptTouchEvent(true);
+                //swipeToRefresh.requestDisallowInterceptTouchEvent(true);
             }
         });
 
 
-
-        connectionNotification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
-
-
-        //Create Dialogs
-        noConnectionDialog = new Dialog(this);
-        cellularDataWarningDialog = new Dialog(this);
-        top = findViewById(R.id.imageView9);
-        bottom = findViewById(R.id.imageView8);
-        title = findViewById(R.id.title);
-
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-
-        gridView = findViewById(R.id.gv_items);
         gridView.setOnItemClickListener(this);
-        gridView.postDelayed(() -> {
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            screenHeight = displayMetrics.heightPixels;
-            gridView.setTranslationY(screenHeight);
-        }, 10);
+        gridView.postDelayed(() -> gridView.setTranslationY(screenHeight), 0);
         gridView.setAlpha(1);
-        gridView.setEnabled(false);
-        titleHolder.setAlpha(0);
+        //gridView.setEnabled(false);
 
-        scrollView.setEnabled(false);
 
-        swipeToRefresh = findViewById(R.id.swipeToRefresh);
-        swipeToRefresh.setEnabled(false);
         swipeToRefresh.setOnRefreshListener(() -> {
             gridView.setEnabled(false);
-            Intent GL = new Intent(GradientsScreen.this, GradientsScreen.class);
+            Intent GL = new Intent(GradientsScreen.this, ActivityConnecting.class);
             startActivity(GL);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
         });
-        if (isInterenetConnected()) {
-            if (isNetworkTypeCellular()) {
-                if (Values.askData) {
-                    showCellularWarningDialog();
-                    connectionType = "Cellular";
-                } else {
-                    getItems();
-                    connectionType = "Cellular";
-                }
-            } else {
-                getItems();
-                connectionType = "Wi-Fi";
-            }
-        } else {
-            getItems();
-            connectionType = "Null";
-            //showNoConnectionDialog();
-        }
-        connectionChecker();
 
-    }
-
-    private void getItems() {
-        playConnectingDialog();
-
-        StringRequest gradientGridItems = new StringRequest(Request.Method.GET, "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getItems",
-                this::parseItems,
-
-                error -> {
-
-                }
-        );
-        StringRequest featuredGradients = new StringRequest(Request.Method.GET, "https://script.google.com/macros/s/AKfycbxBCTFbNajBCakcj90cFSEhKdoFza2y2IrSNBPC/exec?action=getItems",
-                this::parseFeatured,
-
-                error -> {
-
-                }
-        );
-
-        int socketTimeOut = 10000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-
-        gradientGridItems.setRetryPolicy(policy);
-        featuredGradients.setRetryPolicy(policy);
-
-        RequestQueue mainQueue = Volley.newRequestQueue(this);
-        mainQueue.add(gradientGridItems);
-
-        RequestQueue featuredQueue = Volley.newRequestQueue(this);
-        featuredQueue.add(featuredGradients);
-
-    }
-
-    private void parseItems(String jsonResponse) {
-        connected = true;
-        swipeToRefresh.setEnabled(true);
-        scrollView.setEnabled(true);
-        ArrayList<HashMap<String, String>> list = new ArrayList<>();
-
-        try {
-            JSONObject jobj = new JSONObject(jsonResponse);
-            JSONArray jarray = jobj.getJSONArray("items");
-
-            for (int i = jarray.length() - 1; i >= 0; i--) { //int i = 0; i < jarray.length(); i++
-
-                JSONObject jo = jarray.getJSONObject(i);
-
-                String backgroundName = jo.getString("backgroundName").replace(" ", "\n");
-                String leftColour = jo.getString("leftColour");
-                String rightColour = jo.getString("rightColour");
-                String description = jo.getString("description");
-                //String featured = jo.getString("featured");
-
-                HashMap<String, String> item = new HashMap<>();
-                item.put("backgroundName", backgroundName);
-                item.put("leftColour", leftColour);
-                item.put("rightColour", rightColour);
-                item.put("description", description);
-
-                list.add(item);
-                //Log.e("INFO", ""+featuredList);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("Info", "Failed " + e.getLocalizedMessage());
-        } catch (Exception ex) {
-            Log.e("Info", "Failed " + ex.getLocalizedMessage());
-        }
 
         if (Values.uiDesignerMode) {
             try {
@@ -330,34 +253,18 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
 
         }
 
+        UIAnimations.gridViewObjectAnimator(gridView, "translationY", 0, 800, 500, new DecelerateInterpolator(3));
+
         Handler h1 = new Handler();
         h1.postDelayed(() -> {
-            Handler h1I = new Handler();
             swipeToRefresh.setVisibility(View.VISIBLE);
-            h1I.postDelayed(() -> {
-                ObjectAnimator OA1 = ObjectAnimator.ofFloat(gridView, "translationY", 0);
-                OA1.setDuration(800);
-                OA1.setInterpolator(new DecelerateInterpolator(3));
-                OA1.start();
-
-            }, 1000);
-
-            ObjectAnimator OA2 = ObjectAnimator.ofFloat(titleHolder, "alpha", 1);
-            OA2.setDuration(300);
-            OA2.setInterpolator(new LinearInterpolator());
-            OA2.start();
-
-            ObjectAnimator OA3 = ObjectAnimator.ofFloat(connectingDialog, "alpha", 0);
-            OA3.setDuration(300);
-            OA3.setInterpolator(new LinearInterpolator());
-            OA3.start();
 
             UIAnimations.textViewObjectAnimator(featuredTitle, "alpha", 1, 800, 300, new DecelerateInterpolator());
             UIAnimations.textViewObjectAnimator(browseTitle, "alpha", 1, 800, 300, new DecelerateInterpolator());
             UIAnimations.viewPagerObjectAnimator(featuredGradients, "alpha", 1, 800, 300, new DecelerateInterpolator());
             UIAnimations.viewPagerObjectAnimator(featuredGradients, "translationY", 0, 700, 300, new DecelerateInterpolator());
 
-        }, 300);
+        }, 0);
 
         Handler handler = new Handler();
         handler.postDelayed(() -> {
@@ -378,11 +285,8 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                 objectAnimator.setDuration(200);
                 objectAnimator.setInterpolator(new DecelerateInterpolator());
                 objectAnimator.start();
-                swipeToRefresh.setEnabled(false);
-                scrollView.setEnabled(false);
-                gridView.setEnabled(false);
             } else {
-                gridView.setEnabled(true);
+                blocker.setVisibility(View.GONE);
                 UIAnimations.constraintLayoutVisibility(changelogHolder, View.GONE, 0);
             }
             hideChangelogButton.setOnClickListener(new View.OnClickListener() {
@@ -393,9 +297,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                     objectAnimator.setDuration(200);
                     objectAnimator.setInterpolator(new DecelerateInterpolator());
                     objectAnimator.start();
-                    swipeToRefresh.setEnabled(true);
-                    scrollView.setEnabled(true);
-                    gridView.setEnabled(true);
+                    blocker.setVisibility(View.GONE);
                     UIAnimations.constraintLayoutVisibility(changelogHolder, View.GONE, 200);
                     Values.lastVersion = appVersion;
                     Values.saveValues(GradientsScreen.this);
@@ -404,6 +306,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         }, 2000);
 
     }
+
 
     private void parseFeatured(String jsonResponse) {
         ArrayList<HashMap<String, String>> featuredList = new ArrayList<>();
@@ -457,124 +360,6 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
 
     }
 
-    public void showNoConnectionDialog() {
-        noConnectionDialog.setContentView(R.layout.dialog_no_connection);
-        retry = noConnectionDialog.findViewById(R.id.retryButton);
-        openSystemSettingsNoConnection = noConnectionDialog.findViewById(R.id.openSystemSettingsButton);
-
-        WindowManager.LayoutParams lp = Objects.requireNonNull(noConnectionDialog.getWindow()).getAttributes();
-        Window window = noConnectionDialog.getWindow();
-        lp.dimAmount = 0f;
-        noConnectionDialog.getWindow().setAttributes(lp);
-        lp.gravity = Gravity.CENTER;
-        window.setAttributes(lp);
-
-        retry.setOnClickListener(v -> {
-            noConnectionDialog.dismiss();
-            if (isInterenetConnected()) {
-                if (isNetworkTypeCellular()) {
-                    showCellularWarningDialog();
-                } else {
-                    getItems();
-                }
-            } else {
-                showNoConnectionDialog();
-            }
-        });
-        openSystemSettingsNoConnection.setOnClickListener(v -> {
-            noConnectionDialog.dismiss();
-            startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
-        });
-
-        noConnectionDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        noConnectionDialog.setCancelable(false);
-        noConnectionDialog.show();
-    }
-
-    public void showCellularWarningDialog() {
-        cellularDataWarningDialog.setContentView(R.layout.dialog_data_warning);
-        useButton = cellularDataWarningDialog.findViewById(R.id.useButton);
-        dontAskAgain = cellularDataWarningDialog.findViewById(R.id.dontAskAgain);
-        tryWifi = cellularDataWarningDialog.findViewById(R.id.tryWifi);
-
-        WindowManager.LayoutParams lp = Objects.requireNonNull(cellularDataWarningDialog.getWindow()).getAttributes();
-        Window window = cellularDataWarningDialog.getWindow();
-        lp.dimAmount = 0f;
-        cellularDataWarningDialog.getWindow().setAttributes(lp);
-        lp.gravity = Gravity.CENTER;
-        window.setAttributes(lp);
-
-        useButton.setOnClickListener(v -> {
-            cellularDataWarningDialog.dismiss();
-            if (isInterenetConnected()) {
-                getItems();
-            } else {
-                showNoConnectionDialog();
-            }
-        });
-        dontAskAgain.setOnClickListener(v -> {
-            cellularDataWarningDialog.dismiss();
-            if (isInterenetConnected()) {
-                Values.askData = false;
-                Values.saveValues(GradientsScreen.this);
-                getItems();
-            } else {
-                showNoConnectionDialog();
-            }
-        });
-        tryWifi.setOnClickListener(v -> {
-            cellularDataWarningDialog.dismiss();
-            if (isInterenetConnected()) {
-                if (isNetworkTypeCellular()) {
-                    showCellularWarningDialog();
-                } else {
-                    getItems();
-                }
-            } else {
-                showNoConnectionDialog();
-            }
-        });
-
-        cellularDataWarningDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        cellularDataWarningDialog.setCancelable(false);
-        cellularDataWarningDialog.show();
-    }
-
-    public void playConnectingDialog() {
-        ObjectAnimator OA1 = ObjectAnimator.ofFloat(connectingDialog, "alpha", 1);
-        OA1.setDuration(300);
-        OA1.setInterpolator(new LinearInterpolator());
-        OA1.start();
-        ImageView connectingAnimation = findViewById(R.id.animationView);
-
-        connectingAnimation.setBackgroundResource(R.drawable.loading_animation);
-        AnimationDrawable animationDrawable = (AnimationDrawable) connectingAnimation.getBackground();
-        animationDrawable.start();
-
-        Handler handler = new Handler();
-        handler.postDelayed(() -> {
-            if (!connected) {
-                connectionNotification.setAlpha(1);
-                playAnimation(0);
-                UIAnimations.textViewChanger(connectionStatusText, "Trying a self fix", 7500);
-                playAnimation(8000);
-            }
-
-        }, 8000);
-
-
-        Handler handler2 = new Handler();
-        handler2.postDelayed(() -> {
-            if (!connected) {
-                Intent reload = new Intent(GradientsScreen.this, GradientsScreen.class);
-                startActivity(reload);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
-            }
-        }, 25000);
-
-
-    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -584,9 +369,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         @SuppressWarnings("unchecked")
         HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
 
-        gridView.setEnabled(false);
-        swipeToRefresh.setEnabled(false);
-        scrollView.setEnabled(false);
+        blocker.setVisibility(View.VISIBLE);
 
         moduleView = view;
         module = parent;
@@ -629,24 +412,27 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
     @Override
     protected void onResume() {
         if (Values.currentActivity != null && Values.currentActivity.equals("GradientDetails")) {
-            ImageView imageView = moduleView.findViewById(R.id.backgroundGradient);
-            imageView.getLayoutParams().height = imageViewHeight;
-            imageView.requestLayout();
-
-            ValueAnimator slideAnimation = ValueAnimator.ofInt(imageView.getHeight(), imageViewHeight).setDuration(600);
-            slideAnimation.addUpdateListener(animation -> {
-                imageView.getLayoutParams().height = (Integer) animation.getAnimatedValue();
+            try {
+                ImageView imageView = moduleView.findViewById(R.id.backgroundGradient);
+                imageView.getLayoutParams().height = imageViewHeight;
                 imageView.requestLayout();
-            });
-            AnimatorSet set = new AnimatorSet();
-            set.play(slideAnimation);
-            set.setInterpolator(new DecelerateInterpolator(3));
-            set.start();
+
+                ValueAnimator slideAnimation = ValueAnimator.ofInt(imageView.getHeight(), imageViewHeight).setDuration(600);
+                slideAnimation.addUpdateListener(animation -> {
+                    imageView.getLayoutParams().height = (Integer) animation.getAnimatedValue();
+                    imageView.requestLayout();
+                });
+                AnimatorSet set = new AnimatorSet();
+                set.play(slideAnimation);
+                set.setInterpolator(new DecelerateInterpolator(3));
+                set.start();
+            } catch (Exception e) {
+                Log.e("TAG", e.getLocalizedMessage());
+            }
+
 
             Values.currentActivity = "GradientsScreen";
-            gridView.setEnabled(true);
-            swipeToRefresh.setEnabled(true);
-            scrollView.setEnabled(true);
+            blocker.setVisibility(View.GONE);
         }
         super.onResume();
     }
@@ -654,6 +440,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         gridView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 2);
+        featuredGradients.invalidate();
         super.onConfigurationChanged(newConfig);
     }
 
@@ -749,14 +536,27 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                 page.setTranslationX(-page.getWidth() * position);
                 double val = (-30 * (Math.pow(0.5, position) - 1) / (0.5 - 1));
                 page.setTranslationY((float) val);
-                Log.e("INFO", "" + position);
+                //Log.e("INFO", "" + position);
 
             }
-            page.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.e("INFO", "" + position);
-                }
+            page.setOnClickListener(view -> {
+                Intent intent = new Intent(GradientsScreen.this, GradientDetails.class);
+
+                blocker.setVisibility(View.VISIBLE);
+
+                intent.putExtra("backgroundName", "Shallow Lake");
+                intent.putExtra("leftColour", "#89f7fe");
+                intent.putExtra("rightColour", "#66a6ff");
+                intent.putExtra("description", "A lake where you can see the bottom through the clear water");
+
+                UIAnimations.textViewObjectAnimator(view.findViewById(R.id.gradientName), "alpha", 0, 200, 0, new LinearInterpolator());
+
+
+                Handler handler = new Handler();
+                handler.postDelayed(() -> {
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(GradientsScreen.this, view.findViewById(R.id.gradient), "Shallow Lake");
+                    startActivity(intent, options.toBundle());
+                }, 200);
             });
         }
     }

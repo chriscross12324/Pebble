@@ -16,15 +16,15 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class Permissions extends AppCompatActivity {
 
-    TextView asterisk;
     Dialog wifiPermission, dataWarning;
-    LinearLayout understandButtonWifi, understandButtonData;
+    Button understandButtonWifi, understandButtonData;
     ConstraintLayout warningNotification;
     int dialogWidth;
 
@@ -114,7 +114,7 @@ public class Permissions extends AppCompatActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Intent GL = new Intent(Permissions.this, GradientsScreen.class);
+                        Intent GL = new Intent(Permissions.this, ActivityConnecting.class);
                         startActivity(GL);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         Values.firstStart = false;
