@@ -25,6 +25,7 @@ object Vibration {
                 v.vibrate(VibrationEffect.createOneShot(Values.hapticFeedback, VibrationEffect.DEFAULT_AMPLITUDE))
             } else {
                 v.vibrate(Values.notification, -1)
+
             }
         }
     }

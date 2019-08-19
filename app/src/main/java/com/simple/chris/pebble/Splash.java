@@ -14,7 +14,7 @@ public class Splash extends AppCompatActivity {
         Values.loadValues(Splash.this);
 
         if (!Values.firstStart){
-            startActivity(new Intent(Splash.this, GradientsScreen.class));
+            startActivity(new Intent(Splash.this, ActivityConnecting.class));
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
         }else {

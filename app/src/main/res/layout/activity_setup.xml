@@ -15,5 +15,7 @@
         android:id="@+id/pebbleLogo"
         android:layout_width="160dp"
         android:layout_height="160dp"
-        android:background="@drawable/icon_pebble_foreground" />
+        android:background="@drawable/icon_pebble_foreground"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

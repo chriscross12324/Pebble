@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
-            android:layout_marginBottom="8dp"
+            android:elevation="8dp"
             android:fontFamily="@font/googlesans_regular"
             android:gravity="center_vertical"
             android:maxLines="2"
@@ -39,8 +39,7 @@
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="@+id/gradient"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:elevation="8dp"/>
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

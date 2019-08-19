@@ -26,121 +26,6 @@
                 android:background="@drawable/placeholder_gradient_dark"
                 android:contentDescription="@string/descriptionBackground" />
 
-            <LinearLayout
-                android:id="@+id/connectingDialog"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_margin="24dp"
-                android:alpha="0"
-                android:animateLayoutChanges="true"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="vertical"
-                    tools:ignore="UselessParent">
-
-                    <TextView
-                        android:id="@+id/connectingDialogTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:fontFamily="@font/googlesans_bold"
-                        android:text="@string/connectingDialogTitle"
-                        android:textAlignment="center"
-                        android:textColor="?PrimaryTextColour"
-                        android:textSize="30sp" />
-
-                    <TextView
-                        android:id="@+id/connectingDialogBody"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/googlesans_regular"
-                        android:text="@string/connectingDialogBody"
-                        android:textAlignment="center"
-                        android:textColor="?PrimaryTextColour"
-                        android:textSize="20sp" />
-
-                    <ImageView
-                        android:id="@+id/animationView"
-                        android:layout_width="100dp"
-                        android:layout_height="56.2dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="25dp"
-                        android:background="@drawable/loading_animation"
-                        android:backgroundTint="?PrimaryTextColour"
-                        android:contentDescription="@string/descriptionAnimation"
-                        android:tint="?PrimaryTextColour" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/titleHolder"
-                android:layout_width="120px"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:orientation="vertical"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="PxUsage">
-
-                <ImageView
-                    android:id="@+id/imageView9"
-                    android:layout_width="2dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginBottom="16dp"
-                    android:contentDescription="@string/descriptionDecoration"
-                    android:tint="?PrimaryTextColour"
-                    app:layout_constraintBottom_toTopOf="@+id/title"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@color/colorLightThemeForeground" />
-
-                <ImageView
-                    android:id="@+id/title"
-                    android:layout_width="120px"
-                    android:layout_height="660px"
-                    android:background="@drawable/gradients_title"
-                    android:backgroundTint="?PrimaryTextColour"
-                    android:contentDescription="@string/descriptionTitleGradients"
-                    android:scaleType="fitXY"
-                    app:layout_constraintBottom_toTopOf="@+id/imageView8"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView9"
-                    tools:ignore="PxUsage" />
-
-                <ImageView
-                    android:id="@+id/imageView8"
-                    android:layout_width="2dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="32dp"
-                    android:contentDescription="@string/descriptionDecoration"
-                    android:tint="?PrimaryTextColour"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title"
-                    app:srcCompat="@color/colorLightThemeForeground" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/swipeToRefresh"
                 android:layout_width="0dp"
@@ -160,9 +45,10 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/featuredTitle"
@@ -204,12 +90,12 @@
 
                         <com.simple.chris.pebble.ExpandedHeightScrollView
                             android:id="@+id/gv_items"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
                             android:clipToPadding="false"
                             android:gravity="center"
                             android:horizontalSpacing="20dp"
-                            android:numColumns="2"
+                            android:numColumns="auto_fit"
                             android:overScrollMode="never"
                             android:paddingStart="30dp"
                             android:paddingTop="24dp"
@@ -221,7 +107,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/browseTitle" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
                 </ScrollView>
 
 
@@ -229,6 +115,17 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <com.simple.chris.pebble.ExpandedHeightScrollView
+        android:id="@+id/blocker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/changelogBlur"
@@ -338,7 +235,7 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="24dp"
                     android:fontFamily="@font/googlesans_bold"
-                    android:text="August 13, 2019"
+                    android:text="August 17, 2019"
                     android:textColor="?PrimaryTextColour"
                     android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -384,7 +281,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="11dp"
                     android:fontFamily="@font/googlesans_medium"
-                    android:text="Added Splash Screen when opening app"
+                    android:text="Added 'Featured Gradients' section"
                     android:textAlignment="viewStart"
                     android:textColor="?SecondaryTextColour"
                     android:textSize="12sp"
@@ -408,12 +305,36 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="11dp"
                     android:fontFamily="@font/googlesans_medium"
-                    android:text="Added Gradient Details screen; just tap a module"
+                    android:text="Added haptic feedback to in-app notifications"
                     android:textAlignment="viewStart"
                     android:textColor="?SecondaryTextColour"
                     android:textSize="12sp"
                     app:layout_constraintStart_toEndOf="@+id/dotTwo"
                     app:layout_constraintTop_toBottomOf="@+id/newOne" />
+
+                <ImageView
+                    android:id="@+id/dotNThree"
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/circle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/newTwo" />
+
+                <TextView
+                    android:id="@+id/newThree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="11dp"
+                    android:fontFamily="@font/googlesans_medium"
+                    android:text="Added a self-fix feature that repairs the app\n when it fails to load the gradients"
+                    android:textAlignment="viewStart"
+                    android:textColor="?SecondaryTextColour"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@+id/dotNThree"
+                    app:layout_constraintTop_toBottomOf="@+id/newTwo" />
 
                 <ImageView
                     android:id="@+id/changedBadge"
@@ -422,11 +343,11 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="24dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/newTwo"
+                    app:layout_constraintTop_toBottomOf="@+id/newThree"
                     app:srcCompat="@drawable/icon_changelog_changed" />
 
                 <ImageView
-                    android:id="@+id/dotThree"
+                    android:id="@+id/dotCThree"
                     android:layout_width="7dp"
                     android:layout_height="7dp"
                     android:layout_marginStart="32dp"
@@ -442,11 +363,11 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="11dp"
                     android:fontFamily="@font/googlesans_medium"
-                    android:text="Updated the design of data/no connection\nscreens"
+                    android:text="Changed the design of the gradients\nscreen"
                     android:textAlignment="viewStart"
                     android:textColor="?SecondaryTextColour"
                     android:textSize="12sp"
-                    app:layout_constraintStart_toEndOf="@+id/dotThree"
+                    app:layout_constraintStart_toEndOf="@+id/dotCThree"
                     app:layout_constraintTop_toBottomOf="@+id/changedBadge" />
 
                 <ImageView
@@ -466,7 +387,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="11dp"
                     android:fontFamily="@font/googlesans_medium"
-                    android:text="Changed the way animations work"
+                    android:text="Fixed an issue with an animation after\ntapping a module"
                     android:textAlignment="viewStart"
                     android:textColor="?SecondaryTextColour"
                     android:textSize="12sp"
@@ -490,7 +411,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="11dp"
                     android:fontFamily="@font/googlesans_medium"
-                    android:text="Fixed an issue where the 'Wi-Fi' and 'Data'\nscreens would show everytime the app\nwas opened"
+                    android:text="Sped up animations after tapping a module"
                     android:textAlignment="viewStart"
                     android:textColor="?SecondaryTextColour"
                     android:textSize="12sp"
@@ -514,7 +435,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="11dp"
                     android:fontFamily="@font/googlesans_medium"
-                    android:text="Fixed an issue with some UI Elements"
+                    android:text="Changed the way Pebble connects to its\ndatabase"
                     android:textAlignment="viewStart"
                     android:textColor="?SecondaryTextColour"
                     android:textSize="12sp"
@@ -522,28 +443,62 @@
                     app:layout_constraintTop_toBottomOf="@+id/changedThree" />
 
                 <ImageView
-                    android:id="@+id/dotSeven"
+                    android:id="@+id/removedBadge"
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/changedFour"
+                    app:srcCompat="@drawable/icon_changelog_removed" />
+
+                <ImageView
+                    android:id="@+id/dotROne"
                     android:layout_width="7dp"
                     android:layout_height="7dp"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/circle"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/changedFour" />
+                    app:layout_constraintTop_toBottomOf="@+id/removedBadge" />
 
                 <TextView
-                    android:id="@+id/changedFive"
+                    android:id="@+id/removedOne"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="11dp"
                     android:fontFamily="@font/googlesans_medium"
-                    android:text="Updated app icon"
+                    android:text="Removed the sidebar on the gradients\nscreen"
                     android:textAlignment="viewStart"
                     android:textColor="?SecondaryTextColour"
                     android:textSize="12sp"
-                    app:layout_constraintStart_toEndOf="@+id/dotSeven"
-                    app:layout_constraintTop_toBottomOf="@+id/changedFour" />
+                    app:layout_constraintStart_toEndOf="@+id/dotROne"
+                    app:layout_constraintTop_toBottomOf="@+id/removedBadge" />
+
+                <ImageView
+                    android:id="@+id/dotRTwo"
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/circle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/removedOne" />
+
+                <TextView
+                    android:id="@+id/removedTwo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="11dp"
+                    android:fontFamily="@font/googlesans_medium"
+                    android:text="Removed the ability to refresh the\ngradients list when not connected\nto the internet"
+                    android:textAlignment="viewStart"
+                    android:textColor="?SecondaryTextColour"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@+id/dotRTwo"
+                    app:layout_constraintTop_toBottomOf="@+id/removedOne" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
@@ -612,6 +567,7 @@
             app:srcCompat="@drawable/icon_error" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

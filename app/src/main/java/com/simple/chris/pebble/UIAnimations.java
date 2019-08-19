@@ -3,6 +3,7 @@ package com.simple.chris.pebble;
 import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
+import android.app.Dialog;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.os.Handler;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
+
+import java.sql.Time;
 
 import eightbitlab.com.blurview.BlurView;
 
@@ -109,6 +112,16 @@ public class UIAnimations {
     public static void textViewChanger(TextView layout, String text, int delay){
         Handler handler = new Handler();
         handler.postDelayed(() -> layout.setText(text), delay);
+    }
+
+    public static void dialogObjectAnimator(Dialog dialog, String property, int value, int duration, int delay, TimeInterpolator interpolator) {
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(dialog, property, value);
+            objectAnimator.setDuration(duration);
+            objectAnimator.setInterpolator(interpolator);
+            objectAnimator.start();
+        }, delay);
     }
 
 }

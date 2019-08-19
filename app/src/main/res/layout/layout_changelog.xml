@@ -97,7 +97,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/googlesans_bold"
-                android:text="July 17, 2019"
+                android:text="August 17, 2019"
                 android:textColor="?PrimaryTextColour"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +121,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/googlesans_regular"
                 android:gravity="center"
-                android:text="1.0.0-beta.2"
+                android:text="1.0.0-beta.3"
                 android:textColor="?SecondaryTextColour"
                 app:layout_constraintStart_toEndOf="@+id/newBadge"
                 app:layout_constraintTop_toBottomOf="@+id/date" />
@@ -143,7 +143,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="11dp"
                 android:fontFamily="@font/googlesans_medium"
-                android:text="Added Splash Screen when opening app"
+                android:text="Added 'Featured Gradients' section"
                 android:textAlignment="viewStart"
                 android:textColor="?SecondaryTextColour"
                 android:textSize="12sp"
@@ -167,12 +167,36 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="11dp"
                 android:fontFamily="@font/googlesans_medium"
-                android:text="Added Gradient Details screen; just tap a module"
+                android:text="Added haptic feedback to in-app notifications"
                 android:textAlignment="viewStart"
                 android:textColor="?SecondaryTextColour"
                 android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@+id/dotTwo"
                 app:layout_constraintTop_toBottomOf="@+id/newOne" />
+
+            <ImageView
+                android:id="@+id/dotNThree"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/newTwo" />
+
+            <TextView
+                android:id="@+id/newThree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="11dp"
+                android:fontFamily="@font/googlesans_medium"
+                android:text="Added a self-fix feature that repairs the app\n when it fails to load the gradients"
+                android:textAlignment="viewStart"
+                android:textColor="?SecondaryTextColour"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/dotNThree"
+                app:layout_constraintTop_toBottomOf="@+id/newTwo" />
 
             <ImageView
                 android:id="@+id/changedBadge"
@@ -181,11 +205,11 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/newTwo"
+                app:layout_constraintTop_toBottomOf="@+id/newThree"
                 app:srcCompat="@drawable/icon_changelog_changed" />
 
             <ImageView
-                android:id="@+id/dotThree"
+                android:id="@+id/dotCThree"
                 android:layout_width="7dp"
                 android:layout_height="7dp"
                 android:layout_marginStart="32dp"
@@ -201,11 +225,11 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="11dp"
                 android:fontFamily="@font/googlesans_medium"
-                android:text="Updated the design of data/no connection\nscreens"
+                android:text="Changed the design of the gradients\nscreen"
                 android:textAlignment="viewStart"
                 android:textColor="?SecondaryTextColour"
                 android:textSize="12sp"
-                app:layout_constraintStart_toEndOf="@+id/dotThree"
+                app:layout_constraintStart_toEndOf="@+id/dotCThree"
                 app:layout_constraintTop_toBottomOf="@+id/changedBadge" />
 
             <ImageView
@@ -225,7 +249,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="11dp"
                 android:fontFamily="@font/googlesans_medium"
-                android:text="Changed the way animations work"
+                android:text="Fixed an issue with an animation after\ntapping a module"
                 android:textAlignment="viewStart"
                 android:textColor="?SecondaryTextColour"
                 android:textSize="12sp"
@@ -249,7 +273,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="11dp"
                 android:fontFamily="@font/googlesans_medium"
-                android:text="Fixed an issue where the 'Wi-Fi' and 'Data'\nscreens would show evertime the app\nwas opened"
+                android:text="Sped up animations after tapping a module"
                 android:textAlignment="viewStart"
                 android:textColor="?SecondaryTextColour"
                 android:textSize="12sp"
@@ -273,7 +297,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="11dp"
                 android:fontFamily="@font/googlesans_medium"
-                android:text="Fixed an issue with some UI Elements"
+                android:text="Changed the way Pebble connects to its\ndatabase"
                 android:textAlignment="viewStart"
                 android:textColor="?SecondaryTextColour"
                 android:textSize="12sp"
@@ -281,28 +305,63 @@
                 app:layout_constraintTop_toBottomOf="@+id/changedThree" />
 
             <ImageView
-                android:id="@+id/dotSeven"
+                android:id="@+id/removedBadge"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/changedFour"
+                app:srcCompat="@drawable/icon_changelog_removed" />
+
+            <ImageView
+                android:id="@+id/dotROne"
                 android:layout_width="7dp"
                 android:layout_height="7dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/circle"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/changedFour" />
+                app:layout_constraintTop_toBottomOf="@+id/removedBadge" />
 
             <TextView
-                android:id="@+id/changedFive"
+                android:id="@+id/removedOne"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="11dp"
                 android:fontFamily="@font/googlesans_medium"
-                android:text="Updated app icon"
+                android:text="Removed the sidebar on the gradients\nscreen"
                 android:textAlignment="viewStart"
                 android:textColor="?SecondaryTextColour"
                 android:textSize="12sp"
-                app:layout_constraintStart_toEndOf="@+id/dotSeven"
-                app:layout_constraintTop_toBottomOf="@+id/changedFour" />
+                app:layout_constraintStart_toEndOf="@+id/dotROne"
+                app:layout_constraintTop_toBottomOf="@+id/removedBadge" />
+
+            <ImageView
+                android:id="@+id/dotRTwo"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/removedOne" />
+
+            <TextView
+                android:id="@+id/removedTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="11dp"
+                android:fontFamily="@font/googlesans_medium"
+                android:text="Removed the ability to refresh the\n gradients list when not connected\nto the internet"
+                android:textAlignment="viewStart"
+                android:textColor="?SecondaryTextColour"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/dotRTwo"
+                app:layout_constraintTop_toBottomOf="@+id/removedOne" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
