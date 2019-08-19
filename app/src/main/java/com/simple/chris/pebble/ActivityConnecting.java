@@ -189,7 +189,9 @@ public class ActivityConnecting extends AppCompatActivity {
             JSONObject jobj = new JSONObject(jsonResponse);
             JSONArray jarray = jobj.getJSONArray("items");
 
-            for (int i = jarray.length() - 1; i >= 0; i--) { //int i = 0; i < jarray.length(); i++
+            //Top to bottom: int i = 0; i < jarray.length(); i++
+            //Bottom to top: int i = jarray.length() - 1; i >= 0; i--
+            for (int i = jarray.length() - 1; i >= 0; i--) {
 
                 JSONObject jo = jarray.getJSONObject(i);
 
@@ -226,11 +228,13 @@ public class ActivityConnecting extends AppCompatActivity {
             JSONObject fjobj = new JSONObject(jsonResponse);
             JSONArray fjarray = fjobj.getJSONArray("items");
 
-            for (int i = fjarray.length() - 1; i >= 0; i--) { //int i = 0; i < jarray.length(); i++
+            //Top to bottom: int i = 0; i < fjarray.length(); i++
+            //Bottom to top: int i = fjarray.length() - 1; i >= 0; i--
+            for (int i = 0; i < fjarray.length(); i++) {
 
                 JSONObject jo = fjarray.getJSONObject(i);
 
-                String backgroundName = jo.getString("backgroundName").replace(" ", "\n");
+                String backgroundName = jo.getString("backgroundName");
                 String leftColour = jo.getString("leftColour");
                 String rightColour = jo.getString("rightColour");
                 String description = jo.getString("description");

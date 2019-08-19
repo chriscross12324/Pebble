@@ -149,11 +149,14 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         gridView.setNumColumns(maxNumColumns);
 
         ArrayList<HashMap<String, String>> list = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("items");
-        //ArrayList<HashMap<String, String>> flist = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("featured");
+        ArrayList<HashMap<String, String>> flist = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("featured");
         connectionChecker();
 
+        FeaturedAdapterUserFriendly featuredAdapterUserFriendly = new FeaturedAdapterUserFriendly(GradientsScreen.this, flist);
+        featuredGradients.setAdapter(featuredAdapterUserFriendly);
 
-        featuredContents = new ArrayList<>();
+
+        /*featuredContents = new ArrayList<>();
         int startColours[] = {ContextCompat.getColor(GradientsScreen.this, R.color.shallowLakeTL),
                 ContextCompat.getColor(GradientsScreen.this, R.color.purpleHazeTL),
                 ContextCompat.getColor(GradientsScreen.this, R.color.forestTL),
@@ -167,7 +170,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                 ContextCompat.getColor(GradientsScreen.this, R.color.atmosphereBR),
                 ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR)
         };
-        String names[] = {"Shallow Lake", "Purple Haze", "Forest", "Sunshine", "Atmosphere", "Winters Day"};
+        String names[] = {"Shallow Lake", "Purple Haze", "Forest", "Sunshine", "Atmosphere", "Winters Day"};*/
         /*HashMap<String, String> f = flist.get(0);
         featuredContents = new ArrayList<>();
         String startColours[] = new String[flist.get(0).get("leftColour")]];
@@ -178,7 +181,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                 ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
                 ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR)
         };
-        String names[] = {"Winters Day","Sunshine","Forest","Winters Day","Winters Day","Winters Day"};*/
+        String names[] = {"Winters Day","Sunshine","Forest","Winters Day","Winters Day","Winters Day"};
 
 
         for (int s = 0; s < startColours.length; s++) {
@@ -192,10 +195,10 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
 
         }
         //Log.e("K", ""+featuredContents);
-        featuredAdapter = new ViewPagerAdapter(featuredContents, GradientsScreen.this);
+        featuredAdapter = new ViewPagerAdapter(featuredContents, GradientsScreen.this);*/
         featuredGradients.setPageTransformer(true, new ViewPagerStack());
         featuredGradients.setOffscreenPageLimit(4);
-        featuredGradients.setAdapter(featuredAdapter);
+        //featuredGradients.setAdapter(featuredAdapter);
         featuredGradients.setTranslationY(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -50,
                 GradientsScreen.this.getResources().getDisplayMetrics()));
 
@@ -307,64 +310,10 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
 
     }
 
-
-    private void parseFeatured(String jsonResponse) {
-        ArrayList<HashMap<String, String>> featuredList = new ArrayList<>();
-
-        try {
-            JSONObject fjobj = new JSONObject(jsonResponse);
-            JSONArray fjarray = fjobj.getJSONArray("items");
-
-
-            /*for (int i = 0; i < fjarray.length(); i++) { //int i = 0; i < fjarray.length(); i++ //int i = fjarray.length() - 1; i >= 0; i--
-                JSONObject jo = fjarray.getJSONObject(i);
-
-                String backgroundName = jo.getString("backgroundName");
-                String leftColour = jo.getString("leftColour");
-                String rightColour = jo.getString("rightColour");
-                String description = jo.getString("description");
-
-
-                featuredContents = new ArrayList<>();
-                int startColours[] = {Color.parseColor(leftColour)};
-                int endColours[] = {Color.parseColor(rightColour)};
-                String names[] = {backgroundName};
-                //Log.e("C", ""+startColours[i]);
-
-
-                for (int s = 0; s < startColours.length; s++) {
-                    ViewPagerModel viewPagerModel = new ViewPagerModel();
-                    Log.e("I", "Start: "+startColours[s]+" End: "+endColours[s]+" Name: "+names[s]);
-                    viewPagerModel.startColour = startColours[s];
-                    viewPagerModel.endColour = endColours[s];
-                    viewPagerModel.name = names[s];
-
-                    featuredContents.add(viewPagerModel);
-
-                }
-                Log.e("K", ""+featuredContents);
-                featuredAdapter = new ViewPagerAdapter(featuredContents, GradientsScreen.this);
-                featuredGradients.setPageTransformer(true, new ViewPagerStack());
-                featuredGradients.setOffscreenPageLimit(4);
-                featuredGradients.setAdapter(featuredAdapter);
-                featuredGradients.setTranslationY(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -50,
-                        GradientsScreen.this.getResources().getDisplayMetrics()));
-
-            }*/
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("Info", "Failed " + e.getLocalizedMessage());
-        } catch (Exception ex) {
-            Log.e("Info", "Failed " + ex.getLocalizedMessage());
-        }
-
-    }
-
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(GradientsScreen.this, GradientDetails.class);
-        Toast.makeText(this, "" + gridView.getHeight(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "" + gridView.getHeight(), Toast.LENGTH_SHORT).show();
 
         @SuppressWarnings("unchecked")
         HashMap<String, String> map = (HashMap<String, String>) parent.getItemAtPosition(position);
@@ -407,6 +356,51 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
             startActivity(intent, options.toBundle());
         }, 400);
 
+    }
+
+    private class ViewPagerStack implements ViewPager.PageTransformer {
+
+        @Override
+        public void transformPage(@NonNull View page, float position) {
+            if (position >= 0) {
+
+                float scale = 1f - 0.25f * position;
+                if (scale >= 0) {
+                    ViewGroup.LayoutParams layoutParams = page.getLayoutParams();
+                    layoutParams.width = Math.round(1f - 0.25f * position);
+                    page.setLayoutParams(layoutParams);
+                } else {
+                    page.setScaleX(0f);
+                }
+
+                page.setScaleY(1f);
+
+                page.setTranslationX(-page.getWidth() * position);
+                double val = (-30 * (Math.pow(0.5, position) - 1) / (0.5 - 1));
+                page.setTranslationY((float) val);
+                //Log.e("INFO", "" + position);
+
+            }
+            page.setOnClickListener(view -> {
+                Intent intent = new Intent(GradientsScreen.this, GradientDetails.class);
+
+                blocker.setVisibility(View.VISIBLE);
+
+                intent.putExtra("backgroundName", "Shallow Lake");
+                intent.putExtra("leftColour", "#89f7fe");
+                intent.putExtra("rightColour", "#66a6ff");
+                intent.putExtra("description", "A lake where you can see the bottom through the clear water");
+
+                UIAnimations.textViewObjectAnimator(view.findViewById(R.id.gradientName), "alpha", 0, 200, 0, new LinearInterpolator());
+
+
+                Handler handler = new Handler();
+                handler.postDelayed(() -> {
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(GradientsScreen.this, view.findViewById(R.id.gradient), "Shallow Lake");
+                    startActivity(intent, options.toBundle());
+                }, 200);
+            });
+        }
     }
 
     @Override
@@ -518,47 +512,5 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
 
     }
 
-    private class ViewPagerStack implements ViewPager.PageTransformer {
-
-        @Override
-        public void transformPage(@NonNull View page, float position) {
-            if (position >= 0) {
-
-                float scale = 1f - 0.25f * position;
-                if (scale >= 0) {
-                    page.setScaleX(1f - 0.25f * position);
-                } else {
-                    page.setScaleX(0f);
-                }
-
-                page.setScaleY(1f);
-
-                page.setTranslationX(-page.getWidth() * position);
-                double val = (-30 * (Math.pow(0.5, position) - 1) / (0.5 - 1));
-                page.setTranslationY((float) val);
-                //Log.e("INFO", "" + position);
-
-            }
-            page.setOnClickListener(view -> {
-                Intent intent = new Intent(GradientsScreen.this, GradientDetails.class);
-
-                blocker.setVisibility(View.VISIBLE);
-
-                intent.putExtra("backgroundName", "Shallow Lake");
-                intent.putExtra("leftColour", "#89f7fe");
-                intent.putExtra("rightColour", "#66a6ff");
-                intent.putExtra("description", "A lake where you can see the bottom through the clear water");
-
-                UIAnimations.textViewObjectAnimator(view.findViewById(R.id.gradientName), "alpha", 0, 200, 0, new LinearInterpolator());
-
-
-                Handler handler = new Handler();
-                handler.postDelayed(() -> {
-                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(GradientsScreen.this, view.findViewById(R.id.gradient), "Shallow Lake");
-                    startActivity(intent, options.toBundle());
-                }, 200);
-            });
-        }
-    }
 
 }
