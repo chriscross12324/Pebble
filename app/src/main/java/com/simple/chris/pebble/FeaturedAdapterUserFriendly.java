@@ -8,7 +8,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,13 +19,11 @@ import java.util.HashMap;
 
 public class FeaturedAdapterUserFriendly extends PagerAdapter {
 
-    int startColour;
-    int endColour;
     Context context;
-    ArrayList<HashMap<String, String>> map;
-    LayoutInflater layoutInflater;
+    private ArrayList<HashMap<String, String>> map;
+    private LayoutInflater layoutInflater;
 
-    public FeaturedAdapterUserFriendly(Context context, ArrayList<HashMap<String, String>> map) {
+    FeaturedAdapterUserFriendly(Context context, ArrayList<HashMap<String, String>> map) {
         super();
         this.context = context;
         this.map = map;
@@ -45,12 +42,10 @@ public class FeaturedAdapterUserFriendly extends PagerAdapter {
             Log.e("INFO", "Got here");
             HashMap<String, String> details;
             details = map.get(position);
-            startColour = Color.parseColor(details.get("leftColour"));
-            endColour = Color.parseColor(details.get("rightColour"));
+            int startColour = Color.parseColor(details.get("leftColour"));
+            int endColour = Color.parseColor(details.get("rightColour"));
             ViewHolder viewHolder = new ViewHolder();
-
             viewHolder.gradient = view.findViewById(R.id.gradient);
-            viewHolder.gradientName = view.findViewById(R.id.gradientName);
             GradientDrawable gradientDrawable = new GradientDrawable(
                     GradientDrawable.Orientation.TL_BR,
                     new int[]{startColour, endColour}
@@ -59,7 +54,35 @@ public class FeaturedAdapterUserFriendly extends PagerAdapter {
                     context.getResources().getDisplayMetrics()));
             viewHolder.gradient.setBackgroundDrawable(gradientDrawable);
             viewHolder.gradient.setTransitionName(details.get("backgroundName"));
+
+            //UserFriendly
+            viewHolder.gradientName = view.findViewById(R.id.gradientName);
             viewHolder.gradientName.setText(details.get("backgroundName"));
+
+            //UIDesigner
+            viewHolder.startCircle = view.findViewById(R.id.startCircle);
+            viewHolder.endCircle = view.findViewById(R.id.endCircle);
+            viewHolder.startHex = view.findViewById(R.id.startHex);
+            viewHolder.endHex = view.findViewById(R.id.endHex);
+            GradientDrawable startGD = new GradientDrawable();
+            startGD.setShape(GradientDrawable.OVAL);
+            startGD.setStroke(5, startColour);
+            GradientDrawable endGD = new GradientDrawable();
+            endGD.setShape(GradientDrawable.OVAL);
+            endGD.setStroke(5, endColour);
+            viewHolder.startCircle.setBackgroundDrawable(startGD);
+            viewHolder.endCircle.setBackgroundDrawable(endGD);
+            viewHolder.startHex.setText(details.get("leftColour"));
+            viewHolder.endHex.setText(details.get("rightColour"));
+
+            if (Values.uiDesignerMode) {
+                viewHolder.gradientName.setVisibility(View.GONE);
+            } else {
+                viewHolder.startCircle.setVisibility(View.GONE);
+                viewHolder.endCircle.setVisibility(View.GONE);
+                viewHolder.startHex.setVisibility(View.GONE);
+                viewHolder.endHex.setVisibility(View.GONE);
+            }
             container.addView(view);
         } catch (Exception e) {
             Log.e("FeaturedAdapterUF", e.getLocalizedMessage());
@@ -69,17 +92,21 @@ public class FeaturedAdapterUserFriendly extends PagerAdapter {
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((View)object);
+        container.removeView((View) object);
     }
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return (View) object == view;
+        return object == view;
     }
 
 
     static class ViewHolder {
         ImageView gradient;
+        ImageView startCircle;
+        ImageView endCircle;
+        TextView startHex;
+        TextView endHex;
         TextView gradientName;
     }
 }

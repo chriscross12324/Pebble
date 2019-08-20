@@ -67,9 +67,10 @@
                         <androidx.viewpager.widget.ViewPager
                             android:id="@+id/featuredGradients"
                             android:layout_width="match_parent"
-                            android:layout_height="250dp"
+                            android:layout_height="266dp"
                             android:layout_marginTop="16dp"
                             android:alpha="0"
+                            android:clipToPadding="false"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/featuredTitle" />
@@ -235,7 +236,7 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="24dp"
                     android:fontFamily="@font/googlesans_bold"
-                    android:text="August 17, 2019"
+                    android:text="August 19, 2019"
                     android:textColor="?PrimaryTextColour"
                     android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -435,12 +436,36 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="11dp"
                     android:fontFamily="@font/googlesans_medium"
-                    android:text="Changed the way Pebble connects to its\ndatabase"
+                    android:text="Pull To Refresh circle now corresponds to theme\ncolour"
                     android:textAlignment="viewStart"
                     android:textColor="?SecondaryTextColour"
                     android:textSize="12sp"
                     app:layout_constraintStart_toEndOf="@+id/dotSix"
                     app:layout_constraintTop_toBottomOf="@+id/changedThree" />
+
+                <ImageView
+                    android:id="@+id/dotSeven"
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/circle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/changedFour" />
+
+                <TextView
+                    android:id="@+id/changedFive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="11dp"
+                    android:fontFamily="@font/googlesans_medium"
+                    android:text="Changed the way Pebble connects to its\ndatabase"
+                    android:textAlignment="viewStart"
+                    android:textColor="?SecondaryTextColour"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@+id/dotSeven"
+                    app:layout_constraintTop_toBottomOf="@+id/changedFour" />
 
                 <ImageView
                     android:id="@+id/removedBadge"
@@ -449,7 +474,7 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="24dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/changedFour"
+                    app:layout_constraintTop_toBottomOf="@+id/changedFive"
                     app:srcCompat="@drawable/icon_changelog_removed" />
 
                 <ImageView

@@ -101,7 +101,7 @@ public class Permissions extends AppCompatActivity {
 
         UIAnimations.constraintLayoutObjectAnimator(warningNotification, "translationY",
                 0, 500,
-                500, new DecelerateInterpolator(3));
+                200, new DecelerateInterpolator(3));
 
         understandButtonData.setOnClickListener(new View.OnClickListener() {
             @Override

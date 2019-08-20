@@ -5,41 +5,27 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
-import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,20 +34,8 @@ import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.RetryPolicy;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
@@ -77,8 +51,6 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
     ScrollView scrollView;
 
     private ViewPager featuredGradients;
-    private ViewPagerAdapter featuredAdapter;
-    private ArrayList<ViewPagerModel> featuredContents;
 
     int screenWidth;
     int screenHeight;
@@ -90,6 +62,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
 
     Object module;
     View moduleView;
+    View featuredPage;
     DisplayMetrics displayMetrics;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -148,6 +121,16 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         Log.e("TAG", "" + maxNumColumns + screenWidth);
         gridView.setNumColumns(maxNumColumns);
 
+        //SwipeToRefresh
+        if (Values.darkMode){
+            swipeToRefresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorDarkThemeForeground));
+            swipeToRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorLightThemeForeground));
+        } else {
+            swipeToRefresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorLightThemeForeground));
+            swipeToRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorDarkThemeForeground));
+        }
+
+
         ArrayList<HashMap<String, String>> list = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("items");
         ArrayList<HashMap<String, String>> flist = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("featured");
         connectionChecker();
@@ -155,49 +138,8 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         FeaturedAdapterUserFriendly featuredAdapterUserFriendly = new FeaturedAdapterUserFriendly(GradientsScreen.this, flist);
         featuredGradients.setAdapter(featuredAdapterUserFriendly);
 
-
-        /*featuredContents = new ArrayList<>();
-        int startColours[] = {ContextCompat.getColor(GradientsScreen.this, R.color.shallowLakeTL),
-                ContextCompat.getColor(GradientsScreen.this, R.color.purpleHazeTL),
-                ContextCompat.getColor(GradientsScreen.this, R.color.forestTL),
-                ContextCompat.getColor(GradientsScreen.this, R.color.sunshineTL),
-                ContextCompat.getColor(GradientsScreen.this, R.color.atmosphereTL),
-                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayTL)};
-        int endColours[] = {ContextCompat.getColor(GradientsScreen.this, R.color.shallowLakeBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.purpleHazeBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.forestBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.sunshineBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.atmosphereBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR)
-        };
-        String names[] = {"Shallow Lake", "Purple Haze", "Forest", "Sunshine", "Atmosphere", "Winters Day"};*/
-        /*HashMap<String, String> f = flist.get(0);
-        featuredContents = new ArrayList<>();
-        String startColours[] = new String[flist.get(0).get("leftColour")]];
-        int endColours[] = {ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.sunshineBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.forestBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR),
-                ContextCompat.getColor(GradientsScreen.this, R.color.wintersDayBR)
-        };
-        String names[] = {"Winters Day","Sunshine","Forest","Winters Day","Winters Day","Winters Day"};
-
-
-        for (int s = 0; s < startColours.length; s++) {
-            ViewPagerModel viewPagerModel = new ViewPagerModel();
-            Log.e("I", "Start: " + startColours[s] + " End: " + endColours[s] + " Name: " + names[s]);
-            viewPagerModel.startColour = startColours[s];
-            viewPagerModel.endColour = endColours[s];
-            viewPagerModel.name = names[s];
-
-            featuredContents.add(viewPagerModel);
-
-        }
-        //Log.e("K", ""+featuredContents);
-        featuredAdapter = new ViewPagerAdapter(featuredContents, GradientsScreen.this);*/
         featuredGradients.setPageTransformer(true, new ViewPagerStack());
-        featuredGradients.setOffscreenPageLimit(4);
+        featuredGradients.setOffscreenPageLimit(10);
         //featuredGradients.setAdapter(featuredAdapter);
         featuredGradients.setTranslationY(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -50,
                 GradientsScreen.this.getResources().getDisplayMetrics()));
@@ -362,13 +304,15 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
 
         @Override
         public void transformPage(@NonNull View page, float position) {
+            featuredPage = page;
             if (position >= 0) {
 
                 float scale = 1f - 0.25f * position;
                 if (scale >= 0) {
-                    ViewGroup.LayoutParams layoutParams = page.getLayoutParams();
-                    layoutParams.width = Math.round(1f - 0.25f * position);
-                    page.setLayoutParams(layoutParams);
+                    //ViewGroup.LayoutParams layoutParams = page.getLayoutParams();
+                    //layoutParams.width = Math.round(1f - 0.25f * position);
+                    page.setScaleX(1f - 0.15f * position);
+                    //page.setLayoutParams(layoutParams);
                 } else {
                     page.setScaleX(0f);
                 }
@@ -376,7 +320,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                 page.setScaleY(1f);
 
                 page.setTranslationX(-page.getWidth() * position);
-                double val = (-30 * (Math.pow(0.5, position) - 1) / (0.5 - 1));
+                double val = (-50 * (Math.pow(0.5, position) - 1) / (0.5 - 1));
                 page.setTranslationY((float) val);
                 //Log.e("INFO", "" + position);
 
@@ -399,6 +343,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(GradientsScreen.this, view.findViewById(R.id.gradient), "Shallow Lake");
                     startActivity(intent, options.toBundle());
                 }, 200);
+
             });
         }
     }
@@ -423,7 +368,12 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
             } catch (Exception e) {
                 Log.e("TAG", e.getLocalizedMessage());
             }
-
+            try {
+                TextView gradientName = featuredPage.findViewById(R.id.gradientName);
+                UIAnimations.textViewObjectAnimator(gradientName, "alpha", 1, 200, 0, new LinearInterpolator());
+            } catch (Exception e2) {
+                Log.e("TAG", e2.getLocalizedMessage());
+            }
 
             Values.currentActivity = "GradientsScreen";
             blocker.setVisibility(View.GONE);

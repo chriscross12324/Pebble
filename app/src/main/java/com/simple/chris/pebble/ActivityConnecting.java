@@ -342,7 +342,7 @@ public class ActivityConnecting extends AppCompatActivity {
             startActivity(reload);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
-        }, 15000);
+        }, 17000);
 
 
     }
