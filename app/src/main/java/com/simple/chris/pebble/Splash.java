@@ -4,6 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Splash extends AppCompatActivity {
 
@@ -12,6 +17,18 @@ public class Splash extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         Values.loadValues(Splash.this);
+
+        Date date = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("MM-dd-yyyy");
+        String formatedDate = format.format(date);
+        Log.e("Date", formatedDate);
+
+        if (formatedDate.equals("04-12-2020")){
+            Values.peppaPink = true;
+        } else {
+            Values.peppaPink = false;
+        }
+
 
         if (!Values.firstStart){
             startActivity(new Intent(Splash.this, ActivityConnecting.class));

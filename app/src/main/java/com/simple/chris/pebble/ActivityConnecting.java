@@ -1,25 +1,20 @@
 package com.simple.chris.pebble;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
@@ -27,6 +22,9 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -42,8 +40,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-
-import eightbitlab.com.blurview.RenderScriptBlur;
 
 public class ActivityConnecting extends AppCompatActivity {
 
@@ -115,7 +111,7 @@ public class ActivityConnecting extends AppCompatActivity {
                     if (oneTime) {
                         getItems();
                         playConnectingDialog();
-                    }else {
+                    } else {
                         showCellularWarningDialog();
                     }
                 } else {
@@ -135,15 +131,21 @@ public class ActivityConnecting extends AppCompatActivity {
     private void bothGrabbed() {
         handler4.postDelayed(() -> {
             if (connectedMain && connectedFeatured) {
-                startActivity(startGradientScreen);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                //Log.e("TAG", list.toString());
-                //noConnectionDialog.dismiss();
-                //cellularDataWarningDialog.dismiss();
                 handler1.removeCallbacksAndMessages(null);
                 handler2.removeCallbacksAndMessages(null);
                 handler3.removeCallbacksAndMessages(null);
-                finish();
+                handler4.removeCallbacksAndMessages(null);
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.postDelayed(() -> {
+                    startActivity(startGradientScreen);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    //Log.e("TAG", list.toString());
+                    //noConnectionDialog.dismiss();
+                    //cellularDataWarningDialog.dismiss();
+
+                    finish();
+                }, 2000);
+
             } else {
                 bothGrabbed();
             }
@@ -326,14 +328,20 @@ public class ActivityConnecting extends AppCompatActivity {
         UIAnimations.constraintLayoutObjectAnimator(connectingDialog, "alpha", 1, 300, 0, new LinearInterpolator());
         ImageView connectingAnimation = findViewById(R.id.animationView);
 
-        connectingAnimation.setBackgroundResource(R.drawable.loading_animation);
-        AnimationDrawable animationDrawable = (AnimationDrawable) connectingAnimation.getBackground();
-        animationDrawable.start();
+        if (Values.peppaPink) {
+            connectingAnimation.setBackgroundResource(R.drawable.peppa);
+        } else {
+            connectingAnimation.setBackgroundResource(R.drawable.loading_animation);
+            AnimationDrawable animationDrawable = (AnimationDrawable) connectingAnimation.getBackground();
+            animationDrawable.start();
+        }
+
         notification.setAlpha(1);
 
         handler1.postDelayed(() -> {
+            UIAnimations.textViewChanger(notificationText, "It seems that something is wrong", 0);
             playAnimation(0);
-            UIAnimations.textViewChanger(notificationText, "Repairing", 7500);
+            UIAnimations.textViewChanger(notificationText, "Repairing", 6000);
             playAnimation(6000);
         }, 8000);
 
@@ -341,8 +349,12 @@ public class ActivityConnecting extends AppCompatActivity {
             Intent reload = new Intent(ActivityConnecting.this, ActivityConnecting.class);
             startActivity(reload);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            handler1.removeCallbacksAndMessages(null);
+            handler2.removeCallbacksAndMessages(null);
+            handler3.removeCallbacksAndMessages(null);
+            handler4.removeCallbacksAndMessages(null);
             finish();
-        }, 17000);
+        }, 19000);
 
 
     }

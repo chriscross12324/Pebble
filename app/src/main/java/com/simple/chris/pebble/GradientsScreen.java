@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -224,29 +225,30 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                     .setHasFixedTransformationMatrix(false);
 
 
-            if (Values.lastVersion != appVersion) {
+            if (Values.lastVersion < appVersion) {
                 UIAnimations.blurViewObjectAnimator(changelogBlur, "alpha", 1, 500, 0, new DecelerateInterpolator());
                 ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(changelogHolder, "alpha", 1);
                 objectAnimator.setDuration(200);
                 objectAnimator.setInterpolator(new DecelerateInterpolator());
                 objectAnimator.start();
-            } else {
+            } else if (Values.lastVersion == appVersion){
                 blocker.setVisibility(View.GONE);
                 UIAnimations.constraintLayoutVisibility(changelogHolder, View.GONE, 0);
+            } else {
+                Toast.makeText(this, "Are you from the future?", Toast.LENGTH_SHORT).show();
+                finish();
             }
-            hideChangelogButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    UIAnimations.blurViewObjectAnimator(changelogBlur, "alpha", 0, 1000, 0, new DecelerateInterpolator());
-                    ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(changelogHolder, "alpha", 0);
-                    objectAnimator.setDuration(200);
-                    objectAnimator.setInterpolator(new DecelerateInterpolator());
-                    objectAnimator.start();
-                    blocker.setVisibility(View.GONE);
-                    UIAnimations.constraintLayoutVisibility(changelogHolder, View.GONE, 200);
-                    Values.lastVersion = appVersion;
-                    Values.saveValues(GradientsScreen.this);
-                }
+            hideChangelogButton.setOnClickListener(v -> {
+                 UIAnimations.blurViewObjectAnimator(changelogBlur, "alpha", 0, 1000, 0, new DecelerateInterpolator());
+                ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(changelogHolder, "alpha", 0);
+                objectAnimator.setDuration(200);
+                objectAnimator.setInterpolator(new DecelerateInterpolator());
+                objectAnimator.start();
+                blocker.setVisibility(View.GONE);
+                UIAnimations.constraintLayoutVisibility(changelogHolder, View.GONE, 200);
+                Values.lastVersion = appVersion;
+                Values.saveValues(GradientsScreen.this);
+
             });
         }, 2000);
 
