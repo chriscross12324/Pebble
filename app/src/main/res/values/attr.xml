@@ -13,4 +13,10 @@
     <declare-styleable name="TransitionArcMotion">
         <attr name="arcRadius" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="GradientView">
+        <attr name="startColour" format="color"/>
+        <attr name="endColour" format="color"/>
+        <attr name="cornerRadius" format="dimension"/>
+    </declare-styleable>
 </resources>

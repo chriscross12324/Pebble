@@ -50,21 +50,17 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
     ExpandedHeightScrollView gridView, blocker;
     SwipeRefreshLayout swipeToRefresh;
     ScrollView scrollView;
-
-    private ViewPager featuredGradients;
-
     int screenWidth;
     int screenHeight;
     int imageViewHeight;
     boolean connected = false;
     String connectionType;
-
     int appVersion;
-
     Object module;
     View moduleView;
     View featuredPage;
     DisplayMetrics displayMetrics;
+    private ViewPager featuredGradients;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -76,12 +72,6 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
             setTheme(R.style.ThemeLight);
         }
         setContentView(R.layout.activity_gradients_grid);
-        ImageView background = findViewById(R.id.background);
-        if (Values.darkMode) {
-            background.setBackgroundResource(R.drawable.placeholder_gradient_dark);
-        } else {
-            background.setBackgroundResource(R.drawable.placeholder_gradient_light);
-        }
         Values.saveValues(GradientsScreen.this);
 
         /** Declare UI Elements*/
@@ -123,7 +113,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         gridView.setNumColumns(maxNumColumns);
 
         //SwipeToRefresh
-        if (Values.darkMode){
+        if (Values.darkMode) {
             swipeToRefresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorDarkThemeForeground));
             swipeToRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorLightThemeForeground));
         } else {
@@ -136,10 +126,10 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         ArrayList<HashMap<String, String>> flist = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("featured");
         connectionChecker();
 
-        FeaturedAdapterUserFriendly featuredAdapterUserFriendly = new FeaturedAdapterUserFriendly(GradientsScreen.this, flist);
-        featuredGradients.setAdapter(featuredAdapterUserFriendly);
+        FeaturedAdapterBackup featuredAdapter = new FeaturedAdapterBackup(GradientsScreen.this, flist);
+        featuredGradients.setAdapter(featuredAdapter);
 
-        featuredGradients.setPageTransformer(true, new ViewPagerStack());
+        //featuredGradients.setPageTransformer(true, new ViewPagerStack());
         featuredGradients.setOffscreenPageLimit(10);
         //featuredGradients.setAdapter(featuredAdapter);
         featuredGradients.setTranslationY(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -50,
@@ -165,12 +155,9 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
             }
         });
 
-
         gridView.setOnItemClickListener(this);
         gridView.postDelayed(() -> gridView.setTranslationY(screenHeight), 0);
         gridView.setAlpha(1);
-        //gridView.setEnabled(false);
-
 
         swipeToRefresh.setOnRefreshListener(() -> {
             gridView.setEnabled(false);
@@ -231,7 +218,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                 objectAnimator.setDuration(200);
                 objectAnimator.setInterpolator(new DecelerateInterpolator());
                 objectAnimator.start();
-            } else if (Values.lastVersion == appVersion){
+            } else if (Values.lastVersion == appVersion) {
                 blocker.setVisibility(View.GONE);
                 UIAnimations.constraintLayoutVisibility(changelogHolder, View.GONE, 0);
             } else {
@@ -239,7 +226,7 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                 finish();
             }
             hideChangelogButton.setOnClickListener(v -> {
-                 UIAnimations.blurViewObjectAnimator(changelogBlur, "alpha", 0, 1000, 0, new DecelerateInterpolator());
+                UIAnimations.blurViewObjectAnimator(changelogBlur, "alpha", 0, 1000, 0, new DecelerateInterpolator());
                 ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(changelogHolder, "alpha", 0);
                 objectAnimator.setDuration(200);
                 objectAnimator.setInterpolator(new DecelerateInterpolator());
@@ -292,6 +279,28 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         if (imageViewHeight == 0) {
             imageViewHeight = imageView.getHeight();
         }
+        ValueAnimator elevate = ValueAnimator.ofFloat(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, GradientsScreen.this.getResources().getDisplayMetrics()),
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, GradientsScreen.this.getResources().getDisplayMetrics())).setDuration(600);
+        elevate.addUpdateListener(valueAnimator -> {
+            moduleView.setElevation((Float) valueAnimator.getAnimatedValue());
+            moduleView.requestLayout();
+        });
+        AnimatorSet set1 = new AnimatorSet();
+        set1.play(elevate);
+        set1.setDuration(350);
+        set1.start();
+
+        ValueAnimator size = ValueAnimator.ofFloat(1f, 0.98f).setDuration(600);
+        size.addUpdateListener(valueAnimator -> {
+            moduleView.setScaleX((Float) valueAnimator.getAnimatedValue());
+            moduleView.setScaleY((Float) valueAnimator.getAnimatedValue());
+            moduleView.requestLayout();
+        });
+        size.setInterpolator(new DecelerateInterpolator(3));
+        AnimatorSet set2 = new AnimatorSet();
+        set2.play(size);
+        set2.setDuration(350);
+        set2.start();
 
 
         Handler handler = new Handler();
@@ -302,59 +311,11 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
 
     }
 
-    private class ViewPagerStack implements ViewPager.PageTransformer {
-
-        @Override
-        public void transformPage(@NonNull View page, float position) {
-            featuredPage = page;
-            if (position >= 0) {
-
-                float scale = 1f - 0.25f * position;
-                if (scale >= 0) {
-                    //ViewGroup.LayoutParams layoutParams = page.getLayoutParams();
-                    //layoutParams.width = Math.round(1f - 0.25f * position);
-                    page.setScaleX(1f - 0.15f * position);
-                    //page.setLayoutParams(layoutParams);
-                } else {
-                    page.setScaleX(0f);
-                }
-
-                page.setScaleY(1f);
-
-                page.setTranslationX(-page.getWidth() * position);
-                double val = (-50 * (Math.pow(0.5, position) - 1) / (0.5 - 1));
-                page.setTranslationY((float) val);
-                //Log.e("INFO", "" + position);
-
-            }
-            page.setOnClickListener(view -> {
-                Intent intent = new Intent(GradientsScreen.this, GradientDetails.class);
-
-                blocker.setVisibility(View.VISIBLE);
-
-                intent.putExtra("backgroundName", "Shallow Lake");
-                intent.putExtra("leftColour", "#89f7fe");
-                intent.putExtra("rightColour", "#66a6ff");
-                intent.putExtra("description", "A lake where you can see the bottom through the clear water");
-
-                UIAnimations.textViewObjectAnimator(view.findViewById(R.id.gradientName), "alpha", 0, 200, 0, new LinearInterpolator());
-
-
-                Handler handler = new Handler();
-                handler.postDelayed(() -> {
-                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(GradientsScreen.this, view.findViewById(R.id.gradient), "Shallow Lake");
-                    startActivity(intent, options.toBundle());
-                }, 200);
-
-            });
-        }
-    }
-
     @Override
     protected void onResume() {
         if (Values.currentActivity != null && Values.currentActivity.equals("GradientDetails")) {
             try {
-                ImageView imageView = moduleView.findViewById(R.id.backgroundGradient);
+                /*ImageView imageView = moduleView.findViewById(R.id.backgroundGradient);
                 imageView.getLayoutParams().height = imageViewHeight;
                 imageView.requestLayout();
 
@@ -363,10 +324,57 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                     imageView.getLayoutParams().height = (Integer) animation.getAnimatedValue();
                     imageView.requestLayout();
                 });
+                slideAnimation.setDuration(800);
                 AnimatorSet set = new AnimatorSet();
                 set.play(slideAnimation);
-                set.setInterpolator(new DecelerateInterpolator(3));
-                set.start();
+                set.setInterpolator(new DecelerateInterpolator(1));
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        set.start();
+                    }
+                }, 0);*/
+                ImageView imageView = moduleView.findViewById(R.id.backgroundGradient);
+                ValueAnimator slideAnimation = ValueAnimator.ofInt(imageView.getHeight(), imageViewHeight).setDuration(600);
+                slideAnimation.addUpdateListener(animation -> {
+                    imageView.getLayoutParams().height = (Integer) animation.getAnimatedValue();
+                    imageView.requestLayout();
+                });
+                AnimatorSet set = new AnimatorSet();
+                set.play(slideAnimation);
+                set.setInterpolator(new DecelerateInterpolator(2));
+                set.setDuration(600);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        set.start();
+                    }
+                }, 100);
+
+                ValueAnimator elevate = ValueAnimator.ofFloat(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, GradientsScreen.this.getResources().getDisplayMetrics()),
+                        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, GradientsScreen.this.getResources().getDisplayMetrics())).setDuration(600);
+                elevate.addUpdateListener(valueAnimator -> {
+                    moduleView.setElevation((Float) valueAnimator.getAnimatedValue());
+                    moduleView.requestLayout();
+                });
+                AnimatorSet set1 = new AnimatorSet();
+                set1.play(elevate);
+                set1.setDuration(350);
+                set1.start();
+
+                ValueAnimator size = ValueAnimator.ofFloat(0.98f, 1f).setDuration(600);
+                size.addUpdateListener(valueAnimator -> {
+                    moduleView.setScaleX((Float) valueAnimator.getAnimatedValue());
+                    moduleView.setScaleY((Float) valueAnimator.getAnimatedValue());
+                    moduleView.requestLayout();
+                });
+                AnimatorSet set2 = new AnimatorSet();
+                set2.play(size);
+                set2.setDuration(350);
+                set2.start();
+
             } catch (Exception e) {
                 Log.e("TAG", e.getLocalizedMessage());
             }
@@ -386,13 +394,18 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         gridView.setNumColumns(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 2);
-        featuredGradients.invalidate();
+        featuredGradients.requestLayout();
         super.onConfigurationChanged(newConfig);
     }
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    public boolean isInterenetConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
     }
 
     /*public void appCrashHandler() {
@@ -402,11 +415,6 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
             Log.e("TAG", "" + e.getLocalizedMessage());
         }
     }*/
-
-    public boolean isInterenetConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null;
-    }
 
     public boolean isNetworkTypeCellular() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -462,6 +470,55 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
                     3000, new DecelerateInterpolator(3));
         }, delay);
 
+    }
+
+    private class ViewPagerStack implements ViewPager.PageTransformer {
+
+        @Override
+        public void transformPage(@NonNull View page, float position) {
+            featuredPage = page;
+            if (position >= 0) {
+
+                float scale = 1f - 0.25f * position;
+                if (scale >= 0) {
+                    //ViewGroup.LayoutParams layoutParams = page.getLayoutParams();
+                    //layoutParams.width = Math.round(1f - 0.25f * position);
+                    page.setScaleX(1f - 0.15f * position);
+                    page.setScaleY(1f - 0.15f * position);
+                    //page.setLayoutParams(layoutParams);
+                } else {
+                    page.setScaleX(0f);
+                }
+
+                //page.setScaleY(1f);
+
+                page.setTranslationX(-page.getWidth() * position);
+                double val = (-65 * (Math.pow(0.75, position) - 1) / (0.75 - 1));
+                page.setTranslationY((float) val);
+                //Log.e("INFO", "" + position);
+
+            }
+            page.setOnClickListener(view -> {
+                Intent intent = new Intent(GradientsScreen.this, GradientDetails.class);
+
+                blocker.setVisibility(View.VISIBLE);
+
+                intent.putExtra("backgroundName", "Shallow Lake");
+                intent.putExtra("leftColour", "#89f7fe");
+                intent.putExtra("rightColour", "#66a6ff");
+                intent.putExtra("description", "A lake where you can see the bottom through the clear water");
+
+                UIAnimations.textViewObjectAnimator(view.findViewById(R.id.gradientName), "alpha", 0, 200, 0, new LinearInterpolator());
+
+
+                Handler handler = new Handler();
+                handler.postDelayed(() -> {
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(GradientsScreen.this, view.findViewById(R.id.gradient), "Shallow Lake");
+                    startActivity(intent, options.toBundle());
+                }, 200);
+
+            });
+        }
     }
 
 

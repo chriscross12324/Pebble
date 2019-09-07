@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardBackgroundColor="#000000"
-        app:cardCornerRadius="15dp"
-        app:cardElevation="0dp">
+        app:cardCornerRadius="15dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -24,11 +23,14 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/placeholder_gradient"
+                android:elevation="8dp"
                 android:transitionName="gradientView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/detailsHolder"
@@ -57,7 +59,7 @@
                     android:gravity="center"
                     android:text="Shallow Lake"
                     android:textAlignment="center"
-                    android:textColor="?DetailsTitleTextColour"
+                    android:textColor="?PrimaryTextColour"
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +75,7 @@
                     android:fontFamily="@font/googlesans_medium"
                     android:text="A lake where you can see the bottom through the clear water"
                     android:textAlignment="center"
-                    android:textColor="?DetailsDescriptionTextColour"
+                    android:textColor="?SecondaryTextColour"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -82,7 +84,7 @@
                 <ImageView
                     android:id="@+id/dividerOne"
                     android:layout_width="0dp"
-                    android:layout_height="2dp"
+                    android:layout_height="2.3dp"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="24dp"
@@ -213,7 +215,7 @@
 
                 <ImageView
                     android:id="@+id/actionsDivider"
-                    android:layout_width="2dp"
+                    android:layout_width="2.3dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"

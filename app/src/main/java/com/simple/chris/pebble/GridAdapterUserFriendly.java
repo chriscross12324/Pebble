@@ -3,7 +3,9 @@ package com.simple.chris.pebble;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,10 +61,10 @@ public class GridAdapterUserFriendly extends BaseAdapter {
             if (convertView == null) {
                 LayoutInflater mInflator = (LayoutInflater) mContext.
                         getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = mInflator.inflate(R.layout.gridview_module_user_friendly, parent, false);
-                mViewHolder.cardView = convertView.findViewById(R.id.cardView);
-                mViewHolder.mGradient = (ImageView) convertView.findViewById(R.id.backgroundGradient);
-                mViewHolder.mName = (TextView) convertView.findViewById(R.id.backgroundNameTextView);
+                convertView = mInflator.inflate(R.layout.all_card, parent, false);
+                //mViewHolder.cardView = convertView.findViewById(R.id.cardView);
+                mViewHolder.mGradient = (ImageView) convertView.findViewById(R.id.gradient);
+                mViewHolder.mName = (TextView) convertView.findViewById(R.id.gradientName);
                 convertView.setTag(mViewHolder);
             } else {
                 mViewHolder = (ViewHolder) convertView.getTag();
@@ -71,8 +73,9 @@ public class GridAdapterUserFriendly extends BaseAdapter {
                     GradientDrawable.Orientation.TL_BR,
                     new int[]{leftColour, rightColour}
             );
+            gradientDrawable.setCornerRadius(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, mContext.getResources().getDisplayMetrics()));
             mViewHolder.mGradient.setBackgroundDrawable(gradientDrawable);
-            mViewHolder.cardView.setTransitionName(details.get("backgroundName"));
+            //mViewHolder.cardView.setTransitionName(details.get("backgroundName"));
             mViewHolder.mName.setText(details.get("backgroundName"));
 
         }catch (Exception e){
@@ -83,7 +86,7 @@ public class GridAdapterUserFriendly extends BaseAdapter {
     }
 
     static class ViewHolder {
-        CardView cardView;
+        //CardView cardView;
         ImageView mGradient;
         TextView mName;
     }

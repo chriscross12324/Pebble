@@ -57,8 +57,10 @@ public class ActivityConnecting extends AppCompatActivity {
     Boolean oneTime = false;
     Boolean connectedMain = false;
     Boolean connectedFeatured = false;
+    Boolean testLayout = false;
 
     Intent startGradientScreen;
+    Intent startTestLayout;
 
 
     @Override
@@ -70,17 +72,12 @@ public class ActivityConnecting extends AppCompatActivity {
             setTheme(R.style.ThemeLight);
         }
         setContentView(R.layout.activity_connecting);
-        background = findViewById(R.id.background);
-        if (Values.darkMode) {
-            background.setBackgroundResource(R.drawable.placeholder_gradient_dark);
-        } else {
-            background.setBackgroundResource(R.drawable.placeholder_gradient_light);
-        }
 
         /** Declare UI Elements */
         //Constraint Layout
         connectingDialog = findViewById(R.id.connectingDialog);
         notification = findViewById(R.id.notification);
+        background = findViewById(R.id.background);
 
         //Dialogs
         noConnectionDialog = new Dialog(ActivityConnecting.this);
@@ -92,6 +89,7 @@ public class ActivityConnecting extends AppCompatActivity {
         notification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
 
         startGradientScreen = new Intent(ActivityConnecting.this, GradientsScreen.class);
+        startTestLayout = new Intent(ActivityConnecting.this, TestLayout.class);
 
         checkConnection();
         bothGrabbed();
@@ -99,9 +97,10 @@ public class ActivityConnecting extends AppCompatActivity {
         background.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                connectedFeatured = true;
+                testLayout = true;
             }
         });
+
     }
 
     private void checkConnection() {
@@ -131,20 +130,30 @@ public class ActivityConnecting extends AppCompatActivity {
     private void bothGrabbed() {
         handler4.postDelayed(() -> {
             if (connectedMain && connectedFeatured) {
-                handler1.removeCallbacksAndMessages(null);
-                handler2.removeCallbacksAndMessages(null);
-                handler3.removeCallbacksAndMessages(null);
-                handler4.removeCallbacksAndMessages(null);
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.postDelayed(() -> {
-                    startActivity(startGradientScreen);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    //Log.e("TAG", list.toString());
-                    //noConnectionDialog.dismiss();
-                    //cellularDataWarningDialog.dismiss();
+                if (!testLayout) {
+                    handler1.removeCallbacksAndMessages(null);
+                    handler2.removeCallbacksAndMessages(null);
+                    handler3.removeCallbacksAndMessages(null);
+                    handler4.removeCallbacksAndMessages(null);
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.postDelayed(() -> {
+                        startActivity(startGradientScreen);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        //Log.e("TAG", list.toString());
+                        //noConnectionDialog.dismiss();
+                        //cellularDataWarningDialog.dismiss();
 
+                        finish();
+                    }, 0);
+                } else {
+                    handler1.removeCallbacksAndMessages(null);
+                    handler2.removeCallbacksAndMessages(null);
+                    handler3.removeCallbacksAndMessages(null);
+                    handler4.removeCallbacksAndMessages(null);
+                    startActivity(startTestLayout);
                     finish();
-                }, 2000);
+                }
+
 
             } else {
                 bothGrabbed();
@@ -197,7 +206,7 @@ public class ActivityConnecting extends AppCompatActivity {
 
                 JSONObject jo = jarray.getJSONObject(i);
 
-                String backgroundName = jo.getString("backgroundName").replace(" ", "\n");
+                String backgroundName = jo.getString("backgroundName").replace(" ", " ");
                 String leftColour = jo.getString("leftColour");
                 String rightColour = jo.getString("rightColour");
                 String description = jo.getString("description");
@@ -211,6 +220,7 @@ public class ActivityConnecting extends AppCompatActivity {
 
                 list.add(item);
                 startGradientScreen.putExtra("items", list);
+                startTestLayout.putExtra("items", list);
                 //Log.e("INFO", ""+featuredList);
             }
             connectedMain = true;
@@ -250,6 +260,7 @@ public class ActivityConnecting extends AppCompatActivity {
 
                 flist.add(item);
                 startGradientScreen.putExtra("featured", flist);
+                startTestLayout.putExtra("featured", flist);
                 //Log.e("INFO", ""+flist);
             }
             connectedFeatured = true;

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 public class GradientDetails extends AppCompatActivity {
     CardView corners;
@@ -70,15 +71,15 @@ public class GradientDetails extends AppCompatActivity {
 
         //Get-Set values from previous activity
         Intent intent = getIntent();
-        backgroundName = intent.getStringExtra("backgroundName");
+        backgroundName = intent.getStringExtra("gradientName");
 
         //Determines if uppercase HEX value
         if (Values.uppercaseHEX) {
-            leftColour = intent.getStringExtra("leftColour").toUpperCase();
-            rightColour = intent.getStringExtra("rightColour").toUpperCase();
+            leftColour = intent.getStringExtra("startColour").toUpperCase();
+            rightColour = intent.getStringExtra("endColour").toUpperCase();
         } else {
-            leftColour = intent.getStringExtra("leftColour").toLowerCase();
-            rightColour = intent.getStringExtra("rightColour").toLowerCase();
+            leftColour = intent.getStringExtra("startColour").toLowerCase();
+            rightColour = intent.getStringExtra("endColour").toLowerCase();
         }
         description = intent.getStringExtra("description");
         rightColourInt = Color.parseColor(rightColour);
@@ -95,7 +96,11 @@ public class GradientDetails extends AppCompatActivity {
         corners.setTransitionName(backgroundName);
         gradientViewer.setTransitionName(backgroundName + "1");
 
-        startHex.setOnClickListener(v -> {
+        if (description.equals("")){
+            detailsDescription.setVisibility(View.GONE);
+        }
+
+        startHex.setOnLongClickListener(view -> {
             ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText("startHex", leftColour);
             clipboardManager.setPrimaryClip(clipData);
@@ -114,8 +119,10 @@ public class GradientDetails extends AppCompatActivity {
                     playingCopiedAnimation = false;
                 }, 2500);
             }
+            return false;
         });
-        endHex.setOnClickListener(v -> {
+
+        endHex.setOnLongClickListener(view -> {
             ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText("endHex", rightColour);
             clipboardManager.setPrimaryClip(clipData);
@@ -134,7 +141,7 @@ public class GradientDetails extends AppCompatActivity {
                     playingCopiedAnimation = false;
                 }, 2500);
             }
-            Log.e("TAG", ""+copiedText.getTextSize());
+            return false;
         });
 
         detailsHolder.setOnClickListener(v -> {
@@ -226,10 +233,10 @@ public class GradientDetails extends AppCompatActivity {
         bottomColourHex.setText(rightColour);
         GradientDrawable topColourCircleDrawable = new GradientDrawable();
         topColourCircleDrawable.setShape(GradientDrawable.OVAL);
-        topColourCircleDrawable.setStroke(5, leftColourInt);
+        topColourCircleDrawable.setStroke(6, leftColourInt);
         GradientDrawable bottomColourCircleDrawable = new GradientDrawable();
         bottomColourCircleDrawable.setShape(GradientDrawable.OVAL);
-        bottomColourCircleDrawable.setStroke(5, rightColourInt);
+        bottomColourCircleDrawable.setStroke(6, rightColourInt);
         topColourCircle.setBackgroundDrawable(topColourCircleDrawable);
         bottomColourCircle.setBackgroundDrawable(bottomColourCircleDrawable);
     }

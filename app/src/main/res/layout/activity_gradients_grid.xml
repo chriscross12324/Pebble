@@ -23,7 +23,7 @@
                 android:id="@+id/background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/placeholder_gradient_dark"
+                android:background="?BackgroundColour"
                 android:contentDescription="@string/descriptionBackground" />
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -67,13 +67,18 @@
                         <androidx.viewpager.widget.ViewPager
                             android:id="@+id/featuredGradients"
                             android:layout_width="match_parent"
-                            android:layout_height="266dp"
+                            android:layout_height="250dp"
                             android:layout_marginTop="16dp"
                             android:alpha="0"
                             android:clipToPadding="false"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/featuredTitle" />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/featured"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"/>
 
                         <TextView
                             android:id="@+id/browseTitle"

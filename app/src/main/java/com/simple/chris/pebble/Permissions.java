@@ -37,14 +37,6 @@ public class Permissions extends AppCompatActivity {
             setTheme(R.style.ThemeLight);
         }
         setContentView(R.layout.activity_permissions);
-        ImageView background = findViewById(R.id.background);
-        if (Values.darkMode) {
-            background.setBackgroundResource(R.drawable.placeholder_gradient_dark);
-        } else {
-            background.setBackgroundResource(R.drawable.placeholder_gradient_light);
-        }
-
-
 
         wifiPermission = new Dialog(this);
         dataWarning = new Dialog(this);

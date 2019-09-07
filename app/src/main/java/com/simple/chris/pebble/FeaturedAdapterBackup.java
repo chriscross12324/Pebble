@@ -17,13 +17,13 @@ import androidx.viewpager.widget.PagerAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class FeaturedAdapterUserFriendly extends PagerAdapter {
+public class FeaturedAdapterBackup extends PagerAdapter {
 
     Context context;
     private ArrayList<HashMap<String, String>> map;
     private LayoutInflater layoutInflater;
 
-    FeaturedAdapterUserFriendly(Context context, ArrayList<HashMap<String, String>> map) {
+    FeaturedAdapterBackup(Context context, ArrayList<HashMap<String, String>> map) {
         super();
         this.context = context;
         this.map = map;
@@ -60,29 +60,14 @@ public class FeaturedAdapterUserFriendly extends PagerAdapter {
             viewHolder.gradientName.setText(details.get("backgroundName"));
 
             //UIDesigner
-            viewHolder.startCircle = view.findViewById(R.id.startCircle);
-            viewHolder.endCircle = view.findViewById(R.id.endCircle);
-            viewHolder.startHex = view.findViewById(R.id.startHex);
-            viewHolder.endHex = view.findViewById(R.id.endHex);
             GradientDrawable startGD = new GradientDrawable();
             startGD.setShape(GradientDrawable.OVAL);
             startGD.setStroke(5, startColour);
             GradientDrawable endGD = new GradientDrawable();
             endGD.setShape(GradientDrawable.OVAL);
             endGD.setStroke(5, endColour);
-            viewHolder.startCircle.setBackgroundDrawable(startGD);
-            viewHolder.endCircle.setBackgroundDrawable(endGD);
-            viewHolder.startHex.setText(details.get("leftColour"));
-            viewHolder.endHex.setText(details.get("rightColour"));
 
-            if (Values.uiDesignerMode) {
-                viewHolder.gradientName.setVisibility(View.GONE);
-            } else {
-                viewHolder.startCircle.setVisibility(View.GONE);
-                viewHolder.endCircle.setVisibility(View.GONE);
-                viewHolder.startHex.setVisibility(View.GONE);
-                viewHolder.endHex.setVisibility(View.GONE);
-            }
+
             container.addView(view);
         } catch (Exception e) {
             Log.e("FeaturedAdapterUF", e.getLocalizedMessage());
@@ -103,10 +88,6 @@ public class FeaturedAdapterUserFriendly extends PagerAdapter {
 
     static class ViewHolder {
         ImageView gradient;
-        ImageView startCircle;
-        ImageView endCircle;
-        TextView startHex;
-        TextView endHex;
         TextView gradientName;
     }
 }
