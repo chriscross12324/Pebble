@@ -1,150 +1,255 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?BackgroundColour"
     android:id="@+id/main">
 
-    <ScrollView
-        android:id="@+id/master"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:scrollbars="none">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
+            android:id="@+id/master"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:orientation="vertical"
-            android:paddingBottom="32dp">
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:scrollbars="none">
 
-            <TextView
-                android:id="@+id/browseTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="45dp"
-                android:layout_marginTop="200dp"
-                android:fontFamily="@font/manjari_bold"
-                android:text="Browser Gradients"
-                android:textColor="?PrimaryTextColour"
-                android:textSize="30sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/titleDescription"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/manjari_regular"
-                android:text="Look for colours that you would like to use"
-                android:textColor="?PrimaryTextColour"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/browseTitle" />
-
-            <LinearLayout
-                android:id="@+id/linearLayout4"
-                android:layout_width="0dp"
-                android:layout_height="55dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="48dp"
-                android:layout_marginEnd="40dp"
-                android:background="@drawable/search_background"
                 android:clipToPadding="false"
-                android:elevation="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/titleDescription">
+                android:orientation="vertical"
+                android:paddingBottom="32dp">
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@null"
+                <TextView
+                    android:id="@+id/browseTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="200dp"
                     android:fontFamily="@font/manjari_bold"
-                    android:hint="Search..."
-                    android:singleLine="true"
-                    android:textColorHint="?SecondaryTextColour"
-                    android:textColor="?PrimaryTextColour"/>
-            </LinearLayout>
+                    android:text="Browser Gradients"
+                    android:textColor="?PrimaryTextColour"
+                    android:textSize="30sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="64dp"
-                android:text="Featured"
-                android:textColor="?PrimaryTextColour"
-                android:fontFamily="@font/manjari_bold"
-                android:textSize="28sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+                <TextView
+                    android:id="@+id/titleDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/manjari_regular"
+                    android:text="Look for colours that you would like to use"
+                    android:textColor="?PrimaryTextColour"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/browseTitle" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:clipToPadding="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4">
 
-            </androidx.recyclerview.widget.RecyclerView>
+                <LinearLayout
+                    android:id="@+id/linearLayout4"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginEnd="40dp"
+                    android:background="@drawable/search_background"
+                    android:clipToPadding="false"
+                    android:elevation="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/titleDescription"
+                    android:focusableInTouchMode="true">
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:fontFamily="@font/manjari_bold"
-                android:text="All"
-                android:textColor="?PrimaryTextColour"
-                android:textSize="28sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@null"
+                        android:fontFamily="@font/manjari_bold"
+                        android:hint="Search..."
+                        android:singleLine="true"
+                        android:textColorHint="?SecondaryTextColour"
+                        android:textColor="?PrimaryTextColour" />
+                </LinearLayout>
 
-            <com.simple.chris.pebble.ExpandedHeightScrollView
-                android:id="@+id/gv_items"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:clipToPadding="false"
-                android:gravity="center"
-                android:numColumns="auto_fit"
-                android:overScrollMode="never"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingTop="24dp"
-                android:paddingBottom="32dp"
-                android:scrollbars="none"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView5" />
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="64dp"
+                    android:text="Featured"
+                    android:textColor="?PrimaryTextColour"
+                    android:fontFamily="@font/manjari_bold"
+                    android:textSize="28sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:clipToPadding="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4">
 
-    </ScrollView>
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:fontFamily="@font/manjari_bold"
+                    android:text="All"
+                    android:textColor="?PrimaryTextColour"
+                    android:textSize="28sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+
+                <com.simple.chris.pebble.ExpandedHeightScrollView
+                    android:id="@+id/gv_items"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:clipToPadding="false"
+                    android:gravity="center"
+                    android:numColumns="auto_fit"
+                    android:overScrollMode="never"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="24dp"
+                    android:paddingBottom="32dp"
+                    android:scrollbars="none"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView5" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <ImageView
         android:id="@+id/menuIcon"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:background="@drawable/icon_menu"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/icon_verticle_dots"
         android:backgroundTint="?PrimaryTextColour"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/optionsMenu"
+        android:alpha="0"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <eightbitlab.com.blurview.BlurView
+            android:id="@+id/optionsBlur"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:blurOverlayColor="?BlurColour"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/createGradientHolder"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/themeOption"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/search_background">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="15dp"
+                        android:background="@drawable/icon_dark_mode"
+                        android:backgroundTint="?PrimaryTextColour"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/manjari_bold"
+                    android:text="Change Theme"
+                    android:textColor="?SecondaryTextColour"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/createGradientHolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/createOption"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/search_background">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="15dp"
+                        android:background="@drawable/icon_create"
+                        android:backgroundTint="?PrimaryTextColour"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/manjari_bold"
+                    android:text="Create Gradient"
+                    android:textColor="?SecondaryTextColour"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

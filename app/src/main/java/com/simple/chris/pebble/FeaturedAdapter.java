@@ -56,6 +56,10 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.ViewHo
         } catch (Exception e) {
             Log.e("FeaturedAdapterUF", e.getLocalizedMessage());
         }
+
+        holder.itemView.setOnClickListener(view -> {
+
+        });
     }
 
     public int getItemCount() {

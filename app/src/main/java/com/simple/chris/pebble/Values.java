@@ -25,6 +25,7 @@ public class Values {
     public static boolean uppercaseHEX;
     public static boolean askData;
     public static boolean peppaPink;
+    public static boolean optionsOpen = false;
     public static int lastVersion;
 
     public static ArrayList<HashMap<String, String>> main;

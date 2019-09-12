@@ -520,6 +520,4 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
             });
         }
     }
-
-
 }

@@ -10,8 +10,6 @@
         <item name="android:colorBackground">@android:color/transparent</item>
     </style>
 
-
-
     <style name="ThemeLight" parent="Main">
         <item name="BackgroundColour">@color/colorLightThemeBackground</item>
         <item name="ForegroundColour">@color/colorLightThemeForeground</item>
@@ -20,6 +18,7 @@
         <item name="DetailsHEXTextColour">@color/colorLightThemeDetailsHEXTextColour</item>
         <item name="DetailsDividerColour">@color/colorLightThemeDetailsDividerColour</item>
         <item name="BlurColour">@color/colorLightThemeBlurColour</item>
+        <item name="android:popupBackground">@color/colorLightThemeForeground</item>
     </style>
 
     <style name="ThemeDark" parent="Main">
@@ -30,6 +29,7 @@
         <item name="DetailsHEXTextColour">@color/colorDarkThemeDetailsHEXTextColour</item>
         <item name="DetailsDividerColour">@color/colorDarkThemeDetailsDividerColour</item>
         <item name="BlurColour">@color/colorDarkThemeBlurColour</item>
+        <item name="android:popupBackground">@color/colorDarkThemeForeground</item>
     </style>
 
     <style name="LoginScreenEditText" parent="Widget.AppCompat.EditText">

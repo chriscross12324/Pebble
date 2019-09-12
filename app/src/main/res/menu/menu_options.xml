@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/create"
+        android:icon="@drawable/icon_create"
+        android:title="Create Gradient"/>
+    <item android:id="@+id/theme"
+        android:icon="@drawable/icon_dark_mode"
+        android:title="Change Theme"/>
+
+</menu>
