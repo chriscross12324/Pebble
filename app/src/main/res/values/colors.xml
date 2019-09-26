@@ -7,8 +7,16 @@
     <color name="logoColourTopLeft">#F58A33</color>
     <color name="logoColourBottomRight">#D53593</color>
 
-    <color name="colorDarkThemeForeground">#1E1E1E</color><!--#2E303D-->
-    <color name="colorDarkThemeBackground">#121212</color>
+    <color name="colorBlackThemeForeground">#121212</color><!--#2E303D-->
+    <color name="colorBlackThemeBackground">#000000</color><!--#121212-->
+    <color name="colorBlackThemeTextColour">#e1e1e1</color>
+    <color name="colorBlackThemeSecondaryTextColour">#A8A8A8</color>
+    <color name="colorBlackThemeDetailsHEXTextColour">#bababa</color>
+    <color name="colorBlackThemeDetailsDividerColour">#4f4f4f</color>
+    <color name="colorBlackThemeBlurColour">#CC1E1E1E</color>
+
+    <color name="colorDarkThemeForeground">#1E1E1E</color><!--#2E303D--><!--#1E1E1E-->
+    <color name="colorDarkThemeBackground">#121212</color><!--#121212-->
     <color name="colorDarkThemeTextColour">#e1e1e1</color>
     <color name="colorDarkThemeSecondaryTextColour">#A8A8A8</color>
     <color name="colorDarkThemeDetailsHEXTextColour">#bababa</color>

@@ -1,20 +1,21 @@
 package com.simple.chris.pebble;
 
-import android.app.Activity;
+import android.animation.ValueAnimator;
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,16 +28,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import eightbitlab.com.blurview.BlurView;
-import eightbitlab.com.blurview.RenderScriptBlur;
-
 public class TestLayout extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     boolean isAnimating = false;
     SwipeRefreshLayout refresh;
-    ConstraintLayout optionsMenu;
-    LinearLayout themeOption, createOption;
-    BlurView optionsBlur;
+    ConstraintLayout main, optionsMenu, themeHolder, doneButton;
+    ImageView screenDim;
+    TextView themeInformation;
+    EditText search;
     private ArrayList<HashMap<String, String>> featured;
     private ArrayList<HashMap<String, String>> all;
 
@@ -49,11 +48,22 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
             setTheme(R.style.ThemeLight);
         }
         setContentView(R.layout.activity_browse_screen);
+        Values.saveValues(TestLayout.this);
 
-        optionsMenu = findViewById(R.id.optionsMenu);
-        optionsBlur = findViewById(R.id.optionsBlur);
-        themeOption = findViewById(R.id.themeOption);
-        createOption = findViewById(R.id.createOption);
+        //ConstraintLayout
+        main = findViewById(R.id.main);
+        themeHolder = findViewById(R.id.themeHolder);
+        doneButton = findViewById(R.id.doneButton);
+
+        //ImageView
+        screenDim = findViewById(R.id.screenDim);
+
+        //TextView
+        themeInformation = findViewById(R.id.themeInformation);
+
+        //EditText
+        search = findViewById(R.id.search);
+
 
         refresh = findViewById(R.id.refresh);
         featured = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("featured");
@@ -88,13 +98,28 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
         allGrid.setAdapter(UIAdapter);
         allGrid.setOnItemClickListener(this);
 
-        if (Values.darkMode) {
-            refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorDarkThemeForeground));
-            refresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorLightThemeForeground));
+        if (!Values.autoTheme) {
+            if (Values.darkMode) {
+                themeInformation.setText("Current theme: Dark");
+                refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorDarkThemeForeground));
+                refresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorLightThemeForeground));
+            } else {
+                themeInformation.setText("Current theme: Light");
+                refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorLightThemeForeground));
+                refresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorDarkThemeForeground));
+            }
         } else {
-            refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorLightThemeForeground));
-            refresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorDarkThemeForeground));
+            if (Values.darkMode) {
+                themeInformation.setText("Current theme: Dark (Auto)");
+                refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorDarkThemeForeground));
+                refresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorLightThemeForeground));
+            } else {
+                themeInformation.setText("Current theme: Light (Auto)");
+                refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorLightThemeForeground));
+                refresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorDarkThemeForeground));
+            }
         }
+
         refresh.setOnRefreshListener(() -> {
             Intent GL = new Intent(TestLayout.this, ActivityConnecting.class);
             startActivity(GL);
@@ -102,24 +127,30 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
             finish();
         });
 
-        if (Values.optionsOpen){
-            Values.optionsOpen = false;
-            optionsMenu.setVisibility(View.VISIBLE);
-            optionsMenu.setAlpha(1);
-        }
         ImageView menuIcon = findViewById(R.id.menuIcon);
         menuIcon.setOnClickListener(view -> {
-            Log.e("TAG", "Here");
-            optionsMenu.setVisibility(View.VISIBLE);
-            UIAnimations.constraintLayoutObjectAnimator(optionsMenu, "alpha", 1, 300, 0, new DecelerateInterpolator());
+            screenDim.setVisibility(View.VISIBLE);
+            UIAnimations.imageViewObjectAnimator(screenDim, "alpha", 1, 300, 0, new DecelerateInterpolator());
+            themeHolder.setVisibility(View.VISIBLE);
+            doneButton.setVisibility(View.VISIBLE);
+            UIAnimations.constraintLayoutObjectAnimator(themeHolder, "alpha", 1, 250, 10, new DecelerateInterpolator());
+            UIAnimations.constraintLayoutObjectAnimator(doneButton, "alpha", 1, 250, 10, new DecelerateInterpolator());
+            UIAnimations.constraintLayoutObjectAnimator(themeHolder, "translationY", 0, 700, 250, new DecelerateInterpolator(3));
+            UIAnimations.constraintLayoutObjectAnimator(doneButton, "translationY", 0, 700, 300, new DecelerateInterpolator(3));
         });
-        optionsBlur.setOnClickListener(view -> {
-            Log.e("Blur", "Hi");
-            UIAnimations.constraintLayoutObjectAnimator(optionsMenu, "alpha", 0, 300, 0, new DecelerateInterpolator());
-            Handler handler = new Handler();
-            handler.postDelayed(() -> optionsMenu.setVisibility(View.GONE), 300);
+
+        doneButton.setOnClickListener(view -> {
+            UIAnimations.constraintLayoutObjectAnimator(themeHolder, "translationY",
+                    Math.round((90 * getResources().getDisplayMetrics().density) + themeHolder.getHeight()), 250,
+                    50, new DecelerateInterpolator());
+            UIAnimations.constraintLayoutObjectAnimator(doneButton, "translationY",
+                    Math.round((90 * getResources().getDisplayMetrics().density) + themeHolder.getHeight()), 250,
+                    0, new DecelerateInterpolator());
+            UIAnimations.constraintLayoutAlpha(themeHolder, 0, 300);
+            UIAnimations.constraintLayoutAlpha(doneButton, 0, 300);
+            UIAnimations.imageViewObjectAnimator(screenDim, "alpha", 0, 300, 150, new DecelerateInterpolator());
         });
-        themeOption.setOnClickListener(view -> {
+        themeHolder.setOnClickListener(view -> {
             if (Values.darkMode) {
                 Values.darkMode = false;
                 Values.optionsOpen = true;
@@ -142,9 +173,23 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
                 finish();
             }
         });
-        createOption.setOnClickListener(view -> {
-            Toast.makeText(this, "Come back later", Toast.LENGTH_SHORT).show();
+
+        themeHolder.post(() -> {
+            themeHolder.setTranslationY((90 * getResources().getDisplayMetrics().density) + themeHolder.getHeight());
+            doneButton.setTranslationY((74 * getResources().getDisplayMetrics().density) + themeHolder.getHeight());
+            /*if (Values.optionsOpen) {
+                Values.optionsOpen = false;
+                themeHolder.setTranslationY(0);
+                themeHolder.setAlpha(1);
+                doneButton.setTranslationY(0);
+                doneButton.setAlpha(1);
+                screenDim.setImageAlpha(1);
+            }*/
         });
+
+        /*createOption.setOnClickListener(view -> {
+            Toast.makeText(this, "Come back later", Toast.LENGTH_SHORT).show();
+        });*/
 
         ScrollView master = findViewById(R.id.master);
         master.setOnScrollChangeListener((view, i, i1, i2, i3) -> {
@@ -167,14 +212,17 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
             }
         });
 
-        View decorView = getWindow().getDecorView();
-        ViewGroup rootView = decorView.findViewById(android.R.id.content);
-        Drawable windowBackground = decorView.getBackground();
-        optionsBlur.setupWith(rootView)
-                .setFrameClearDrawable(windowBackground)
-                .setBlurAlgorithm(new RenderScriptBlur(TestLayout.this))
-                .setBlurRadius(25f)
-                .setHasFixedTransformationMatrix(false);
+        search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    ValueAnimator valueAnimator = new ValueAnimator();
+                } else {
+
+                }
+            }
+        });
+
     }
 
     /*public boolean onMenuItemClick(MenuItem item) {
@@ -201,4 +249,7 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(TestLayout.this, view.findViewById(R.id.gradient), gradientName);
         startActivity(details, options.toBundle());
     }
+
 }
+
+

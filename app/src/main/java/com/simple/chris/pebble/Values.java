@@ -20,6 +20,7 @@ public class Values {
     public static boolean offlineMode;
 
     public static boolean vibrations;
+    public static boolean autoTheme;
     public static boolean darkMode;
     public static boolean uiDesignerMode;
     public static boolean uppercaseHEX;

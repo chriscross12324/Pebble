@@ -3,6 +3,7 @@ package com.simple.chris.pebble;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -75,6 +76,10 @@ public class GridAdapterUserFriendly extends BaseAdapter {
             );
             gradientDrawable.setCornerRadius(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, mContext.getResources().getDisplayMetrics()));
             mViewHolder.mGradient.setBackgroundDrawable(gradientDrawable);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                mViewHolder.mGradient.setOutlineSpotShadowColor(rightColour);
+            }
+
             //mViewHolder.cardView.setTransitionName(details.get("backgroundName"));
             mViewHolder.mName.setText(details.get("backgroundName"));
 

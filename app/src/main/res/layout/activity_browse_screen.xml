@@ -68,13 +68,14 @@
                     android:layout_marginEnd="40dp"
                     android:background="@drawable/search_background"
                     android:clipToPadding="false"
-                    android:elevation="8dp"
+                    android:elevation="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/titleDescription"
                     android:focusableInTouchMode="true">
 
                     <EditText
+                        android:id="@+id/search"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="16dp"
@@ -161,95 +162,84 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/optionsMenu"
-        android:alpha="0"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <eightbitlab.com.blurview.BlurView
-            android:id="@+id/optionsBlur"
+        <ImageView
+            android:id="@+id/screenDim"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:blurOverlayColor="?BlurColour"/>
+            android:background="#BF000000"
+            android:visibility="visible"
+            android:alpha="0"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/themeHolder"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@id/doneButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/details_background"
+            android:elevation="8dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:visibility="visible"
+            android:alpha="0">
+
+            <TextView
+                android:id="@+id/themeTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Theme"
+                android:textColor="?PrimaryTextColour"
+                android:textSize="24sp"
+                android:fontFamily="@font/googlesans_bold"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/themeInformation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Current theme: (null)"
+                android:textColor="?SecondaryTextColour"
+                android:textSize="14sp"
+                android:fontFamily="@font/googlesans_medium"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@+id/themeTitle"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/doneButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:background="@drawable/search_background"
+            android:elevation="8dp"
+            android:visibility="visible"
+            android:alpha="0">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toTopOf="@+id/createGradientHolder"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <LinearLayout
-                    android:id="@+id/themeOption"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/search_background">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="15dp"
-                        android:background="@drawable/icon_dark_mode"
-                        android:backgroundTint="?PrimaryTextColour"/>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/manjari_bold"
-                    android:text="Change Theme"
-                    android:textColor="?SecondaryTextColour"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/createGradientHolder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <LinearLayout
-                    android:id="@+id/createOption"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/search_background">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="15dp"
-                        android:background="@drawable/icon_create"
-                        android:backgroundTint="?PrimaryTextColour"/>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/manjari_bold"
-                    android:text="Create Gradient"
-                    android:textColor="?SecondaryTextColour"
-                    android:textSize="16sp" />
-            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Done"
+                android:textColor="?PrimaryTextColour"
+                android:textSize="18sp"
+                android:fontFamily="@font/googlesans_medium"
+                android:gravity="center"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

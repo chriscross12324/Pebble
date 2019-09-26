@@ -3,6 +3,7 @@ package com.simple.chris.pebble;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -50,6 +51,9 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.ViewHo
                     context.getResources().getDisplayMetrics()));
             holder.gradient.setBackgroundDrawable(gradientDrawable);
             holder.gradient.setTransitionName(details.get("backgroundName"));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                holder.gradient.setOutlineSpotShadowColor(endColour);
+            }
 
             holder.gradientName.setText(details.get("backgroundName"));
 

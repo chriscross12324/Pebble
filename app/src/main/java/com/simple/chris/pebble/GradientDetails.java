@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
@@ -168,18 +170,18 @@ public class GradientDetails extends AppCompatActivity {
 
         backButton.setOnClickListener(v -> {
             UIAnimations.constraintLayoutObjectAnimator(detailsHolder, "translationY",
-                    Math.round((90 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight()), 300,
+                    Math.round((90 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight()), 250,
                     50, new DecelerateInterpolator()
             );
             UIAnimations.constraintLayoutObjectAnimator(actionsHolder, "translationY",
-                    Math.round((74 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight()), 300,
+                    Math.round((74 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight()), 250,
                     0, new DecelerateInterpolator()
             );
-            UIAnimations.constraintLayoutAlpha(detailsHolder, 0, 350);
-            UIAnimations.constraintLayoutAlpha(actionsHolder, 0, 350);
-            UIAnimations.constraintLayoutAlpha(copiedNotification, 0, 350);
+            UIAnimations.constraintLayoutAlpha(detailsHolder, 0, 300);
+            UIAnimations.constraintLayoutAlpha(actionsHolder, 0, 300);
+            UIAnimations.constraintLayoutAlpha(copiedNotification, 0, 300);
             Handler handler1 = new Handler();
-            handler1.postDelayed(() -> GradientDetails.super.onBackPressed(), 350);
+            handler1.postDelayed(() -> GradientDetails.super.onBackPressed(), 250);
 
         });
         hideButton.setOnClickListener(v -> {
@@ -198,7 +200,14 @@ public class GradientDetails extends AppCompatActivity {
             UIAnimations.imageViewObjectAnimator(arrow, "alpha",
                     1, 200,
                     200, new DecelerateInterpolator());
-            expanded = true;
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    expanded = true;
+                }
+            }, 400);
+
         });
 
         gradientViewer.post(() -> {
@@ -239,6 +248,9 @@ public class GradientDetails extends AppCompatActivity {
         bottomColourCircleDrawable.setStroke(6, rightColourInt);
         topColourCircle.setBackgroundDrawable(topColourCircleDrawable);
         bottomColourCircle.setBackgroundDrawable(bottomColourCircleDrawable);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+            gradientViewer.setOutlineSpotShadowColor(rightColourInt);
+        }
     }
 
     public boolean isDarkTheme() {
@@ -267,6 +279,19 @@ public class GradientDetails extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        UIAnimations.constraintLayoutObjectAnimator(detailsHolder, "translationY",
+                Math.round((90 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight()), 250,
+                50, new DecelerateInterpolator()
+        );
+        UIAnimations.constraintLayoutObjectAnimator(actionsHolder, "translationY",
+                Math.round((74 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight()), 250,
+                0, new DecelerateInterpolator()
+        );
+        UIAnimations.constraintLayoutAlpha(detailsHolder, 0, 300);
+        UIAnimations.constraintLayoutAlpha(actionsHolder, 0, 300);
+        UIAnimations.constraintLayoutAlpha(copiedNotification, 0, 300);
+        Handler handler1 = new Handler();
+        handler1.postDelayed(() -> GradientDetails.super.onBackPressed(), 250);
         return;
     }
 }

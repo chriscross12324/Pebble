@@ -130,7 +130,7 @@ public class ActivityConnecting extends AppCompatActivity {
     private void bothGrabbed() {
         handler4.postDelayed(() -> {
             if (connectedMain && connectedFeatured) {
-                if (!testLayout) {
+                if (testLayout) {
                     handler1.removeCallbacksAndMessages(null);
                     handler2.removeCallbacksAndMessages(null);
                     handler3.removeCallbacksAndMessages(null);

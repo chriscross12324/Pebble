@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.os.Handler;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 
@@ -76,6 +77,16 @@ public class UIAnimations {
             valueAnimator.setInterpolator(interpolator);
             valueAnimator.setDuration(duration);
             valueAnimator.start();
+        }, delay);
+    }
+
+    public static void linearLayoutValueAnimator(LinearLayout layout, String propertyName, float finishedPos, int duration, int delay, TimeInterpolator interpolator) {
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(layout, propertyName, finishedPos);
+            objectAnimator.setDuration(duration);
+            objectAnimator.setInterpolator(interpolator);
+            objectAnimator.start();
         }, delay);
     }
 
