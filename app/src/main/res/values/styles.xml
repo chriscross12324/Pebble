@@ -13,6 +13,7 @@
     <style name="ThemeLight" parent="Main">
         <item name="BackgroundColour">@color/colorLightThemeBackground</item>
         <item name="ForegroundColour">@color/colorLightThemeForeground</item>
+        <item name="SecondaryForegroundColour">@color/colorLightThemeSecondaryForeground</item>
         <item name="PrimaryTextColour">@color/colorLightThemeTextColour</item>
         <item name="SecondaryTextColour">@color/colorLightThemeSecondaryTextColour</item>
         <item name="DetailsHEXTextColour">@color/colorLightThemeDetailsHEXTextColour</item>
@@ -24,12 +25,25 @@
     <style name="ThemeDark" parent="Main">
         <item name="BackgroundColour">@color/colorDarkThemeBackground</item>
         <item name="ForegroundColour">@color/colorDarkThemeForeground</item>
+        <item name="SecondaryForegroundColour">@color/colorDarkThemeSecondaryForeground</item>
         <item name="PrimaryTextColour">@color/colorDarkThemeTextColour</item>
         <item name="SecondaryTextColour">@color/colorDarkThemeSecondaryTextColour</item>
         <item name="DetailsHEXTextColour">@color/colorDarkThemeDetailsHEXTextColour</item>
         <item name="DetailsDividerColour">@color/colorDarkThemeDetailsDividerColour</item>
         <item name="BlurColour">@color/colorDarkThemeBlurColour</item>
         <item name="android:popupBackground">@color/colorDarkThemeForeground</item>
+    </style>
+
+    <style name="ThemeBlack" parent="Main">
+        <item name="BackgroundColour">@color/colorBlackThemeBackground</item>
+        <item name="ForegroundColour">@color/colorBlackThemeForeground</item>
+        <item name="SecondaryForegroundColour">@color/colorBlackThemeSecondaryForeground</item>
+        <item name="PrimaryTextColour">@color/colorBlackThemeTextColour</item>
+        <item name="SecondaryTextColour">@color/colorBlackThemeSecondaryTextColour</item>
+        <item name="DetailsHEXTextColour">@color/colorBlackThemeDetailsHEXTextColour</item>
+        <item name="DetailsDividerColour">@color/colorBlackThemeDetailsDividerColour</item>
+        <item name="BlurColour">@color/colorBlackThemeBlurColour</item>
+        <item name="android:popupBackground">@color/colorBlackThemeForeground</item>
     </style>
 
     <style name="LoginScreenEditText" parent="Widget.AppCompat.EditText">

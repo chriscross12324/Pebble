@@ -9,12 +9,9 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,7 +19,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 
 public class GradientDetails extends AppCompatActivity {
     CardView corners;
@@ -38,7 +34,17 @@ public class GradientDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isDarkTheme();
+        switch (Values.theme) {
+            case "light":
+                setTheme(R.style.ThemeLight);
+                break;
+            case "dark":
+                setTheme(R.style.ThemeDark);
+                break;
+            case "black":
+                setTheme(R.style.ThemeBlack);
+                break;
+        }
         setContentView(R.layout.activity_gradient_details);
         postponeEnterTransition();
         Values.currentActivity = "GradientDetails";
@@ -98,7 +104,7 @@ public class GradientDetails extends AppCompatActivity {
         corners.setTransitionName(backgroundName);
         gradientViewer.setTransitionName(backgroundName + "1");
 
-        if (description.equals("")){
+        if (description.equals("")) {
             detailsDescription.setVisibility(View.GONE);
         }
 
@@ -248,18 +254,9 @@ public class GradientDetails extends AppCompatActivity {
         bottomColourCircleDrawable.setStroke(6, rightColourInt);
         topColourCircle.setBackgroundDrawable(topColourCircleDrawable);
         bottomColourCircle.setBackgroundDrawable(bottomColourCircleDrawable);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             gradientViewer.setOutlineSpotShadowColor(rightColourInt);
-        }
-    }
-
-    public boolean isDarkTheme() {
-        if (Values.darkMode) {
-            setTheme(R.style.ThemeDark);
-            return true;
-        } else {
-            setTheme(R.style.ThemeLight);
-            return false;
+            corners.setOutlineSpotShadowColor(rightColourInt);
         }
     }
 

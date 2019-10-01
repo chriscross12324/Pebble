@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?BackgroundColour"
@@ -39,7 +40,7 @@
                     android:layout_height="45dp"
                     android:layout_marginTop="200dp"
                     android:fontFamily="@font/manjari_bold"
-                    android:text="Browser Gradients"
+                    android:text="Browse Gradients"
                     android:textColor="?PrimaryTextColour"
                     android:textSize="30sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -63,16 +64,16 @@
                     android:id="@+id/linearLayout4"
                     android:layout_width="0dp"
                     android:layout_height="55dp"
-                    android:layout_marginStart="40dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginTop="48dp"
-                    android:layout_marginEnd="40dp"
                     android:background="@drawable/search_background"
                     android:clipToPadding="false"
                     android:elevation="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:focusableInTouchMode="true"
+                    app:layout_constraintEnd_toStartOf="@+id/searchButton"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/titleDescription"
-                    android:focusableInTouchMode="true">
+                    app:layout_constraintTop_toBottomOf="@id/titleDescription">
 
                     <EditText
                         android:id="@+id/search"
@@ -83,13 +84,33 @@
                         android:background="@null"
                         android:fontFamily="@font/manjari_bold"
                         android:hint="Search..."
+                        android:inputType="textNoSuggestions"
                         android:singleLine="true"
-                        android:textColorHint="?SecondaryTextColour"
-                        android:textColor="?PrimaryTextColour" />
+                        android:textColor="?PrimaryTextColour"
+                        android:textColorHint="?SecondaryTextColour" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/searchButton"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginEnd="20dp"
+                    android:elevation="16dp"
+                    android:background="@drawable/search_background"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/titleDescription" >
+                    <ImageView
+                        android:id="@+id/searchIcon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/icon_search"
+                        android:tint="?PrimaryTextColour"
+                        android:layout_margin="13dp"/>
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/featuredTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="64dp"
@@ -110,12 +131,12 @@
                     android:clipToPadding="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView4">
+                    app:layout_constraintTop_toBottomOf="@+id/featuredTitle">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/allTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
@@ -143,7 +164,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textView5" />
+                    app:layout_constraintTop_toBottomOf="@id/allTitle" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -210,6 +231,113 @@
                 android:fontFamily="@font/googlesans_medium"
                 android:gravity="center"
                 app:layout_constraintTop_toBottomOf="@+id/themeTitle"/>
+
+            <!--<LinearLayout
+                android:id="@+id/linearLayout5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                app:layout_constraintTop_toBottomOf="@+id/themeInformation"
+                tools:layout_editor_absoluteX="16dp">
+
+                <LinearLayout
+                    android:id="@+id/lightThemeButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_margin="4dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/options_button"
+                    android:elevation="4dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:src="@drawable/theme_circle_light" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/darkThemeButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/options_button"
+                    android:elevation="4dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:src="@drawable/theme_circle_dark" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/blackThemeButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/options_button"
+                    android:elevation="4dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:src="@drawable/theme_circle_black" />
+                </LinearLayout>
+            </LinearLayout>-->
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/themeInformation"
+                android:layout_marginTop="15dp"
+                android:scrollbars="none"
+                android:overScrollMode="never">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/lightThemeButton"
+                        android:layout_width="130dp"
+                        android:layout_height="55dp"
+                        android:layout_margin="5dp"
+                        android:text="Light"
+                        android:textColor="?PrimaryTextColour"
+                        android:background="@drawable/options_button"/>
+                    <Button
+                        android:id="@+id/darkThemeButton"
+                        android:layout_width="130dp"
+                        android:layout_height="55dp"
+                        android:layout_margin="5dp"
+                        android:text="Dark"
+                        android:textColor="?PrimaryTextColour"
+                        android:background="@drawable/options_button"/>
+                    <Button
+                        android:id="@+id/blackThemeButton"
+                        android:layout_width="130dp"
+                        android:layout_height="55dp"
+                        android:layout_margin="5dp"
+                        android:text="Black"
+                        android:textColor="?PrimaryTextColour"
+                        android:background="@drawable/options_button_selected"/>
+                </LinearLayout>
+            </HorizontalScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

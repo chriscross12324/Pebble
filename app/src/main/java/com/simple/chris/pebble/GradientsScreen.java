@@ -66,10 +66,16 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Values.darkMode) {
-            setTheme(R.style.ThemeDark);
-        } else {
-            setTheme(R.style.ThemeLight);
+        switch (Values.theme) {
+            case "light":
+                setTheme(R.style.ThemeLight);
+                break;
+            case "dark":
+                setTheme(R.style.ThemeDark);
+                break;
+            case "black":
+                setTheme(R.style.ThemeBlack);
+                break;
         }
         setContentView(R.layout.activity_gradients_grid);
         Values.saveValues(GradientsScreen.this);
@@ -113,12 +119,19 @@ public class GradientsScreen extends AppCompatActivity implements AdapterView.On
         gridView.setNumColumns(maxNumColumns);
 
         //SwipeToRefresh
-        if (Values.darkMode) {
-            swipeToRefresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorDarkThemeForeground));
-            swipeToRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorLightThemeForeground));
-        } else {
-            swipeToRefresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorLightThemeForeground));
-            swipeToRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorDarkThemeForeground));
+        switch (Values.theme) {
+            case "light":
+                swipeToRefresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorLightThemeForeground));
+                swipeToRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorDarkThemeForeground));
+                break;
+            case "dark":
+                swipeToRefresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorDarkThemeForeground));
+                swipeToRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorLightThemeForeground));
+                break;
+            case "black":
+                swipeToRefresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorBlackThemeForeground));
+                swipeToRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorBlackThemeForeground));
+                break;
         }
 
 

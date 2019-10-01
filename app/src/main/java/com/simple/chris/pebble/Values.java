@@ -21,7 +21,7 @@ public class Values {
 
     public static boolean vibrations;
     public static boolean autoTheme;
-    public static boolean darkMode;
+    public static String theme;
     public static boolean uiDesignerMode;
     public static boolean uppercaseHEX;
     public static boolean askData;
@@ -37,11 +37,11 @@ public class Values {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("vibrations", vibrations);
         editor.putBoolean("firstStart", firstStart);
-        editor.putBoolean("darkMode", darkMode);
         editor.putBoolean("uiDesignerMode", uiDesignerMode);
         editor.putBoolean("uppercaseHEX", uppercaseHEX);
         editor.putBoolean("askData", askData);
         editor.putBoolean("peppaPink", peppaPink);
+        editor.putString("theme", theme);
         editor.putInt("lastVersion", lastVersion);
         editor.apply();
     }
@@ -50,11 +50,11 @@ public class Values {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE);
         vibrations = sharedPreferences.getBoolean("vibrations", true);
         firstStart = sharedPreferences.getBoolean("firstStart", true);
-        darkMode = sharedPreferences.getBoolean("darkMode", true);
         uiDesignerMode = sharedPreferences.getBoolean("uiDesignerMode", false);
         uppercaseHEX = sharedPreferences.getBoolean("uppercaseHEX", true);
         askData = sharedPreferences.getBoolean("askData", true);
         peppaPink = sharedPreferences.getBoolean("peppaPink", false);
+        theme = sharedPreferences.getString("theme", "dark");
         lastVersion = sharedPreferences.getInt("lastVersion", 0);
     }
 }

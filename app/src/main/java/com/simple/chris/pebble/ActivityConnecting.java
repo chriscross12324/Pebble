@@ -66,10 +66,16 @@ public class ActivityConnecting extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Values.darkMode) {
-            setTheme(R.style.ThemeDark);
-        } else {
-            setTheme(R.style.ThemeLight);
+        switch (Values.theme) {
+            case "light":
+                setTheme(R.style.ThemeLight);
+                break;
+            case "dark":
+                setTheme(R.style.ThemeDark);
+                break;
+            case "black":
+                setTheme(R.style.ThemeBlack);
+                break;
         }
         setContentView(R.layout.activity_connecting);
 
