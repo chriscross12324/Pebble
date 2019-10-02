@@ -38,7 +38,6 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         try {
-            Log.e("INFO", "Got here");
             HashMap<String, String> details;
             details = map.get(position);
             int startColour = Color.parseColor(details.get("leftColour"));
@@ -58,7 +57,7 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.ViewHo
             holder.gradientName.setText(details.get("backgroundName"));
 
         } catch (Exception e) {
-            Log.e("FeaturedAdapterUF", e.getLocalizedMessage());
+            Log.e("ERR", "pebble.featured_adapter: "+e.getLocalizedMessage());
         }
 
         holder.itemView.setOnClickListener(view -> {

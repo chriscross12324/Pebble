@@ -8,13 +8,12 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
@@ -37,6 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -59,7 +59,6 @@ public class ActivityConnecting extends AppCompatActivity {
     Boolean connectedFeatured = false;
     Boolean testLayout = false;
 
-    Intent startGradientScreen;
     Intent startTestLayout;
 
 
@@ -79,7 +78,6 @@ public class ActivityConnecting extends AppCompatActivity {
         }
         setContentView(R.layout.activity_connecting);
 
-        /** Declare UI Elements */
         //Constraint Layout
         connectingDialog = findViewById(R.id.connectingDialog);
         notification = findViewById(R.id.notification);
@@ -94,18 +92,12 @@ public class ActivityConnecting extends AppCompatActivity {
 
         notification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
 
-        startGradientScreen = new Intent(ActivityConnecting.this, GradientsScreen.class);
-        startTestLayout = new Intent(ActivityConnecting.this, TestLayout.class);
+        startTestLayout = new Intent(ActivityConnecting.this, BrowseActivity.class);
 
         checkConnection();
         bothGrabbed();
 
-        background.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                testLayout = true;
-            }
-        });
+        background.setOnClickListener(view -> testLayout = true);
 
     }
 
@@ -136,31 +128,13 @@ public class ActivityConnecting extends AppCompatActivity {
     private void bothGrabbed() {
         handler4.postDelayed(() -> {
             if (connectedMain && connectedFeatured) {
-                if (testLayout) {
-                    handler1.removeCallbacksAndMessages(null);
-                    handler2.removeCallbacksAndMessages(null);
-                    handler3.removeCallbacksAndMessages(null);
-                    handler4.removeCallbacksAndMessages(null);
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.postDelayed(() -> {
-                        startActivity(startGradientScreen);
-                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                        //Log.e("TAG", list.toString());
-                        //noConnectionDialog.dismiss();
-                        //cellularDataWarningDialog.dismiss();
-
-                        finish();
-                    }, 0);
-                } else {
-                    handler1.removeCallbacksAndMessages(null);
-                    handler2.removeCallbacksAndMessages(null);
-                    handler3.removeCallbacksAndMessages(null);
-                    handler4.removeCallbacksAndMessages(null);
-                    startActivity(startTestLayout);
-                    finish();
-                }
-
-
+                handler1.removeCallbacksAndMessages(null);
+                handler2.removeCallbacksAndMessages(null);
+                handler3.removeCallbacksAndMessages(null);
+                handler4.removeCallbacksAndMessages(null);
+                startActivity(startTestLayout);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
             } else {
                 bothGrabbed();
             }
@@ -199,83 +173,87 @@ public class ActivityConnecting extends AppCompatActivity {
 
     }
 
-    private void parseItems(String jsonResponse) {
-        ArrayList<HashMap<String, String>> list = new ArrayList<>();
+    public void parseItems(String jsonResponse) {
+        AsyncTask.execute(() -> {
+            ArrayList<HashMap<String, String>> list = new ArrayList<>();
 
-        try {
-            JSONObject jobj = new JSONObject(jsonResponse);
-            JSONArray jarray = jobj.getJSONArray("items");
+            try {
+                JSONObject jobj = new JSONObject(jsonResponse);
+                JSONArray jarray = jobj.getJSONArray("items");
 
-            //Top to bottom: int i = 0; i < jarray.length(); i++
-            //Bottom to top: int i = jarray.length() - 1; i >= 0; i--
-            for (int i = jarray.length() - 1; i >= 0; i--) {
+                //Top to bottom: int i = 0; i < jarray.length(); i++
+                //Bottom to top: int i = jarray.length() - 1; i >= 0; i--
+                for (int i = jarray.length() - 1; i >= 0; i--) {
 
-                JSONObject jo = jarray.getJSONObject(i);
+                    JSONObject jo = jarray.getJSONObject(i);
 
-                String backgroundName = jo.getString("backgroundName").replace(" ", " ");
-                String leftColour = jo.getString("leftColour");
-                String rightColour = jo.getString("rightColour");
-                String description = jo.getString("description");
-                //String featured = jo.getString("featured");
+                    String backgroundName = jo.getString("backgroundName").replace(" ", " ");
+                    String leftColour = jo.getString("leftColour");
+                    String rightColour = jo.getString("rightColour");
+                    String description = jo.getString("description");
+                    //String featured = jo.getString("featured");
 
-                HashMap<String, String> item = new HashMap<>();
-                item.put("backgroundName", backgroundName);
-                item.put("leftColour", leftColour);
-                item.put("rightColour", rightColour);
-                item.put("description", description);
+                    HashMap<String, String> item = new HashMap<>();
+                    item.put("backgroundName", backgroundName);
+                    item.put("leftColour", leftColour);
+                    item.put("rightColour", rightColour);
+                    item.put("description", description);
 
-                list.add(item);
-                startGradientScreen.putExtra("items", list);
-                startTestLayout.putExtra("items", list);
-                //Log.e("INFO", ""+featuredList);
+                    list.add(item);
+                    startTestLayout.putExtra("items", list);
+                    Log.e("INFO", "Parsed");
+                }
+                connectedMain = true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("Info", "pebble.activity_connecting: " + e.getLocalizedMessage());
+            } catch (Exception ex) {
+                Log.e("Info", "pebble.activity_connecting: " + ex.getLocalizedMessage());
             }
-            connectedMain = true;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("Info", "Failed " + e.getLocalizedMessage());
-        } catch (Exception ex) {
-            Log.e("Info", "Failed " + ex.getLocalizedMessage());
-        }
+        });
+
 
     }
 
     private void parseFeatured(String jsonResponse) {
-        ArrayList<HashMap<String, String>> flist = new ArrayList<>();
+        AsyncTask.execute(() -> {
+            ArrayList<HashMap<String, String>> flist = new ArrayList<>();
 
-        try {
-            JSONObject fjobj = new JSONObject(jsonResponse);
-            JSONArray fjarray = fjobj.getJSONArray("items");
+            try {
+                JSONObject fjobj = new JSONObject(jsonResponse);
+                JSONArray fjarray = fjobj.getJSONArray("items");
 
-            //Top to bottom: int i = 0; i < fjarray.length(); i++
-            //Bottom to top: int i = fjarray.length() - 1; i >= 0; i--
-            for (int i = 0; i < fjarray.length(); i++) {
+                //Top to bottom: int i = 0; i < fjarray.length(); i++
+                //Bottom to top: int i = fjarray.length() - 1; i >= 0; i--
+                for (int i = 0; i < fjarray.length(); i++) {
 
-                JSONObject jo = fjarray.getJSONObject(i);
+                    JSONObject jo = fjarray.getJSONObject(i);
 
-                String backgroundName = jo.getString("backgroundName");
-                String leftColour = jo.getString("leftColour");
-                String rightColour = jo.getString("rightColour");
-                String description = jo.getString("description");
-                //String featured = jo.getString("featured");
+                    String backgroundName = jo.getString("backgroundName");
+                    String leftColour = jo.getString("leftColour");
+                    String rightColour = jo.getString("rightColour");
+                    String description = jo.getString("description");
+                    //String featured = jo.getString("featured");
 
-                HashMap<String, String> item = new HashMap<>();
-                item.put("backgroundName", backgroundName);
-                item.put("leftColour", leftColour);
-                item.put("rightColour", rightColour);
-                item.put("description", description);
+                    HashMap<String, String> item = new HashMap<>();
+                    item.put("backgroundName", backgroundName);
+                    item.put("leftColour", leftColour);
+                    item.put("rightColour", rightColour);
+                    item.put("description", description);
 
-                flist.add(item);
-                startGradientScreen.putExtra("featured", flist);
-                startTestLayout.putExtra("featured", flist);
-                //Log.e("INFO", ""+flist);
+                    flist.add(item);
+                    startTestLayout.putExtra("featured", flist);
+                    //Log.e("INFO", ""+flist);
+                }
+                connectedFeatured = true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("Info", "pebble.activity_connecting: " + e.getLocalizedMessage());
+            } catch (Exception ex) {
+                Log.e("Info", "pebble.activity_connecting: " + ex.getLocalizedMessage());
             }
-            connectedFeatured = true;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("Info", "Failed " + e.getLocalizedMessage());
-        } catch (Exception ex) {
-            Log.e("Info", "Failed " + ex.getLocalizedMessage());
-        }
+        });
+
 
     }
 
@@ -311,7 +289,7 @@ public class ActivityConnecting extends AppCompatActivity {
         dontAskAgain = cellularDataWarningDialog.findViewById(R.id.dontAskAgain);
         tryWifi = cellularDataWarningDialog.findViewById(R.id.tryWifi);
 
-        notificationText.setText("Not connected to Wi-Fi");
+        notificationText.setText(R.string.noWifi);
         playAnimation(500);
 
         WindowManager.LayoutParams lp = Objects.requireNonNull(cellularDataWarningDialog.getWindow()).getAttributes();

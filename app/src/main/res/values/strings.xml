@@ -17,4 +17,6 @@
     <string name="connectingDialogBody">This shouldn\'t take long</string>
     <string name="connectingDialogTitle">Connecting</string>
     <string name="descriptionBackground">background</string>
+
+    <string name="noWifi">Not connected to Wi-Fi</string>
 </resources>

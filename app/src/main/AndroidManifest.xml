@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Main">
-        <activity android:name=".TestLayout"></activity>
+        <activity android:name=".BrowseActivity"></activity>
         <activity android:name=".ActivityConnecting" />
         <activity android:name=".Setup" />
         <activity
@@ -26,11 +26,6 @@
             android:name=".Permissions"
             android:screenOrientation="portrait" />
         <activity android:name=".Settings" />
-        <activity
-            android:name=".GradientsScreen"
-            android:configChanges="orientation|screenSize"
-            android:hardwareAccelerated="true" />
-        <activity android:name=".MainActivity" />
     </application>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />

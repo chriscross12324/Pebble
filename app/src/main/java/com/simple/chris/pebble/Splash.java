@@ -20,7 +20,7 @@ public class Splash extends AppCompatActivity {
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("MM-dd-yyyy");
         String formatedDate = format.format(date);
-        Log.e("Date", formatedDate);
+        Log.i("INFO", "pebble.splash: "+formatedDate);
 
         if (formatedDate.equals("04-12-2020")) {
             Values.peppaPink = true;

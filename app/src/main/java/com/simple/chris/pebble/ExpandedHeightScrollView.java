@@ -2,7 +2,6 @@ package com.simple.chris.pebble;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.ViewGroup;
 import android.widget.GridView;
 
 public class ExpandedHeightScrollView extends GridView {

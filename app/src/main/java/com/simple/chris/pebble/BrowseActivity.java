@@ -1,7 +1,7 @@
 package com.simple.chris.pebble;
 
-import android.animation.ValueAnimator;
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,18 +9,16 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,23 +32,24 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TestLayout extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class BrowseActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     boolean isAnimating = false;
     boolean isExpanded = false;
+    boolean searchChanged = true;
     SwipeRefreshLayout refresh;
     ScrollView master;
+    ScrollableGridView allGrid;
     ConstraintLayout main, optionsMenu, themeHolder, doneButton;
-    LinearLayout searchButton;
+    LinearLayout searchButton, antiTouch;
     Button lightThemeButton, darkThemeButton, blackThemeButton;
     ImageView screenDim, searchIcon;
     TextView featuredTitle, allTitle, themeInformation;
     EditText search;
+    String searchField;
     private ArrayList<HashMap<String, String>> featured;
     private ArrayList<HashMap<String, String>> all;
     private ArrayList<HashMap<String, String>> searchResult = new ArrayList<HashMap<String, String>>();
-
-    String searchField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +66,13 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
                 break;
         }
         setContentView(R.layout.activity_browse_screen);
-        Values.saveValues(TestLayout.this);
+        Values.saveValues(BrowseActivity.this);
 
         //ScrollView
         master = findViewById(R.id.master);
+
+        //Grid
+        allGrid = findViewById(R.id.gv_items);
 
         //ConstraintLayout
         main = findViewById(R.id.main);
@@ -79,6 +81,7 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
 
         //LinearLayout
         searchButton = findViewById(R.id.searchButton);
+        antiTouch = findViewById(R.id.antiTouch);
 
         //Button
         lightThemeButton = findViewById(R.id.lightThemeButton);
@@ -105,8 +108,8 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
         refresh = findViewById(R.id.refresh);
 
         RecyclerView featuredRecycler = findViewById(R.id.recyclerView);
-        FeaturedAdapter featuredAdapter = new FeaturedAdapter(featured, TestLayout.this);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(TestLayout.this, LinearLayoutManager.HORIZONTAL, false);
+        FeaturedAdapter featuredAdapter = new FeaturedAdapter(featured, BrowseActivity.this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(BrowseActivity.this, LinearLayoutManager.HORIZONTAL, false);
         featuredRecycler.setLayoutManager(layoutManager);
         featuredRecycler.setAdapter(featuredAdapter);
         featuredRecycler.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +119,7 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
             }
         });
         featuredRecycler.addOnItemTouchListener(
-                new RecyclerItemClickListener(TestLayout.this, featuredRecycler, new RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener(BrowseActivity.this, featuredRecycler, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
 
@@ -128,15 +131,14 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
                     }
                 })
         );
-        ExpandedHeightScrollView allGrid = findViewById(R.id.gv_items);
-        GridAdapterUserFriendly UIAdapter = new GridAdapterUserFriendly(TestLayout.this, all);
+        GridAdapter UIAdapter = new GridAdapter(BrowseActivity.this, all);
         allGrid.setAdapter(UIAdapter);
         allGrid.setOnItemClickListener(this);
 
         loadThemes();
 
         refresh.setOnRefreshListener(() -> {
-            Intent GL = new Intent(TestLayout.this, ActivityConnecting.class);
+            Intent GL = new Intent(BrowseActivity.this, ActivityConnecting.class);
             startActivity(GL);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
@@ -144,6 +146,7 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
 
         ImageView menuIcon = findViewById(R.id.menuIcon);
         menuIcon.setOnClickListener(view -> {
+            antiTouch.setVisibility(View.VISIBLE);
             screenDim.setVisibility(View.VISIBLE);
             UIAnimations.imageViewObjectAnimator(screenDim, "alpha", 1, 300, 0, new DecelerateInterpolator());
             themeHolder.setVisibility(View.VISIBLE);
@@ -167,7 +170,7 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
         });
 
         lightThemeButton.setOnClickListener(view1 -> {
-            if (!Values.theme.equals("light")){
+            if (!Values.theme.equals("light")) {
                 Values.theme = "light";
                 loadThemes();
                 master.smoothScrollTo(0, 0);
@@ -175,7 +178,7 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
             }
         });
         darkThemeButton.setOnClickListener(view1 -> {
-            if (!Values.theme.equals("dark")){
+            if (!Values.theme.equals("dark")) {
                 Values.theme = "dark";
                 loadThemes();
                 master.smoothScrollTo(0, 0);
@@ -183,7 +186,7 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
             }
         });
         blackThemeButton.setOnClickListener(view1 -> {
-            if (!Values.theme.equals("black")){
+            if (!Values.theme.equals("black")) {
                 Values.theme = "black";
                 loadThemes();
                 master.smoothScrollTo(0, 0);
@@ -221,49 +224,89 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
         });
 
         searchButton.setOnClickListener(view -> {
+            if (!searchChanged) {
+                searchResult.clear();
+                search.setText("");
+                searchField = "";
+
+                featuredTitle.setVisibility(View.VISIBLE);
+                featuredRecycler.setVisibility(View.VISIBLE);
+                allTitle.setText("All");
+                allGrid.setAdapter(UIAdapter);
+
+                searchIcon.setImageResource(R.drawable.icon_search);
+                searchIcon.animate().rotation(0).start();
+
+                searchChanged = true;
+            }
+            searchChanged = false;
             searchResult.clear();
             searchField = search.getText().toString();
             //Log.e("Search", searchField);
-            for (int count = 0; count < all.size(); count++){//int count = all.size() - 1; count >= 0; count--
+            for (int count = 0; count < all.size(); count++) {//int count = all.size() - 1; count >= 0; count--
                 //Log.e("INFO", ""+all.get(count).get("backgroundName"));
                 HashMap<String, String> searched = new HashMap<String, String>();
-                if (all.get(count).get("backgroundName").toLowerCase().contains(searchField.toLowerCase()) && !searchField.equals("")){
-                    Log.e("INFO", "HERE2");
+                if (all.get(count).get("backgroundName").replace(" ", "").toLowerCase()
+                        .contains(searchField.replace(" ", "").toLowerCase())
+                        && !searchField.equals("")) {
                     searched.put("backgroundName", all.get(count).get("backgroundName"));
                     searched.put("leftColour", all.get(count).get("leftColour"));
                     searched.put("rightColour", all.get(count).get("rightColour"));
                     searched.put("description", all.get(count).get("description"));
 
                     searchResult.add(searched);
-                    Log.e("Stuff", ""+all.get(count).get("backgroundName"));
                 }
 
             }
-            Log.e("Searched", ""+searchResult);
 
-            if (!searchResult.isEmpty()){
-                GridAdapterUserFriendly UIAdapterSearched = new GridAdapterUserFriendly(TestLayout.this, searchResult);
+            try {
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            } catch (Exception e) {Log.w("pebble.browse_screen", "Search wasn't focused: "+e.getLocalizedMessage());}
+
+
+            Log.e("Searched", "" + searchResult);
+
+
+
+            if (!searchResult.isEmpty()) {
+                GridAdapter UIAdapterSearched = new GridAdapter(BrowseActivity.this, searchResult);
                 featuredTitle.setVisibility(View.GONE);
                 featuredRecycler.setVisibility(View.GONE);
                 allTitle.setText("Results");
                 allGrid.setAdapter(UIAdapterSearched);
-                //searchIcon.setBackgroundResource(R.drawable.icon_add);
-                //searchIcon.setRotation(90 );
+                searchIcon.setImageResource(R.drawable.icon_add);
+                //searchIcon.setRotation(90);
+                searchIcon.animate().rotation(45).start();
+                //searchButton.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
             } else {
-                featuredTitle.setVisibility(View.VISIBLE);
-                featuredRecycler.setVisibility(View.VISIBLE);
-                allTitle.setText("All");
-                allGrid.setAdapter(UIAdapter);
+                if (!searchField.equals("")) {
+                    //Display "Nothing found"
+                    //Toast.makeText(this, "Field not empty", Toast.LENGTH_SHORT).show();
+                    //searchIcon.setImageResource(R.drawable.icon_search);
+                } else {
+                    featuredTitle.setVisibility(View.VISIBLE);
+                    featuredRecycler.setVisibility(View.VISIBLE);
+                    allTitle.setText("All");
+                    allGrid.setAdapter(UIAdapter);
+                    //Toast.makeText(this, "Field empty", Toast.LENGTH_SHORT).show();
+                    //searchButton.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                }
+
             }
         });
         search.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 //searchIcon.setBackgroundResource(R.drawable.icon_search);
                 //searchIcon.setRotation(0);
+                searchIcon.setImageResource(R.drawable.icon_search);
+                searchIcon.animate().rotation(0).start();
+                searchChanged = true;
             }
 
             @Override
@@ -280,7 +323,11 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
         }
     }*/
 
-    public void loadThemes(){
+    public void showAll(){
+
+    }
+
+    public void loadThemes() {
         switch (Values.theme) {
             case "light":
                 themeInformation.setText("Current theme: Light");
@@ -290,7 +337,7 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
                 darkThemeButton.setBackgroundResource(R.drawable.options_button);
                 blackThemeButton.setBackgroundResource(R.drawable.options_button);
                 lightThemeButton.setTextColor(getResources().getColor(android.R.color.white));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     lightThemeButton.setOutlineSpotShadowColor(getResources().getColor(R.color.pebbleEnd));
                 }
                 break;
@@ -301,7 +348,7 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
                 lightThemeButton.setBackgroundResource(R.drawable.options_button);
                 darkThemeButton.setBackgroundResource(R.drawable.options_button_selected);
                 blackThemeButton.setBackgroundResource(R.drawable.options_button);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     darkThemeButton.setOutlineSpotShadowColor(getResources().getColor(R.color.pebbleEnd));
                 }
                 break;
@@ -312,7 +359,7 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
                 lightThemeButton.setBackgroundResource(R.drawable.options_button);
                 darkThemeButton.setBackgroundResource(R.drawable.options_button);
                 blackThemeButton.setBackgroundResource(R.drawable.options_button_selected);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     blackThemeButton.setOutlineSpotShadowColor(getResources().getColor(R.color.pebbleEnd));
                 }
                 break;
@@ -331,7 +378,7 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
         UIAnimations.imageViewObjectAnimator(screenDim, "alpha", 0, 300, 150, new DecelerateInterpolator());
         Handler handler = new Handler();
         handler.postDelayed(() -> {
-            Intent restart = new Intent(TestLayout.this, TestLayout.class);
+            Intent restart = new Intent(BrowseActivity.this, BrowseActivity.class);
             restart.putExtra("featured", featured);
             restart.putExtra("items", all);
             startActivity(restart);
@@ -341,8 +388,15 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        antiTouch.setVisibility(View.GONE);
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent details = new Intent(TestLayout.this, GradientDetails.class);
+        antiTouch.setVisibility(View.VISIBLE);
+        Intent details = new Intent(BrowseActivity.this, GradientDetails.class);
         HashMap<String, String> info = (HashMap<String, String>) parent.getItemAtPosition(position);
 
         String gradientName = info.get("backgroundName");
@@ -355,10 +409,10 @@ public class TestLayout extends AppCompatActivity implements AdapterView.OnItemC
         details.putExtra("endColour", endColour);
         details.putExtra("description", description);
 
-        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(TestLayout.this, view.findViewById(R.id.gradient), gradientName);
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(BrowseActivity.this, view.findViewById(R.id.gradient), gradientName);
         startActivity(details, options.toBundle());
 
-        Vibration.INSTANCE.hFeedack(TestLayout.this);
+        Vibration.INSTANCE.hFeedack(BrowseActivity.this);
     }
 
 }

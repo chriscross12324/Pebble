@@ -31,8 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
-                android:orientation="vertical"
-                android:paddingBottom="32dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/browseTitle"
@@ -148,10 +147,11 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
-                <com.simple.chris.pebble.ExpandedHeightScrollView
+                <com.simple.chris.pebble.ScrollableGridView
                     android:id="@+id/gv_items"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
+                    android:listSelector="@android:color/transparent"
                     android:clipToPadding="false"
                     android:gravity="center"
                     android:numColumns="auto_fit"
@@ -159,7 +159,7 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:paddingTop="24dp"
-                    android:paddingBottom="32dp"
+                    android:paddingBottom="64dp"
                     android:scrollbars="none"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -186,13 +186,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/screenDim"
+        <LinearLayout
+            android:id="@+id/antiTouch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#BF000000"
-            android:visibility="visible"
-            android:alpha="0"/>
+            android:visibility="gone">
+            <ImageView
+                android:id="@+id/screenDim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#BF000000"
+                android:visibility="visible"
+                android:alpha="0"/>
+        </LinearLayout>
+
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/themeHolder"

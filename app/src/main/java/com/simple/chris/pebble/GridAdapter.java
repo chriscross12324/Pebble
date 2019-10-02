@@ -21,14 +21,14 @@ import androidx.cardview.widget.CardView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GridAdapterUserFriendly extends BaseAdapter {
+public class GridAdapter extends BaseAdapter {
 
     int leftColour;
     int rightColour;
     Context mContext;
     ArrayList<HashMap<String, String>> map;
 
-    public GridAdapterUserFriendly(@NonNull Context context, ArrayList<HashMap<String, String>> map) {
+    public GridAdapter(@NonNull Context context, ArrayList<HashMap<String, String>> map) {
         super();
         this.mContext = context;
         this.map = map;
@@ -84,8 +84,7 @@ public class GridAdapterUserFriendly extends BaseAdapter {
             mViewHolder.mName.setText(details.get("backgroundName"));
 
         }catch (Exception e){
-            Log.e("TAG", ""+e.getLocalizedMessage());
-            //GradientsScreen.appCrashReceiver();
+            Log.e("ERR", "pebble.grid_adapter: "+e.getLocalizedMessage());
         }
         return convertView;
     }
