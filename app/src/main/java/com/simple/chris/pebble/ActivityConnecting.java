@@ -13,7 +13,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
@@ -28,7 +30,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -40,13 +45,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Random;
 
 public class ActivityConnecting extends AppCompatActivity {
 
-    ConstraintLayout connectingDialog, notification;
+    ConstraintLayout.LayoutParams params;
+    RequestQueue mQueue;
+
+    ConstraintLayout connectingDialog, notification, main, optionsUI;
     Dialog noConnectionDialog, cellularDataWarningDialog;
     Button retry, openSystemSettingsNoConnection, useButton, dontAskAgain, tryWifi;
-    TextView notificationText;
+    TextView notificationText, connectionStatusText, connectingDialogBody;
     ImageView background;
 
     Handler handler1 = new Handler();
@@ -78,6 +87,8 @@ public class ActivityConnecting extends AppCompatActivity {
         }
         setContentView(R.layout.activity_connecting);
 
+        mQueue = Volley.newRequestQueue(this);
+
         //Constraint Layout
         connectingDialog = findViewById(R.id.connectingDialog);
         notification = findViewById(R.id.notification);
@@ -89,6 +100,11 @@ public class ActivityConnecting extends AppCompatActivity {
 
         //TextView
         notificationText = findViewById(R.id.notificationText);
+        connectionStatusText = findViewById(R.id.connectionStatusText);
+        connectingDialogBody = findViewById(R.id.connectingDialogBody);
+
+        String[] connectingArray = ActivityConnecting.this.getResources().getStringArray(R.array.connecting_array);
+        connectingDialogBody.setText(connectingArray[new Random().nextInt(connectingArray.length)]);
 
         notification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
 
@@ -97,7 +113,10 @@ public class ActivityConnecting extends AppCompatActivity {
         checkConnection();
         bothGrabbed();
 
-        background.setOnClickListener(view -> testLayout = true);
+        background.setOnClickListener(view -> {
+            connectedMain = true;
+            connectedFeatured = true;
+        });
 
     }
 
@@ -120,7 +139,7 @@ public class ActivityConnecting extends AppCompatActivity {
                 playConnectingDialog();
             }
         } else {
-            //getItems();
+            getItems();
             showNoConnectionDialog();
         }
     }
@@ -142,119 +161,71 @@ public class ActivityConnecting extends AppCompatActivity {
     }
 
     private void getItems() {
-        playConnectingDialog();
+        String url = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getItems";
+        String urlFeatured = "https://script.google.com/macros/s/AKfycbxBCTFbNajBCakcj90cFSEhKdoFza2y2IrSNBPC/exec?action=getItems";
 
-        StringRequest gradientGridItems = new StringRequest(Request.Method.GET, "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getItems",
-                this::parseItems,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        connectionStatusText.setText("Status: Downloading All");
+                        JSONArray mainArray = response.getJSONArray("items");
+                        ArrayList<HashMap<String, String>> list = new ArrayList<>();
 
-                error -> {
+                        for (int i = mainArray.length() - 1; i >= 0; i--) {
+                            JSONObject items = mainArray.getJSONObject(i);
 
-                }
-        );
-        StringRequest featuredGradients = new StringRequest(Request.Method.GET, "https://script.google.com/macros/s/AKfycbxBCTFbNajBCakcj90cFSEhKdoFza2y2IrSNBPC/exec?action=getItems",
-                this::parseFeatured,
+                            String backgroundName = items.getString("backgroundName");
+                            String startColour = items.getString("leftColour");
+                            String endColour = items.getString("rightColour");
+                            String description = items.getString("description");
 
-                error -> {
+                            HashMap<String, String> item = new HashMap<>();
+                            item.put("backgroundName", backgroundName);
+                            item.put("startColour", startColour);
+                            item.put("endColour", endColour);
+                            item.put("description", description);
 
-                }
-        );
+                            list.add(item);
+                            startTestLayout.putExtra("items", list);
+                        }
+                        connectedMain = true;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, Throwable::printStackTrace);
 
-        int socketTimeOut = 10000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        JsonObjectRequest requestFeatured = new JsonObjectRequest(Request.Method.GET, urlFeatured, null,
+                response -> {
+                    try {
+                        connectionStatusText.setText("Status: Downloading Featured");
+                        JSONArray featuredArray = response.getJSONArray("items");
+                        ArrayList<HashMap<String, String>> featuredList = new ArrayList<>();
 
-        gradientGridItems.setRetryPolicy(policy);
-        featuredGradients.setRetryPolicy(policy);
+                        for (int i = featuredArray.length() - 1; i >= 0; i--) {
+                            JSONObject featuredItems = featuredArray.getJSONObject(i);
 
-        RequestQueue mainQueue = Volley.newRequestQueue(this);
-        mainQueue.add(gradientGridItems);
+                            String backgroundName = featuredItems.getString("backgroundName");
+                            String startColour = featuredItems.getString("leftColour");
+                            String endColour = featuredItems.getString("rightColour");
+                            String description = featuredItems.getString("description");
 
-        RequestQueue featuredQueue = Volley.newRequestQueue(this);
-        featuredQueue.add(featuredGradients);
+                            HashMap<String, String> item = new HashMap<>();
+                            item.put("backgroundName", backgroundName);
+                            item.put("startColour", startColour);
+                            item.put("endColour", endColour);
+                            item.put("description", description);
 
-    }
+                            featuredList.add(item);
+                            startTestLayout.putExtra("featured", featuredList);
+                        }
+                        connectedFeatured = true;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, Throwable::printStackTrace);
 
-    public void parseItems(String jsonResponse) {
-        AsyncTask.execute(() -> {
-            ArrayList<HashMap<String, String>> list = new ArrayList<>();
-
-            try {
-                JSONObject jobj = new JSONObject(jsonResponse);
-                JSONArray jarray = jobj.getJSONArray("items");
-
-                //Top to bottom: int i = 0; i < jarray.length(); i++
-                //Bottom to top: int i = jarray.length() - 1; i >= 0; i--
-                for (int i = jarray.length() - 1; i >= 0; i--) {
-
-                    JSONObject jo = jarray.getJSONObject(i);
-
-                    String backgroundName = jo.getString("backgroundName").replace(" ", " ");
-                    String leftColour = jo.getString("leftColour");
-                    String rightColour = jo.getString("rightColour");
-                    String description = jo.getString("description");
-                    //String featured = jo.getString("featured");
-
-                    HashMap<String, String> item = new HashMap<>();
-                    item.put("backgroundName", backgroundName);
-                    item.put("leftColour", leftColour);
-                    item.put("rightColour", rightColour);
-                    item.put("description", description);
-
-                    list.add(item);
-                    startTestLayout.putExtra("items", list);
-                    Log.e("INFO", "Parsed");
-                }
-                connectedMain = true;
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Log.e("Info", "pebble.activity_connecting: " + e.getLocalizedMessage());
-            } catch (Exception ex) {
-                Log.e("Info", "pebble.activity_connecting: " + ex.getLocalizedMessage());
-            }
-        });
-
-
-    }
-
-    private void parseFeatured(String jsonResponse) {
-        AsyncTask.execute(() -> {
-            ArrayList<HashMap<String, String>> flist = new ArrayList<>();
-
-            try {
-                JSONObject fjobj = new JSONObject(jsonResponse);
-                JSONArray fjarray = fjobj.getJSONArray("items");
-
-                //Top to bottom: int i = 0; i < fjarray.length(); i++
-                //Bottom to top: int i = fjarray.length() - 1; i >= 0; i--
-                for (int i = 0; i < fjarray.length(); i++) {
-
-                    JSONObject jo = fjarray.getJSONObject(i);
-
-                    String backgroundName = jo.getString("backgroundName");
-                    String leftColour = jo.getString("leftColour");
-                    String rightColour = jo.getString("rightColour");
-                    String description = jo.getString("description");
-                    //String featured = jo.getString("featured");
-
-                    HashMap<String, String> item = new HashMap<>();
-                    item.put("backgroundName", backgroundName);
-                    item.put("leftColour", leftColour);
-                    item.put("rightColour", rightColour);
-                    item.put("description", description);
-
-                    flist.add(item);
-                    startTestLayout.putExtra("featured", flist);
-                    //Log.e("INFO", ""+flist);
-                }
-                connectedFeatured = true;
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Log.e("Info", "pebble.activity_connecting: " + e.getLocalizedMessage());
-            } catch (Exception ex) {
-                Log.e("Info", "pebble.activity_connecting: " + ex.getLocalizedMessage());
-            }
-        });
-
-
+        mQueue.add(request);
+        mQueue.add(requestFeatured);
     }
 
     public void showNoConnectionDialog() {

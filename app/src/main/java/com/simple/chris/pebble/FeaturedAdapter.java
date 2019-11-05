@@ -40,8 +40,8 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.ViewHo
         try {
             HashMap<String, String> details;
             details = map.get(position);
-            int startColour = Color.parseColor(details.get("leftColour"));
-            int endColour = Color.parseColor(details.get("rightColour"));
+            int startColour = Color.parseColor(details.get("startColour"));
+            int endColour = Color.parseColor(details.get("endColour"));
             GradientDrawable gradientDrawable = new GradientDrawable(
                     GradientDrawable.Orientation.TL_BR,
                     new int[]{startColour, endColour}
@@ -66,7 +66,12 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.ViewHo
     }
 
     public int getItemCount() {
-        return map.size();
+        try {
+            return map.size();
+        } catch (Exception e) {
+            Log.e("ERR", "pebble.grid_adapter: " + e.getLocalizedMessage());
+        }
+        return 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

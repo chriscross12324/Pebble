@@ -5,8 +5,8 @@
             <solid android:color="@color/colorDarkThemeBackground"/>
         </shape>
     </item>
-    <item android:gravity="center" android:width="160dp" android:height="160dp">
-        <bitmap android:src="@drawable/icon_pebble_foreground" />
+    <item android:gravity="center" android:width="160dp" android:height="180dp">
+        <bitmap android:src="@drawable/icon_pebble_sunshine" />
     </item>
 
 

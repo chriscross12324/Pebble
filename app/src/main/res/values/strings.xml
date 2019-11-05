@@ -19,4 +19,19 @@
     <string name="descriptionBackground">background</string>
 
     <string name="noWifi">Not connected to Wi-Fi</string>
+
+    <string-array name="connecting_array">
+        <item>This shouldn\'t take long</item>
+        <item>Get ready for inspiration!</item>
+        <item>Preparing the colours...</item>
+        <item>This is my favourite part</item>
+        <item>Don\'t forget to have a nice day!</item>
+        <item>Getting the party started!!!</item>
+        <item>Try tapping a gradient to see more info</item>
+        <item>Dark theme is pretty cool</item>
+        <item>Beware the dark gradients...</item>
+        <item>Sharing is caring!</item>
+        <item>I hear that the featured section is pretty cool...</item>
+        <item>Nice to see you!!!</item>
+    </string-array>
 </resources>

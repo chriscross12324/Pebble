@@ -36,7 +36,12 @@ public class GridAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return map.size();
+        try {
+            return map.size();
+        } catch (Exception e) {
+            Log.e("ERR", "pebble.grid_adapter: " + e.getLocalizedMessage());
+        }
+        return 0;
     }
 
     @Override
@@ -55,8 +60,8 @@ public class GridAdapter extends BaseAdapter {
         try {
             HashMap<String, String> details;
             details = map.get(position);
-            leftColour = Color.parseColor(details.get("leftColour"));
-            rightColour = Color.parseColor(details.get("rightColour"));
+            leftColour = Color.parseColor(details.get("startColour"));
+            rightColour = Color.parseColor(details.get("endColour"));
             ViewHolder mViewHolder = new ViewHolder();
 
             if (convertView == null) {

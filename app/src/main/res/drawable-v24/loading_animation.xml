@@ -60,7 +60,7 @@
     <item android:drawable="@drawable/animation_00057" android:duration="16"/>
     <item android:drawable="@drawable/animation_00058" android:duration="16"/>
     <item android:drawable="@drawable/animation_00059" android:duration="16"/>
-    <item android:drawable="@drawable/animation_00060" android:duration="16"/>
+    <!--<item android:drawable="@drawable/animation_00060" android:duration="16"/>
     <item android:drawable="@drawable/animation_00061" android:duration="16"/>
     <item android:drawable="@drawable/animation_00062" android:duration="16"/>
     <item android:drawable="@drawable/animation_00063" android:duration="16"/>
@@ -180,7 +180,7 @@
     <item android:drawable="@drawable/animation_00176" android:duration="16"/>
     <item android:drawable="@drawable/animation_00177" android:duration="16"/>
     <item android:drawable="@drawable/animation_00178" android:duration="16"/>
-    <item android:drawable="@drawable/animation_00179" android:duration="16"/>
+    <item android:drawable="@drawable/animation_00179" android:duration="16"/>-->
 
 
 

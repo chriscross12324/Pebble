@@ -10,17 +10,18 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -34,22 +35,24 @@ import java.util.HashMap;
 
 public class BrowseActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
+    //Core
+    Context context = BrowseActivity.this;
+
     boolean isAnimating = false;
-    boolean isExpanded = false;
     boolean searchChanged = true;
     SwipeRefreshLayout refresh;
     ScrollView master;
     ScrollableGridView allGrid;
-    ConstraintLayout main, optionsMenu, themeHolder, doneButton;
-    LinearLayout searchButton, antiTouch;
+    ConstraintLayout main, themeHolder, doneButton, notification;
+    LinearLayout antiTouch, backToTop;
     Button lightThemeButton, darkThemeButton, blackThemeButton;
     ImageView screenDim, searchIcon;
-    TextView featuredTitle, allTitle, themeInformation;
-    EditText search;
+    TextView featuredTitle, allTitle, themeInformation, notificationText;
+    /*EditText search;*/
     String searchField;
     private ArrayList<HashMap<String, String>> featured;
     private ArrayList<HashMap<String, String>> all;
-    private ArrayList<HashMap<String, String>> searchResult = new ArrayList<HashMap<String, String>>();
+    private ArrayList<HashMap<String, String>> searchResult = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +81,12 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
         main = findViewById(R.id.main);
         themeHolder = findViewById(R.id.themeHolder);
         doneButton = findViewById(R.id.doneButton);
+        notification = findViewById(R.id.notification);
 
         //LinearLayout
-        searchButton = findViewById(R.id.searchButton);
+        /*searchButton = findViewById(R.id.searchButton);*/
         antiTouch = findViewById(R.id.antiTouch);
+        backToTop = findViewById(R.id.backToTop);
 
         //Button
         lightThemeButton = findViewById(R.id.lightThemeButton);
@@ -90,15 +95,19 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
 
         //ImageView
         screenDim = findViewById(R.id.screenDim);
-        searchIcon = findViewById(R.id.searchIcon);
+        /*searchIcon = findViewById(R.id.searchIcon);*/
 
         //TextView
         featuredTitle = findViewById(R.id.featuredTitle);
         allTitle = findViewById(R.id.allTitle);
         themeInformation = findViewById(R.id.themeInformation);
+        notificationText = findViewById(R.id.notificationText);
+
 
         //EditText
-        search = findViewById(R.id.search);
+        /*search = findViewById(R.id.search);*/
+
+        backToTop.setOnClickListener(view -> master.smoothScrollTo(0, 0));
 
 
         //ArrayList
@@ -107,16 +116,15 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
 
         refresh = findViewById(R.id.refresh);
 
+        notification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
+
         RecyclerView featuredRecycler = findViewById(R.id.recyclerView);
         FeaturedAdapter featuredAdapter = new FeaturedAdapter(featured, BrowseActivity.this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(BrowseActivity.this, LinearLayoutManager.HORIZONTAL, false);
         featuredRecycler.setLayoutManager(layoutManager);
         featuredRecycler.setAdapter(featuredAdapter);
-        featuredRecycler.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        featuredRecycler.setOnClickListener(view -> {
 
-            }
         });
         featuredRecycler.addOnItemTouchListener(
                 new RecyclerItemClickListener(BrowseActivity.this, featuredRecycler, new RecyclerItemClickListener.OnItemClickListener() {
@@ -134,6 +142,7 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
         GridAdapter UIAdapter = new GridAdapter(BrowseActivity.this, all);
         allGrid.setAdapter(UIAdapter);
         allGrid.setOnItemClickListener(this);
+        allGridLayout();
 
         loadThemes();
 
@@ -199,10 +208,6 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
             doneButton.setTranslationY((74 * getResources().getDisplayMetrics().density) + themeHolder.getHeight());
         });
 
-        /*createOption.setOnClickListener(view -> {
-            Toast.makeText(this, "Come back later", Toast.LENGTH_SHORT).show();
-        });*/
-
         ScrollView master = findViewById(R.id.master);
         master.setOnScrollChangeListener((view, i, i1, i2, i3) -> {
             if (master.getScrollY() >= 300) {
@@ -223,50 +228,55 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
             }
         });
 
-        searchButton.setOnClickListener(view -> {
+        /*searchButton.setOnClickListener(view -> {
             if (!searchChanged) {
                 searchResult.clear();
                 search.setText("");
                 searchField = "";
 
+
+                searchIcon.animate().rotation(0).start();
+
+                searchIcon.setImageResource(R.drawable.icon_search);
                 featuredTitle.setVisibility(View.VISIBLE);
                 featuredRecycler.setVisibility(View.VISIBLE);
                 allTitle.setText("All");
                 allGrid.setAdapter(UIAdapter);
 
-                searchIcon.setImageResource(R.drawable.icon_search);
-                searchIcon.animate().rotation(0).start();
 
                 searchChanged = true;
-            }
-            searchChanged = false;
-            searchResult.clear();
-            searchField = search.getText().toString();
-            //Log.e("Search", searchField);
-            for (int count = 0; count < all.size(); count++) {//int count = all.size() - 1; count >= 0; count--
-                //Log.e("INFO", ""+all.get(count).get("backgroundName"));
-                HashMap<String, String> searched = new HashMap<String, String>();
-                if (all.get(count).get("backgroundName").replace(" ", "").toLowerCase()
-                        .contains(searchField.replace(" ", "").toLowerCase())
-                        && !searchField.equals("")) {
-                    searched.put("backgroundName", all.get(count).get("backgroundName"));
-                    searched.put("leftColour", all.get(count).get("leftColour"));
-                    searched.put("rightColour", all.get(count).get("rightColour"));
-                    searched.put("description", all.get(count).get("description"));
+            } else {
+                searchChanged = false;
+                searchResult.clear();
+                searchField = search.getText().toString();
+                //Log.e("Search", searchField);
+                for (int count = 0; count < all.size(); count++) {//int count = all.size() - 1; count >= 0; count--
+                    //Log.e("INFO", ""+all.get(count).get("backgroundName"));
+                    HashMap<String, String> searched = new HashMap<String, String>();
+                    if (all.get(count).get("backgroundName").replace(" ", "").toLowerCase()
+                            .contains(searchField.replace(" ", "").toLowerCase())
+                            && !searchField.equals("")) {
+                        searched.put("backgroundName", all.get(count).get("backgroundName"));
+                        searched.put("startColour", all.get(count).get("startColour"));
+                        searched.put("endColour", all.get(count).get("endColour"));
+                        searched.put("description", all.get(count).get("description"));
 
-                    searchResult.add(searched);
+                        searchResult.add(searched);
+                    }
+
                 }
-
             }
+
 
             try {
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            } catch (Exception e) {Log.w("pebble.browse_screen", "Search wasn't focused: "+e.getLocalizedMessage());}
+            } catch (Exception e) {
+                Log.w("pebble.browse_screen", "Search wasn't focused: " + e.getLocalizedMessage());
+            }
 
 
             Log.e("Searched", "" + searchResult);
-
 
 
             if (!searchResult.isEmpty()) {
@@ -278,12 +288,16 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
                 searchIcon.setImageResource(R.drawable.icon_add);
                 //searchIcon.setRotation(90);
                 searchIcon.animate().rotation(45).start();
+                master.smoothScrollTo(0, 0);
                 //searchButton.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
             } else {
                 if (!searchField.equals("")) {
                     //Display "Nothing found"
                     //Toast.makeText(this, "Field not empty", Toast.LENGTH_SHORT).show();
                     //searchIcon.setImageResource(R.drawable.icon_search);
+                    playAnimation();
+                    searchIcon.setImageResource(R.drawable.icon_add);
+                    searchIcon.animate().rotation(45).start();
                 } else {
                     featuredTitle.setVisibility(View.VISIBLE);
                     featuredRecycler.setVisibility(View.VISIBLE);
@@ -312,7 +326,7 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
             @Override
             public void afterTextChanged(Editable editable) {
             }
-        });
+        });*/
 
     }
 
@@ -323,8 +337,13 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
         }
     }*/
 
-    public void showAll(){
+    public void allGridLayout(){
+        ViewGroup.LayoutParams allGridParams = allGrid.getLayoutParams();
+        allGridParams.height = Calculations.screenMeasure(context, "height");
+        allGrid.setLayoutParams(allGridParams);
 
+        Log.i("INFO", "pebble.browse_activity: " + allGrid.getHeight());
+        Log.i("INFO", "Pebble.browse_activity: Actual " + Calculations.screenMeasure(context, "height"));
     }
 
     public void loadThemes() {
@@ -400,8 +419,8 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
         HashMap<String, String> info = (HashMap<String, String>) parent.getItemAtPosition(position);
 
         String gradientName = info.get("backgroundName");
-        String startColour = info.get("leftColour");
-        String endColour = info.get("rightColour");
+        String startColour = info.get("startColour");
+        String endColour = info.get("endColour");
         String description = info.get("description");
 
         details.putExtra("gradientName", gradientName);
@@ -413,6 +432,18 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
         startActivity(details, options.toBundle());
 
         Vibration.INSTANCE.hFeedack(BrowseActivity.this);
+    }
+
+    public void playAnimation() {
+        notification.setAlpha(1);
+        Vibration.INSTANCE.notification(BrowseActivity.this);
+        UIAnimations.constraintLayoutObjectAnimator(notification, "translationY",
+                0, 500,
+                0, new DecelerateInterpolator(3));
+        UIAnimations.constraintLayoutObjectAnimator(notification, "translationY",
+                Math.round(-45 * getResources().getDisplayMetrics().density), 500,
+                3000, new DecelerateInterpolator(3));
+        UIAnimations.constraintLayoutAlpha(notification, 0, 3500);
     }
 
 }
