@@ -8,14 +8,11 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
@@ -27,21 +24,15 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -57,6 +48,7 @@ public class ActivityConnecting extends AppCompatActivity {
     Button retry, openSystemSettingsNoConnection, useButton, dontAskAgain, tryWifi;
     TextView notificationText, connectionStatusText, connectingDialogBody;
     ImageView background;
+    ImageView animationView;
 
     Handler handler1 = new Handler();
     Handler handler2 = new Handler();
@@ -66,25 +58,16 @@ public class ActivityConnecting extends AppCompatActivity {
     Boolean oneTime = false;
     Boolean connectedMain = false;
     Boolean connectedFeatured = false;
-    Boolean testLayout = false;
+    int testLayout = 0;
 
     Intent startTestLayout;
+    Intent beta5Layout;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        switch (Values.theme) {
-            case "light":
-                setTheme(R.style.ThemeLight);
-                break;
-            case "dark":
-                setTheme(R.style.ThemeDark);
-                break;
-            case "black":
-                setTheme(R.style.ThemeBlack);
-                break;
-        }
+        UIElements.INSTANCE.setTheme(ActivityConnecting.this);
         setContentView(R.layout.activity_connecting);
 
         mQueue = Volley.newRequestQueue(this);
@@ -103,19 +86,37 @@ public class ActivityConnecting extends AppCompatActivity {
         connectionStatusText = findViewById(R.id.connectionStatusText);
         connectingDialogBody = findViewById(R.id.connectingDialogBody);
 
+        //ImageView
+        animationView = findViewById(R.id.animationView);
+
         String[] connectingArray = ActivityConnecting.this.getResources().getStringArray(R.array.connecting_array);
         connectingDialogBody.setText(connectingArray[new Random().nextInt(connectingArray.length)]);
 
         notification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
 
         startTestLayout = new Intent(ActivityConnecting.this, BrowseActivity.class);
+        beta5Layout = new Intent(ActivityConnecting.this, Main.class);
 
         checkConnection();
         bothGrabbed();
 
         background.setOnClickListener(view -> {
-            connectedMain = true;
-            connectedFeatured = true;
+            testLayout++;
+        });
+
+        animationView.setOnClickListener(view -> {
+            switch (Values.theme) {
+                case "light":
+                    Values.theme = "dark";
+                    break;
+                case "dark":
+                    Values.theme = "black";
+                    break;
+                case "black":
+                    Values.theme = "light";
+                    break;
+
+            }
         });
 
     }
@@ -151,9 +152,15 @@ public class ActivityConnecting extends AppCompatActivity {
                 handler2.removeCallbacksAndMessages(null);
                 handler3.removeCallbacksAndMessages(null);
                 handler4.removeCallbacksAndMessages(null);
-                startActivity(startTestLayout);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
+                if (testLayout == 1) {
+                    startActivity(beta5Layout);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    finish();
+                } else {
+                    startActivity(startTestLayout);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    finish();
+                }
             } else {
                 bothGrabbed();
             }
@@ -187,6 +194,7 @@ public class ActivityConnecting extends AppCompatActivity {
 
                             list.add(item);
                             startTestLayout.putExtra("items", list);
+                            beta5Layout.putExtra("items", list);
                         }
                         connectedMain = true;
                     } catch (JSONException e) {
@@ -217,6 +225,7 @@ public class ActivityConnecting extends AppCompatActivity {
 
                             featuredList.add(item);
                             startTestLayout.putExtra("featured", featuredList);
+                            beta5Layout.putExtra("featured", featuredList);
                         }
                         connectedFeatured = true;
                     } catch (JSONException e) {
@@ -229,6 +238,7 @@ public class ActivityConnecting extends AppCompatActivity {
     }
 
     public void showNoConnectionDialog() {
+        connectionStatusText.setVisibility(View.INVISIBLE);
         noConnectionDialog.setContentView(R.layout.dialog_no_connection);
         retry = noConnectionDialog.findViewById(R.id.retryButton);
         openSystemSettingsNoConnection = noConnectionDialog.findViewById(R.id.openSystemSettingsButton);
@@ -241,11 +251,12 @@ public class ActivityConnecting extends AppCompatActivity {
         window.setAttributes(lp);
 
         retry.setOnClickListener(v -> {
+            connectionStatusText.setVisibility(View.VISIBLE);
             noConnectionDialog.dismiss();
             checkConnection();
         });
         openSystemSettingsNoConnection.setOnClickListener(v -> {
-            noConnectionDialog.dismiss();
+            //noConnectionDialog.dismiss();
             startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
         });
 
@@ -294,13 +305,9 @@ public class ActivityConnecting extends AppCompatActivity {
         UIAnimations.constraintLayoutObjectAnimator(connectingDialog, "alpha", 1, 300, 0, new LinearInterpolator());
         ImageView connectingAnimation = findViewById(R.id.animationView);
 
-        if (Values.peppaPink) {
-            connectingAnimation.setBackgroundResource(R.drawable.peppa);
-        } else {
-            connectingAnimation.setBackgroundResource(R.drawable.loading_animation);
-            AnimationDrawable animationDrawable = (AnimationDrawable) connectingAnimation.getBackground();
-            animationDrawable.start();
-        }
+        connectingAnimation.setBackgroundResource(R.drawable.loading_animation);
+        AnimationDrawable animationDrawable = (AnimationDrawable) connectingAnimation.getBackground();
+        animationDrawable.start();
 
         notification.setAlpha(1);
 

@@ -34,17 +34,7 @@ public class GradientDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        switch (Values.theme) {
-            case "light":
-                setTheme(R.style.ThemeLight);
-                break;
-            case "dark":
-                setTheme(R.style.ThemeDark);
-                break;
-            case "black":
-                setTheme(R.style.ThemeBlack);
-                break;
-        }
+        UIElements.INSTANCE.setTheme(GradientDetails.this);
         setContentView(R.layout.activity_gradient_details);
         postponeEnterTransition();
         Values.currentActivity = "GradientDetails";
@@ -101,6 +91,7 @@ public class GradientDetails extends AppCompatActivity {
                 new int[]{left, right}
         );
         gradientViewer.setBackgroundDrawable(gradientDrawable);
+
         corners.setTransitionName(backgroundName);
         gradientViewer.setTransitionName(backgroundName + "1");
 

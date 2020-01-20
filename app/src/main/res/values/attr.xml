@@ -2,14 +2,8 @@
 <resources>
     <attr name="BackgroundColour" format="reference|color"/>
     <attr name="ForegroundColour" format="reference|color"/>
-    <attr name="SecondaryForegroundColour" format="reference|color"/>
     <attr name="PrimaryTextColour" format="reference|color"/>
     <attr name="SecondaryTextColour" format="reference|color"/>
-    <attr name="DetailsTitleTextColour" format="reference|color"/>
-    <attr name="DetailsDescriptionTextColour" format="reference|color"/>
-    <attr name="DetailsHEXTextColour" format="reference|color"/>
-    <attr name="DetailsDividerColour" format="reference|color"/>
-    <attr name="BlurColour" format="reference|color"/>
 
     <declare-styleable name="TransitionArcMotion">
         <attr name="arcRadius" format="integer" />

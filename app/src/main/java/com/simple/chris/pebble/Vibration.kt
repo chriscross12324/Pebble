@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.simple.chris.pebble
 
 import android.content.Context

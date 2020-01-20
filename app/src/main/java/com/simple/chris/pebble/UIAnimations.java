@@ -17,20 +17,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import java.sql.Time;
 
-import eightbitlab.com.blurview.BlurView;
 
 
 public class UIAnimations {
-
-    public static void blurViewObjectAnimator(BlurView layout, String propertyName, float finishedPos, int duration, int delay, TimeInterpolator interpolator) {
-        Handler handler = new Handler();
-        handler.postDelayed(() -> {
-            ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(layout, propertyName, finishedPos);
-            objectAnimator.setDuration(duration);
-            objectAnimator.setInterpolator(interpolator);
-            objectAnimator.start();
-        }, delay);
-    }
 
     public static void constraintLayoutVisibility(ConstraintLayout layout, int visibility, int delay){
         Handler handler = new Handler();

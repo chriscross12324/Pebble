@@ -3,29 +3,21 @@ package com.simple.chris.pebble;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.GridView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -38,18 +30,13 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
     //Core
     Context context = BrowseActivity.this;
 
-    boolean isAnimating = false;
-    boolean searchChanged = true;
     SwipeRefreshLayout refresh;
     ScrollView master;
     ScrollableGridView allGrid;
     ConstraintLayout main, themeHolder, doneButton, notification;
-    LinearLayout antiTouch, backToTop;
-    Button lightThemeButton, darkThemeButton, blackThemeButton;
-    ImageView screenDim, searchIcon;
+    ImageView screenDim;
     TextView featuredTitle, allTitle, themeInformation, notificationText;
     /*EditText search;*/
-    String searchField;
     private ArrayList<HashMap<String, String>> featured;
     private ArrayList<HashMap<String, String>> all;
     private ArrayList<HashMap<String, String>> searchResult = new ArrayList<>();
@@ -57,18 +44,8 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        switch (Values.theme) {
-            case "light":
-                setTheme(R.style.ThemeLight);
-                break;
-            case "dark":
-                setTheme(R.style.ThemeDark);
-                break;
-            case "black":
-                setTheme(R.style.ThemeBlack);
-                break;
-        }
-        setContentView(R.layout.activity_browse_screen);
+        UIElements.INSTANCE.setTheme(BrowseActivity.this);
+        //setContentView(R.layout.activity_browse_screen);
         Values.saveValues(BrowseActivity.this);
 
         //ScrollView
@@ -85,13 +62,10 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
 
         //LinearLayout
         /*searchButton = findViewById(R.id.searchButton);*/
-        antiTouch = findViewById(R.id.antiTouch);
-        backToTop = findViewById(R.id.backToTop);
+        CheckBox checkbox = findViewById(R.id.checkbox);
+        checkbox.setOnCheckedChangeListener((compoundButton, b) -> {
 
-        //Button
-        lightThemeButton = findViewById(R.id.lightThemeButton);
-        darkThemeButton = findViewById(R.id.darkThemeButton);
-        blackThemeButton = findViewById(R.id.blackThemeButton);
+        });
 
         //ImageView
         screenDim = findViewById(R.id.screenDim);
@@ -107,16 +81,12 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
         //EditText
         /*search = findViewById(R.id.search);*/
 
-        backToTop.setOnClickListener(view -> master.smoothScrollTo(0, 0));
-
-
         //ArrayList
         featured = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("featured");
         all = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("items");
 
         refresh = findViewById(R.id.refresh);
 
-        notification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
 
         RecyclerView featuredRecycler = findViewById(R.id.recyclerView);
         FeaturedAdapter featuredAdapter = new FeaturedAdapter(featured, BrowseActivity.this);
@@ -140,92 +110,15 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
                 })
         );
         GridAdapter UIAdapter = new GridAdapter(BrowseActivity.this, all);
-        allGrid.setAdapter(UIAdapter);
+        /*allGrid.setAdapter(UIAdapter);
         allGrid.setOnItemClickListener(this);
-        allGridLayout();
-
-        loadThemes();
+        allGridLayout();*/
 
         refresh.setOnRefreshListener(() -> {
             Intent GL = new Intent(BrowseActivity.this, ActivityConnecting.class);
             startActivity(GL);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
-        });
-
-        ImageView menuIcon = findViewById(R.id.menuIcon);
-        menuIcon.setOnClickListener(view -> {
-            antiTouch.setVisibility(View.VISIBLE);
-            screenDim.setVisibility(View.VISIBLE);
-            UIAnimations.imageViewObjectAnimator(screenDim, "alpha", 1, 300, 0, new DecelerateInterpolator());
-            themeHolder.setVisibility(View.VISIBLE);
-            doneButton.setVisibility(View.VISIBLE);
-            UIAnimations.constraintLayoutObjectAnimator(themeHolder, "alpha", 1, 250, 10, new DecelerateInterpolator());
-            UIAnimations.constraintLayoutObjectAnimator(doneButton, "alpha", 1, 250, 10, new DecelerateInterpolator());
-            UIAnimations.constraintLayoutObjectAnimator(themeHolder, "translationY", 0, 700, 250, new DecelerateInterpolator(3));
-            UIAnimations.constraintLayoutObjectAnimator(doneButton, "translationY", 0, 700, 300, new DecelerateInterpolator(3));
-        });
-
-        doneButton.setOnClickListener(view -> {
-            UIAnimations.constraintLayoutObjectAnimator(themeHolder, "translationY",
-                    Math.round((90 * getResources().getDisplayMetrics().density) + themeHolder.getHeight()), 250,
-                    50, new DecelerateInterpolator());
-            UIAnimations.constraintLayoutObjectAnimator(doneButton, "translationY",
-                    Math.round((90 * getResources().getDisplayMetrics().density) + themeHolder.getHeight()), 250,
-                    0, new DecelerateInterpolator());
-            UIAnimations.constraintLayoutAlpha(themeHolder, 0, 300);
-            UIAnimations.constraintLayoutAlpha(doneButton, 0, 300);
-            UIAnimations.imageViewObjectAnimator(screenDim, "alpha", 0, 300, 150, new DecelerateInterpolator());
-        });
-
-        lightThemeButton.setOnClickListener(view1 -> {
-            if (!Values.theme.equals("light")) {
-                Values.theme = "light";
-                loadThemes();
-                master.smoothScrollTo(0, 0);
-                refreshLayout();
-            }
-        });
-        darkThemeButton.setOnClickListener(view1 -> {
-            if (!Values.theme.equals("dark")) {
-                Values.theme = "dark";
-                loadThemes();
-                master.smoothScrollTo(0, 0);
-                refreshLayout();
-            }
-        });
-        blackThemeButton.setOnClickListener(view1 -> {
-            if (!Values.theme.equals("black")) {
-                Values.theme = "black";
-                loadThemes();
-                master.smoothScrollTo(0, 0);
-                refreshLayout();
-            }
-        });
-
-        themeHolder.post(() -> {
-            themeHolder.setTranslationY((90 * getResources().getDisplayMetrics().density) + themeHolder.getHeight());
-            doneButton.setTranslationY((74 * getResources().getDisplayMetrics().density) + themeHolder.getHeight());
-        });
-
-        ScrollView master = findViewById(R.id.master);
-        master.setOnScrollChangeListener((view, i, i1, i2, i3) -> {
-            if (master.getScrollY() >= 300) {
-                if (!isAnimating) {
-                    isAnimating = true;
-                    UIAnimations.imageViewObjectAnimator(menuIcon, "alpha", 0, 100, 0, new LinearInterpolator());
-                    boolean change = new Handler().postDelayed(() ->
-                            isAnimating = false, 100);
-
-                }
-            } else if (master.getScrollY() < 300) {
-                if (!isAnimating) {
-                    isAnimating = true;
-                    UIAnimations.imageViewObjectAnimator(menuIcon, "alpha", 1, 200, 0, new LinearInterpolator());
-                    boolean change = new Handler().postDelayed(() ->
-                            isAnimating = false, 200);
-                }
-            }
         });
 
         /*searchButton.setOnClickListener(view -> {
@@ -337,7 +230,7 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
         }
     }*/
 
-    public void allGridLayout(){
+    public void allGridLayout() {
         ViewGroup.LayoutParams allGridParams = allGrid.getLayoutParams();
         allGridParams.height = Calculations.screenMeasure(context, "height");
         allGrid.setLayoutParams(allGridParams);
@@ -346,44 +239,6 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
         Log.i("INFO", "Pebble.browse_activity: Actual " + Calculations.screenMeasure(context, "height"));
     }
 
-    public void loadThemes() {
-        switch (Values.theme) {
-            case "light":
-                themeInformation.setText("Current theme: Light");
-                refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorLightThemeForeground));
-                refresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorDarkThemeForeground));
-                lightThemeButton.setBackgroundResource(R.drawable.options_button_selected);
-                darkThemeButton.setBackgroundResource(R.drawable.options_button);
-                blackThemeButton.setBackgroundResource(R.drawable.options_button);
-                lightThemeButton.setTextColor(getResources().getColor(android.R.color.white));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    lightThemeButton.setOutlineSpotShadowColor(getResources().getColor(R.color.pebbleEnd));
-                }
-                break;
-            case "dark":
-                themeInformation.setText("Current theme: Dark");
-                refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorDarkThemeForeground));
-                refresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorLightThemeForeground));
-                lightThemeButton.setBackgroundResource(R.drawable.options_button);
-                darkThemeButton.setBackgroundResource(R.drawable.options_button_selected);
-                blackThemeButton.setBackgroundResource(R.drawable.options_button);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    darkThemeButton.setOutlineSpotShadowColor(getResources().getColor(R.color.pebbleEnd));
-                }
-                break;
-            case "black":
-                themeInformation.setText("Current theme: Black");
-                refresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.colorBlackThemeForeground));
-                refresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorLightThemeForeground));
-                lightThemeButton.setBackgroundResource(R.drawable.options_button);
-                darkThemeButton.setBackgroundResource(R.drawable.options_button);
-                blackThemeButton.setBackgroundResource(R.drawable.options_button_selected);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    blackThemeButton.setOutlineSpotShadowColor(getResources().getColor(R.color.pebbleEnd));
-                }
-                break;
-        }
-    }
 
     public void refreshLayout() {
         UIAnimations.constraintLayoutObjectAnimator(themeHolder, "translationY",
@@ -409,12 +264,10 @@ public class BrowseActivity extends AppCompatActivity implements AdapterView.OnI
     @Override
     protected void onResume() {
         super.onResume();
-        antiTouch.setVisibility(View.GONE);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        antiTouch.setVisibility(View.VISIBLE);
         Intent details = new Intent(BrowseActivity.this, GradientDetails.class);
         HashMap<String, String> info = (HashMap<String, String>) parent.getItemAtPosition(position);
 

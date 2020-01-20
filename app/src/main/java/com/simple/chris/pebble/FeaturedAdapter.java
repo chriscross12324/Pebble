@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import io.github.armcha.coloredshadow.ShadowImageView;
+
 public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.ViewHolder> {
 
     Context context;

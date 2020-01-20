@@ -148,7 +148,7 @@
                         android:layout_margin="5dp"
                         android:text="Black"
                         android:textColor="?PrimaryTextColour"
-                        android:background="@drawable/options_button_selected"/>
+                        android:background="@drawable/placeholder_gradient"/>
                 </LinearLayout>
             </HorizontalScrollView>
 

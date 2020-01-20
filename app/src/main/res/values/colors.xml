@@ -7,82 +7,22 @@
     <color name="logoColourTopLeft">#F58A33</color>
     <color name="logoColourBottomRight">#D53593</color>
 
-    <color name="colorBlackThemeForeground">#121212</color><!--#2E303D-->
-    <color name="colorBlackThemeSecondaryForeground">#1E1E1E</color><!--#2E303D--><!--#1E1E1E-->
-    <color name="colorBlackThemeBackground">#000000</color><!--#121212-->
-    <color name="colorBlackThemeTextColour">#e1e1e1</color>
-    <color name="colorBlackThemeSecondaryTextColour">#A8A8A8</color>
-    <color name="colorBlackThemeDetailsHEXTextColour">#bababa</color>
-    <color name="colorBlackThemeDetailsDividerColour">#4f4f4f</color>
-    <color name="colorBlackThemeBlurColour">#CC1E1E1E</color>
+    <color name="BackgroundTint">#32121212</color>
 
-    <color name="colorDarkThemeForeground">#1E1E1E</color><!--#2E303D--><!--#1E1E1E-->
-    <color name="colorDarkThemeSecondaryForeground">#323232</color><!--#2E303D--><!--#1E1E1E-->
-    <color name="colorDarkThemeBackground">#121212</color><!--#121212-->
-    <color name="colorDarkThemeTextColour">#e1e1e1</color>
-    <color name="colorDarkThemeSecondaryTextColour">#A8A8A8</color>
-    <color name="colorDarkThemeDetailsHEXTextColour">#bababa</color>
-    <color name="colorDarkThemeDetailsDividerColour">#4f4f4f</color>
-    <color name="colorDarkThemeBlurColour">#CC1E1E1E</color>
+    <color name="lightForeground">#f2f2f2</color>
+    <color name="lightBackground">#ffffff</color>
+    <color name="lightTextPrimary">#282828</color>
+    <color name="lightTextSecondary">#626262</color>
 
-    <color name="colorLightThemeForeground">#FFFFFF</color>
-    <color name="colorLightThemeSecondaryForeground">#F0F0F0</color><!--#2E303D--><!--#1E1E1E-->
-    <color name="colorLightThemeBackground">#FFFFFF</color>
-    <color name="colorLightThemeTextColour">#282828</color><!--#565656-->
-    <color name="colorLightThemeSecondaryTextColour">#626262</color>
-    <color name="colorLightThemeDetailsHEXTextColour">#505050</color>
-    <color name="colorLightThemeDetailsDividerColour">#dadada</color>
-    <color name="colorLightThemeBlurColour">#80DBDBDB</color>
+    <color name="darkForeground">#1d1e25</color>
+    <color name="darkBackground">#191921</color>
+    <color name="darkTextPrimary">#e1e1e1</color>
+    <color name="darkTextSecondary">#A8A8A8</color>
 
-    <!-- Login Screen -->
-    <color name="editTextColour">#80FFFFFF</color>
-    <color name="editTextLineColour">#90FFFFFF</color>
-    <color name="Colour_Placeholder">#76E646</color>
-    <color name="Colour_Placeholder2">#4693E6</color>
-    <color name="Colour_Placeholder3">#E67946</color>
-
-    <color name="pebbleStart">#3C9CD8</color>
-    <color name="pebbleEnd">#5E4EF2</color>
-
-    <color name="wintersDayTL">#c2e9fb</color>
-    <color name="wintersDayBR">#a1c4fd</color>
-
-    <!-- Shallow Lake -->
-    <color name="shallowLakeTL">#89f7fe</color>
-    <color name="shallowLakeBR">#66a6ff</color>
-
-    <!-- Tropic Ocean -->
-    <color name="tropicalOceanTL">#84fab0</color>
-    <color name="tropicalOceanBR">#8fd3f4</color>
-
-    <!-- Green Grass -->
-    <color name="greenGrassTL">#d4fc79</color>
-    <color name="greenGrassBR">#96e6a1</color>
-
-    <!-- Sunshine -->
-    <color name="sunshineTL">#f6d365</color>
-    <color name="sunshineBR">#fda085</color>
-
-    <!-- Forest -->
-    <color name="forestTL">#3cba92</color>
-    <color name="forestBR">#0ba360</color>
-
-    <!-- Atmosphere -->
-    <color name="atmosphereTL">#6f86d6</color>
-    <color name="atmosphereBR">#48c6ef</color>
-
-    <!-- Purple Haze -->
-    <color name="purpleHazeTL">#88d3ce</color>
-    <color name="purpleHazeBR">#6e45e2</color>
-
-    <!-- Cold Night -->
-    <color name="coldNightTL">#A2B5DC</color>
-    <color name="coldNightBR">#163581</color>
-
-    <!-- Eternal Space -->
-    <color name="eternalSpaceTL">#537895</color>
-    <color name="eternalSpaceBR">#09203f</color>
-
+    <color name="blackForeground">#191921</color>
+    <color name="blackBackground">#000000</color>
+    <color name="blackTextPrimary">#e1e1e1</color>
+    <color name="blackTextSecondary">#A8A8A8</color>
 
 </resources>
 

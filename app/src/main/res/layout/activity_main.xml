@@ -4,193 +4,76 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Main"
+    android:background="?BackgroundColour">
 
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="0dp"
+    <com.simple.chris.pebble.CustomViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:src="@drawable/placeholder_gradient_dark"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/pebbleLogo"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon_pebble_foreground" />
+        />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <!--<com.gauravk.bubblenavigation.BubbleToggleView
+        android:id="@+id/navigationView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:fontFamily="@font/googlesans_regular"
-        android:gravity="center"
-        android:text="Pebble"
-        android:textAlignment="center"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pebbleLogo" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="24dp"
-        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/menu_options"
+        android:backgroundTint="?BackgroundColour"
+        app:morphCornerRadius="20dp"
+        app:morphItemRadius="64dp"
+        app:morphVerticalOffset="8dp"
+        app:itemIconTint="?PrimaryTextColour"
+        app:itemTextColor="?PrimaryTextColour" />-->
+
+    <!--<com.gauravk.bubblenavigation.BubbleNavigationConstraintView
+        android:id="@+id/navigation_header_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_navigation_bg"
+        android:elevation="12dp"
+        android:padding="12dp"
+        app:bnc_mode="spread"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintCircleRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:id="@+id/textView2"
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/gotoHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/googlesans_medium"
-            android:text="Don't have an account?"
-            android:textColor="@color/colorAccent"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-            tools:layout_editor_absoluteX="175dp" />
+            app:bt_active="true"
+            app:bt_colorActive="#F6B97B"
+            app:bt_badgeTextColor="?PrimaryTextColour"
+            app:bt_colorInactive="?SecondaryTextColour"
+            app:bt_duration="200"
+            app:bt_icon="@drawable/icon_home"
+            app:bt_shape="@drawable/bottom_navigation_button_bg" />
 
-        <TextView
-            android:id="@+id/textView3"
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/gotoBrowse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:fontFamily="@font/googlesans_medium"
-            android:text="Create one"
-            android:textColor="#BEFFFFFF"
-            android:textSize="12sp" />
-    </LinearLayout>
+            app:bt_colorActive="#F6B97B"
+            app:bt_badgeTextColor="?PrimaryTextColour"
+            app:bt_colorInactive="?SecondaryTextColour"
+            app:bt_duration="200"
+            app:bt_icon="@drawable/icon_browse"
+            app:bt_shape="@drawable/bottom_navigation_button_bg"/>
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="64dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="8dp"
-            app:srcCompat="@drawable/icon_email" />
-
-        <EditText
-            android:id="@+id/editText"
-            style="@style/LoginScreenEditText"
-            android:layout_width="match_parent"
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/gotoSearch"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Email Address"
-            android:inputType="textEmailAddress"
-            android:singleLine="true"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF" />
-
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="64dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:srcCompat="@color/editTextLineColour" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="64dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3">
-
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="8dp"
-            app:srcCompat="@drawable/icon_lock" />
-
-        <EditText
-            android:id="@+id/editText1"
-            style="@style/LoginScreenEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:singleLine="true"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF" />
-
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="64dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-        app:srcCompat="@color/editTextLineColour" />
-
-    <Button
-        android:id="@+id/button"
-        style="?android:attr/buttonStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="80dp"
-        android:background="@drawable/button_dialog_permission"
-        android:fontFamily="@font/googlesans_regular"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:text="Log In"
-        android:textColor="@android:color/white"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+            app:bt_colorActive="#F6B97B"
+            app:bt_badgeTextColor="?PrimaryTextColour"
+            app:bt_colorInactive="?SecondaryTextColour"
+            app:bt_duration="200"
+            app:bt_icon="@drawable/icon_search"
+            app:bt_shape="@drawable/bottom_navigation_button_bg"/>
+    </com.gauravk.bubblenavigation.BubbleNavigationConstraintView>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
