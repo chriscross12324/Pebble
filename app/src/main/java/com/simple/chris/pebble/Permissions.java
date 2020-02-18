@@ -31,17 +31,7 @@ public class Permissions extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        switch (Values.theme) {
-            case "light":
-                setTheme(R.style.ThemeLight);
-                break;
-            case "dark":
-                setTheme(R.style.ThemeDark);
-                break;
-            case "black":
-                setTheme(R.style.ThemeBlack);
-                break;
-        }
+        UIElements.INSTANCE.setTheme(Permissions.this);
         setContentView(R.layout.activity_permissions);
 
         wifiPermission = new Dialog(this);
@@ -107,6 +97,7 @@ public class Permissions extends AppCompatActivity {
                 UIAnimations.constraintLayoutObjectAnimator(warningNotification, "translationY",
                         Math.round(-90 * getResources().getDisplayMetrics().density), 500,
                         0, new DecelerateInterpolator(3));
+                Values.INSTANCE.setFirstStart(false);
                 dataWarning.dismiss();
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -115,7 +106,6 @@ public class Permissions extends AppCompatActivity {
                         Intent GL = new Intent(Permissions.this, ActivityConnecting.class);
                         startActivity(GL);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                        Values.firstStart = false;
                         finish();
                     }
                 },700);

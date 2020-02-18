@@ -1,8 +1,9 @@
 package com.simple.chris.pebble
 
 import android.content.Context
+import com.polyak.iconswitch.IconSwitch
 
-/*object Values {
+object Values {
 
     const val SAVE = "SavedValues"
 
@@ -17,6 +18,11 @@ import android.content.Context
     var theme: String = "dark"
     var askMobileData: Boolean = true
     var lastVersion: Int = 0
+    lateinit var browse: ArrayList<HashMap<String, String>>
+    lateinit var featured: ArrayList<HashMap<String, String>>
+    lateinit var browseSearchField: String
+    var filterSpinner = 0
+    var gridCount: IconSwitch.Checked = IconSwitch.Checked.RIGHT
 
     fun saveValues(context: Context) {
         val sharedPreferences = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE)
@@ -45,4 +51,4 @@ import android.content.Context
 
     }
 
-}*/
+}

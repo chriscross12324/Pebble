@@ -40,10 +40,9 @@ import java.util.Random;
 
 public class ActivityConnecting extends AppCompatActivity {
 
-    ConstraintLayout.LayoutParams params;
     RequestQueue mQueue;
 
-    ConstraintLayout connectingDialog, notification, main, optionsUI;
+    ConstraintLayout connectingDialog, notification;
     Dialog noConnectionDialog, cellularDataWarningDialog;
     Button retry, openSystemSettingsNoConnection, useButton, dontAskAgain, tryWifi;
     TextView notificationText, connectionStatusText, connectingDialogBody;
@@ -58,9 +57,7 @@ public class ActivityConnecting extends AppCompatActivity {
     Boolean oneTime = false;
     Boolean connectedMain = false;
     Boolean connectedFeatured = false;
-    int testLayout = 0;
 
-    Intent startTestLayout;
     Intent beta5Layout;
 
 
@@ -68,6 +65,7 @@ public class ActivityConnecting extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UIElements.INSTANCE.setTheme(ActivityConnecting.this);
+        Values.INSTANCE.saveValues(ActivityConnecting.this);
         setContentView(R.layout.activity_connecting);
 
         mQueue = Volley.newRequestQueue(this);
@@ -94,26 +92,22 @@ public class ActivityConnecting extends AppCompatActivity {
 
         notification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
 
-        startTestLayout = new Intent(ActivityConnecting.this, BrowseActivity.class);
         beta5Layout = new Intent(ActivityConnecting.this, Main.class);
 
         checkConnection();
         bothGrabbed();
 
-        background.setOnClickListener(view -> {
-            testLayout++;
-        });
 
         animationView.setOnClickListener(view -> {
-            switch (Values.theme) {
+            switch (Values.INSTANCE.getTheme()) {
                 case "light":
-                    Values.theme = "dark";
+                    Values.INSTANCE.setTheme("dark");
                     break;
                 case "dark":
-                    Values.theme = "black";
+                    Values.INSTANCE.setTheme("black");
                     break;
                 case "black":
-                    Values.theme = "light";
+                    Values.INSTANCE.setTheme("light");
                     break;
 
             }
@@ -124,7 +118,7 @@ public class ActivityConnecting extends AppCompatActivity {
     private void checkConnection() {
         if (isInternetConnected()) {
             if (isNetworkTypeCellular()) {
-                if (Values.askData) {
+                if (Values.INSTANCE.getAskMobileData()) {
                     if (oneTime) {
                         getItems();
                         playConnectingDialog();
@@ -152,15 +146,9 @@ public class ActivityConnecting extends AppCompatActivity {
                 handler2.removeCallbacksAndMessages(null);
                 handler3.removeCallbacksAndMessages(null);
                 handler4.removeCallbacksAndMessages(null);
-                if (testLayout == 1) {
-                    startActivity(beta5Layout);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    finish();
-                } else {
-                    startActivity(startTestLayout);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    finish();
-                }
+                startActivity(beta5Layout);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
             } else {
                 bothGrabbed();
             }
@@ -193,8 +181,7 @@ public class ActivityConnecting extends AppCompatActivity {
                             item.put("description", description);
 
                             list.add(item);
-                            startTestLayout.putExtra("items", list);
-                            beta5Layout.putExtra("items", list);
+                            Values.INSTANCE.setBrowse(list);
                         }
                         connectedMain = true;
                     } catch (JSONException e) {
@@ -224,8 +211,7 @@ public class ActivityConnecting extends AppCompatActivity {
                             item.put("description", description);
 
                             featuredList.add(item);
-                            startTestLayout.putExtra("featured", featuredList);
-                            beta5Layout.putExtra("featured", featuredList);
+                            Values.INSTANCE.setFeatured(featuredList);
                         }
                         connectedFeatured = true;
                     } catch (JSONException e) {
@@ -288,7 +274,7 @@ public class ActivityConnecting extends AppCompatActivity {
         });
         dontAskAgain.setOnClickListener(v -> {
             cellularDataWarningDialog.dismiss();
-            Values.askData = false;
+            Values.INSTANCE.setAskMobileData(false);
             checkConnection();
         });
         tryWifi.setOnClickListener(v -> {
@@ -305,7 +291,7 @@ public class ActivityConnecting extends AppCompatActivity {
         UIAnimations.constraintLayoutObjectAnimator(connectingDialog, "alpha", 1, 300, 0, new LinearInterpolator());
         ImageView connectingAnimation = findViewById(R.id.animationView);
 
-        connectingAnimation.setBackgroundResource(R.drawable.loading_animation);
+        connectingAnimation.setBackgroundResource(R.drawable.animation_loading);
         AnimationDrawable animationDrawable = (AnimationDrawable) connectingAnimation.getBackground();
         animationDrawable.start();
 

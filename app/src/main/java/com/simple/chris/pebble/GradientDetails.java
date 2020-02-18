@@ -6,30 +6,33 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 public class GradientDetails extends AppCompatActivity {
     CardView corners;
     ConstraintLayout detailsHolder, actionsHolder, copiedNotification;
     LinearLayout backButton, hideButton, startHex, endHex;
-    ImageView gradientViewer, topColourCircle, bottomColourCircle, arrow;
+    ImageView gradientViewer, topColourCircle, bottomColourCircle, arrow, lock, copiedIcon;
     TextView detailsTitle, detailsDescription, topColourHex, bottomColourHex, copiedText;
     String backgroundName, leftColour, rightColour, description;
     int leftColourInt, rightColourInt, detailsDefaultHeight;
     boolean expanded = false;
     boolean playingCopiedAnimation = false;
+    boolean locked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,7 @@ public class GradientDetails extends AppCompatActivity {
         UIElements.INSTANCE.setTheme(GradientDetails.this);
         setContentView(R.layout.activity_gradient_details);
         postponeEnterTransition();
-        Values.currentActivity = "GradientDetails";
+        Values.INSTANCE.setCurrentActivity("GradientDetails");
 
         /** Declare UI Elements */
         //ConstraintLayout
@@ -59,6 +62,8 @@ public class GradientDetails extends AppCompatActivity {
         topColourCircle = findViewById(R.id.topColourCircle);
         bottomColourCircle = findViewById(R.id.bottomColourCircle);
         arrow = findViewById(R.id.arrow);
+        lock = findViewById(R.id.lock);
+        copiedIcon = findViewById(R.id.copiedIcon);
 
         //TextView
         detailsTitle = findViewById(R.id.detailsTitle);
@@ -71,17 +76,9 @@ public class GradientDetails extends AppCompatActivity {
         Intent intent = getIntent();
         backgroundName = intent.getStringExtra("gradientName");
 
-        //Determines if uppercase HEX value
-        if (Values.uppercaseHEX) {
-            leftColour = intent.getStringExtra("startColour").toUpperCase();
-            rightColour = intent.getStringExtra("endColour").toUpperCase();
-        } else {
-            leftColour = intent.getStringExtra("startColour").toLowerCase();
-            rightColour = intent.getStringExtra("endColour").toLowerCase();
-        }
         description = intent.getStringExtra("description");
-        rightColourInt = Color.parseColor(rightColour);
-        leftColourInt = Color.parseColor(leftColour);
+        leftColour = intent.getStringExtra("startColour");
+        rightColour = intent.getStringExtra("endColour");
         int left = Color.parseColor(leftColour);
         int right = Color.parseColor(rightColour);
 
@@ -98,6 +95,31 @@ public class GradientDetails extends AppCompatActivity {
         if (description.equals("")) {
             detailsDescription.setVisibility(View.GONE);
         }
+
+
+        gradientViewer.setOnTouchListener((view, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                //Toast.makeText(GradientDetails.this, "Down", Toast.LENGTH_SHORT).show();
+                UIAnimations.constraintLayoutValueAnimator(detailsHolder, detailsHolder.getMeasuredHeight(),
+                        50 * getResources().getDisplayMetrics().density, 700,
+                        0, new DecelerateInterpolator(3));
+                UIAnimations.constraintLayoutObjectAnimator(detailsHolder, "translationY",
+                        100 * getResources().getDisplayMetrics().density, 400,
+                        0, new DecelerateInterpolator());
+            } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+
+                UIAnimations.constraintLayoutValueAnimator(detailsHolder, detailsHolder.getMeasuredHeight(),
+                        detailsDefaultHeight, 700,
+                        0, new DecelerateInterpolator(3));
+                UIAnimations.constraintLayoutObjectAnimator(detailsHolder, "translationY",
+                        0, 400,
+                        0, new DecelerateInterpolator());
+
+                //Toast.makeText(GradientDetails.this, "Up", Toast.LENGTH_SHORT).show();
+
+            }
+            return true;
+        });
 
         startHex.setOnLongClickListener(view -> {
             ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -239,16 +261,12 @@ public class GradientDetails extends AppCompatActivity {
         bottomColourHex.setText(rightColour);
         GradientDrawable topColourCircleDrawable = new GradientDrawable();
         topColourCircleDrawable.setShape(GradientDrawable.OVAL);
-        topColourCircleDrawable.setStroke(6, leftColourInt);
+        topColourCircleDrawable.setStroke(8, left);
         GradientDrawable bottomColourCircleDrawable = new GradientDrawable();
         bottomColourCircleDrawable.setShape(GradientDrawable.OVAL);
-        bottomColourCircleDrawable.setStroke(6, rightColourInt);
+        bottomColourCircleDrawable.setStroke(8, right);
         topColourCircle.setBackgroundDrawable(topColourCircleDrawable);
         bottomColourCircle.setBackgroundDrawable(bottomColourCircleDrawable);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            gradientViewer.setOutlineSpotShadowColor(rightColourInt);
-            corners.setOutlineSpotShadowColor(rightColourInt);
-        }
     }
 
     private void scheduledStartPostponedTransition(final View sharedElement) {

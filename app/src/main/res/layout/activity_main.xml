@@ -7,73 +7,14 @@
     tools:context=".Main"
     android:background="?BackgroundColour">
 
-    <com.simple.chris.pebble.CustomViewPager
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <!--<com.gauravk.bubblenavigation.BubbleToggleView
-        android:id="@+id/navigationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/menu_options"
-        android:backgroundTint="?BackgroundColour"
-        app:morphCornerRadius="20dp"
-        app:morphItemRadius="64dp"
-        app:morphVerticalOffset="8dp"
-        app:itemIconTint="?PrimaryTextColour"
-        app:itemTextColor="?PrimaryTextColour" />-->
-
-    <!--<com.gauravk.bubblenavigation.BubbleNavigationConstraintView
-        android:id="@+id/navigation_header_container"
+    <FrameLayout
+        android:id="@+id/mainFragmentHolder"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bottom_navigation_bg"
-        android:elevation="12dp"
-        android:padding="12dp"
-        app:bnc_mode="spread"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintCircleRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.gauravk.bubblenavigation.BubbleToggleView
-            android:id="@+id/gotoHome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:bt_active="true"
-            app:bt_colorActive="#F6B97B"
-            app:bt_badgeTextColor="?PrimaryTextColour"
-            app:bt_colorInactive="?SecondaryTextColour"
-            app:bt_duration="200"
-            app:bt_icon="@drawable/icon_home"
-            app:bt_shape="@drawable/bottom_navigation_button_bg" />
-
-        <com.gauravk.bubblenavigation.BubbleToggleView
-            android:id="@+id/gotoBrowse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:bt_colorActive="#F6B97B"
-            app:bt_badgeTextColor="?PrimaryTextColour"
-            app:bt_colorInactive="?SecondaryTextColour"
-            app:bt_duration="200"
-            app:bt_icon="@drawable/icon_browse"
-            app:bt_shape="@drawable/bottom_navigation_button_bg"/>
-
-        <com.gauravk.bubblenavigation.BubbleToggleView
-            android:id="@+id/gotoSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:bt_colorActive="#F6B97B"
-            app:bt_badgeTextColor="?PrimaryTextColour"
-            app:bt_colorInactive="?SecondaryTextColour"
-            app:bt_duration="200"
-            app:bt_icon="@drawable/icon_search"
-            app:bt_shape="@drawable/bottom_navigation_button_bg"/>
-    </com.gauravk.bubblenavigation.BubbleNavigationConstraintView>-->
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

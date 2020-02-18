@@ -1,10 +1,17 @@
 package com.simple.chris.pebble;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.github.javiersantos.appupdater.AppUpdater;
+
+import org.jsoup.Jsoup;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,21 +22,9 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        Values.loadValues(Splash.this);
+        Values.INSTANCE.loadValues(Splash.this);
 
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("MM-dd-yyyy");
-        String formatedDate = format.format(date);
-        Log.i("INFO", "pebble.splash: "+formatedDate);
-
-        if (formatedDate.equals("04-12-2020")) {
-            Values.peppaPink = true;
-        } else {
-            Values.peppaPink = false;
-        }
-
-
-        if (!Values.firstStart) {
+        if (!Values.INSTANCE.getFirstStart()) {
             startActivity(new Intent(Splash.this, ActivityConnecting.class));
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
@@ -40,4 +35,5 @@ public class Splash extends AppCompatActivity {
         }
 
     }
+
 }

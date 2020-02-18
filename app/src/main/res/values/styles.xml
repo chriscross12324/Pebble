@@ -15,6 +15,7 @@
         <item name="ForegroundColour">@color/lightForeground</item>
         <item name="PrimaryTextColour">@color/lightTextPrimary</item>
         <item name="SecondaryTextColour">@color/lightTextSecondary</item>
+        <item name="SpecialBackground">@color/lightSpecialBackground</item>
     </style>
 
     <style name="ThemeDark" parent="Main">
@@ -22,6 +23,7 @@
         <item name="ForegroundColour">@color/darkForeground</item>
         <item name="PrimaryTextColour">@color/darkTextPrimary</item>
         <item name="SecondaryTextColour">@color/darkTextSecondary</item>
+        <item name="SpecialBackground">@color/darkSpecialBackground</item>
     </style>
 
     <style name="ThemeBlack" parent="Main">
@@ -29,6 +31,7 @@
         <item name="ForegroundColour">@color/blackForeground</item>
         <item name="PrimaryTextColour">@color/blackTextPrimary</item>
         <item name="SecondaryTextColour">@color/blackTextSecondary</item>
+        <item name="SpecialBackground">@color/blackSpecialBackground</item>
     </style>
 
     <style name="LoginScreenEditText" parent="Widget.AppCompat.EditText">
@@ -60,6 +63,12 @@
         <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:fitsSystemWindows">true</item>
         <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="spinnerTheme">
+        <item name="android:elevation">3dp</item>
+        <item name="android:textColor">?PrimaryTextColour</item>
+        <item name="android:fontFamily">@font/googlesans_regular</item>
     </style>
 
 

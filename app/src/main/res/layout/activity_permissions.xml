@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Permissions"
-    android:clipToPadding="false">
+    android:clipToPadding="false"
+    tools:context=".Permissions">
 
     <ImageView
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?BackgroundColour"/>
+        android:background="?BackgroundColour" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/warningNotification"
@@ -20,6 +20,7 @@
         android:layout_marginTop="16dp"
         android:alpha="0"
         android:background="@drawable/details_background"
+        android:backgroundTint="?ForegroundColour"
         android:elevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,8 +33,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/googlesans_medium"
-            android:text="I am not responsible if you\nexceed your data limit"
             android:gravity="center"
+            android:text="I am not responsible if you\nexceed your data limit"
             android:textColor="?PrimaryTextColour"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

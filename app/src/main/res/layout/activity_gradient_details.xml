@@ -16,14 +16,14 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true">
 
             <ImageView
                 android:id="@+id/gradientViewer"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/placeholder_gradient"
-                android:elevation="10dp"
                 android:transitionName="gradientView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -166,7 +166,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="32dp"
                 android:alpha="1"
                 android:animateLayoutChanges="true"
                 android:background="@drawable/details_background"
@@ -334,6 +334,7 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="24dp"
                 android:alpha="1"
+                android:visibility="gone"
                 android:background="@drawable/details_background"
                 android:elevation="12dp"
                 app:layout_constraintBottom_toBottomOf="@+id/gradientViewer"
@@ -400,7 +401,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/copiedNotification"
                 android:layout_width="wrap_content"
-                android:layout_height="28dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:alpha="0"
                 android:background="@drawable/details_background"
@@ -417,6 +418,7 @@
                     android:layout_marginEnd="16dp"
                     android:fontFamily="@font/googlesans_medium"
                     android:text="Copied"
+                    android:gravity="center"
                     android:textColor="?SecondaryTextColour"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -436,6 +438,18 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/icon_copy" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/lock"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/gradientViewer"
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@drawable/icon_lock"
+                android:backgroundTint="@color/lightTextPrimary"
+                android:visibility="gone"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

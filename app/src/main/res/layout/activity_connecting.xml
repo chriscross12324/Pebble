@@ -69,10 +69,10 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/connectingDialogTitle" />
 
-                <com.airbnb.lottie.LottieAnimationView
+                <ImageView
                     android:id="@+id/animationView"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
                     android:layout_gravity="center"
 
                     android:contentDescription="@string/descriptionAnimation"

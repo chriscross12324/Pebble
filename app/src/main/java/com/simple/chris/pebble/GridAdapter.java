@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -16,11 +15,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 public class GridAdapter extends BaseAdapter {
 
@@ -65,15 +62,15 @@ public class GridAdapter extends BaseAdapter {
             rightColour = Color.parseColor(details.get("endColour"));
             ViewHolder mViewHolder = new ViewHolder();
 
-            int randomHeight = new Random().nextInt((Values.cardMaxHeight - Values.cardMinHeight) + 1) + Values.cardMinHeight;
+            //int randomHeight = new Random().nextInt((Values.cardMaxHeight - Values.cardMinHeight) + 1) + Values.cardMinHeight;
 
             if (convertView == null) {
                 LayoutInflater mInflator = (LayoutInflater) mContext.
                         getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = mInflator.inflate(R.layout.all_card, parent, false);
+                convertView = mInflator.inflate(R.layout.module_browse, parent, false);
                 //mViewHolder.cardView = convertView.findViewById(R.id.cardView);
                 mViewHolder.mGradient = (ImageView) convertView.findViewById(R.id.gradient);
-                //mViewHolder.mName = (TextView) convertView.findViewById(R.id.gradientName);
+                mViewHolder.mName = (TextView) convertView.findViewById(R.id.gradientName);
                 convertView.setTag(mViewHolder);
             } else {
                 mViewHolder = (ViewHolder) convertView.getTag();
@@ -82,9 +79,6 @@ public class GridAdapter extends BaseAdapter {
                     GradientDrawable.Orientation.TL_BR,
                     new int[]{leftColour, rightColour}
             );
-            mViewHolder.mGradient.getLayoutParams().height = Math.round(TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, randomHeight,
-                    mContext.getResources().getDisplayMetrics()));
             gradientDrawable.setCornerRadius(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, mContext.getResources().getDisplayMetrics()));
             mViewHolder.mGradient.setBackgroundDrawable(gradientDrawable);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
@@ -92,7 +86,7 @@ public class GridAdapter extends BaseAdapter {
             }
 
             //mViewHolder.cardView.setTransitionName(details.get("backgroundName"));
-            //mViewHolder.mName.setText(details.get("backgroundName"));
+            mViewHolder.mName.setText(details.get("backgroundName"));
 
         }catch (Exception e){
             Log.e("ERR", "pebble.grid_adapters: "+e.getLocalizedMessage());
@@ -103,6 +97,6 @@ public class GridAdapter extends BaseAdapter {
     static class ViewHolder {
         //CardView cardView;
         ImageView mGradient;
-        //TextView mName;
+        TextView mName;
     }
 }

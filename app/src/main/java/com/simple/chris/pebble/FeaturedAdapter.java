@@ -17,8 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import io.github.armcha.coloredshadow.ShadowImageView;
-
 public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.ViewHolder> {
 
     Context context;
@@ -33,7 +31,7 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = this.layoutInflater.inflate(R.layout.featured_card, parent, false);
+        View view = this.layoutInflater.inflate(R.layout.module_featured, parent, false);
         return new ViewHolder(view);
     }
 

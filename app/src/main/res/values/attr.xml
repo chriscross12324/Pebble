@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <attr name="BackgroundColour" format="reference|color"/>
     <attr name="ForegroundColour" format="reference|color"/>
     <attr name="PrimaryTextColour" format="reference|color"/>
     <attr name="SecondaryTextColour" format="reference|color"/>
+    <attr name="SpecialBackground" format="reference|color"/>
 
     <declare-styleable name="TransitionArcMotion">
         <attr name="arcRadius" format="integer" />
@@ -13,5 +15,6 @@
         <attr name="startColour" format="color"/>
         <attr name="endColour" format="color"/>
         <attr name="cornerRadius" format="dimension"/>
+        <attr name="colourShadow" format="boolean"/>
     </declare-styleable>
 </resources>
