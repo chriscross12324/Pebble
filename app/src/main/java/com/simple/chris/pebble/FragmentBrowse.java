@@ -26,6 +26,9 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.polyak.iconswitch.IconSwitch;
@@ -128,12 +131,36 @@ public class FragmentBrowse extends Fragment implements AdapterView.OnItemClickL
 
     public void getAndSetBrowse() {
         try {
-            GridView gridView = rootView.findViewById(R.id.gradientGrid);
-            GridAdapter gridAdapter = new GridAdapter(getActivity(), Values.browse);
-            gridView.setAdapter(gridAdapter);
-            gridView.setOnItemClickListener(this);
+            RecyclerView gridView = rootView.findViewById(R.id.gradientGrid);
+            gridView.setHasFixedSize(true);
 
-            gridViewFirstVisiblePos = gridView.getFirstVisiblePosition();
+            GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
+            gridView.setLayoutManager(layoutManager);
+            //GridAdapter gridAdapter = new GridAdapter(getActivity(), Values.browse);
+            BrowseRecylerViewAdapter recyclerViewAdapter = new BrowseRecylerViewAdapter(getActivity(), Values.browse);
+            gridView.setAdapter(recyclerViewAdapter);
+            recyclerViewAdapter.setClickListener(new BrowseRecylerViewAdapter.ItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    Intent details = new Intent(getActivity(), GradientDetails.class);
+                    HashMap<String, String> info = Values.browse.get(position);
+
+                    String gradientName = info.get("backgroundName");
+                    String startColour = info.get("startColour");
+                    String endColour = info.get("endColour");
+                    String description = info.get("description");
+
+                    details.putExtra("gradientName", gradientName);
+                    details.putExtra("startColour", startColour);
+                    details.putExtra("endColour", endColour);
+                    details.putExtra("description", description);
+
+                    //Log.e("TAG", details.getStringExtra("startColor"));
+
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), view.findViewById(R.id.gradient), gradientName);
+                    startActivity(details, options.toBundle());
+                }
+            });
 
         } catch (Exception e) {
             Log.e("OOPS", e.getLocalizedMessage());
