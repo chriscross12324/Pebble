@@ -13,6 +13,7 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import java.sql.Time;
@@ -124,5 +125,17 @@ public class UIAnimations {
         }, delay);
     }
 
+    public static void coordinatorLayoutObjectAnimator(CoordinatorLayout layout, String propertyName, int value, int duration, int delay, TimeInterpolator interpolator){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ObjectAnimator objectAnimator= ObjectAnimator.ofFloat(layout, propertyName, value);
+                objectAnimator.setDuration(duration);
+                objectAnimator.setInterpolator(interpolator);
+                objectAnimator.start();
+            }
+        }, delay);
+    }
 
 }

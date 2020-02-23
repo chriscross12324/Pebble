@@ -23,6 +23,7 @@ object Values {
     lateinit var browseSearchField: String
     var filterSpinner = 0
     var gridCount: IconSwitch.Checked = IconSwitch.Checked.RIGHT
+    var normalGrid = true
 
     fun saveValues(context: Context) {
         val sharedPreferences = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE)
@@ -32,6 +33,12 @@ object Values {
         editor.putBoolean("askMobileData", askMobileData)
         editor.putString("theme", theme)
         editor.putInt("lastVersion", lastVersion)
+        if (gridCount == IconSwitch.Checked.RIGHT) {
+            editor.putBoolean("normalGrid", true)
+        } else {
+            editor.putBoolean("normalGrid", false)
+        }
+
         editor.apply()
     }
 
@@ -47,7 +54,11 @@ object Values {
         } catch (e: Exception) {
             sharedPreferences.getBoolean("askData", true)
         }
-
+        gridCount = if (sharedPreferences.getBoolean("normalGrid", true)) {
+            IconSwitch.Checked.RIGHT
+        } else {
+            IconSwitch.Checked.LEFT
+        }
 
     }
 

@@ -3,6 +3,7 @@ package com.simple.chris.pebble;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +14,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.polyak.iconswitch.IconSwitch;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-public class BrowseRecylerViewAdapter extends RecyclerView.Adapter<BrowseRecylerViewAdapter.ViewHolder> {
+public class BrowseRecyclerViewAdapter extends RecyclerView.Adapter<BrowseRecyclerViewAdapter.ViewHolder> {
 
     Context context;
     private ArrayList<HashMap<String, String>> browseItems;
@@ -25,7 +27,7 @@ public class BrowseRecylerViewAdapter extends RecyclerView.Adapter<BrowseRecyler
     private ItemClickListener clickListener;
     private LayoutInflater layoutInflater;
 
-    BrowseRecylerViewAdapter(Context context, ArrayList<HashMap<String, String>> browseItems) {
+    BrowseRecyclerViewAdapter(Context context, ArrayList<HashMap<String, String>> browseItems) {
         this.layoutInflater = LayoutInflater.from(context);
 
         this.context = context;
@@ -34,13 +36,18 @@ public class BrowseRecylerViewAdapter extends RecyclerView.Adapter<BrowseRecyler
 
     @NonNull
     @Override
-    public BrowseRecylerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.module_browse, parent, false);
+    public BrowseRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view;
+        if (Values.INSTANCE.getGridCount() == IconSwitch.Checked.LEFT) {
+            view = layoutInflater.inflate(R.layout.module_browse_small, parent, false);
+        } else {
+            view = layoutInflater.inflate(R.layout.module_browse_normal, parent, false);
+        }
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BrowseRecylerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BrowseRecyclerViewAdapter.ViewHolder holder, int position) {
         HashMap<String, String> details;
         details = browseItems.get(position);
         holder.gradientName.setText(details.get("backgroundName"));
@@ -53,6 +60,9 @@ public class BrowseRecylerViewAdapter extends RecyclerView.Adapter<BrowseRecyler
         );
         gradientDrawable.setCornerRadius(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, context.getResources().getDisplayMetrics()));
         holder.gradientDisplay.setBackground(gradientDrawable);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            holder.gradientDisplay.setOutlineSpotShadowColor(endColour);
+        }
     }
 
     @Override

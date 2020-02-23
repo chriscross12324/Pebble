@@ -15,13 +15,13 @@
     <color name="lightTextSecondary">#626262</color>
     <color name="lightSpecialBackground">#000000</color>
 
-    <color name="darkForeground">#1d1e25</color>
-    <color name="darkBackground">#191921</color>
+    <color name="darkForeground">#1e1e1e</color>
+    <color name="darkBackground">#121212</color>
     <color name="darkTextPrimary">#e1e1e1</color>
     <color name="darkTextSecondary">#A8A8A8</color>
     <color name="darkSpecialBackground">#ffffff</color>
 
-    <color name="blackForeground">#191921</color>
+    <color name="blackForeground">#121212</color>
     <color name="blackBackground">#000000</color>
     <color name="blackTextPrimary">#e1e1e1</color>
     <color name="blackTextSecondary">#A8A8A8</color>

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -88,6 +89,9 @@ public class GradientDetails extends AppCompatActivity {
                 new int[]{left, right}
         );
         gradientViewer.setBackgroundDrawable(gradientDrawable);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            corners.setOutlineSpotShadowColor(right);
+        }
 
         corners.setTransitionName(backgroundName);
         gradientViewer.setTransitionName(backgroundName + "1");

@@ -92,7 +92,7 @@ public class ActivityConnecting extends AppCompatActivity {
 
         notification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
 
-        beta5Layout = new Intent(ActivityConnecting.this, Main.class);
+        beta5Layout = new Intent(ActivityConnecting.this, Browse.class);
 
         checkConnection();
         bothGrabbed();
