@@ -1,15 +1,18 @@
 package com.simple.chris.pebble
 
 import android.app.ActivityOptions
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -25,9 +28,11 @@ class Browse : AppCompatActivity() {
 
     private lateinit var buttonSearch: ImageView
     private lateinit var buttonSettings: ImageView
+    private lateinit var actionsPopup: ConstraintLayout
 
     private var screenHeight = 0
     private var bottomSheetPeekHeight: Int = 0
+    private var actionsPopupHeight: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,12 +40,13 @@ class Browse : AppCompatActivity() {
         setContentView(R.layout.activity_browse)
         Values.saveValues(this)
 
+        actionsPopup = findViewById(R.id.actionsPopup)
+
         val coordinatorLayout: CoordinatorLayout = findViewById(R.id.coordinatorLayout)
         val viewTreeObserver = coordinatorLayout.viewTreeObserver
         viewTreeObserver.addOnGlobalLayoutListener {
             getScreenHeight()
             bottomSheet()
-
         }
         browseGrid()
         buttonSearch()
@@ -54,6 +60,9 @@ class Browse : AppCompatActivity() {
 
             screenHeight = displayMetrics.heightPixels
             bottomSheetPeekHeight = (screenHeight * 0.4).roundToInt()
+
+            actionsPopupHeight = actionsPopup.measuredHeight
+            Log.e("INFO", ""+actionsPopupHeight)
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse.get_screen_height: " + e.localizedMessage)
         }
@@ -104,18 +113,7 @@ class Browse : AppCompatActivity() {
     private fun buttonSettings() {
         buttonSettings = findViewById(R.id.buttonSettings)
         buttonSettings.setOnClickListener {
-            val popupMenu = PopupMenu(this, buttonSettings)
-            popupMenu.menuInflater.inflate(R.menu.browse_popup, popupMenu.menu)
 
-            popupMenu.setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.settingsOption -> openSettings()
-                    R.id.aboutOption -> Toast.makeText(this, "About doesn't exist", Toast.LENGTH_SHORT).show()
-                    else -> Log.e("INFO", "pebble.browse.button_settings: Menu selection error")
-                }
-                true
-            }
-            popupMenu.show()
         }
     }
 

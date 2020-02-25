@@ -1,5 +1,9 @@
 package com.simple.chris.pebble;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.TimeAnimator;
+import android.animation.ValueAnimator;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -9,25 +13,22 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 
 public class GradientDetails extends AppCompatActivity {
     CardView corners;
     ConstraintLayout detailsHolder, actionsHolder, copiedNotification;
     LinearLayout backButton, hideButton, startHex, endHex;
-    ImageView gradientViewer, topColourCircle, bottomColourCircle, arrow, lock, copiedIcon;
+    ImageView gradientViewer1, gradientViewer2, topColourCircle, bottomColourCircle, arrow, lock, copiedIcon;
     TextView detailsTitle, detailsDescription, topColourHex, bottomColourHex, copiedText;
     String backgroundName, leftColour, rightColour, description;
     int leftColourInt, rightColourInt, detailsDefaultHeight;
@@ -59,7 +60,8 @@ public class GradientDetails extends AppCompatActivity {
         corners = findViewById(R.id.corners);
 
         //ImageView
-        gradientViewer = findViewById(R.id.gradientViewer);
+        gradientViewer1 = findViewById(R.id.gradientViewer1);
+        gradientViewer2 = findViewById(R.id.gradientViewer2);
         topColourCircle = findViewById(R.id.topColourCircle);
         bottomColourCircle = findViewById(R.id.bottomColourCircle);
         arrow = findViewById(R.id.arrow);
@@ -88,42 +90,17 @@ public class GradientDetails extends AppCompatActivity {
                 GradientDrawable.Orientation.TL_BR,
                 new int[]{left, right}
         );
-        gradientViewer.setBackgroundDrawable(gradientDrawable);
+        gradientViewer1.setBackgroundDrawable(gradientDrawable);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             corners.setOutlineSpotShadowColor(right);
         }
 
         corners.setTransitionName(backgroundName);
-        gradientViewer.setTransitionName(backgroundName + "1");
+        gradientViewer1.setTransitionName(backgroundName + "1");
 
         if (description.equals("")) {
             detailsDescription.setVisibility(View.GONE);
         }
-
-
-        gradientViewer.setOnTouchListener((view, motionEvent) -> {
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                //Toast.makeText(GradientDetails.this, "Down", Toast.LENGTH_SHORT).show();
-                UIAnimations.constraintLayoutValueAnimator(detailsHolder, detailsHolder.getMeasuredHeight(),
-                        50 * getResources().getDisplayMetrics().density, 700,
-                        0, new DecelerateInterpolator(3));
-                UIAnimations.constraintLayoutObjectAnimator(detailsHolder, "translationY",
-                        100 * getResources().getDisplayMetrics().density, 400,
-                        0, new DecelerateInterpolator());
-            } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-
-                UIAnimations.constraintLayoutValueAnimator(detailsHolder, detailsHolder.getMeasuredHeight(),
-                        detailsDefaultHeight, 700,
-                        0, new DecelerateInterpolator(3));
-                UIAnimations.constraintLayoutObjectAnimator(detailsHolder, "translationY",
-                        0, 400,
-                        0, new DecelerateInterpolator());
-
-                //Toast.makeText(GradientDetails.this, "Up", Toast.LENGTH_SHORT).show();
-
-            }
-            return true;
-        });
 
         startHex.setOnLongClickListener(view -> {
             ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -233,7 +210,7 @@ public class GradientDetails extends AppCompatActivity {
 
         });
 
-        gradientViewer.post(() -> {
+        gradientViewer1.post(() -> {
             //Start sharedElement transition
             scheduledStartPostponedTransition(corners);
 
@@ -271,6 +248,7 @@ public class GradientDetails extends AppCompatActivity {
         bottomColourCircleDrawable.setStroke(8, right);
         topColourCircle.setBackgroundDrawable(topColourCircleDrawable);
         bottomColourCircle.setBackgroundDrawable(bottomColourCircleDrawable);
+        animateGradient(left, right);
     }
 
     private void scheduledStartPostponedTransition(final View sharedElement) {
@@ -303,5 +281,29 @@ public class GradientDetails extends AppCompatActivity {
         Handler handler1 = new Handler();
         handler1.postDelayed(() -> GradientDetails.super.onBackPressed(), 250);
         return;
+    }
+
+    public void animateGradient(int left, int right) {
+        int start = left;
+        int end = right;
+
+        ArgbEvaluator evaluator = new ArgbEvaluator();
+        View preloader = this.findViewById(R.id.gradientViewer1);
+        preloader.setVisibility(View.VISIBLE);
+        GradientDrawable gradientDrawable = (GradientDrawable) preloader.getBackground();
+
+        ValueAnimator animator = TimeAnimator.ofFloat(0.0f, 1.0f);
+        animator.setDuration(10000);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setRepeatMode(ValueAnimator.REVERSE);
+        animator.addUpdateListener(valueAnimator -> {
+            Float fraction = valueAnimator.getAnimatedFraction();
+            int newStart = (int) evaluator.evaluate(fraction, start, end);
+            int newEnd = (int) evaluator.evaluate(fraction, end, start);
+            int[] newArray = {newStart, newEnd};
+            gradientDrawable.setColors(newArray);
+        });
+
+        animator.start();
     }
 }

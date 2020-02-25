@@ -20,7 +20,21 @@
             android:animateLayoutChanges="true">
 
             <ImageView
-                android:id="@+id/gradientViewer"
+                android:id="@+id/gradientViewer2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:elevation="10dp"
+                android:background="@drawable/placeholder_gradient"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                android:alpha="1"/>
+
+            <ImageView
+                android:id="@+id/gradientViewer1"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:elevation="10dp"
@@ -338,7 +352,7 @@
                 android:visibility="visible"
                 android:background="@drawable/details_background"
                 android:elevation="12dp"
-                app:layout_constraintBottom_toBottomOf="@+id/gradientViewer"
+                app:layout_constraintBottom_toBottomOf="@+id/gradientViewer1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent">
@@ -409,7 +423,7 @@
                 android:elevation="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/gradientViewer">
+                app:layout_constraintTop_toTopOf="@+id/gradientViewer1">
 
                 <TextView
                     android:id="@+id/copiedText"
@@ -446,7 +460,7 @@
                 android:layout_height="70dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/gradientViewer"
+                app:layout_constraintStart_toStartOf="@+id/gradientViewer1"
                 app:layout_constraintTop_toTopOf="parent"
                 android:background="@drawable/icon_lock"
                 android:backgroundTint="@color/lightTextPrimary"
