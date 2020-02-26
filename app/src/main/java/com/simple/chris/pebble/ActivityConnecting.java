@@ -288,7 +288,7 @@ public class ActivityConnecting extends AppCompatActivity {
     }
 
     public void playConnectingDialog() {
-        UIAnimations.constraintLayoutObjectAnimator(connectingDialog, "alpha", 1, 300, 0, new LinearInterpolator());
+        UIElements.INSTANCE.constraintLayoutObjectAnimator(connectingDialog, "alpha", 1, 300, 0, new LinearInterpolator());
         ImageView connectingAnimation = findViewById(R.id.animationView);
 
         connectingAnimation.setBackgroundResource(R.drawable.animation_loading);
@@ -298,9 +298,9 @@ public class ActivityConnecting extends AppCompatActivity {
         notification.setAlpha(1);
 
         handler1.postDelayed(() -> {
-            UIAnimations.textViewChanger(notificationText, "It seems that something is wrong", 0);
+            UIElements.INSTANCE.textViewTextChanger(notificationText, "It seems that something is wrong", 0);
             playAnimation(0);
-            UIAnimations.textViewChanger(notificationText, "Repairing", 6000);
+            UIElements.INSTANCE.textViewTextChanger(notificationText, "Attempting Repair", 6000);
             playAnimation(6000);
         }, 8000);
 
@@ -322,13 +322,13 @@ public class ActivityConnecting extends AppCompatActivity {
         handler3.postDelayed(() -> {
             notification.setAlpha(1);
             Vibration.INSTANCE.notification(ActivityConnecting.this);
-            UIAnimations.constraintLayoutObjectAnimator(notification, "translationY",
+            UIElements.INSTANCE.constraintLayoutObjectAnimator(notification, "translationY",
                     0, 500,
                     0, new DecelerateInterpolator(3));
-            UIAnimations.constraintLayoutObjectAnimator(notification, "translationY",
+            UIElements.INSTANCE.constraintLayoutObjectAnimator(notification, "translationY",
                     Math.round(-45 * getResources().getDisplayMetrics().density), 500,
                     3000, new DecelerateInterpolator(3));
-            UIAnimations.constraintLayoutAlpha(notification, 0, 3500);
+            UIElements.INSTANCE.constraintLayoutAlpha(notification, 0, 3500);
         }, delay);
     }
 

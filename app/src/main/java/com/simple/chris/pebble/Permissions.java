@@ -87,14 +87,14 @@ public class Permissions extends AppCompatActivity {
         layoutParams.gravity = Gravity.CENTER;
         window.setAttributes(layoutParams);
 
-        UIAnimations.constraintLayoutObjectAnimator(warningNotification, "translationY",
+        UIElements.INSTANCE.constraintLayoutObjectAnimator(warningNotification, "translationY",
                 0, 500,
                 200, new DecelerateInterpolator(3));
 
         understandButtonData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIAnimations.constraintLayoutObjectAnimator(warningNotification, "translationY",
+                UIElements.INSTANCE.constraintLayoutObjectAnimator(warningNotification, "translationY",
                         Math.round(-90 * getResources().getDisplayMetrics().density), 500,
                         0, new DecelerateInterpolator(3));
                 Values.INSTANCE.setFirstStart(false);

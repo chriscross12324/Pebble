@@ -110,13 +110,13 @@ public class GradientDetails extends AppCompatActivity {
             if (!playingCopiedAnimation) {
                 playingCopiedAnimation = true;
                 Vibration.INSTANCE.hFeedack(GradientDetails.this);
-                UIAnimations.constraintLayoutObjectAnimator(copiedNotification, "translationY",
+                UIElements.INSTANCE.constraintLayoutObjectAnimator(copiedNotification, "translationY",
                         0, 500,
                         0, new DecelerateInterpolator(3));
-                UIAnimations.constraintLayoutObjectAnimator(copiedNotification, "translationY",
+                UIElements.INSTANCE.constraintLayoutObjectAnimator(copiedNotification, "translationY",
                         Math.round(-45 * getResources().getDisplayMetrics().density), 500,
                         2000, new DecelerateInterpolator(3));
-                UIAnimations.constraintLayoutAlpha(copiedNotification, 0, 2500);
+                UIElements.INSTANCE.constraintLayoutAlpha(copiedNotification, 0, 2500);
                 boolean handler = new Handler().postDelayed(() -> {
                     playingCopiedAnimation = false;
                 }, 2500);
@@ -132,13 +132,13 @@ public class GradientDetails extends AppCompatActivity {
             if (!playingCopiedAnimation) {
                 playingCopiedAnimation = true;
                 Vibration.INSTANCE.hFeedack(GradientDetails.this);
-                UIAnimations.constraintLayoutObjectAnimator(copiedNotification, "translationY",
+                UIElements.INSTANCE.constraintLayoutObjectAnimator(copiedNotification, "translationY",
                         0, 500,
                         0, new DecelerateInterpolator(3));
-                UIAnimations.constraintLayoutObjectAnimator(copiedNotification, "translationY",
+                UIElements.INSTANCE.constraintLayoutObjectAnimator(copiedNotification, "translationY",
                         Math.round(-45 * getResources().getDisplayMetrics().density), 500,
                         2000, new DecelerateInterpolator(3));
-                UIAnimations.constraintLayoutAlpha(copiedNotification, 0, 2500);
+                UIElements.INSTANCE.constraintLayoutAlpha(copiedNotification, 0, 2500);
                 boolean handler = new Handler().postDelayed(() -> {
                     playingCopiedAnimation = false;
                 }, 2500);
@@ -149,19 +149,19 @@ public class GradientDetails extends AppCompatActivity {
         detailsHolder.setOnClickListener(v -> {
             if (expanded) {
                 expanded = false;
-                UIAnimations.constraintLayoutValueAnimator(detailsHolder, 50 * getResources().getDisplayMetrics().density,
+                UIElements.INSTANCE.constraintLayoutValueAnimator(detailsHolder, 50 * getResources().getDisplayMetrics().density,
                         detailsDefaultHeight, 700,
                         0, new DecelerateInterpolator(3));
-                UIAnimations.constraintLayoutObjectAnimator(actionsHolder, "translationY",
+                UIElements.INSTANCE.constraintLayoutObjectAnimator(actionsHolder, "translationY",
                         0, 400,
                         50, new DecelerateInterpolator());
-                UIAnimations.constraintLayoutObjectAnimator(detailsHolder, "translationY",
+                UIElements.INSTANCE.constraintLayoutObjectAnimator(detailsHolder, "translationY",
                         0, 400,
                         0, new DecelerateInterpolator());
-                UIAnimations.imageViewObjectAnimator(arrow, "alpha",
+                UIElements.INSTANCE.imageViewObjectAnimator(arrow, "alpha",
                         0, 200,
                         0, new DecelerateInterpolator());
-                UIAnimations.textViewObjectAnimator(detailsTitle, "alpha",
+                UIElements.INSTANCE.textViewObjectAnimator(detailsTitle, "alpha",
                         1, 200,
                         100, new DecelerateInterpolator());
                 expanded = false;
@@ -169,35 +169,35 @@ public class GradientDetails extends AppCompatActivity {
         });
 
         backButton.setOnClickListener(v -> {
-            UIAnimations.constraintLayoutObjectAnimator(detailsHolder, "translationY",
+            UIElements.INSTANCE.constraintLayoutObjectAnimator(detailsHolder, "translationY",
                     Math.round((90 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight()), 250,
                     50, new DecelerateInterpolator()
             );
-            UIAnimations.constraintLayoutObjectAnimator(actionsHolder, "translationY",
+            UIElements.INSTANCE.constraintLayoutObjectAnimator(actionsHolder, "translationY",
                     Math.round((74 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight()), 250,
                     0, new DecelerateInterpolator()
             );
-            UIAnimations.constraintLayoutAlpha(detailsHolder, 0, 300);
-            UIAnimations.constraintLayoutAlpha(actionsHolder, 0, 300);
-            UIAnimations.constraintLayoutAlpha(copiedNotification, 0, 300);
+            UIElements.INSTANCE.constraintLayoutAlpha(detailsHolder, 0, 300);
+            UIElements.INSTANCE.constraintLayoutAlpha(actionsHolder, 0, 300);
+            UIElements.INSTANCE.constraintLayoutAlpha(copiedNotification, 0, 300);
             Handler handler1 = new Handler();
             handler1.postDelayed(() -> GradientDetails.super.onBackPressed(), 250);
 
         });
         hideButton.setOnClickListener(v -> {
-            UIAnimations.constraintLayoutValueAnimator(detailsHolder, detailsHolder.getMeasuredHeight(),
+            UIElements.INSTANCE.constraintLayoutValueAnimator(detailsHolder, detailsHolder.getMeasuredHeight(),
                     50 * getResources().getDisplayMetrics().density, 700,
                     0, new DecelerateInterpolator(3));
-            UIAnimations.constraintLayoutObjectAnimator(detailsHolder, "translationY",
+            UIElements.INSTANCE.constraintLayoutObjectAnimator(detailsHolder, "translationY",
                     74 * getResources().getDisplayMetrics().density, 400,
                     0, new DecelerateInterpolator());
-            UIAnimations.constraintLayoutObjectAnimator(actionsHolder, "translationY",
+            UIElements.INSTANCE.constraintLayoutObjectAnimator(actionsHolder, "translationY",
                     74 * getResources().getDisplayMetrics().density, 400,
                     25, new DecelerateInterpolator());
-            UIAnimations.textViewObjectAnimator(detailsTitle, "alpha",
+            UIElements.INSTANCE.textViewObjectAnimator(detailsTitle, "alpha",
                     0, 200,
                     0, new DecelerateInterpolator());
-            UIAnimations.imageViewObjectAnimator(arrow, "alpha",
+            UIElements.INSTANCE.imageViewObjectAnimator(arrow, "alpha",
                     1, 200,
                     200, new DecelerateInterpolator());
             Handler handler = new Handler();
@@ -220,12 +220,12 @@ public class GradientDetails extends AppCompatActivity {
             copiedNotification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
 
             //Animate UI Elements
-            UIAnimations.constraintLayoutAlpha(detailsHolder, 1, 500);
-            UIAnimations.constraintLayoutAlpha(actionsHolder, 1, 500);
-            UIAnimations.constraintLayoutObjectAnimator(actionsHolder, "translationY",
+            UIElements.INSTANCE.constraintLayoutAlpha(detailsHolder, 1, 500);
+            UIElements.INSTANCE.constraintLayoutAlpha(actionsHolder, 1, 500);
+            UIElements.INSTANCE.constraintLayoutObjectAnimator(actionsHolder, "translationY",
                     0, 700,
                     550, new DecelerateInterpolator(3));
-            UIAnimations.constraintLayoutObjectAnimator(detailsHolder, "translationY",
+            UIElements.INSTANCE.constraintLayoutObjectAnimator(detailsHolder, "translationY",
                     0, 700,
                     500, new DecelerateInterpolator(3));
 
@@ -267,17 +267,17 @@ public class GradientDetails extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        UIAnimations.constraintLayoutObjectAnimator(detailsHolder, "translationY",
+        UIElements.INSTANCE.constraintLayoutObjectAnimator(detailsHolder, "translationY",
                 Math.round((90 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight()), 250,
                 50, new DecelerateInterpolator()
         );
-        UIAnimations.constraintLayoutObjectAnimator(actionsHolder, "translationY",
+        UIElements.INSTANCE.constraintLayoutObjectAnimator(actionsHolder, "translationY",
                 Math.round((74 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight()), 250,
                 0, new DecelerateInterpolator()
         );
-        UIAnimations.constraintLayoutAlpha(detailsHolder, 0, 300);
-        UIAnimations.constraintLayoutAlpha(actionsHolder, 0, 300);
-        UIAnimations.constraintLayoutAlpha(copiedNotification, 0, 300);
+        UIElements.INSTANCE.constraintLayoutAlpha(detailsHolder, 0, 300);
+        UIElements.INSTANCE.constraintLayoutAlpha(actionsHolder, 0, 300);
+        UIElements.INSTANCE.constraintLayoutAlpha(copiedNotification, 0, 300);
         Handler handler1 = new Handler();
         handler1.postDelayed(() -> GradientDetails.super.onBackPressed(), 250);
         return;
