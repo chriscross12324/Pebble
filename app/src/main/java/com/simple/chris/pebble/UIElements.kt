@@ -22,7 +22,7 @@ object UIElements {
         }
     }
 
-    fun constraintLayoutAlpha(layout: ConstraintLayout, value: Int, delay: Long) {
+    fun constraintLayoutVisibility(layout: ConstraintLayout, value: Int, delay: Long) {
         Handler().postDelayed({
             layout.visibility = value
         }, delay)

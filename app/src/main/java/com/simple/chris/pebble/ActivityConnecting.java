@@ -92,7 +92,7 @@ public class ActivityConnecting extends AppCompatActivity {
 
         notification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
 
-        beta5Layout = new Intent(ActivityConnecting.this, Browse.class);
+        beta5Layout = new Intent(ActivityConnecting.this, ActivityBrowse.class);
 
         checkConnection();
         bothGrabbed();
@@ -328,7 +328,7 @@ public class ActivityConnecting extends AppCompatActivity {
             UIElements.INSTANCE.constraintLayoutObjectAnimator(notification, "translationY",
                     Math.round(-45 * getResources().getDisplayMetrics().density), 500,
                     3000, new DecelerateInterpolator(3));
-            UIElements.INSTANCE.constraintLayoutAlpha(notification, 0, 3500);
+            UIElements.INSTANCE.constraintLayoutVisibility(notification, View.INVISIBLE, 3500);
         }, delay);
     }
 

@@ -1,15 +1,11 @@
 package com.simple.chris.pebble
 
 import android.app.ActivityOptions
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.LayoutInflater
 import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlin.math.roundToInt
 
-class Browse : AppCompatActivity() {
+class ActivityBrowse : AppCompatActivity() {
 
     private lateinit var bottomSheet: CardView
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
@@ -82,10 +78,10 @@ class Browse : AppCompatActivity() {
             val gridLayoutManager = GridLayoutManager(this, 2)
             browseGrid.layoutManager = gridLayoutManager
 
-            val browseGridAdapter = BrowseRecyclerViewAdapter(this@Browse, Values.browse)
+            val browseGridAdapter = BrowseRecyclerViewAdapter(this@ActivityBrowse, Values.browse)
             browseGrid.adapter = browseGridAdapter
             browseGridAdapter.setClickListener { view, position ->
-                val details = Intent(this, GradientDetails::class.java)
+                val details = Intent(this, ActivityGradientDetailsK::class.java)
                 val info = Values.browse[position]
 
                 val gradientName = info["backgroundName"]
@@ -119,7 +115,7 @@ class Browse : AppCompatActivity() {
 
     private fun openSettings() {
         val activityOptions = ActivityOptions.makeSceneTransitionAnimation(this, bottomSheet, ViewCompat.getTransitionName(bottomSheet))
-        startActivity(Intent(this, Settings::class.java), activityOptions.toBundle())
+        startActivity(Intent(this, ActivitySettings::class.java), activityOptions.toBundle())
 
     }
 }

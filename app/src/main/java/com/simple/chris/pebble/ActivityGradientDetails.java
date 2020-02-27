@@ -1,7 +1,6 @@
 package com.simple.chris.pebble;
 
 import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.animation.TimeAnimator;
 import android.animation.ValueAnimator;
 import android.content.ClipData;
@@ -24,7 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-public class GradientDetails extends AppCompatActivity {
+public class ActivityGradientDetails extends AppCompatActivity {
     CardView corners;
     ConstraintLayout detailsHolder, actionsHolder, copiedNotification;
     LinearLayout backButton, hideButton, startHex, endHex;
@@ -39,10 +38,9 @@ public class GradientDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UIElements.INSTANCE.setTheme(GradientDetails.this);
+        UIElements.INSTANCE.setTheme(ActivityGradientDetails.this);
         setContentView(R.layout.activity_gradient_details);
         postponeEnterTransition();
-        Values.INSTANCE.setCurrentActivity("GradientDetails");
 
         /** Declare UI Elements */
         //ConstraintLayout
@@ -60,19 +58,18 @@ public class GradientDetails extends AppCompatActivity {
         corners = findViewById(R.id.corners);
 
         //ImageView
-        gradientViewer1 = findViewById(R.id.gradientViewer1);
-        gradientViewer2 = findViewById(R.id.gradientViewer2);
-        topColourCircle = findViewById(R.id.topColourCircle);
-        bottomColourCircle = findViewById(R.id.bottomColourCircle);
+        gradientViewer1 = findViewById(R.id.gradientViewStatic);
+        gradientViewer2 = findViewById(R.id.gradientViewAnimated);
+        topColourCircle = findViewById(R.id.startHexCircle);
+        bottomColourCircle = findViewById(R.id.endHexCircle);
         arrow = findViewById(R.id.arrow);
-        lock = findViewById(R.id.lock);
         copiedIcon = findViewById(R.id.copiedIcon);
 
         //TextView
-        detailsTitle = findViewById(R.id.detailsTitle);
-        detailsDescription = findViewById(R.id.detailsDescription);
-        topColourHex = findViewById(R.id.topColourHex);
-        bottomColourHex = findViewById(R.id.bottomColourHex);
+        detailsTitle = findViewById(R.id.gradientName);
+        detailsDescription = findViewById(R.id.gradientDescription);
+        topColourHex = findViewById(R.id.gradientStartHex);
+        bottomColourHex = findViewById(R.id.gradientEndHex);
         copiedText = findViewById(R.id.copiedText);
 
         //Get-Set values from previous activity
@@ -90,13 +87,13 @@ public class GradientDetails extends AppCompatActivity {
                 GradientDrawable.Orientation.TL_BR,
                 new int[]{left, right}
         );
-        gradientViewer1.setBackgroundDrawable(gradientDrawable);
+        gradientViewer2.setBackgroundDrawable(gradientDrawable);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             corners.setOutlineSpotShadowColor(right);
         }
 
         corners.setTransitionName(backgroundName);
-        gradientViewer1.setTransitionName(backgroundName + "1");
+        gradientViewer2.setTransitionName(backgroundName + "1");
 
         if (description.equals("")) {
             detailsDescription.setVisibility(View.GONE);
@@ -109,14 +106,14 @@ public class GradientDetails extends AppCompatActivity {
             copiedNotification.setAlpha(1);
             if (!playingCopiedAnimation) {
                 playingCopiedAnimation = true;
-                Vibration.INSTANCE.hFeedack(GradientDetails.this);
+                Vibration.INSTANCE.hFeedack(ActivityGradientDetails.this);
                 UIElements.INSTANCE.constraintLayoutObjectAnimator(copiedNotification, "translationY",
                         0, 500,
                         0, new DecelerateInterpolator(3));
                 UIElements.INSTANCE.constraintLayoutObjectAnimator(copiedNotification, "translationY",
                         Math.round(-45 * getResources().getDisplayMetrics().density), 500,
                         2000, new DecelerateInterpolator(3));
-                UIElements.INSTANCE.constraintLayoutAlpha(copiedNotification, 0, 2500);
+                UIElements.INSTANCE.constraintLayoutVisibility(copiedNotification, View.INVISIBLE, 2500);
                 boolean handler = new Handler().postDelayed(() -> {
                     playingCopiedAnimation = false;
                 }, 2500);
@@ -131,14 +128,14 @@ public class GradientDetails extends AppCompatActivity {
             copiedNotification.setAlpha(1);
             if (!playingCopiedAnimation) {
                 playingCopiedAnimation = true;
-                Vibration.INSTANCE.hFeedack(GradientDetails.this);
+                Vibration.INSTANCE.hFeedack(ActivityGradientDetails.this);
                 UIElements.INSTANCE.constraintLayoutObjectAnimator(copiedNotification, "translationY",
                         0, 500,
                         0, new DecelerateInterpolator(3));
                 UIElements.INSTANCE.constraintLayoutObjectAnimator(copiedNotification, "translationY",
                         Math.round(-45 * getResources().getDisplayMetrics().density), 500,
                         2000, new DecelerateInterpolator(3));
-                UIElements.INSTANCE.constraintLayoutAlpha(copiedNotification, 0, 2500);
+                UIElements.INSTANCE.constraintLayoutVisibility(copiedNotification, View.INVISIBLE, 2500);
                 boolean handler = new Handler().postDelayed(() -> {
                     playingCopiedAnimation = false;
                 }, 2500);
@@ -169,20 +166,7 @@ public class GradientDetails extends AppCompatActivity {
         });
 
         backButton.setOnClickListener(v -> {
-            UIElements.INSTANCE.constraintLayoutObjectAnimator(detailsHolder, "translationY",
-                    Math.round((90 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight()), 250,
-                    50, new DecelerateInterpolator()
-            );
-            UIElements.INSTANCE.constraintLayoutObjectAnimator(actionsHolder, "translationY",
-                    Math.round((74 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight()), 250,
-                    0, new DecelerateInterpolator()
-            );
-            UIElements.INSTANCE.constraintLayoutAlpha(detailsHolder, 0, 300);
-            UIElements.INSTANCE.constraintLayoutAlpha(actionsHolder, 0, 300);
-            UIElements.INSTANCE.constraintLayoutAlpha(copiedNotification, 0, 300);
-            Handler handler1 = new Handler();
-            handler1.postDelayed(() -> GradientDetails.super.onBackPressed(), 250);
-
+            onBackPressed();
         });
         hideButton.setOnClickListener(v -> {
             UIElements.INSTANCE.constraintLayoutValueAnimator(detailsHolder, detailsHolder.getMeasuredHeight(),
@@ -210,7 +194,7 @@ public class GradientDetails extends AppCompatActivity {
 
         });
 
-        gradientViewer1.post(() -> {
+        gradientViewer2.post(() -> {
             //Start sharedElement transition
             scheduledStartPostponedTransition(corners);
 
@@ -220,8 +204,8 @@ public class GradientDetails extends AppCompatActivity {
             copiedNotification.setTranslationY(-45 * getResources().getDisplayMetrics().density);
 
             //Animate UI Elements
-            UIElements.INSTANCE.constraintLayoutAlpha(detailsHolder, 1, 500);
-            UIElements.INSTANCE.constraintLayoutAlpha(actionsHolder, 1, 500);
+            UIElements.INSTANCE.constraintLayoutVisibility(detailsHolder, View.VISIBLE, 500);
+            UIElements.INSTANCE.constraintLayoutVisibility(actionsHolder, View.VISIBLE, 500);
             UIElements.INSTANCE.constraintLayoutObjectAnimator(actionsHolder, "translationY",
                     0, 700,
                     550, new DecelerateInterpolator(3));
@@ -275,12 +259,11 @@ public class GradientDetails extends AppCompatActivity {
                 Math.round((74 * getResources().getDisplayMetrics().density) + detailsHolder.getHeight()), 250,
                 0, new DecelerateInterpolator()
         );
-        UIElements.INSTANCE.constraintLayoutAlpha(detailsHolder, 0, 300);
-        UIElements.INSTANCE.constraintLayoutAlpha(actionsHolder, 0, 300);
-        UIElements.INSTANCE.constraintLayoutAlpha(copiedNotification, 0, 300);
+        UIElements.INSTANCE.constraintLayoutVisibility(detailsHolder, View.INVISIBLE, 300);
+        UIElements.INSTANCE.constraintLayoutVisibility(actionsHolder, View.INVISIBLE, 300);
+        UIElements.INSTANCE.constraintLayoutVisibility(copiedNotification, View.INVISIBLE, 300);
         Handler handler1 = new Handler();
-        handler1.postDelayed(() -> GradientDetails.super.onBackPressed(), 250);
-        return;
+        handler1.postDelayed(() -> ActivityGradientDetails.super.onBackPressed(), 250);
     }
 
     public void animateGradient(int left, int right) {
@@ -288,7 +271,7 @@ public class GradientDetails extends AppCompatActivity {
         int end = right;
 
         ArgbEvaluator evaluator = new ArgbEvaluator();
-        View preloader = this.findViewById(R.id.gradientViewer1);
+        View preloader = this.findViewById(R.id.gradientViewAnimated);
         preloader.setVisibility(View.VISIBLE);
         GradientDrawable gradientDrawable = (GradientDrawable) preloader.getBackground();
 

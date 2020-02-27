@@ -13,7 +13,6 @@ object Values {
 
     //App Values
     var firstStart: Boolean = true
-    var currentActivity: String = ""
     var vibrations: Boolean = true
     var theme: String = "dark"
     var askMobileData: Boolean = true

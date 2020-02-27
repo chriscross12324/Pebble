@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context=".GradientDetails">
+    tools:context=".ActivityGradientDetails">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/corners"
@@ -17,13 +17,13 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:animateLayoutChanges="true">
+            android:animateLayoutChanges="false">
 
             <ImageView
-                android:id="@+id/gradientViewer2"
+                android:id="@+id/gradientViewStatic"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:elevation="10dp"
+                android:elevation="8dp"
                 android:background="@drawable/placeholder_gradient"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -34,7 +34,7 @@
                 android:alpha="1"/>
 
             <ImageView
-                android:id="@+id/gradientViewer1"
+                android:id="@+id/gradientViewAnimated"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:elevation="10dp"
@@ -45,7 +45,8 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0"
+                android:visibility="invisible"/>
 
             <!--<ImageView
                 android:layout_width="0dp"
@@ -182,7 +183,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="16dp"
-                android:alpha="0"
+                android:visibility="invisible"
                 android:animateLayoutChanges="true"
                 android:background="@drawable/details_background"
                 android:elevation="12dp"
@@ -192,7 +193,7 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <TextView
-                    android:id="@+id/detailsTitle"
+                    android:id="@+id/gradientName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
@@ -209,7 +210,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/detailsDescription"
+                    android:id="@+id/gradientDescription"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
@@ -222,7 +223,7 @@
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/detailsTitle" />
+                    app:layout_constraintTop_toBottomOf="@+id/gradientName" />
 
                 <ImageView
                     android:id="@+id/dividerOne"
@@ -235,7 +236,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/detailsDescription" />
+                    app:layout_constraintTop_toBottomOf="@+id/gradientDescription" />
 
                 <LinearLayout
                     android:id="@+id/hexHolder"
@@ -264,7 +265,7 @@
                             android:layout_height="wrap_content">
 
                             <ImageView
-                                android:id="@+id/topColourCircle"
+                                android:id="@+id/startHexCircle"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -272,7 +273,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/topColourHex"
+                                android:id="@+id/gradientStartHex"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
@@ -283,7 +284,7 @@
                                 android:textColor="?SecondaryTextColour"
                                 android:textSize="16sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/topColourCircle"
+                                app:layout_constraintStart_toEndOf="@+id/startHexCircle"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -301,7 +302,7 @@
                             android:layout_height="wrap_content">
 
                             <ImageView
-                                android:id="@+id/bottomColourCircle"
+                                android:id="@+id/endHexCircle"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -309,7 +310,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/bottomColourHex"
+                                android:id="@+id/gradientEndHex"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
@@ -320,7 +321,7 @@
                                 android:textColor="?SecondaryTextColour"
                                 android:textSize="16sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/bottomColourCircle"
+                                app:layout_constraintStart_toEndOf="@+id/endHexCircle"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -348,11 +349,10 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="24dp"
-                android:alpha="0"
-                android:visibility="visible"
+                android:visibility="invisible"
                 android:background="@drawable/details_background"
                 android:elevation="12dp"
-                app:layout_constraintBottom_toBottomOf="@+id/gradientViewer1"
+                app:layout_constraintBottom_toBottomOf="@+id/gradientViewStatic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent">
@@ -418,12 +418,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:alpha="0"
+                android:visibility="invisible"
                 android:background="@drawable/details_background"
                 android:elevation="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/gradientViewer1">
+                app:layout_constraintTop_toTopOf="@+id/gradientViewStatic">
 
                 <TextView
                     android:id="@+id/copiedText"
@@ -453,18 +453,6 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/icon_copy" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <ImageView
-                android:id="@+id/lock"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/gradientViewer1"
-                app:layout_constraintTop_toTopOf="parent"
-                android:background="@drawable/icon_lock"
-                android:backgroundTint="@color/lightTextPrimary"
-                android:visibility="gone"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

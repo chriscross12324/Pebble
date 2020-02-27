@@ -7,10 +7,6 @@
     <attr name="SecondaryTextColour" format="reference|color"/>
     <attr name="SpecialBackground" format="reference|color"/>
 
-    <declare-styleable name="TransitionArcMotion">
-        <attr name="arcRadius" format="integer" />
-    </declare-styleable>
-
     <declare-styleable name="GradientView">
         <attr name="startColour" format="color"/>
         <attr name="endColour" format="color"/>

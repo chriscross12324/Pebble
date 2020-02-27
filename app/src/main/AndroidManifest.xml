@@ -16,11 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Main"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".Browse"></activity>
-        <activity android:name=".Settings" />
-        <activity android:name=".ActivityConnecting" />
+        <activity android:name=".ActivityGradientDetailsK"></activity>
         <activity
-            android:name=".Splash"
+            android:name=".ActivitySplash"
             android:theme="@style/splashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,9 +26,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GradientDetails" />
+        <activity android:name=".ActivityBrowse" />
+        <activity android:name=".ActivitySettings" />
+        <activity android:name=".ActivityConnecting" />
+        <activity android:name=".ActivityGradientDetails" />
         <activity
-            android:name=".Permissions"
+            android:name=".ActivityPermissions"
             android:screenOrientation="portrait" />
     </application>
 
