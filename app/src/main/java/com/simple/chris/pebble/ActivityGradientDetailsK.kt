@@ -1,19 +1,27 @@
 package com.simple.chris.pebble
 
+import android.animation.ArgbEvaluator
+import android.animation.TimeAnimator
+import android.animation.ValueAnimator
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.graphics.drawable.shapes.Shape
 import android.os.Bundle
 import android.os.Handler
+import android.renderscript.Sampler
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -37,6 +45,8 @@ class ActivityGradientDetailsK : AppCompatActivity() {
     private lateinit var hideButton: LinearLayout
     private lateinit var startHex: LinearLayout
     private lateinit var endHex: LinearLayout
+    private lateinit var hexHolder: LinearLayout
+    private lateinit var optionsHolder: LinearLayout
 
     private lateinit var gradientViewStatic: ImageView
     private lateinit var gradientViewAnimated: ImageView
@@ -53,6 +63,7 @@ class ActivityGradientDetailsK : AppCompatActivity() {
     private lateinit var gradientDescriptionString: String
 
     private var startColourInt: Int = 0
+    private var middleColourInt: Int = 0
     private var endColourInt: Int = 0
     private var detailsHolderHeight = 0
 
@@ -75,6 +86,8 @@ class ActivityGradientDetailsK : AppCompatActivity() {
         hideButton = findViewById(R.id.hideButton)
         startHex = findViewById(R.id.startHex)
         endHex = findViewById(R.id.endHex)
+        hexHolder = findViewById(R.id.hexHolder)
+        optionsHolder = findViewById(R.id.optionsHolder)
 
         gradientViewStatic = findViewById(R.id.gradientViewStatic)
         gradientViewAnimated = findViewById(R.id.gradientViewAnimated)
@@ -108,6 +121,7 @@ class ActivityGradientDetailsK : AppCompatActivity() {
             startPostponedEnterTransition()
             buttons()
             preViewPlacements()
+            getCenterPixel()
         }
 
         gradientName.text = gradientNameString.replace("\n", " ")
@@ -139,6 +153,27 @@ class ActivityGradientDetailsK : AppCompatActivity() {
                 0f, 700,
                 500, DecelerateInterpolator(3f))
         detailsHolderHeight = detailsHolder.height
+    }
+
+    private fun getCenterPixel() {
+        val halfWidth = (resources.displayMetrics.widthPixels)/2
+        val halfHeight = (resources.displayMetrics.heightPixels)/2
+
+        val mutableBitmap = Bitmap.createBitmap(resources.displayMetrics.widthPixels, resources.displayMetrics.heightPixels, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(mutableBitmap)
+        val gradientDrawable = GradientDrawable(
+                GradientDrawable.Orientation.TL_BR,
+                intArrayOf(startColourInt, endColourInt)
+        )
+        gradientDrawable.setBounds(0, 0, resources.displayMetrics.widthPixels, resources.displayMetrics.heightPixels)
+        gradientDrawable.draw(canvas)
+        val pixel = mutableBitmap.getPixel(halfWidth, halfHeight)
+
+        val redValue = Color.red(pixel)
+        val greenValue = Color.green(pixel)
+        val blueValue = Color.blue(pixel)
+
+        middleColourInt = Color.parseColor(String.format("#%02x%02x%02x", redValue, greenValue, blueValue))
     }
 
     private fun buttons() {
@@ -213,7 +248,7 @@ class ActivityGradientDetailsK : AppCompatActivity() {
         }
 
         hideButton.setOnClickListener {
-            constraintLayoutValueAnimator(detailsHolder, detailsHolder.measuredHeight.toFloat(),
+            /*constraintLayoutValueAnimator(detailsHolder, detailsHolder.measuredHeight.toFloat(),
                     50 * resources.displayMetrics.density, 700,
                     0, DecelerateInterpolator(3f))
             constraintLayoutObjectAnimator(detailsHolder, "translationY",
@@ -229,8 +264,45 @@ class ActivityGradientDetailsK : AppCompatActivity() {
 
             Handler().postDelayed({
                 detailsHolderExpanded = true
-            }, 400)
+            }, 400)*/
+            if (!detailsHolderExpanded) {
+                hexHolder.visibility = View.GONE
+                optionsHolder.visibility = View.VISIBLE
+                detailsHolderExpanded = true
+            } else {
+                hexHolder.visibility = View.VISIBLE
+                optionsHolder.visibility = View.GONE
+                detailsHolderExpanded = false
+            }
+
         }
+    }
+
+    private fun animateGradient(startColour: Int, middleColour: Int, endColour: Int) {
+
+        var start = startColour
+        var middle = middleColour
+        var endColour = endColour
+
+        val evaluator = ArgbEvaluator()
+        val preloader = this.findViewById<ImageView>(R.id.gradientViewAnimated)
+        preloader.visibility = View.VISIBLE
+        val gradientDrawable:GradientDrawable = preloader.drawable as GradientDrawable
+        val valueAnimator = TimeAnimator.ofFloat(0.0f, 1.0f)
+        valueAnimator.duration = 5000
+        valueAnimator.repeatCount = 0
+        valueAnimator.addUpdateListener {
+            val fraction = valueAnimator.animatedFraction
+            val newStart = evaluator.evaluate(fraction, start, start) as Int
+            val newMiddle = evaluator.evaluate(fraction, middle, middle) as Int
+            val newEnd = evaluator.evaluate(fraction, endColour, endColour) as Int
+            val array = intArrayOf(newStart, newMiddle, newEnd)
+            gradientDrawable.colors = array
+        }
+        valueAnimator.start()
+
+
+
     }
 
     override fun onBackPressed() {

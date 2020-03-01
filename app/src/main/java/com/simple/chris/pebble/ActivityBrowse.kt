@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -34,7 +35,7 @@ class ActivityBrowse : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         UIElements.setTheme(this)
         setContentView(R.layout.activity_browse)
-        Values.saveValues(this)
+        //Values.saveValues(this)
 
         actionsPopup = findViewById(R.id.actionsPopup)
 
@@ -58,7 +59,6 @@ class ActivityBrowse : AppCompatActivity() {
             bottomSheetPeekHeight = (screenHeight * 0.4).roundToInt()
 
             actionsPopupHeight = actionsPopup.measuredHeight
-            Log.e("INFO", ""+actionsPopupHeight)
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse.get_screen_height: " + e.localizedMessage)
         }
@@ -117,5 +117,22 @@ class ActivityBrowse : AppCompatActivity() {
         val activityOptions = ActivityOptions.makeSceneTransitionAnimation(this, bottomSheet, ViewCompat.getTransitionName(bottomSheet))
         startActivity(Intent(this, ActivitySettings::class.java), activityOptions.toBundle())
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Values.saveValues(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (browseGrid.adapter == null) {
+            Values.loadValues(this)
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, ActivityConnecting::class.java))
+        } else {
+            Toast.makeText(this, "No Error", Toast.LENGTH_SHORT).show()
+            Values.saveValues(this)
+        }
     }
 }

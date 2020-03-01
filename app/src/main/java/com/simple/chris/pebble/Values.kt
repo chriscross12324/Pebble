@@ -5,7 +5,7 @@ import com.polyak.iconswitch.IconSwitch
 
 object Values {
 
-    const val SAVE = "SavedValues"
+    private const val SAVE = "SavedValues"
 
     //Vibrations
     val notification = longArrayOf(0, 5, 5, 5)
