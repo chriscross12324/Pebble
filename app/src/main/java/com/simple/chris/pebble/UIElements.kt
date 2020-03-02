@@ -8,6 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import android.os.Handler
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.os.postDelayed
 import kotlin.math.roundToInt
@@ -38,6 +39,21 @@ object UIElements {
     }
 
     fun constraintLayoutValueAnimator(layout: ConstraintLayout, startPos: Float, endPos: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
+        Handler().postDelayed({
+            var valueAnimator = ValueAnimator.ofInt(startPos.roundToInt(), endPos.roundToInt())
+            valueAnimator.addUpdateListener {
+                val value:Int = it.animatedValue as Int
+                var layoutParams = layout.layoutParams
+                layoutParams.height = value
+                layout.layoutParams = layoutParams
+            }
+            valueAnimator.interpolator = interpolator
+            valueAnimator.duration = duration
+            valueAnimator.start()
+        }, delay)
+    }
+
+    fun linearLayoutValueAnimator(layout: LinearLayout, startPos: Float, endPos: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
         Handler().postDelayed({
             var valueAnimator = ValueAnimator.ofInt(startPos.roundToInt(), endPos.roundToInt())
             valueAnimator.addUpdateListener {

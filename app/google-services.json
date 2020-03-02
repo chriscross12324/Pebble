@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "670554087732",
+    "firebase_url": "https://pebble-b6c98.firebaseio.com",
+    "project_id": "pebble-b6c98",
+    "storage_bucket": "pebble-b6c98.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670554087732:android:d00ea3674b8a4690778561",
+        "android_client_info": {
+          "package_name": "com.simple.chris.pebble"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "670554087732-on7df2kgm7d0jqldnsf0s9ippn5dfot1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.simple.chris.pebble",
+            "certificate_hash": "e470810348cfff67583526c88891293cbee59978"
+          }
+        },
+        {
+          "client_id": "670554087732-qlkdhiraf47gifqb20f99sn6udmdnogd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeROUyiIm6g5Lv20REcBnnsc0QuSowS8Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "670554087732-qlkdhiraf47gifqb20f99sn6udmdnogd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

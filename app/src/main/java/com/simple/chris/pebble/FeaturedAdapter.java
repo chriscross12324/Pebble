@@ -23,7 +23,7 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.ViewHo
     private ArrayList<HashMap<String, String>> map;
     private LayoutInflater layoutInflater;
 
-    public FeaturedAdapter(ArrayList<HashMap<String, String>> map, Context context) {
+    public FeaturedAdapter(Context context, ArrayList<HashMap<String, String>> map) {
         this.map = map;
         this.context = context;
         this.layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -40,24 +40,23 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.ViewHo
         try {
             HashMap<String, String> details;
             details = map.get(position);
+            holder.gradientName.setText(details.get("backgroundName"));
             int startColour = Color.parseColor(details.get("startColour"));
             int endColour = Color.parseColor(details.get("endColour"));
+
             GradientDrawable gradientDrawable = new GradientDrawable(
                     GradientDrawable.Orientation.TL_BR,
-                    new int[]{startColour, endColour}
+                    new int[] {startColour, endColour}
             );
-            gradientDrawable.setCornerRadius(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15,
-                    context.getResources().getDisplayMetrics()));
-            holder.gradient.setBackgroundDrawable(gradientDrawable);
-            holder.gradient.setTransitionName(details.get("backgroundName"));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-                holder.gradient.setOutlineSpotShadowColor(endColour);
+            gradientDrawable.setCornerRadius(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, context.getResources().getDisplayMetrics()));
+            holder.gradientView.setBackground(gradientDrawable);
+            holder.gradientView.setTransitionName(details.get("backgroundName"));
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                holder.gradientView.setOutlineSpotShadowColor(endColour);
             }
-
-            holder.gradientName.setText(details.get("backgroundName"));
-
         } catch (Exception e) {
-            Log.e("ERR", "pebble.featured_adapter: "+e.getLocalizedMessage());
+            Log.e("ERR", "pebble.featured_adapter.on_bind_view_holder: " + e.getLocalizedMessage());
         }
 
         holder.itemView.setOnClickListener(view -> {
@@ -75,13 +74,19 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView gradient;
+        TextView gradientInitials;
         TextView gradientName;
+        TextView creator;
+        TextView timeStamp;
+        ImageView gradientView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            gradient = itemView.findViewById(R.id.gradient);
+            gradientInitials = itemView.findViewById(R.id.gradientNameInitials);
             gradientName = itemView.findViewById(R.id.gradientName);
+            creator = itemView.findViewById(R.id.creator);
+            timeStamp = itemView.findViewById(R.id.timeStamp);
+            gradientView = itemView.findViewById(R.id.gradientView);
         }
     }
 

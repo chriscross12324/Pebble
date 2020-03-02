@@ -19,6 +19,8 @@
     <string name="descriptionBackground">background</string>
 
     <string name="noWifi">Not connected to Wi-Fi</string>
+    <string name="PushHoldGradient">Try touching the Gradient, the gradient will stop animating and the UI will hide to give you the full experience</string>
+    <string-array name="hejak">Try touching the Gradient, the gradient will stop animating and the UI will hide to give you the full experience</string-array>
 
     <string-array name="connecting_array">
         <item>This shouldn\'t take long</item>

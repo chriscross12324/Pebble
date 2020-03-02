@@ -2,17 +2,28 @@ package com.simple.chris.pebble
 
 import android.app.ActivityOptions
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
+import android.media.Image
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
+import android.util.TypedValue
+import android.view.View
+import android.view.animation.DecelerateInterpolator
+import android.widget.HorizontalScrollView
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlin.math.roundToInt
@@ -21,11 +32,15 @@ class ActivityBrowse : AppCompatActivity() {
 
     private lateinit var bottomSheet: CardView
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
+    private lateinit var featuredScroller: ImageView
+    private lateinit var imageOptionsButton: ImageView
     private lateinit var browseGrid: RecyclerView
 
-    private lateinit var buttonSearch: ImageView
-    private lateinit var buttonSettings: ImageView
-    private lateinit var actionsPopup: ConstraintLayout
+    private lateinit var optionsHolder: LinearLayout
+    private lateinit var buttonOptions: LinearLayout
+    private lateinit var buttonSearch: LinearLayout
+    private lateinit var buttonSettings: LinearLayout
+    private lateinit var buttonReload: LinearLayout
 
     private var screenHeight = 0
     private var bottomSheetPeekHeight: Int = 0
@@ -37,8 +52,6 @@ class ActivityBrowse : AppCompatActivity() {
         setContentView(R.layout.activity_browse)
         //Values.saveValues(this)
 
-        actionsPopup = findViewById(R.id.actionsPopup)
-
         val coordinatorLayout: CoordinatorLayout = findViewById(R.id.coordinatorLayout)
         val viewTreeObserver = coordinatorLayout.viewTreeObserver
         viewTreeObserver.addOnGlobalLayoutListener {
@@ -46,8 +59,8 @@ class ActivityBrowse : AppCompatActivity() {
             bottomSheet()
         }
         browseGrid()
-        buttonSearch()
-        buttonSettings()
+        featuredScroller()
+        options()
     }
 
     private fun getScreenHeight() {
@@ -56,9 +69,8 @@ class ActivityBrowse : AppCompatActivity() {
             windowManager.defaultDisplay.getMetrics(displayMetrics)
 
             screenHeight = displayMetrics.heightPixels
-            bottomSheetPeekHeight = (screenHeight * 0.4).roundToInt()
+            bottomSheetPeekHeight = (screenHeight * 0.6).roundToInt()
 
-            actionsPopupHeight = actionsPopup.measuredHeight
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse.get_screen_height: " + e.localizedMessage)
         }
@@ -81,6 +93,7 @@ class ActivityBrowse : AppCompatActivity() {
             val browseGridAdapter = BrowseRecyclerViewAdapter(this@ActivityBrowse, Values.browse)
             browseGrid.adapter = browseGridAdapter
             browseGridAdapter.setClickListener { view, position ->
+                browseGrid.isEnabled = false
                 val details = Intent(this, ActivityGradientDetailsK::class.java)
                 val info = Values.browse[position]
 
@@ -94,7 +107,7 @@ class ActivityBrowse : AppCompatActivity() {
                 details.putExtra("endColour", endColour)
                 details.putExtra("description", description)
 
-                val activityOptions = ActivityOptions.makeSceneTransitionAnimation(this, view.findViewById(R.id.gradient), gradientName)
+                val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view.findViewById(R.id.gradient), gradientName as String)
                 startActivity(details, activityOptions.toBundle())
             }
         } catch (e: Exception) {
@@ -102,14 +115,56 @@ class ActivityBrowse : AppCompatActivity() {
         }
     }
 
-    private fun buttonSearch() {
-        buttonSearch = findViewById(R.id.buttonSearch)
+    private fun featuredScroller() {
+        try {
+            val randomNumber = (0..Values.browse.size).random()
+            featuredScroller = this.findViewById(R.id.featured)
+            var hashmap: HashMap<String, String> = Values.browse[randomNumber]
+            val gradientDrawable = GradientDrawable(
+                    GradientDrawable.Orientation.TL_BR,
+                    intArrayOf(Color.parseColor(hashmap["startColour"]), Color.parseColor(hashmap["endColour"]))
+            )
+            gradientDrawable.cornerRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics)
+            featuredScroller.background = gradientDrawable
+        } catch (e: Exception) {
+            Log.e("ERR", "pebble.browse.featured_scroller: ${e.localizedMessage}")
+        }
     }
 
-    private fun buttonSettings() {
+    private fun options() {
+        var optionsExpanded = false
+        optionsHolder = findViewById(R.id.optionsHolder)
+        buttonOptions = findViewById(R.id.buttonOptions)
+        buttonSearch = findViewById(R.id.buttonSearch)
         buttonSettings = findViewById(R.id.buttonSettings)
-        buttonSettings.setOnClickListener {
+        buttonReload = findViewById(R.id.buttonReload)
+        imageOptionsButton = findViewById(R.id.imageOptionsButton)
 
+        buttonOptions.setOnClickListener {
+            if (!optionsExpanded) {
+                imageOptionsButton.setBackgroundResource(R.drawable.icon_close)
+                buttonSearch.visibility = View.VISIBLE
+                buttonSettings.visibility = View.VISIBLE
+                buttonReload.visibility = View.VISIBLE
+                UIElements.linearLayoutValueAnimator(optionsHolder, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50f, resources.displayMetrics),
+                        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics), 500, 0, DecelerateInterpolator(3f))
+                optionsHolder.elevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics)
+                optionsExpanded = true
+            } else {
+                imageOptionsButton.setBackgroundResource(R.drawable.icon_apps)
+                UIElements.linearLayoutValueAnimator(optionsHolder, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics),
+                        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50f, resources.displayMetrics), 500, 0, DecelerateInterpolator(3f))
+                buttonSearch.visibility = View.GONE
+                buttonSettings.visibility = View.GONE
+                buttonReload.visibility = View.GONE
+                optionsHolder.elevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0f, resources.displayMetrics)
+                optionsExpanded = false
+            }
+        }
+
+        buttonReload.setOnClickListener {
+            startActivity(Intent(this, ActivityConnecting::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
     }
 
@@ -128,11 +183,10 @@ class ActivityBrowse : AppCompatActivity() {
         super.onResume()
         if (browseGrid.adapter == null) {
             Values.loadValues(this)
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
             startActivity(Intent(this, ActivityConnecting::class.java))
         } else {
-            Toast.makeText(this, "No Error", Toast.LENGTH_SHORT).show()
             Values.saveValues(this)
+            browseGrid.isEnabled = true
         }
     }
 }

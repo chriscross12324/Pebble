@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="?BackgroundColour">
+    android:padding="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
+        android:clipChildren="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,20 +19,21 @@
 
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@drawable/featured_initials_bg"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/gradientNameInitials"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/googlesans_bold"
                 android:gravity="center"
                 android:text="OB"
                 android:textColor="?BackgroundColour"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -46,13 +48,13 @@
             app:layout_constraintTop_toTopOf="@+id/linearLayout">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/gradientName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/googlesans_medium"
                 android:text="Orange Bubbles"
                 android:textColor="?PrimaryTextColour"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -61,12 +63,13 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/creator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/googlesans_regular"
                     android:text="Submitted by: chriscross12324"
                     android:textColor="?PrimaryTextColour"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:layout_width="5dp"
@@ -77,24 +80,27 @@
                     android:backgroundTint="?PrimaryTextColour" />
 
                 <TextView
+                    android:id="@+id/timeStamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/googlesans_regular"
                     android:text="2h ago"
                     android:textColor="?PrimaryTextColour"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/gradientView"
             android:layout_width="0dp"
-            android:layout_height="240dp"
+            android:layout_height="140dp"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            android:background="@drawable/placeholder_gradient"/>
+            android:background="@drawable/placeholder_gradient"
+            android:elevation="8dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
