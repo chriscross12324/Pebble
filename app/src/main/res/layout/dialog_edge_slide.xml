@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="32dp"
+    android:layout_marginEnd="32dp"
+    android:layout_marginBottom="16dp"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/details_background"
+    android:clickable="true"
+    android:elevation="12dp"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:visibility="visible"
+    android:layout_gravity="center">
+
+
+    <ImageView
+        android:id="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/icon_view"
+        android:tint="?PrimaryTextColour" />
+
+    <TextView
+        android:id="@+id/textView9"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/googlesans_bold"
+        android:text="Edge Slide"
+        android:textColor="?PrimaryTextColour"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/textView10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/googlesans_regular"
+        android:text="@string/EdgeSlide"
+        android:textColor="?SecondaryTextColour" />
+
+    <TextView
+        android:id="@+id/dismissPopup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/googlesans_bold"
+        android:text="@string/appupdater_btn_dismiss"
+        android:textColor="?PrimaryTextColour"
+        android:textSize="18sp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

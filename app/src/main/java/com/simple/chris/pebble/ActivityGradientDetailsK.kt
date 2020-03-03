@@ -22,6 +22,7 @@ import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -301,6 +302,9 @@ class ActivityGradientDetailsK : AppCompatActivity() {
             gradientViewAnimated.visibility = View.VISIBLE
         }, 1000)
 
+        gradientViewStatic.setOnClickListener {
+            Log.e("INFO", "Click")
+        }
 
         gradientViewAnimated.setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
@@ -318,6 +322,10 @@ class ActivityGradientDetailsK : AppCompatActivity() {
                 actionsHolder.visibility = View.VISIBLE
             }
             true
+        }
+
+        gradientViewAnimated.setOnClickListener {
+            Log.e("ERR", "Clicked")
         }
 
         val evaluator = ArgbEvaluator()

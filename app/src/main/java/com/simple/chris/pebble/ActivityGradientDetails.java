@@ -59,7 +59,7 @@ public class ActivityGradientDetails extends AppCompatActivity {
 
         //ImageView
         gradientViewer1 = findViewById(R.id.gradientViewStatic);
-        gradientViewer2 = findViewById(R.id.gradientViewAnimated);
+        //gradientViewer2 = findViewById(R.id.gradientViewAnimated);
         topColourCircle = findViewById(R.id.startHexCircle);
         bottomColourCircle = findViewById(R.id.endHexCircle);
         arrow = findViewById(R.id.arrow);
@@ -271,9 +271,9 @@ public class ActivityGradientDetails extends AppCompatActivity {
         int end = right;
 
         ArgbEvaluator evaluator = new ArgbEvaluator();
-        View preloader = this.findViewById(R.id.gradientViewAnimated);
-        preloader.setVisibility(View.VISIBLE);
-        GradientDrawable gradientDrawable = (GradientDrawable) preloader.getBackground();
+        //View preloader = this.findViewById(R.id.gradientViewAnimated);
+        /*preloader.setVisibility(View.VISIBLE);
+        GradientDrawable gradientDrawable = (GradientDrawable) preloader.getBackground();*/
 
         ValueAnimator animator = TimeAnimator.ofFloat(0.0f, 1.0f);
         animator.setDuration(10000);
@@ -284,7 +284,7 @@ public class ActivityGradientDetails extends AppCompatActivity {
             int newStart = (int) evaluator.evaluate(fraction, start, end);
             int newEnd = (int) evaluator.evaluate(fraction, end, start);
             int[] newArray = {newStart, newEnd};
-            gradientDrawable.setColors(newArray);
+            //gradientDrawable.setColors(newArray);
         });
 
         animator.start();

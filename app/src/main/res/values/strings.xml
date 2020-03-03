@@ -19,8 +19,8 @@
     <string name="descriptionBackground">background</string>
 
     <string name="noWifi">Not connected to Wi-Fi</string>
-    <string name="PushHoldGradient">Try touching the Gradient, the gradient will stop animating and the UI will hide to give you the full experience</string>
-    <string-array name="hejak">Try touching the Gradient, the gradient will stop animating and the UI will hide to give you the full experience</string-array>
+    <string name="PushHoldGradient">Try tapping and holding the Gradient, it will stop animating and become fullscreen.</string>
+    <string name="EdgeSlide">Tap and Slide down along the edge of the screen to hide the grid of Gradients.</string>
 
     <string-array name="connecting_array">
         <item>This shouldn\'t take long</item>

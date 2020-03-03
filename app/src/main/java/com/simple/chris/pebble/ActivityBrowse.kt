@@ -6,16 +6,15 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.media.Image
+import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
-import android.widget.HorizontalScrollView
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -42,6 +41,11 @@ class ActivityBrowse : AppCompatActivity() {
     private lateinit var buttonSettings: LinearLayout
     private lateinit var buttonReload: LinearLayout
 
+    private lateinit var helloText: TextView
+    private lateinit var createGradientBanner: ConstraintLayout
+
+    private lateinit var touchBlocker: View
+
     private var screenHeight = 0
     private var bottomSheetPeekHeight: Int = 0
     private var actionsPopupHeight: Int = 0
@@ -57,9 +61,9 @@ class ActivityBrowse : AppCompatActivity() {
         viewTreeObserver.addOnGlobalLayoutListener {
             getScreenHeight()
             bottomSheet()
+            uiSet()
         }
         browseGrid()
-        featuredScroller()
         options()
     }
 
@@ -69,7 +73,17 @@ class ActivityBrowse : AppCompatActivity() {
             windowManager.defaultDisplay.getMetrics(displayMetrics)
 
             screenHeight = displayMetrics.heightPixels
-            bottomSheetPeekHeight = (screenHeight * 0.6).roundToInt()
+            //bottomSheetPeekHeight = (screenHeight * 0.6).roundToInt()
+
+            helloText = findViewById(R.id.helloText)
+            createGradientBanner = findViewById(R.id.createGradientBanner)
+
+            val helloTextHeight = helloText.measuredHeight
+            val createGradientBannerHeight = createGradientBanner.measuredHeight
+
+            bottomSheetPeekHeight = screenHeight - ((TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 64f, resources.displayMetrics) + helloTextHeight +
+                    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 64f, resources.displayMetrics) + createGradientBannerHeight +
+                    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32f, resources.displayMetrics))).roundToInt()
 
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse.get_screen_height: " + e.localizedMessage)
@@ -80,6 +94,18 @@ class ActivityBrowse : AppCompatActivity() {
         bottomSheet = findViewById(R.id.bottomSheet)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.peekHeight = bottomSheetPeekHeight
+    }
+
+    private fun uiSet(){
+        val gradientDrawable = GradientDrawable(
+                GradientDrawable.Orientation.TL_BR,
+                intArrayOf(resources.getColor(R.color.pebbleStart), resources.getColor(R.color.pebbleEnd))
+        )
+        gradientDrawable.cornerRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics)
+        createGradientBanner.background = gradientDrawable
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            createGradientBanner.outlineSpotShadowColor = resources.getColor(R.color.pebbleEnd)
+        }
     }
 
     private fun browseGrid() {
@@ -115,24 +141,9 @@ class ActivityBrowse : AppCompatActivity() {
         }
     }
 
-    private fun featuredScroller() {
-        try {
-            val randomNumber = (0..Values.browse.size).random()
-            featuredScroller = this.findViewById(R.id.featured)
-            var hashmap: HashMap<String, String> = Values.browse[randomNumber]
-            val gradientDrawable = GradientDrawable(
-                    GradientDrawable.Orientation.TL_BR,
-                    intArrayOf(Color.parseColor(hashmap["startColour"]), Color.parseColor(hashmap["endColour"]))
-            )
-            gradientDrawable.cornerRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics)
-            featuredScroller.background = gradientDrawable
-        } catch (e: Exception) {
-            Log.e("ERR", "pebble.browse.featured_scroller: ${e.localizedMessage}")
-        }
-    }
-
     private fun options() {
         var optionsExpanded = false
+        touchBlocker = findViewById(R.id.touchBlocker)
         optionsHolder = findViewById(R.id.optionsHolder)
         buttonOptions = findViewById(R.id.buttonOptions)
         buttonSearch = findViewById(R.id.buttonSearch)
@@ -143,6 +154,7 @@ class ActivityBrowse : AppCompatActivity() {
         buttonOptions.setOnClickListener {
             if (!optionsExpanded) {
                 imageOptionsButton.setBackgroundResource(R.drawable.icon_close)
+                touchBlocker.visibility = View.VISIBLE
                 buttonSearch.visibility = View.VISIBLE
                 buttonSettings.visibility = View.VISIBLE
                 buttonReload.visibility = View.VISIBLE
@@ -151,6 +163,7 @@ class ActivityBrowse : AppCompatActivity() {
                 optionsHolder.elevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics)
                 optionsExpanded = true
             } else {
+                touchBlocker.visibility = View.GONE
                 imageOptionsButton.setBackgroundResource(R.drawable.icon_apps)
                 UIElements.linearLayoutValueAnimator(optionsHolder, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics),
                         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50f, resources.displayMetrics), 500, 0, DecelerateInterpolator(3f))
@@ -160,6 +173,23 @@ class ActivityBrowse : AppCompatActivity() {
                 optionsHolder.elevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0f, resources.displayMetrics)
                 optionsExpanded = false
             }
+        }
+
+        touchBlocker.setOnTouchListener { view, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                if (optionsExpanded) {
+                    touchBlocker.visibility = View.GONE
+                    imageOptionsButton.setBackgroundResource(R.drawable.icon_apps)
+                    UIElements.linearLayoutValueAnimator(optionsHolder, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics),
+                            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50f, resources.displayMetrics), 500, 0, DecelerateInterpolator(3f))
+                    buttonSearch.visibility = View.GONE
+                    buttonSettings.visibility = View.GONE
+                    buttonReload.visibility = View.GONE
+                    optionsHolder.elevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0f, resources.displayMetrics)
+                    optionsExpanded = false
+                }
+            }
+            true
         }
 
         buttonReload.setOnClickListener {
