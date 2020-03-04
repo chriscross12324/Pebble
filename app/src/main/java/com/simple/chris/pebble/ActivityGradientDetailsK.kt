@@ -4,17 +4,20 @@ import android.animation.ArgbEvaluator
 import android.animation.TimeAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.renderscript.Sampler
 import android.util.Log
+import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
@@ -28,6 +31,7 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.simple.chris.pebble.UIElements.constraintLayoutObjectAnimator
 import kotlinx.android.synthetic.main.activity_gradient_details.*
+import java.util.*
 import kotlin.math.roundToInt
 
 class ActivityGradientDetailsK : AppCompatActivity() {
@@ -75,13 +79,16 @@ class ActivityGradientDetailsK : AppCompatActivity() {
         setContentView(R.layout.activity_gradient_details)
         postponeEnterTransition()
 
+        //Initiate CardViews
         cardView = findViewById(R.id.corners)
 
+        //Initiate ConstraintLayouts
         detailsHolder = findViewById(R.id.detailsHolder)
         actionsHolder = findViewById(R.id.actionsHolder)
         notification = findViewById(R.id.copiedNotification)
         pushHoldPopup = findViewById(R.id.pushHoldPopup)
 
+        //Initiate LinearLayouts
         backButton = findViewById(R.id.backButton)
         hideButton = findViewById(R.id.hideButton)
         startHex = findViewById(R.id.startHex)
@@ -89,18 +96,21 @@ class ActivityGradientDetailsK : AppCompatActivity() {
         hexHolder = findViewById(R.id.hexHolder)
         optionsHolder = findViewById(R.id.optionsHolder)
 
+        //Initiate ImageViews
         gradientViewStatic = findViewById(R.id.gradientViewStatic)
         gradientViewAnimated = findViewById(R.id.gradientViewAnimated)
         startHexCircle = findViewById(R.id.startHexCircle)
         endHexCircle = findViewById(R.id.endHexCircle)
         arrow = findViewById(R.id.arrow)
 
+        //Initiates TextViews
         gradientName = findViewById(R.id.gradientName)
         gradientDescription = findViewById(R.id.gradientDescription)
         gradientStartHex = findViewById(R.id.gradientStartHex)
         gradientEndHex = findViewById(R.id.gradientEndHex)
         dismissPopup = findViewById(R.id.dismissPopup)
 
+        //Sets
         gradientNameString = intent.getStringExtra("gradientName") as String
         gradientDescriptionString = intent.getStringExtra("description") as String
         startColourInt = Color.parseColor(intent.getStringExtra("startColour"))
@@ -126,6 +136,9 @@ class ActivityGradientDetailsK : AppCompatActivity() {
             getCenterPixel()
             pushHoldPopup()
             animateGradient(startColourInt, middleColourInt, endColourInt)
+            if (!Values.detailsPushHoldPopupClosed) {
+                pushHoldPopup()
+            }
         }
 
         gradientName.text = gradientNameString.replace("\n", " ")

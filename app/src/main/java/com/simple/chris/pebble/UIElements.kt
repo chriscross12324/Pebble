@@ -4,13 +4,11 @@ import android.animation.ObjectAnimator
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
 import android.content.Context
-import androidx.constraintlayout.widget.ConstraintLayout
 import android.os.Handler
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.os.postDelayed
+import androidx.constraintlayout.widget.ConstraintLayout
 import kotlin.math.roundToInt
 
 object UIElements {
@@ -23,27 +21,27 @@ object UIElements {
         }
     }
 
-    fun constraintLayoutVisibility(layout: ConstraintLayout, value: Int, delay: Long) {
+    fun constraintLayoutVisibility(layout: ConstraintLayout, visibility: Int, delay: Long) {
         Handler().postDelayed({
-            layout.visibility = value
+            layout.visibility = visibility
         }, delay)
     }
 
-    fun constraintLayoutObjectAnimator(layout: ConstraintLayout, propertyName: String, endPos: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
+    fun constraintLayoutObjectAnimator(layout: ConstraintLayout, propertyName: String, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
         Handler().postDelayed({
-            var objectAnimator = ObjectAnimator.ofFloat(layout, propertyName, endPos)
+            val objectAnimator = ObjectAnimator.ofFloat(layout, propertyName, endValue)
             objectAnimator.duration = duration
             objectAnimator.interpolator = interpolator
             objectAnimator.start()
         }, delay)
     }
 
-    fun constraintLayoutValueAnimator(layout: ConstraintLayout, startPos: Float, endPos: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
+    fun constraintLayoutHeightAnimator(layout: ConstraintLayout, startValue: Float, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
         Handler().postDelayed({
-            var valueAnimator = ValueAnimator.ofInt(startPos.roundToInt(), endPos.roundToInt())
+            val valueAnimator = ValueAnimator.ofInt(startValue.roundToInt(), endValue.roundToInt())
             valueAnimator.addUpdateListener {
-                val value:Int = it.animatedValue as Int
-                var layoutParams = layout.layoutParams
+                val value = it.animatedValue as Int
+                val layoutParams = layout.layoutParams
                 layoutParams.height = value
                 layout.layoutParams = layoutParams
             }
@@ -53,14 +51,27 @@ object UIElements {
         }, delay)
     }
 
-    fun linearLayoutValueAnimator(layout: LinearLayout, startPos: Float, endPos: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
+    fun linearLayoutHeightAnimator(layout: LinearLayout, startValue: Float, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
         Handler().postDelayed({
-            var valueAnimator = ValueAnimator.ofInt(startPos.roundToInt(), endPos.roundToInt())
+            val valueAnimator = ValueAnimator.ofInt(startValue.roundToInt(), endValue.roundToInt())
             valueAnimator.addUpdateListener {
-                val value:Int = it.animatedValue as Int
-                var layoutParams = layout.layoutParams
+                val value = it.animatedValue as Int
+                val layoutParams = layout.layoutParams
                 layoutParams.height = value
                 layout.layoutParams = layoutParams
+            }
+            valueAnimator.interpolator = interpolator
+            valueAnimator.duration = duration
+            valueAnimator.start()
+        }, delay)
+    }
+
+    fun linearLayoutElevationAnimator(layout: LinearLayout, startElevation: Float, endElevation: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
+        Handler().postDelayed({
+            val valueAnimator = ValueAnimator.ofFloat(startElevation, endElevation)
+            valueAnimator.addUpdateListener {
+                val current = it.animatedValue as Float
+                layout.elevation = current
             }
             valueAnimator.interpolator = interpolator
             valueAnimator.duration = duration
@@ -70,7 +81,7 @@ object UIElements {
 
     fun imageViewObjectAnimator(layout: ImageView, propertyName: String, value: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
         Handler().postDelayed({
-            var objectAnimator = ObjectAnimator.ofFloat(layout, propertyName, value)
+            val objectAnimator = ObjectAnimator.ofFloat(layout, propertyName, value)
             objectAnimator.duration = duration
             objectAnimator.interpolator = interpolator
             objectAnimator.start()
@@ -79,7 +90,7 @@ object UIElements {
 
     fun textViewObjectAnimator(layout: TextView, propertyName: String, value: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
         Handler().postDelayed({
-            var objectAnimator = ObjectAnimator.ofFloat(layout, propertyName, value)
+            val objectAnimator = ObjectAnimator.ofFloat(layout, propertyName, value)
             objectAnimator.duration = duration
             objectAnimator.interpolator = interpolator
             objectAnimator.start()

@@ -16,15 +16,13 @@ object Values {
     var vibrations: Boolean = true
     var askMobileData: Boolean = true
     var detailsPushHoldPopupClosed: Boolean = false
-    var normalGrid:Boolean = true
 
     var theme: String = "dark"
 
-    var lastVersion: Int = 0
+    var lastVersion = 0
     lateinit var browse: ArrayList<HashMap<String, String>>
     lateinit var featured: ArrayList<HashMap<String, String>>
-    lateinit var browseSearchField: String
-    var filterSpinner = 0
+
     var gridCount: IconSwitch.Checked = IconSwitch.Checked.RIGHT
 
 

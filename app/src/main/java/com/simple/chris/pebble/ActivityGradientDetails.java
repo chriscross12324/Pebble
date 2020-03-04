@@ -146,7 +146,7 @@ public class ActivityGradientDetails extends AppCompatActivity {
         detailsHolder.setOnClickListener(v -> {
             if (expanded) {
                 expanded = false;
-                UIElements.INSTANCE.constraintLayoutValueAnimator(detailsHolder, 50 * getResources().getDisplayMetrics().density,
+                UIElements.INSTANCE.constraintLayoutHeightAnimator(detailsHolder, 50 * getResources().getDisplayMetrics().density,
                         detailsDefaultHeight, 700,
                         0, new DecelerateInterpolator(3));
                 UIElements.INSTANCE.constraintLayoutObjectAnimator(actionsHolder, "translationY",
@@ -169,7 +169,7 @@ public class ActivityGradientDetails extends AppCompatActivity {
             onBackPressed();
         });
         hideButton.setOnClickListener(v -> {
-            UIElements.INSTANCE.constraintLayoutValueAnimator(detailsHolder, detailsHolder.getMeasuredHeight(),
+            UIElements.INSTANCE.constraintLayoutHeightAnimator(detailsHolder, detailsHolder.getMeasuredHeight(),
                     50 * getResources().getDisplayMetrics().density, 700,
                     0, new DecelerateInterpolator(3));
             UIElements.INSTANCE.constraintLayoutObjectAnimator(detailsHolder, "translationY",

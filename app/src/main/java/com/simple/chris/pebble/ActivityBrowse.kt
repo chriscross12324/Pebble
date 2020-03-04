@@ -1,39 +1,34 @@
 package com.simple.chris.pebble
 
-import android.app.ActivityOptions
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.media.Image
 import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
+import android.os.Handler
 import android.util.Log
-import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.animation.DecelerateInterpolator
-import android.widget.*
+import android.view.animation.LinearInterpolator
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityOptionsCompat
-import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.simple.chris.pebble.Calculations.convertToDP
+import com.simple.chris.pebble.UIElements.linearLayoutElevationAnimator
+import com.simple.chris.pebble.UIElements.linearLayoutHeightAnimator
 import kotlin.math.roundToInt
 
 class ActivityBrowse : AppCompatActivity() {
-
-    private lateinit var bottomSheet: CardView
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
-    private lateinit var featuredScroller: ImageView
-    private lateinit var imageOptionsButton: ImageView
-    private lateinit var browseGrid: RecyclerView
 
     private lateinit var optionsHolder: LinearLayout
     private lateinit var buttonOptions: LinearLayout
@@ -41,67 +36,96 @@ class ActivityBrowse : AppCompatActivity() {
     private lateinit var buttonSettings: LinearLayout
     private lateinit var buttonReload: LinearLayout
 
-    private lateinit var helloText: TextView
+    private lateinit var coordinatorLayout: CoordinatorLayout
+    private lateinit var viewTreeObserver: ViewTreeObserver
+
+    private lateinit var bottomSheet: CardView
     private lateinit var createGradientBanner: ConstraintLayout
-
+    private lateinit var browseGrid: RecyclerView
     private lateinit var touchBlocker: View
+    private lateinit var imageOptionsButton: ImageView
+    private lateinit var reloadImage: ImageView
+    private lateinit var helloText: TextView
 
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
     private var screenHeight = 0
-    private var bottomSheetPeekHeight: Int = 0
-    private var actionsPopupHeight: Int = 0
+    private var helloTextHeight = 0
+    private var createGradientBannerHeight = 0
+    private var bottomSheetPeekHeight = 0
+
+    private var navigationMenuExpanded = false
+
+
+    /*
+    This is the Main Browse Activity, here users can view any gradient that is found on the database. This
+    code allows users to navigate to different views as well as view any gradient fullscreen.
+     */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UIElements.setTheme(this)
         setContentView(R.layout.activity_browse)
-        //Values.saveValues(this)
 
-        val coordinatorLayout: CoordinatorLayout = findViewById(R.id.coordinatorLayout)
-        val viewTreeObserver = coordinatorLayout.viewTreeObserver
+        //Initiate LinearLayouts - Navigation Menu
+        optionsHolder = findViewById(R.id.optionsHolder)
+        buttonOptions = findViewById(R.id.buttonOptions)
+        buttonSearch = findViewById(R.id.buttonSearch)
+        buttonSettings = findViewById(R.id.buttonSettings)
+        buttonReload = findViewById(R.id.buttonReload)
+
+        //Initiate Misc. Layouts
+        bottomSheet = findViewById(R.id.bottomSheet) //CardView
+        createGradientBanner = findViewById(R.id.createGradientBanner) //ConstraintLayout
+        browseGrid = findViewById(R.id.browseGrid) //RecyclerView
+        touchBlocker = findViewById(R.id.touchBlocker) //View
+        imageOptionsButton = findViewById(R.id.imageOptionsButton) //ImageView
+        reloadImage = findViewById(R.id.reloadImage) //ImageView
+        helloText = findViewById(R.id.helloText) //TextView
+
+
+        //Run code once the Gradient Grid is created
+        coordinatorLayout = findViewById(R.id.coordinatorLayout)
+        viewTreeObserver = coordinatorLayout.viewTreeObserver
         viewTreeObserver.addOnGlobalLayoutListener {
-            getScreenHeight()
+            getHeights()
             bottomSheet()
             uiSet()
         }
         browseGrid()
-        options()
+        navigationMenu()
     }
 
-    private fun getScreenHeight() {
+    /*
+    Gets the height of the screen and other UI elements to use for UI elements that reference screen size
+     */
+    private fun getHeights() {
         try {
-            val displayMetrics = DisplayMetrics()
-            windowManager.defaultDisplay.getMetrics(displayMetrics)
+            screenHeight = Calculations.screenMeasure(this, "height")
 
-            screenHeight = displayMetrics.heightPixels
-            //bottomSheetPeekHeight = (screenHeight * 0.6).roundToInt()
+            helloTextHeight = helloText.measuredHeight
+            createGradientBannerHeight = createGradientBanner.measuredHeight
 
-            helloText = findViewById(R.id.helloText)
-            createGradientBanner = findViewById(R.id.createGradientBanner)
-
-            val helloTextHeight = helloText.measuredHeight
-            val createGradientBannerHeight = createGradientBanner.measuredHeight
-
-            bottomSheetPeekHeight = screenHeight - ((TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 64f, resources.displayMetrics) + helloTextHeight +
-                    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 64f, resources.displayMetrics) + createGradientBannerHeight +
-                    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32f, resources.displayMetrics))).roundToInt()
-
+            bottomSheetPeekHeight = screenHeight - (convertToDP(this, 160f) + helloTextHeight + createGradientBannerHeight).roundToInt()
         } catch (e: Exception) {
-            Log.e("ERR", "pebble.browse.get_screen_height: " + e.localizedMessage)
+            Log.e("ERR", "pebble.browse.get_screen_height: ${e.localizedMessage}")
         }
     }
 
+    /*
+    Sets anything related to the bottomSheet
+     */
     private fun bottomSheet() {
         bottomSheet = findViewById(R.id.bottomSheet)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.peekHeight = bottomSheetPeekHeight
     }
 
-    private fun uiSet(){
+    private fun uiSet() {
         val gradientDrawable = GradientDrawable(
                 GradientDrawable.Orientation.TL_BR,
                 intArrayOf(resources.getColor(R.color.pebbleStart), resources.getColor(R.color.pebbleEnd))
         )
-        gradientDrawable.cornerRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics)
+        gradientDrawable.cornerRadius = convertToDP(this, 20f)
         createGradientBanner.background = gradientDrawable
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             createGradientBanner.outlineSpotShadowColor = resources.getColor(R.color.pebbleEnd)
@@ -116,10 +140,9 @@ class ActivityBrowse : AppCompatActivity() {
             val gridLayoutManager = GridLayoutManager(this, 2)
             browseGrid.layoutManager = gridLayoutManager
 
-            val browseGridAdapter = BrowseRecyclerViewAdapter(this@ActivityBrowse, Values.browse)
+            val browseGridAdapter = BrowseRecyclerViewAdapter(this, Values.browse)
             browseGrid.adapter = browseGridAdapter
             browseGridAdapter.setClickListener { view, position ->
-                browseGrid.isEnabled = false
                 val details = Intent(this, ActivityGradientDetailsK::class.java)
                 val info = Values.browse[position]
 
@@ -141,69 +164,61 @@ class ActivityBrowse : AppCompatActivity() {
         }
     }
 
-    private fun options() {
-        var optionsExpanded = false
-        touchBlocker = findViewById(R.id.touchBlocker)
-        optionsHolder = findViewById(R.id.optionsHolder)
-        buttonOptions = findViewById(R.id.buttonOptions)
-        buttonSearch = findViewById(R.id.buttonSearch)
-        buttonSettings = findViewById(R.id.buttonSettings)
-        buttonReload = findViewById(R.id.buttonReload)
-        imageOptionsButton = findViewById(R.id.imageOptionsButton)
-
+    /*
+    Handles the Navigation Menu
+     */
+    private fun navigationMenu() {
         buttonOptions.setOnClickListener {
-            if (!optionsExpanded) {
-                imageOptionsButton.setBackgroundResource(R.drawable.icon_close)
-                touchBlocker.visibility = View.VISIBLE
-                buttonSearch.visibility = View.VISIBLE
-                buttonSettings.visibility = View.VISIBLE
-                buttonReload.visibility = View.VISIBLE
-                UIElements.linearLayoutValueAnimator(optionsHolder, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50f, resources.displayMetrics),
-                        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics), 500, 0, DecelerateInterpolator(3f))
-                optionsHolder.elevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics)
-                optionsExpanded = true
+            if (!navigationMenuExpanded) {
+                navigationMenuAnimation(View.VISIBLE, convertToDP(this, 50f), convertToDP(this, 200f),
+                        convertToDP(this, 0f), convertToDP(this, 20f), R.drawable.icon_close, true)
             } else {
-                touchBlocker.visibility = View.GONE
-                imageOptionsButton.setBackgroundResource(R.drawable.icon_apps)
-                UIElements.linearLayoutValueAnimator(optionsHolder, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics),
-                        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50f, resources.displayMetrics), 500, 0, DecelerateInterpolator(3f))
-                buttonSearch.visibility = View.GONE
-                buttonSettings.visibility = View.GONE
-                buttonReload.visibility = View.GONE
-                optionsHolder.elevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0f, resources.displayMetrics)
-                optionsExpanded = false
+                navigationMenuAnimation(View.GONE, convertToDP(this, 200f), convertToDP(this, 50f),
+                        convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)
             }
         }
 
         touchBlocker.setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                if (optionsExpanded) {
-                    touchBlocker.visibility = View.GONE
-                    imageOptionsButton.setBackgroundResource(R.drawable.icon_apps)
-                    UIElements.linearLayoutValueAnimator(optionsHolder, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f, resources.displayMetrics),
-                            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50f, resources.displayMetrics), 500, 0, DecelerateInterpolator(3f))
-                    buttonSearch.visibility = View.GONE
-                    buttonSettings.visibility = View.GONE
-                    buttonReload.visibility = View.GONE
-                    optionsHolder.elevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0f, resources.displayMetrics)
-                    optionsExpanded = false
+                if (navigationMenuExpanded) {
+                    navigationMenuAnimation(View.GONE, convertToDP(this, 200f), convertToDP(this, 50f),
+                            convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)
                 }
             }
             true
         }
 
         buttonReload.setOnClickListener {
-            startActivity(Intent(this, ActivityConnecting::class.java))
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
+            UIElements.imageViewObjectAnimator(reloadImage, "rotation", -360f, 1000, 0, DecelerateInterpolator(3f))
+
+            Handler().postDelayed({
+                startActivity(Intent(this, ActivityConnecting::class.java))
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                finish()
+            }, 700)
+
         }
     }
 
-    private fun openSettings() {
-        val activityOptions = ActivityOptions.makeSceneTransitionAnimation(this, bottomSheet, ViewCompat.getTransitionName(bottomSheet))
-        startActivity(Intent(this, ActivitySettings::class.java), activityOptions.toBundle())
+    /*
+    Animates the Navigation Menu
+     */
+    private fun navigationMenuAnimation(visibility: Int, startSize: Float, endSize: Float, startElevation: Float, endElevation: Float, drawable: Int, expanded: Boolean) {
+        touchBlocker.visibility = visibility
+        buttonSearch.visibility = visibility
+        buttonSettings.visibility = visibility
+        buttonReload.visibility = visibility
 
+        linearLayoutHeightAnimator(optionsHolder, startSize, endSize, 400, 0, DecelerateInterpolator(3f))
+        linearLayoutElevationAnimator(optionsHolder, startElevation, endElevation, 400 , 0, DecelerateInterpolator(3f))
+
+        imageOptionsButton.setBackgroundResource(drawable)
+
+        navigationMenuExpanded = expanded
     }
 
+    //Called when Activity Pauses and Finishes
     override fun onPause() {
         super.onPause()
         Values.saveValues(this)
@@ -211,12 +226,13 @@ class ActivityBrowse : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
+        //Checks to see if the Gradient Grid is still populated (known to depopulate if the app is paused for too long)
         if (browseGrid.adapter == null) {
             Values.loadValues(this)
             startActivity(Intent(this, ActivityConnecting::class.java))
         } else {
             Values.saveValues(this)
-            browseGrid.isEnabled = true
         }
     }
 }
