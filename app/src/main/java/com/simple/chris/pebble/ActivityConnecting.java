@@ -113,6 +113,12 @@ public class ActivityConnecting extends AppCompatActivity {
             }
         });
 
+        background.setOnClickListener(view -> {
+            startActivity(new Intent(ActivityConnecting.this, Create.class));
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            finish();
+        });
+
     }
 
     private void checkConnection() {
