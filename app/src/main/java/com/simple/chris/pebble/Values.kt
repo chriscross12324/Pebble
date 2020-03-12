@@ -25,6 +25,12 @@ object Values {
 
     var gridCount: IconSwitch.Checked = IconSwitch.Checked.RIGHT
 
+    //Gradient Creator Saved values
+    var createGradientStartColour: String = "#f6d365"
+    var createGradientEndColour: String = "#fda085"
+    var createGradientName: String = ""
+    var createGradientDescription = ""
+
 
     fun saveValues(context: Context) {
         val sharedPreferences = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE)

@@ -15,6 +15,7 @@ import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -92,6 +93,7 @@ class ActivityBrowse : AppCompatActivity() {
             uiSet()
         }
         browseGrid()
+        createGradient()
         navigationMenu()
     }
 
@@ -161,6 +163,14 @@ class ActivityBrowse : AppCompatActivity() {
             }
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse.browse_grid: " + e.localizedMessage)
+        }
+    }
+
+    private fun createGradient(){
+        createGradientBanner.setOnClickListener {
+            val details = Intent(this, CreateGradient::class.java)
+            val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, createGradientBanner, "gradientCreatorViewer")
+            startActivity(details, activityOptions.toBundle())
         }
     }
 
