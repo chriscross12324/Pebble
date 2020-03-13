@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.os.Build
 import android.os.Handler
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -101,6 +102,12 @@ object UIElements {
         Handler().postDelayed({
             layout.text = text
         }, delay)
+    }
+
+    fun contraintElevationColour(layout: ConstraintLayout, colour: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            layout.outlineSpotShadowColor = colour
+        }
     }
 
 }

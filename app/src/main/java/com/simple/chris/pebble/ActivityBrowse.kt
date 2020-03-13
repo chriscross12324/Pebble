@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.simple.chris.pebble.Calculations.convertToDP
+import com.simple.chris.pebble.UIElements.constraintLayoutObjectAnimator
 import com.simple.chris.pebble.UIElements.linearLayoutElevationAnimator
 import com.simple.chris.pebble.UIElements.linearLayoutHeightAnimator
 import kotlin.math.roundToInt
@@ -42,7 +43,9 @@ class ActivityBrowse : AppCompatActivity() {
 
     private lateinit var bottomSheet: CardView
     private lateinit var createGradientBanner: ConstraintLayout
+    private lateinit var createGradientBannerDetails: ConstraintLayout
     private lateinit var browseGrid: RecyclerView
+    private lateinit var touchBlockerMenu: View
     private lateinit var touchBlocker: View
     private lateinit var imageOptionsButton: ImageView
     private lateinit var reloadImage: ImageView
@@ -77,7 +80,9 @@ class ActivityBrowse : AppCompatActivity() {
         //Initiate Misc. Layouts
         bottomSheet = findViewById(R.id.bottomSheet) //CardView
         createGradientBanner = findViewById(R.id.createGradientBanner) //ConstraintLayout
+        createGradientBannerDetails = findViewById(R.id.createGradientBannerDetails) //ConstraintLayout
         browseGrid = findViewById(R.id.browseGrid) //RecyclerView
+        touchBlockerMenu = findViewById(R.id.touchBlockerMenu) //View
         touchBlocker = findViewById(R.id.touchBlocker) //View
         imageOptionsButton = findViewById(R.id.imageOptionsButton) //ImageView
         reloadImage = findViewById(R.id.reloadImage) //ImageView
@@ -145,6 +150,7 @@ class ActivityBrowse : AppCompatActivity() {
             val browseGridAdapter = BrowseRecyclerViewAdapter(this, Values.browse)
             browseGrid.adapter = browseGridAdapter
             browseGridAdapter.setClickListener { view, position ->
+                touchBlocker.visibility = View.VISIBLE
                 val details = Intent(this, ActivityGradientDetailsK::class.java)
                 val info = Values.browse[position]
 
@@ -168,9 +174,15 @@ class ActivityBrowse : AppCompatActivity() {
 
     private fun createGradient(){
         createGradientBanner.setOnClickListener {
-            val details = Intent(this, CreateGradient::class.java)
+            touchBlocker.visibility = View.VISIBLE
+            constraintLayoutObjectAnimator(createGradientBannerDetails, "alpha", 0f, 150, 0, DecelerateInterpolator())
+
+            val createGradientIntent = Intent(this, CreateGradient::class.java)
             val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, createGradientBanner, "gradientCreatorViewer")
-            startActivity(details, activityOptions.toBundle())
+
+            Handler().postDelayed({
+                startActivity(createGradientIntent, activityOptions.toBundle())
+            }, 150)
         }
     }
 
@@ -188,7 +200,7 @@ class ActivityBrowse : AppCompatActivity() {
             }
         }
 
-        touchBlocker.setOnTouchListener { view, motionEvent ->
+        touchBlockerMenu.setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 if (navigationMenuExpanded) {
                     navigationMenuAnimation(View.GONE, convertToDP(this, 200f), convertToDP(this, 50f),
@@ -215,7 +227,8 @@ class ActivityBrowse : AppCompatActivity() {
     Animates the Navigation Menu
      */
     private fun navigationMenuAnimation(visibility: Int, startSize: Float, endSize: Float, startElevation: Float, endElevation: Float, drawable: Int, expanded: Boolean) {
-        touchBlocker.visibility = visibility
+        touchBlocker.visibility = View.VISIBLE
+        touchBlockerMenu.visibility = visibility
         buttonSearch.visibility = visibility
         buttonSettings.visibility = visibility
         buttonReload.visibility = visibility
@@ -226,6 +239,10 @@ class ActivityBrowse : AppCompatActivity() {
         imageOptionsButton.setBackgroundResource(drawable)
 
         navigationMenuExpanded = expanded
+
+        Handler().postDelayed({
+            touchBlocker.visibility = View.GONE
+        }, 420)
     }
 
     //Called when Activity Pauses and Finishes
@@ -243,6 +260,16 @@ class ActivityBrowse : AppCompatActivity() {
             startActivity(Intent(this, ActivityConnecting::class.java))
         } else {
             Values.saveValues(this)
+
+            if (Values.currentActivity == "CreateGradient") {
+                Values.currentActivity = "Browse"
+                touchBlocker.visibility = View.GONE
+
+                constraintLayoutObjectAnimator(createGradientBannerDetails, "alpha", 1f, 250, 0, DecelerateInterpolator())
+            } else if (Values.currentActivity == "GradientDetails") {
+                Values.currentActivity = "Browse"
+                touchBlocker.visibility = View.GONE
+            }
         }
     }
 }

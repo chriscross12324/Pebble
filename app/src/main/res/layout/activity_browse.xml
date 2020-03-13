@@ -194,13 +194,22 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <View
-        android:id="@+id/touchBlocker"
+        android:id="@+id/touchBlockerMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"
         android:elevation="11dp"
-        android:background="#4A000000"/>
+        android:background="#4A000000" />
+
+    <View
+        android:id="@+id/touchBlocker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        android:elevation="21dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

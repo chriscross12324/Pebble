@@ -147,7 +147,7 @@ public class ActivityConnecting extends AppCompatActivity {
 
     private void bothGrabbed() {
         handler4.postDelayed(() -> {
-            if (connectedMain && connectedFeatured) {
+            if (connectedMain) {
                 handler1.removeCallbacksAndMessages(null);
                 handler2.removeCallbacksAndMessages(null);
                 handler3.removeCallbacksAndMessages(null);
@@ -163,12 +163,12 @@ public class ActivityConnecting extends AppCompatActivity {
 
     private void getItems() {
         String url = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getItems";
-        String urlFeatured = "https://script.google.com/macros/s/AKfycbxBCTFbNajBCakcj90cFSEhKdoFza2y2IrSNBPC/exec?action=getItems";
+        //String urlFeatured = "https://script.google.com/macros/s/AKfycbxBCTFbNajBCakcj90cFSEhKdoFza2y2IrSNBPC/exec?action=getItems";
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
-                        connectionStatusText.setText("Status: Downloading All");
+                        connectionStatusText.setText("Status: Downloading Gradient");
                         JSONArray mainArray = response.getJSONArray("items");
                         ArrayList<HashMap<String, String>> list = new ArrayList<>();
 
@@ -195,38 +195,7 @@ public class ActivityConnecting extends AppCompatActivity {
                     }
                 }, Throwable::printStackTrace);
 
-        JsonObjectRequest requestFeatured = new JsonObjectRequest(Request.Method.GET, urlFeatured, null,
-                response -> {
-                    try {
-                        connectionStatusText.setText("Status: Downloading Featured");
-                        JSONArray featuredArray = response.getJSONArray("items");
-                        ArrayList<HashMap<String, String>> featuredList = new ArrayList<>();
-
-                        for (int i = featuredArray.length() - 1; i >= 0; i--) {
-                            JSONObject featuredItems = featuredArray.getJSONObject(i);
-
-                            String backgroundName = featuredItems.getString("backgroundName");
-                            String startColour = featuredItems.getString("leftColour");
-                            String endColour = featuredItems.getString("rightColour");
-                            String description = featuredItems.getString("description");
-
-                            HashMap<String, String> item = new HashMap<>();
-                            item.put("backgroundName", backgroundName);
-                            item.put("startColour", startColour);
-                            item.put("endColour", endColour);
-                            item.put("description", description);
-
-                            featuredList.add(item);
-                            Values.INSTANCE.setFeatured(featuredList);
-                        }
-                        connectedFeatured = true;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }, Throwable::printStackTrace);
-
         mQueue.add(request);
-        mQueue.add(requestFeatured);
     }
 
     public void showNoConnectionDialog() {

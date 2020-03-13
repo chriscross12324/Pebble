@@ -298,6 +298,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:background="?ForegroundColour"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -308,6 +309,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:gravity="center"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/actionsDivider"
@@ -330,7 +332,7 @@
                     android:layout_height="0dp"
                     android:gravity="center"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/actionsDivider"
+                    app:layout_constraintEnd_toStartOf="@id/hideButton"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 

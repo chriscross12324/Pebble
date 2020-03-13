@@ -7,6 +7,8 @@ object Values {
 
     private const val SAVE = "SavedValues"
 
+    var currentActivity: String = ""
+
     //Vibrations
     val notification = longArrayOf(0, 5, 5, 5)
     const val hapticFeedback: Long = 5

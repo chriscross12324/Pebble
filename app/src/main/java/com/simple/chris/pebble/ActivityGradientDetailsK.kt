@@ -37,6 +37,7 @@ import kotlin.math.roundToInt
 class ActivityGradientDetailsK : AppCompatActivity() {
 
     private lateinit var cardView: CardView
+    private lateinit var touchBlocker: View
 
     private lateinit var detailsHolder: ConstraintLayout
     private lateinit var actionsHolder: ConstraintLayout
@@ -131,6 +132,7 @@ class ActivityGradientDetailsK : AppCompatActivity() {
 
         gradientViewStatic.post {
             startPostponedEnterTransition()
+            Values.currentActivity = "GradientDetails"
             buttons()
             preViewPlacements()
             getCenterPixel()
