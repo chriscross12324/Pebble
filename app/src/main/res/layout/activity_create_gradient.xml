@@ -19,15 +19,15 @@
             android:id="@+id/gradientViewer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="16dp"
+            android:layout_margin="32dp"
             android:background="@drawable/placeholder_gradient"
             android:elevation="7dp"
             android:transitionName="gradientCreatorViewer" />
 
         <ImageView
             android:id="@+id/startColourPicker"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_margin="16dp"
             android:elevation="7dp"
             app:layout_constraintStart_toStartOf="@+id/gradientViewer"
@@ -36,8 +36,8 @@
 
         <ImageView
             android:id="@+id/endColourPicker"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_margin="16dp"
             android:elevation="7dp"
             app:layout_constraintBottom_toBottomOf="@+id/gradientViewer"
@@ -53,7 +53,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/details_background"
-        android:elevation="3dp"
+        android:elevation="8dp"
         android:alpha="0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -115,5 +115,69 @@
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/actionsHolder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gradientViewerHolder">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/details_background"
+            android:layout_margin="32dp"
+            android:elevation="8dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/details_background"
+                android:backgroundTint="?ForegroundColour"
+                android:elevation="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:hint="Gradient Name"
+                    android:gravity="center"
+                    android:textColor="?PrimaryTextColour"
+                    android:textColorHint="?SecondaryTextColour"
+                    android:fontFamily="@font/googlesans_bold"
+                    android:textSize="24sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/details_background"
+                android:backgroundTint="?ForegroundColour"
+                android:elevation="5dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="24dp">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@android:color/transparent"
+                    android:hint="Gradient Description"
+                    android:textAlignment="textStart"
+                    android:textColor="?PrimaryTextColour"
+                    android:textColorHint="?SecondaryTextColour"
+                    android:fontFamily="@font/googlesans_medium"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

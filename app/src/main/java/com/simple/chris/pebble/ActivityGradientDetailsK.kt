@@ -20,6 +20,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
@@ -30,6 +31,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.simple.chris.pebble.UIElements.constraintLayoutObjectAnimator
+import com.simple.chris.pebble.UIElements.imageViewObjectAnimator
 import kotlinx.android.synthetic.main.activity_gradient_details.*
 import java.util.*
 import kotlin.math.roundToInt
@@ -42,7 +44,6 @@ class ActivityGradientDetailsK : AppCompatActivity() {
     private lateinit var detailsHolder: ConstraintLayout
     private lateinit var actionsHolder: ConstraintLayout
     private lateinit var notification: ConstraintLayout
-    private lateinit var pushHoldPopup: ConstraintLayout
 
     private lateinit var backButton: LinearLayout
     private lateinit var hideButton: LinearLayout
@@ -52,7 +53,7 @@ class ActivityGradientDetailsK : AppCompatActivity() {
     private lateinit var optionsHolder: LinearLayout
 
     private lateinit var gradientViewStatic: ImageView
-    private lateinit var gradientViewAnimated: ImageView
+    //private lateinit var gradientViewAnimated: ImageView
     private lateinit var startHexCircle: ImageView
     private lateinit var endHexCircle: ImageView
     private lateinit var arrow: ImageView
@@ -61,7 +62,6 @@ class ActivityGradientDetailsK : AppCompatActivity() {
     private lateinit var gradientDescription: TextView
     private lateinit var gradientStartHex: TextView
     private lateinit var gradientEndHex: TextView
-    private lateinit var dismissPopup: TextView
 
     private lateinit var gradientNameString: String
     private lateinit var gradientDescriptionString: String
@@ -87,7 +87,6 @@ class ActivityGradientDetailsK : AppCompatActivity() {
         detailsHolder = findViewById(R.id.detailsHolder)
         actionsHolder = findViewById(R.id.actionsHolder)
         notification = findViewById(R.id.copiedNotification)
-        pushHoldPopup = findViewById(R.id.pushHoldPopup)
 
         //Initiate LinearLayouts
         backButton = findViewById(R.id.backButton)
@@ -99,7 +98,7 @@ class ActivityGradientDetailsK : AppCompatActivity() {
 
         //Initiate ImageViews
         gradientViewStatic = findViewById(R.id.gradientViewStatic)
-        gradientViewAnimated = findViewById(R.id.gradientViewAnimated)
+        //gradientViewAnimated = findViewById(R.id.gradientViewAnimated)
         startHexCircle = findViewById(R.id.startHexCircle)
         endHexCircle = findViewById(R.id.endHexCircle)
         arrow = findViewById(R.id.arrow)
@@ -109,7 +108,6 @@ class ActivityGradientDetailsK : AppCompatActivity() {
         gradientDescription = findViewById(R.id.gradientDescription)
         gradientStartHex = findViewById(R.id.gradientStartHex)
         gradientEndHex = findViewById(R.id.gradientEndHex)
-        dismissPopup = findViewById(R.id.dismissPopup)
 
         //Sets
         gradientNameString = intent.getStringExtra("gradientName") as String
@@ -122,7 +120,7 @@ class ActivityGradientDetailsK : AppCompatActivity() {
                 intArrayOf(startColourInt, endColourInt)
         )
         gradientViewStatic.background = gradientDrawable
-        gradientViewAnimated.background = gradientDrawable
+        //gradientViewAnimated.background = gradientDrawable
 
         corners.transitionName = gradientNameString
 
@@ -161,7 +159,7 @@ class ActivityGradientDetailsK : AppCompatActivity() {
     private fun preViewPlacements() {
         detailsHolder.translationY = (90 * resources.displayMetrics.density) + detailsHolder.height
         actionsHolder.translationY = (74 * resources.displayMetrics.density) + detailsHolder.height
-        notification.translationY = (-45 * resources.displayMetrics.density)
+        notification.translationY = (-60 * resources.displayMetrics.density)
 
         UIElements.constraintLayoutVisibility(detailsHolder, View.VISIBLE, 500)
         UIElements.constraintLayoutVisibility(actionsHolder, View.VISIBLE, 500)
@@ -210,7 +208,7 @@ class ActivityGradientDetailsK : AppCompatActivity() {
                 constraintLayoutObjectAnimator(notification, "translationY", 0f, 500,
                         0, DecelerateInterpolator(3f))
                 constraintLayoutObjectAnimator(notification, "translationY",
-                        (-45 * resources.displayMetrics.density).roundToInt().toFloat(), 500,
+                        Calculations.convertToDP(this, -60f), 500,
                         2000, DecelerateInterpolator(3f))
                 UIElements.constraintLayoutVisibility(notification, View.INVISIBLE, 2500)
 
@@ -233,7 +231,7 @@ class ActivityGradientDetailsK : AppCompatActivity() {
                 constraintLayoutObjectAnimator(notification, "translationY", 0f, 500,
                         0, DecelerateInterpolator(3f))
                 constraintLayoutObjectAnimator(notification, "translationY",
-                        (-45 * resources.displayMetrics.density).roundToInt().toFloat(), 500,
+                        Calculations.convertToDP(this, -60f), 500,
                         2000, DecelerateInterpolator(3f))
                 UIElements.constraintLayoutVisibility(notification, View.INVISIBLE, 2500)
 
@@ -263,7 +261,11 @@ class ActivityGradientDetailsK : AppCompatActivity() {
         }*/
 
         backButton.setOnClickListener {
-            onBackPressed()
+            //imageViewObjectAnimator(gradientViewAnimated, "alpha", 0f, 0, 0, LinearInterpolator())
+            Handler().postDelayed({
+                onBackPressed()
+            }, 0)
+
         }
 
         hideButton.setOnClickListener {
@@ -298,38 +300,42 @@ class ActivityGradientDetailsK : AppCompatActivity() {
     }
 
     private fun pushHoldPopup() {
-        Handler().postDelayed({
-            if (!Values.detailsPushHoldPopupClosed) {
-                pushHoldPopup.visibility = View.VISIBLE
-            }
-        }, 500)
+        if (!Values.detailsPushHoldPopupClosed) {
+            val pushHoldDialog = Dialog(this, R.style.dialogStyle)
+            pushHoldDialog.setCancelable(false)
+            pushHoldDialog.setContentView(R.layout.dialog_push_hold)
 
-        dismissPopup.setOnClickListener {
-            UIElements.constraintLayoutVisibility(pushHoldPopup, View.GONE, 250)
-            Values.detailsPushHoldPopupClosed = true
+            val dismissButton: LinearLayout = pushHoldDialog.findViewById(R.id.dismissPopup)
+            dismissButton.setOnClickListener {
+                Values.detailsPushHoldPopupClosed = true
+                pushHoldDialog.dismiss()
+            }
+
+            val window = pushHoldDialog.window
+            window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+            window.setDimAmount(0.5f)
+
+            Handler().postDelayed({
+                pushHoldDialog.show()
+            }, 1000)
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun animateGradient(startColour: Int, middleColour: Int, endColour: Int) {
 
-        Handler().postDelayed({
-            gradientViewAnimated.visibility = View.VISIBLE
-        }, 1000)
+        //imageViewObjectAnimator(gradientViewAnimated, "alpha", 1f, 250, 1000, LinearInterpolator())
 
         gradientViewStatic.setOnClickListener {
             Log.e("INFO", "Click")
         }
 
-        gradientViewAnimated.setOnTouchListener { view, motionEvent ->
+        gradientViewStatic.setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 //Hide UI
                 view.visibility = View.INVISIBLE
                 detailsHolder.visibility = View.INVISIBLE
                 actionsHolder.visibility = View.INVISIBLE
-                if (pushHoldPopup.visibility != View.GONE) {
-                    pushHoldPopup.visibility = View.GONE
-                }
             } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                 //Show UI
                 view.visibility = View.VISIBLE
@@ -339,11 +345,7 @@ class ActivityGradientDetailsK : AppCompatActivity() {
             true
         }
 
-        gradientViewAnimated.setOnClickListener {
-            Log.e("ERR", "Clicked")
-        }
-
-        val evaluator = ArgbEvaluator()
+        /*val evaluator = ArgbEvaluator()
         val gradientDrawable = gradientViewAnimated.background as GradientDrawable
         val valueAnimator = TimeAnimator.ofFloat(0.0f, 1.0f)
         valueAnimator.duration = 5000
@@ -356,7 +358,7 @@ class ActivityGradientDetailsK : AppCompatActivity() {
             val array = intArrayOf(newStart, newEnd)
             gradientDrawable.colors = array
         }
-        valueAnimator.start()
+        valueAnimator.start()*/
 
 
     }
@@ -373,11 +375,7 @@ class ActivityGradientDetailsK : AppCompatActivity() {
         UIElements.constraintLayoutVisibility(detailsHolder, View.INVISIBLE, 250)
         UIElements.constraintLayoutVisibility(actionsHolder, View.INVISIBLE, 250)
         UIElements.constraintLayoutVisibility(notification, View.INVISIBLE, 250)
-        gradientViewAnimated.visibility = View.INVISIBLE
-
-        if (pushHoldPopup.visibility != View.GONE) {
-            UIElements.constraintLayoutVisibility(pushHoldPopup, View.GONE, 0)
-        }
+        //imageViewObjectAnimator(gradientViewAnimated, "alpha", 0f, 0, 0, LinearInterpolator())
 
         Handler().postDelayed({
             super@ActivityGradientDetailsK.onBackPressed()

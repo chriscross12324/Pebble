@@ -10,6 +10,7 @@ import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import kotlin.math.roundToInt
 
 class CreateGradient : AppCompatActivity() {
 
@@ -80,7 +81,7 @@ class CreateGradient : AppCompatActivity() {
         screenHeight = Calculations.screenMeasure(this, "height")
 
         val params = gradientViewerHolder.layoutParams
-        params.height = screenHeight/2
+        params.height = (screenHeight/2.2).roundToInt()
         gradientViewerHolder.layoutParams = params
     }
 
