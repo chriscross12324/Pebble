@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?BackgroundColour"
+    tools:context=".SearchGradient">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchResultsRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fadingEdge="none"
+        android:paddingStart="16dp"
+        android:paddingTop="32dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="98dp"
+        android:requiresFadingEdge="none" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonBack"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/details_background"
+        android:backgroundTint="?ForegroundColour"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:contentDescription="@string/description_button_back"
+            android:rotation="180"
+            android:src="@drawable/icon_arrow"
+            android:tint="?PrimaryTextColour" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/searchFieldHolder"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/details_background"
+        android:backgroundTint="?ForegroundColour"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonSearch"
+        app:layout_constraintStart_toEndOf="@+id/buttonBack">
+
+        <EditText
+            android:id="@+id/searchField"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/googlesans_medium"
+            android:gravity="center"
+            android:hint="@string/search_field_hint"
+            android:inputType="textCapWords"
+            android:maxLength="24"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="?PrimaryTextColour"
+            android:textColorHint="?SecondaryTextColour" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonSearch"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/details_background"
+        android:backgroundTint="?ForegroundColour"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="12dp"
+            android:contentDescription="@string/description_button_search"
+            android:src="@drawable/icon_search"
+            android:tint="?PrimaryTextColour"
+            android:transitionName="sharedSearchElement" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/searchPopup"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:src="@drawable/icon_search"
+            android:tint="?SecondaryTextColour" />
+
+        <TextView
+            android:id="@+id/searchProblemTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hmm..."
+            android:textSize="22sp"
+            android:textColor="?PrimaryTextColour"
+            android:fontFamily="@font/googlesans_bold"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/searchProblemBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="We tried searching but couldn't find anything under that name, try searching for something else."
+            android:textSize="14sp"
+            android:textColor="?PrimaryTextColour"
+            android:fontFamily="@font/googlesans_medium"
+            android:gravity="center"/>
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/touchBlocker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        android:elevation="10dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

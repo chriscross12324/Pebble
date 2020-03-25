@@ -134,11 +134,9 @@ class ActivityGradientDetailsK : AppCompatActivity() {
             buttons()
             preViewPlacements()
             getCenterPixel()
-            pushHoldPopup()
             animateGradient(startColourInt, middleColourInt, endColourInt)
-            if (!Values.detailsPushHoldPopupClosed) {
-                pushHoldPopup()
-            }
+            pushHoldPopup()
+            detailsHolderFixer()
         }
 
         gradientName.text = gradientNameString.replace("\n", " ")
@@ -309,6 +307,7 @@ class ActivityGradientDetailsK : AppCompatActivity() {
             dismissButton.setOnClickListener {
                 Values.detailsPushHoldPopupClosed = true
                 pushHoldDialog.dismiss()
+                Log.e("INFO", "Clicked")
             }
 
             val window = pushHoldDialog.window
@@ -331,36 +330,37 @@ class ActivityGradientDetailsK : AppCompatActivity() {
         }
 
         gradientViewStatic.setOnTouchListener { view, motionEvent ->
+
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 //Hide UI
-                view.visibility = View.INVISIBLE
-                detailsHolder.visibility = View.INVISIBLE
-                actionsHolder.visibility = View.INVISIBLE
+                constraintLayoutObjectAnimator(detailsHolder, "translationY", 100f, 300, 50, DecelerateInterpolator(3f))
+                constraintLayoutObjectAnimator(detailsHolder, "alpha", 0f, 100, 50, LinearInterpolator())
+                constraintLayoutObjectAnimator(actionsHolder, "translationY", 100f, 300, 0, DecelerateInterpolator(3f))
+                constraintLayoutObjectAnimator(actionsHolder, "alpha", 0f, 100, 0, LinearInterpolator())
             } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                 //Show UI
-                view.visibility = View.VISIBLE
-                detailsHolder.visibility = View.VISIBLE
-                actionsHolder.visibility = View.VISIBLE
+                constraintLayoutObjectAnimator(detailsHolder, "translationY", 0f, 300, 0, DecelerateInterpolator(3f))
+                constraintLayoutObjectAnimator(detailsHolder, "alpha", 1f, 100, 0, LinearInterpolator())
+                constraintLayoutObjectAnimator(actionsHolder, "translationY", 0f, 300, 50, DecelerateInterpolator(3f))
+                constraintLayoutObjectAnimator(actionsHolder, "alpha", 1f, 100, 50, LinearInterpolator())
             }
             true
         }
+    }
 
-        /*val evaluator = ArgbEvaluator()
-        val gradientDrawable = gradientViewAnimated.background as GradientDrawable
-        val valueAnimator = TimeAnimator.ofFloat(0.0f, 1.0f)
-        valueAnimator.duration = 5000
-        valueAnimator.repeatCount = ValueAnimator.INFINITE
-        valueAnimator.repeatMode = ValueAnimator.REVERSE
-        valueAnimator.addUpdateListener {
-            val fraction = valueAnimator.animatedFraction
-            val newStart = evaluator.evaluate(fraction, startColour, endColour) as Int
-            val newEnd = evaluator.evaluate(fraction, endColour, middleColour) as Int
-            val array = intArrayOf(newStart, newEnd)
-            gradientDrawable.colors = array
-        }
-        valueAnimator.start()*/
+    private fun detailsHolderFixer() {
+        val handler = Handler()
+        handler.postDelayed(object:Runnable {
+            override fun run() {
+                if (actionsHolder.alpha == 1f && detailsHolder.alpha == 0f) {
+                    constraintLayoutObjectAnimator(detailsHolder, "translationY", 0f, 300, 0, DecelerateInterpolator(3f))
+                    constraintLayoutObjectAnimator(detailsHolder, "alpha", 1f, 100, 0, LinearInterpolator())
+                    detailsHolderFixer()
+                }
 
-
+                handler.postDelayed(this, 2000)
+            }
+        }, 2000)
     }
 
     override fun onBackPressed() {
@@ -376,6 +376,8 @@ class ActivityGradientDetailsK : AppCompatActivity() {
         UIElements.constraintLayoutVisibility(actionsHolder, View.INVISIBLE, 250)
         UIElements.constraintLayoutVisibility(notification, View.INVISIBLE, 250)
         //imageViewObjectAnimator(gradientViewAnimated, "alpha", 0f, 0, 0, LinearInterpolator())
+
+        Vibration.mediumFeedback(this)
 
         Handler().postDelayed({
             super@ActivityGradientDetailsK.onBackPressed()

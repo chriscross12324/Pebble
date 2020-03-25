@@ -106,7 +106,7 @@ public class ActivityGradientDetails extends AppCompatActivity {
             copiedNotification.setAlpha(1);
             if (!playingCopiedAnimation) {
                 playingCopiedAnimation = true;
-                Vibration.INSTANCE.hFeedack(ActivityGradientDetails.this);
+                //Vibration.INSTANCE.hFeedack(ActivityGradientDetails.this);
                 UIElements.INSTANCE.constraintLayoutObjectAnimator(copiedNotification, "translationY",
                         0, 500,
                         0, new DecelerateInterpolator(3));
@@ -128,7 +128,7 @@ public class ActivityGradientDetails extends AppCompatActivity {
             copiedNotification.setAlpha(1);
             if (!playingCopiedAnimation) {
                 playingCopiedAnimation = true;
-                Vibration.INSTANCE.hFeedack(ActivityGradientDetails.this);
+                //Vibration.INSTANCE.hFeedack(ActivityGradientDetails.this);
                 UIElements.INSTANCE.constraintLayoutObjectAnimator(copiedNotification, "translationY",
                         0, 500,
                         0, new DecelerateInterpolator(3));

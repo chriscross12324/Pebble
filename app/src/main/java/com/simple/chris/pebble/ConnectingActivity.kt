@@ -1,16 +1,19 @@
 package com.simple.chris.pebble
 
 import android.app.Dialog
-import android.app.Notification
 import android.content.Context
 import android.content.Intent
-import android.media.Image
+import android.graphics.drawable.AnimationDrawable
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -18,17 +21,16 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import org.json.JSONArray
-import org.json.JSONException
+import org.json.JSONObject
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
-/*
-class ConnectingActivity : AppCompatActivity{
+class ConnectingActivity : AppCompatActivity() {
 
-    lateinit var mQueue: RequestQueue
+    private lateinit var mQueue: RequestQueue
 
     private lateinit var connectingDialog: ConstraintLayout
     private lateinit var notification: ConstraintLayout
@@ -50,8 +52,8 @@ class ConnectingActivity : AppCompatActivity{
     private lateinit var animationView: ImageView
 
 
-    var oneTime = false
-    var connectedMain = false
+    private var oneTime = false
+    var downloaded = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,7 +100,7 @@ class ConnectingActivity : AppCompatActivity{
     }
 
     private fun checkConnection() {
-        if (isInternetConnected()) {
+        /*if (isInternetConnected()) {
             if (isNetworkTypeData()) {
                 if (Values.askMobileData) {
                     if (oneTime) {
@@ -118,58 +120,80 @@ class ConnectingActivity : AppCompatActivity{
         } else {
             getItems()
             showNoConnectionDialog()
-        }
+        }*/
+        getItems()
+        playConnectionDialog()
     }
 
     private fun itemsGrabbed() {
-        Handler().postDelayed({
-            if (connectedMain) {
-                val browse = Intent(this, ActivityBrowse::class.java)
-                startActivity(browse)
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                finish()
-            } else {
-                itemsGrabbed()
+        val handler = Handler()
+        handler.postDelayed(object:Runnable {
+            override fun run() {
+                if (downloaded) {
+                    startActivity(Intent(this@ConnectingActivity, ActivityBrowse::class.java))
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                    finish()
+                } else {
+                    handler.postDelayed(this, 100)
+                }
             }
+
         }, 100)
     }
 
     private fun getItems() {
         val gradientDatabaseURL = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getItems"
 
-        */
-/*var request = JsonObjectRequest(Request.Method.GET, url, null,
-                { response-> try
-                {
-                    connectionStatusText.setText("Status: Downloading All")
-                    val mainArray = response.getJSONArray("items")
-                    val list = ArrayList()
-                    for (i in mainArray.length() - 1 downTo 0)
-                    {
-                        val items = mainArray.getJSONObject(i)
-                        val backgroundName = items.getString("backgroundName")
-                        val startColour = items.getString("leftColour")
-                        val endColour = items.getString("rightColour")
-                        val description = items.getString("description")
-                        val item = HashMap()
-                        item.put("backgroundName", backgroundName)
-                        item.put("startColour", startColour)
-                        item.put("endColour", endColour)
-                        item.put("description", description)
-                        list.add(item)
-                        Values.browse(list)
+        val request = JsonObjectRequest(Request.Method.GET, gradientDatabaseURL, null,
+                Response.Listener { response ->
+                    try {
+                        connectionStatusText.text = "Status: Downloading Gradients"
+                        val gradientArray = response.getJSONArray("items")
+                        val gradientList = ArrayList<HashMap<String, String>>()
+
+                        for (i in 0 until gradientArray.length()) {
+                            val downloadedItem = gradientArray.getJSONObject(i)
+
+                            val item = HashMap<String, String>()
+                            item["backgroundName"] = downloadedItem.getString("backgroundName")
+                            item["startColour"] = downloadedItem.getString("leftColour")
+                            item["endColour"] = downloadedItem.getString("rightColour")
+                            item["description"] = downloadedItem.getString("description")
+
+                            gradientList.add(item)
+                            Values.browse = gradientList
+                        }
+                        downloaded = true
+                    } catch (e: Exception) {
+                        Log.e("ERR", "pebble.connecting_activity.get_items: ${e.localizedMessage}")
                     }
-                    connectedMain = true
-                }
-                catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-                }, ???({ printStackTrace() }))*//*
+                },
+                Response.ErrorListener {
+                    Log.e("ERR", "pebble.connecting_activity.get_items.request.error_listener: ${it.networkResponse}")
+                })
+
+        mQueue.add(request)
 
     }
 
     private fun playConnectionDialog() {
+        UIElements.constraintLayoutObjectAnimator(connectingDialog, "alpha", 1f, 300, 0, LinearInterpolator())
 
+        animationView.setBackgroundResource(R.drawable.animation_loading)
+        val animationDrawable = animationView.background as AnimationDrawable
+        animationDrawable.start()
+
+        Handler().postDelayed({
+            UIElements.textViewTextChanger(notificationText, "It's taking a bit longer\nthan usual to connect", 0)
+            playNotificationAnimation(0)
+            UIElements.textViewTextChanger(notificationText, "Attempting to\nrepair issues", 6000)
+            playNotificationAnimation(6000)
+        }, 10000)
+        Handler().postDelayed({
+            startActivity(Intent(this, ConnectingActivity::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            finish()
+        }, 20000)
     }
 
     private fun showDataWarningDialog() {
@@ -180,14 +204,27 @@ class ConnectingActivity : AppCompatActivity{
 
     }
 
-    private fun isInternetConnected() : Boolean {
+    private fun playNotificationAnimation(delay: Long) {
+        Handler().postDelayed({
+            notification.alpha = 1f
+            Vibration.notification(this)
+            UIElements.constraintLayoutObjectAnimator(notification, "translationY",
+            0f, 500, 0, DecelerateInterpolator(3f))
+            UIElements.constraintLayoutObjectAnimator(notification, "translationY",
+            Calculations.convertToDP(this, -(notification.height).toFloat()), 500, 3000, DecelerateInterpolator(3f))
+            UIElements.constraintLayoutObjectAnimator(notification, "alpha",
+            0f, 0, 3500, LinearInterpolator())
+        }, delay)
+    }
+
+    /*private fun isInternetConnected(): Boolean {
         val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return cm.activeNetwork != null
     }
 
-    private fun isNetworkTypeData() : Boolean {
+    private fun isNetworkTypeData(): Boolean {
         val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = cm.activeNetwork as NetworkInfo
         return networkInfo.type == ConnectivityManager.TYPE_MOBILE
-    }
-}*/
+    }*/
+}

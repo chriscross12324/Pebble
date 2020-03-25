@@ -52,6 +52,15 @@ object UIElements {
         }, delay)
     }
 
+    fun linearLayoutObjectAnimator(layout: LinearLayout, propertyName: String, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
+        Handler().postDelayed({
+            val objectAnimator = ObjectAnimator.ofFloat(layout, propertyName, endValue)
+            objectAnimator.duration = duration
+            objectAnimator.interpolator = interpolator
+            objectAnimator.start()
+        }, delay)
+    }
+
     fun linearLayoutHeightAnimator(layout: LinearLayout, startValue: Float, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
         Handler().postDelayed({
             val valueAnimator = ValueAnimator.ofInt(startValue.roundToInt(), endValue.roundToInt())

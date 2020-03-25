@@ -69,7 +69,7 @@ public class StaggeredRecyclerAdapter extends RecyclerView.Adapter<StaggeredRecy
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity)mContext, holder.gradientView, item.get("backgroundName"));
                     mContext.startActivity(details, options.toBundle());
 
-                    Vibration.INSTANCE.hFeedack(mContext);
+                    //Vibration.INSTANCE.hFeedack(mContext);
                 }
             });
         } catch (Exception e) {

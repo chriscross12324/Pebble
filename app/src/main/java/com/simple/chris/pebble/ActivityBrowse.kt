@@ -48,6 +48,7 @@ class ActivityBrowse : AppCompatActivity() {
     private lateinit var touchBlockerMenu: View
     private lateinit var touchBlocker: View
     private lateinit var imageOptionsButton: ImageView
+    private lateinit var searchIcon: ImageView
     private lateinit var reloadImage: ImageView
     private lateinit var helloText: TextView
 
@@ -85,6 +86,7 @@ class ActivityBrowse : AppCompatActivity() {
         touchBlockerMenu = findViewById(R.id.touchBlockerMenu) //View
         touchBlocker = findViewById(R.id.touchBlocker) //View
         imageOptionsButton = findViewById(R.id.imageOptionsButton) //ImageView
+        searchIcon = findViewById(R.id.searchIcon) //ImageView
         reloadImage = findViewById(R.id.reloadImage) //ImageView
         helloText = findViewById(R.id.helloText) //TextView
 
@@ -150,6 +152,7 @@ class ActivityBrowse : AppCompatActivity() {
             val browseGridAdapter = BrowseRecyclerViewAdapter(this, Values.browse)
             browseGrid.adapter = browseGridAdapter
             browseGridAdapter.setClickListener { view, position ->
+                Vibration.lowFeedback(this)
                 touchBlocker.visibility = View.VISIBLE
                 val details = Intent(this, ActivityGradientDetailsK::class.java)
                 val info = Values.browse[position]
@@ -194,6 +197,7 @@ class ActivityBrowse : AppCompatActivity() {
             if (!navigationMenuExpanded) {
                 navigationMenuAnimation(View.VISIBLE, convertToDP(this, 50f), convertToDP(this, 200f),
                         convertToDP(this, 0f), convertToDP(this, 20f), R.drawable.icon_close, true)
+                Vibration.mediumFeedback(this)
             } else {
                 navigationMenuAnimation(View.GONE, convertToDP(this, 200f), convertToDP(this, 50f),
                         convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)
@@ -208,6 +212,14 @@ class ActivityBrowse : AppCompatActivity() {
                 }
             }
             true
+        }
+
+        buttonSearch.setOnClickListener {
+            touchBlocker.visibility = View.VISIBLE
+            val searchGradientIntent = Intent(this, SearchGradient::class.java)
+            val searchGradientActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, searchIcon, "sharedSearchElement")
+
+            startActivity(searchGradientIntent, searchGradientActivityOptions.toBundle())
         }
 
         buttonReload.setOnClickListener {
@@ -261,14 +273,23 @@ class ActivityBrowse : AppCompatActivity() {
         } else {
             Values.saveValues(this)
 
-            if (Values.currentActivity == "CreateGradient") {
-                Values.currentActivity = "Browse"
-                touchBlocker.visibility = View.GONE
+            when (Values.currentActivity) {
+                "CreateGradient" -> {
+                    Values.currentActivity = "Browse"
+                    touchBlocker.visibility = View.GONE
 
-                constraintLayoutObjectAnimator(createGradientBannerDetails, "alpha", 1f, 250, 0, DecelerateInterpolator())
-            } else if (Values.currentActivity == "GradientDetails") {
-                Values.currentActivity = "Browse"
-                touchBlocker.visibility = View.GONE
+                    constraintLayoutObjectAnimator(createGradientBannerDetails, "alpha", 1f, 250, 0, DecelerateInterpolator())
+                }
+                "GradientDetails" -> {
+                    Values.currentActivity = "Browse"
+                    touchBlocker.visibility = View.GONE
+                }
+                "SearchGradient" -> {
+                    Values.currentActivity = "Browse"
+                    touchBlocker.visibility = View.GONE
+                    navigationMenuAnimation(View.GONE, convertToDP(this, 200f), convertToDP(this, 50f),
+                            convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)
+                }
             }
         }
     }

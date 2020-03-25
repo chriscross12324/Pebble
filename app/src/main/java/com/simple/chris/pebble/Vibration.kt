@@ -20,11 +20,33 @@ object Vibration {
         }
     }
 
-    fun hFeedack(context: Context) {
+    fun strongFeedback(context: Context) {
         if (Values.vibrations) {
             val v = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                v.vibrate(VibrationEffect.createOneShot(Values.hapticFeedback, VibrationEffect.DEFAULT_AMPLITUDE))
+                v.vibrate(VibrationEffect.createOneShot(Values.strongVibration, VibrationEffect.DEFAULT_AMPLITUDE))
+            } else {
+                v.vibrate(Values.notification, -1)
+            }
+        }
+    }
+
+    fun mediumFeedback(context: Context) {
+        if (Values.vibrations) {
+            val v = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                v.vibrate(VibrationEffect.createOneShot(Values.mediumVibration, VibrationEffect.DEFAULT_AMPLITUDE))
+            } else {
+                v.vibrate(Values.notification, -1)
+            }
+        }
+    }
+
+    fun lowFeedback(context: Context) {
+        if (Values.vibrations) {
+            val v = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                v.vibrate(VibrationEffect.createOneShot(Values.lowVibration, VibrationEffect.DEFAULT_AMPLITUDE))
             } else {
                 v.vibrate(Values.notification, -1)
 

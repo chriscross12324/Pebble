@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/Main"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".CreateGradient"></activity>
+        <activity android:name=".SearchGradient"></activity>
+        <activity android:name=".CreateGradient" />
         <activity android:name=".Create" />
         <activity android:name=".ActivityGradientDetailsK" />
         <activity
@@ -31,6 +32,7 @@
         <activity android:name=".ActivityBrowse" />
         <activity android:name=".ActivitySettings" />
         <activity android:name=".ActivityConnecting" />
+        <activity android:name=".ConnectingActivity"/>
         <activity android:name=".ActivityGradientDetails" />
         <activity
             android:name=".ActivityPermissions"

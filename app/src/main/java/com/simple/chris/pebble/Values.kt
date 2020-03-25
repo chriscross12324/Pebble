@@ -8,10 +8,13 @@ object Values {
     private const val SAVE = "SavedValues"
 
     var currentActivity: String = ""
+    var userName: String = "User"
 
     //Vibrations
     val notification = longArrayOf(0, 5, 5, 5)
-    const val hapticFeedback: Long = 5
+    const val strongVibration: Long = 5
+    const val mediumVibration: Long = 3
+    const val lowVibration: Long = 1
 
     //App Values
     var firstStart: Boolean = true
@@ -23,7 +26,7 @@ object Values {
 
     var lastVersion = 0
     lateinit var browse: ArrayList<HashMap<String, String>>
-    lateinit var featured: ArrayList<HashMap<String, String>>
+    lateinit var searched: HashMap<String, String>
 
     var gridCount: IconSwitch.Checked = IconSwitch.Checked.RIGHT
 
