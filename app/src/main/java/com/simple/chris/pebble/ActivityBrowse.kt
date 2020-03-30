@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.activity_browse.*
 import java.util.*
 import kotlin.math.roundToInt
 
-class ActivityBrowse : AppCompatActivity() {
+class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener {
 
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
@@ -104,28 +104,8 @@ class ActivityBrowse : AppCompatActivity() {
 
             val gridLayoutManager = GridLayoutManager(this, 2)
             browseGrid.layoutManager = gridLayoutManager
-
-            val browseGridAdapter = BrowseRecyclerViewAdapter(this, Values.browse)
+            val browseGridAdapter = GradientRecyclerViewAdapter(this, Values.browse, this)
             browseGrid.adapter = browseGridAdapter
-            browseGridAdapter.setClickListener { view, position ->
-                Vibration.lowFeedback(this)
-                touchBlocker.visibility = View.VISIBLE
-                val details = Intent(this, ActivityGradientDetails::class.java)
-                val info = Values.browse[position]
-
-                val gradientName = info["backgroundName"]
-                val startColour = info["startColour"]
-                val endColour = info["endColour"]
-                val description = info["description"]
-
-                details.putExtra("gradientName", gradientName)
-                details.putExtra("startColour", startColour)
-                details.putExtra("endColour", endColour)
-                details.putExtra("description", description)
-
-                val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view.findViewById(R.id.gradient), gradientName as String)
-                startActivity(details, activityOptions.toBundle())
-            }
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse.browse_grid: " + e.localizedMessage)
         }
@@ -306,5 +286,25 @@ class ActivityBrowse : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onGradientClick(position: Int, view: View) {
+        Vibration.lowFeedback(this)
+        touchBlocker.visibility = View.VISIBLE
+        val details = Intent(this, ActivityGradientDetails::class.java)
+        val info = Values.browse[position]
+
+        val gradientName = info["backgroundName"]
+        val startColour = info["startColour"]
+        val endColour = info["endColour"]
+        val description = info["description"]
+
+        details.putExtra("gradientName", gradientName)
+        details.putExtra("startColour", startColour)
+        details.putExtra("endColour", endColour)
+        details.putExtra("description", description)
+
+        val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view.findViewById(R.id.gradient), gradientName as String)
+        startActivity(details, activityOptions.toBundle())
     }
 }

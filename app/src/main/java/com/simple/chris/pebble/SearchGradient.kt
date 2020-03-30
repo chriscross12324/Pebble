@@ -19,7 +19,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class SearchGradient : AppCompatActivity() {
+class SearchGradient : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener {
 
     private lateinit var backButton: LinearLayout
     private lateinit var buttonSearch: LinearLayout
@@ -168,29 +168,8 @@ class SearchGradient : AppCompatActivity() {
 
     private fun setResultsGrid() {
         try {
-            val gridAdapter = BrowseRecyclerViewAdapter(this, searchResults)
+            val gridAdapter = GradientRecyclerViewAdapter(this, searchResults, this)
             searchResultsRecycler.adapter = gridAdapter
-
-            gridAdapter.setClickListener { view, position ->
-                Vibration.lowFeedback(this)
-                touchBlocker.visibility = View.VISIBLE
-
-                val details = Intent(this, ActivityGradientDetails::class.java)
-                val info = searchResults[position]
-
-                val gradientName = info["backgroundName"]
-                val startColour = info["startColour"]
-                val endColour = info["endColour"]
-                val description = info["description"]
-
-                details.putExtra("gradientName", gradientName)
-                details.putExtra("startColour", startColour)
-                details.putExtra("endColour", endColour)
-                details.putExtra("description", description)
-
-                val detailsActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view.findViewById(R.id.gradient), gradientName as String)
-                startActivity(details, detailsActivityOptions.toBundle())
-            }
         } catch (e: Exception) {
             Log.e("ERR", "pebble.search_gradient.set_results_grid: ${e.localizedMessage}")
         }
@@ -208,5 +187,26 @@ class SearchGradient : AppCompatActivity() {
         Values.currentActivity = "SearchGradient"
         Values.saveValues(this)
         touchBlocker.visibility = View.GONE
+    }
+
+    override fun onGradientClick(position: Int, view: View) {
+        Vibration.lowFeedback(this)
+        touchBlocker.visibility = View.VISIBLE
+
+        val details = Intent(this, ActivityGradientDetails::class.java)
+        val info = searchResults[position]
+
+        val gradientName = info["backgroundName"]
+        val startColour = info["startColour"]
+        val endColour = info["endColour"]
+        val description = info["description"]
+
+        details.putExtra("gradientName", gradientName)
+        details.putExtra("startColour", startColour)
+        details.putExtra("endColour", endColour)
+        details.putExtra("description", description)
+
+        val detailsActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view.findViewById(R.id.gradient), gradientName as String)
+        startActivity(details, detailsActivityOptions.toBundle())
     }
 }
