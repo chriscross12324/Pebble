@@ -1,9 +1,9 @@
 package com.simple.chris.pebble;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 public class BrowseRecyclerViewAdapter extends RecyclerView.Adapter<BrowseRecyclerViewAdapter.ViewHolder> {
 
-    Context context;
+    private Context context;
     private ArrayList<HashMap<String, String>> browseItems;
 
     private ItemClickListener clickListener;
@@ -46,6 +46,7 @@ public class BrowseRecyclerViewAdapter extends RecyclerView.Adapter<BrowseRecycl
         return new ViewHolder(view);
     }
 
+    @SuppressLint("NewApi")
     @Override
     public void onBindViewHolder(@NonNull BrowseRecyclerViewAdapter.ViewHolder holder, int position) {
         HashMap<String, String> details;
@@ -60,7 +61,7 @@ public class BrowseRecyclerViewAdapter extends RecyclerView.Adapter<BrowseRecycl
         );
         gradientDrawable.setCornerRadius(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, context.getResources().getDisplayMetrics()));
         holder.gradientDisplay.setBackground(gradientDrawable);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (Calculations.INSTANCE.isAndroidPOrGreater()) {
             holder.gradientDisplay.setOutlineSpotShadowColor(endColour);
         }
     }
@@ -68,6 +69,14 @@ public class BrowseRecyclerViewAdapter extends RecyclerView.Adapter<BrowseRecycl
     @Override
     public int getItemCount() {
         return browseItems.size();
+    }
+
+    void setClickListener(ItemClickListener itemClickListener) {
+        this.clickListener = itemClickListener;
+    }
+
+    public interface ItemClickListener {
+        void onItemClick(@NonNull View view, int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -82,17 +91,10 @@ public class BrowseRecyclerViewAdapter extends RecyclerView.Adapter<BrowseRecycl
             itemView.setOnClickListener(this);
         }
 
+        @SuppressLint("SyntheticAccessor")
         @Override
-        public void onClick(View view) {
+        public void onClick(@NonNull View view) {
             if (clickListener != null) clickListener.onItemClick(view, getAdapterPosition());
         }
-    }
-
-    void setClickListener(ItemClickListener itemClickListener) {
-        this.clickListener = itemClickListener;
-    }
-
-    public interface  ItemClickListener {
-        void onItemClick(View view, int position);
     }
 }

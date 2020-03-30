@@ -16,27 +16,35 @@
         android:supportsRtl="true"
         android:theme="@style/Main"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".SearchGradient"></activity>
+        <activity android:name=".ColourPickerTester" />
+        <activity android:name=".CreateGradientNew" />
+        <activity android:name=".SearchGradient" android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity android:name=".CreateGradient" />
-        <activity android:name=".Create" />
-        <activity android:name=".ActivityGradientDetailsK" />
+        <activity android:name=".ActivityGradientDetails" android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".ActivitySplash"
-            android:theme="@style/splashTheme">
+            android:theme="@style/splashTheme"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityBrowse" />
+        <activity android:name=".ActivityBrowse"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
         <activity android:name=".ActivitySettings" />
-        <activity android:name=".ActivityConnecting" />
-        <activity android:name=".ConnectingActivity"/>
-        <activity android:name=".ActivityGradientDetails" />
+        <activity android:name=".ConnectingActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".ActivityPermissions"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>

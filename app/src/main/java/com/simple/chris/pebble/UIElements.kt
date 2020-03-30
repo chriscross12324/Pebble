@@ -98,6 +98,18 @@ object UIElements {
         }, delay)
     }
 
+    fun imageViewVisibility(layout: ImageView, visibility: Int, delay: Long) {
+        Handler().postDelayed({
+            layout.visibility = visibility
+        }, delay)
+    }
+
+    fun textViewVisibility(layout: TextView, visibility: Int, delay: Long) {
+        Handler().postDelayed({
+            layout.visibility = visibility
+        }, delay)
+    }
+
     fun textViewObjectAnimator(layout: TextView, propertyName: String, value: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
         Handler().postDelayed({
             val objectAnimator = ObjectAnimator.ofFloat(layout, propertyName, value)
@@ -113,7 +125,7 @@ object UIElements {
         }, delay)
     }
 
-    fun contraintElevationColour(layout: ConstraintLayout, colour: Int) {
+    fun constraintElevationColour(layout: ConstraintLayout, colour: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             layout.outlineSpotShadowColor = colour
         }

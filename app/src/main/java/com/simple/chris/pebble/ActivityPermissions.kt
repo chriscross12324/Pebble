@@ -100,7 +100,7 @@ class ActivityPermissions : AppCompatActivity() {
             dataWarningDialog.dismiss()
 
             Handler().postDelayed({
-                startActivity(Intent(this, ActivityConnecting::class.java))
+                startActivity(Intent(this, ConnectingActivity::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 finish()
             }, 700)

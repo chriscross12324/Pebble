@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:cardBackgroundColor="?ForegroundColour"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/brush_color_linear"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginBottom="10dp"
+            android:background="#f6d365"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/brush_edit_color"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/googlesans_medium"
+                android:gravity="center"
+                android:lines="1"
+                android:padding="10dp"
+                android:text="#FFFFFF" />
+
+        </RelativeLayout>
+
+        <SeekBar
+            android:id="@+id/brush_red_seek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:thumbTint="#FF0000" />
+
+        <SeekBar
+            android:id="@+id/brush_green_seek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:thumbTint="#00BF07" />
+
+        <SeekBar
+            android:id="@+id/brush_blue_seek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:thumbTint="#008EFF" />
+
+
+        <LinearLayout
+            android:id="@+id/brush_done"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/googlesans_medium"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:text="Done"
+            android:textAllCaps="false"
+            android:textColor="?SecondaryTextColour"
+            android:textSize="20sp" >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/googlesans_medium"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:text="Done"
+                android:textAllCaps="false"
+                android:textColor="?SecondaryTextColour"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

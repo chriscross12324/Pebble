@@ -9,7 +9,7 @@
 
 
     <View
-        android:id="@+id/buttonOpenOptions"
+        android:id="@+id/navigationMenuPlacementHolder"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginEnd="32dp"
@@ -18,13 +18,13 @@
         app:layout_constraintTop_toTopOf="@+id/helloText"/>
 
     <LinearLayout
-        android:id="@+id/optionsHolder"
+        android:id="@+id/navigationHolder"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="@+id/buttonOpenOptions"
-        app:layout_constraintStart_toStartOf="@+id/buttonOpenOptions"
-        app:layout_constraintTop_toTopOf="@+id/buttonOpenOptions"
+        app:layout_constraintEnd_toEndOf="@+id/navigationMenuPlacementHolder"
+        app:layout_constraintStart_toStartOf="@+id/navigationMenuPlacementHolder"
+        app:layout_constraintTop_toTopOf="@+id/navigationMenuPlacementHolder"
         android:background="@drawable/button_background"
         android:animateLayoutChanges="true"
         android:clickable="true"
@@ -109,7 +109,7 @@
         app:layout_constraintTop_toBottomOf="@+id/helloText">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/createGradientBannerDetails"
+            android:id="@+id/createGradientDetailsHolder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="1">

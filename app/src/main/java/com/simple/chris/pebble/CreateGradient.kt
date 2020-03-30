@@ -19,7 +19,7 @@ class CreateGradient : AppCompatActivity() {
 
     private lateinit var gradientViewer: ImageView
 
-    var screenHeight: Int = 0
+    private var screenHeight: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

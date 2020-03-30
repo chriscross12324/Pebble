@@ -26,13 +26,12 @@ object Values {
 
     var lastVersion = 0
     lateinit var browse: ArrayList<HashMap<String, String>>
-    lateinit var searched: HashMap<String, String>
 
     var gridCount: IconSwitch.Checked = IconSwitch.Checked.RIGHT
 
     //Gradient Creator Saved values
-    var createGradientStartColour: String = "#f6d365"
-    var createGradientEndColour: String = "#fda085"
+    var createGradientStartColour: String = "#acd77b"
+    var createGradientEndColour: String = "#74d77b"
     var createGradientName: String = ""
     var createGradientDescription = ""
 

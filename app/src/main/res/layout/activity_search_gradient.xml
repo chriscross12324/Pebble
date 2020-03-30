@@ -159,4 +159,15 @@
         android:focusable="true"
         android:visibility="gone"
         android:elevation="10dp" />
+
+    <TextView
+        android:id="@+id/textEntry"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Search"
+        android:textColor="?PrimaryTextColour"
+        android:textSize="48sp"
+        android:fontFamily="@font/googlesans_bold"
+        android:gravity="center"
+        android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

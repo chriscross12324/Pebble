@@ -13,27 +13,27 @@ import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_search_gradient.*
 
 class SearchGradient : AppCompatActivity() {
 
-    lateinit var backButton: LinearLayout
+    private lateinit var backButton: LinearLayout
     private lateinit var buttonSearch: LinearLayout
     private lateinit var searchPopup: LinearLayout
     private lateinit var touchBlocker: View
 
-    lateinit var searchResultsRecycler: RecyclerView
+    private lateinit var searchResultsRecycler: RecyclerView
 
-    lateinit var searchField: EditText
-    lateinit var searchFieldHolder: LinearLayout
+    private lateinit var searchField: EditText
+    private lateinit var searchFieldHolder: LinearLayout
+    private lateinit var searchEntry: TextView
 
-    lateinit var browseItems: ArrayList<HashMap<String, String>>
-    lateinit var searchResults: ArrayList<HashMap<String, String>>
+    private lateinit var browseItems: ArrayList<HashMap<String, String>>
+    private lateinit var searchResults: ArrayList<HashMap<String, String>>
 
     var searchChanged = true
 
@@ -60,6 +60,7 @@ class SearchGradient : AppCompatActivity() {
         //Initiate EditText
         searchField = findViewById(R.id.searchField)
         searchFieldHolder = findViewById(R.id.searchFieldHolder)
+        searchEntry = findViewById(R.id.textEntry)
 
         browseItems = Values.browse
         searchResults = ArrayList()
@@ -98,14 +99,14 @@ class SearchGradient : AppCompatActivity() {
             }
         })
 
-        searchField.setOnKeyListener { view, i, keyEvent ->
+        searchField.setOnKeyListener { _, _, keyEvent ->
             if (keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
                 searchGradients()
             }
             false
         }
 
-        searchField.setOnFocusChangeListener { view, b ->
+        searchField.setOnFocusChangeListener { _, b ->
             if (b) {
                 UIElements.linearLayoutObjectAnimator(backButton, "translationY", -80f, 300, 0, DecelerateInterpolator())
                 UIElements.linearLayoutObjectAnimator(searchFieldHolder, "translationY", -80f, 300, 0, DecelerateInterpolator())
@@ -118,6 +119,7 @@ class SearchGradient : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     private fun searchGradients() {
         searchField.clearFocus()
         val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -173,7 +175,7 @@ class SearchGradient : AppCompatActivity() {
                 Vibration.lowFeedback(this)
                 touchBlocker.visibility = View.VISIBLE
 
-                val details = Intent(this, ActivityGradientDetailsK::class.java)
+                val details = Intent(this, ActivityGradientDetails::class.java)
                 val info = searchResults[position]
 
                 val gradientName = info["backgroundName"]
@@ -191,6 +193,12 @@ class SearchGradient : AppCompatActivity() {
             }
         } catch (e: Exception) {
             Log.e("ERR", "pebble.search_gradient.set_results_grid: ${e.localizedMessage}")
+        }
+
+        try {
+            searchEntry.text = searchField.text.toString().replace(" ", "\n")
+        } catch (e: Exception) {
+            Log.e("ERR", "No TextView")
         }
     }
 

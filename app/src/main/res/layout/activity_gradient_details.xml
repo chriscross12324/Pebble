@@ -22,14 +22,14 @@
                 android:id="@+id/gradientViewStatic"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:alpha="1"
                 android:background="@drawable/placeholder_gradient"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                android:alpha="1"/>
+                app:layout_constraintVertical_bias="0.0" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
@@ -42,7 +42,7 @@
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/gradientViewStatic"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" >
+                app:layout_constraintStart_toStartOf="parent">
 
                 <TextView
                     android:layout_width="0dp"
@@ -61,12 +61,12 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="16dp"
-                android:visibility="invisible"
                 android:animateLayoutChanges="true"
                 android:background="@drawable/details_background"
-                android:elevation="12dp"
                 android:clickable="true"
+                android:elevation="12dp"
                 android:focusable="true"
+                android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/actionsHolder"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -127,8 +127,8 @@
                     android:layout_marginEnd="32dp"
                     android:layout_marginBottom="16dp"
                     android:orientation="horizontal"
-                    android:weightSum="2"
                     android:visibility="visible"
+                    android:weightSum="2"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -159,7 +159,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
                                 android:fontFamily="@font/googlesans_bold"
-                                android:gravity="center_vertical"
                                 android:text="#76E646"
                                 android:textAlignment="center"
                                 android:textColor="?SecondaryTextColour"
@@ -196,7 +195,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
                                 android:fontFamily="@font/googlesans_bold"
-                                android:gravity="center_vertical"
                                 android:text="#76E646"
                                 android:textAlignment="center"
                                 android:textColor="?SecondaryTextColour"
@@ -209,6 +207,7 @@
                     </LinearLayout>
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/optionsHolder"
                     android:layout_width="0dp"
@@ -219,7 +218,7 @@
                     android:layout_marginBottom="16dp"
                     android:orientation="horizontal"
                     android:visibility="gone"
-                    android:weightSum="2"
+                    android:weightSum="1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -228,24 +227,34 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center">
-                        <ImageView
+                        android:layout_gravity="center"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/googlesans_medium"
+                            android:gravity="center"
+                            android:text="Coming soon"
+                            android:textColor="?SecondaryTextColour" />
+                        <!--<ImageView
                             android:layout_width="match_parent"
                             android:layout_height="25dp"
                             android:src="@drawable/icon_download"
-                            android:tint="?SecondaryTextColour"/>
+                            android:tint="?SecondaryTextColour"/>-->
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center">
+                        android:layout_gravity="center"
+                        android:layout_weight="1">
+
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="25dp"
                             android:src="@drawable/icon_share"
-                            android:tint="?SecondaryTextColour"/>
+                            android:tint="?SecondaryTextColour" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -270,9 +279,9 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="24dp"
-                android:visibility="visible"
                 android:background="@drawable/details_background"
                 android:elevation="12dp"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/gradientViewStatic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -341,9 +350,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:visibility="visible"
                 android:background="@drawable/details_background"
                 android:elevation="12dp"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/gradientViewStatic">
@@ -352,13 +361,13 @@
                     android:id="@+id/copiedText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="2dp"
                     android:fontFamily="@font/googlesans_medium"
-                    android:text="Copied\nto Clipboard"
                     android:gravity="center"
+                    android:text="Copied\nto Clipboard"
                     android:textColor="?SecondaryTextColour"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
