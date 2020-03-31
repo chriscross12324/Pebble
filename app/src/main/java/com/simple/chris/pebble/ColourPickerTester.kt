@@ -2,22 +2,21 @@ package com.simple.chris.pebble
 
 import android.app.Dialog
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.SeekBar
-import android.widget.SeekBar.OnSeekBarChangeListener
+import androidx.appcompat.app.AppCompatActivity
 
 class ColourPickerTester : AppCompatActivity() {
 
-    lateinit var redSeek: SeekBar
-    lateinit var greenSeek: SeekBar
-    lateinit var blueSeek: SeekBar
-    lateinit var done: LinearLayout
-    lateinit var editText: EditText
-    lateinit var colourDisplay: RelativeLayout
+    private lateinit var redSeek: SeekBar
+    private lateinit var greenSeek: SeekBar
+    private lateinit var blueSeek: SeekBar
+    private lateinit var done: LinearLayout
+    private lateinit var editText: EditText
+    private lateinit var colourDisplay: RelativeLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +26,6 @@ class ColourPickerTester : AppCompatActivity() {
 
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.colour_picker_dialog)
-
 
         redSeek = dialog.findViewById(R.id.brush_red_seek)
         greenSeek = dialog.findViewById(R.id.brush_green_seek)

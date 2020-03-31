@@ -27,7 +27,6 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.simple.chris.pebble.Values.askMobileData
-import com.simple.chris.pebble.Connections.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -108,8 +107,8 @@ class ConnectingActivity : AppCompatActivity() {
     }
 
     private fun checkConnection() {
-        if (isNetworkConnected(this)) {
-            if (isNetworkTypeData(this)) {
+        if (Connection.isNetworkAvailable(this)) {
+            if (Connection.isNetworkTypeData(this)) {
                 if (askMobileData) {
                     if (oneTime) {
                         getItems()
