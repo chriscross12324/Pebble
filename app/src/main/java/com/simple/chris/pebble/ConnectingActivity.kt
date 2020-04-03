@@ -86,6 +86,13 @@ class ConnectingActivity : AppCompatActivity() {
         background = findViewById(R.id.background)
         animationView = findViewById(R.id.animationView)
 
+        background.setOnClickListener {
+            connectionNotificationHandler.removeCallbacksAndMessages(null)
+            connectionRetryHandler.removeCallbacksAndMessages(null)
+            startActivity(Intent(this, Feedback::class.java))
+            finish()
+        }
+
         //Random Connecting Body
         val randomConnectingBody = this.resources.getStringArray(R.array.connecting_array)
         connectionDialogBody.text = randomConnectingBody[Random().nextInt(randomConnectingBody.size)]

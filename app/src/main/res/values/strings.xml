@@ -2,10 +2,12 @@
     <string name="app_name">Pebble</string>
 
     <!-- English Strings -->
+    <string name="text_eng_ok">Ok</string>
     <string name="text_eng_next">Next</string>
     <string name="text_eng_back">Back</string>
     <string name="text_eng_cancel">Cancel</string>
     <string name="text_eng_options">Options</string>
+    <string name="text_eng_submit">Submit</string>
 
     <string name="create_group_body">Create a new group to store gradients in</string>
     <string name="pebble">Pebble</string>
@@ -34,6 +36,10 @@
     <string name="greeting_morning">Good\nMorning</string>
     <string name="greeting_afternoon">Good\nAfternoon</string>
     <string name="greeting_evening">Good\nEvening</string>
+    <string name="dialog_text_eng_missing_info">Missing Info</string>
+    <string name="dialog_text_eng_missing_info_body">It looks like you\'re missing some required information, please make sure you filled out your name and included some feedback.</string>
+    <string name="dialog_text_eng_email">Email</string>
+    <string name="dialog_text_eng_email_body">Providing an email is not required, it just helps us get in contact with you if we need anymore information.</string>
 
     <string-array name="connecting_array">
         <item>This shouldn\'t take long</item>
@@ -57,5 +63,12 @@
     <string-array name="filter_array">
         <item>Newest First</item>
         <item>Oldest First</item>
+    </string-array>
+
+    <string-array name="feedback_type_array">
+        <item>App Crashes/Restarts</item>
+        <item>Optimization Issue</item>
+        <item>Visual Issue</item>
+        <item>Suggestion</item>
     </string-array>
 </resources>

@@ -34,6 +34,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     private var bottomSheetPeekHeight = 0
 
     private var navigationMenuExpanded = false
+    private val navigationMenuHeight = 200f
 
 
     /*
@@ -112,7 +113,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     }
 
     private fun createGradient() {
-        /*createGradientBanner.setOnClickListener {
+        createGradientBanner.setOnClickListener {
             touchBlocker.visibility = View.VISIBLE
             constraintLayoutObjectAnimator(createGradientDetailsHolder, "alpha", 0f, 150, 0, DecelerateInterpolator())
 
@@ -122,7 +123,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             Handler().postDelayed({
                 startActivity(createGradientIntent, activityOptions.toBundle())
             }, 150)
-        }*/
+        }
     }
 
     private fun getTime() {
@@ -152,12 +153,12 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     private fun navigationMenu() {
         buttonOptions.setOnClickListener {
             if (!navigationMenuExpanded) {
-                navigationMenuAnimation(View.VISIBLE, convertToDP(this, 50f), convertToDP(this, 150f),
+                navigationMenuAnimation(View.VISIBLE, convertToDP(this, 50f), convertToDP(this, navigationMenuHeight),
                         convertToDP(this, 0f), convertToDP(this, 20f), R.drawable.icon_close, true)
                 Vibration.mediumFeedback(this)
                 //Toast.makeText(this, "Expanded", Toast.LENGTH_SHORT).show()
             } else {
-                navigationMenuAnimation(View.GONE, convertToDP(this, 150f), convertToDP(this, 50f),
+                navigationMenuAnimation(View.GONE, convertToDP(this, navigationMenuHeight), convertToDP(this, 50f),
                         convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)
             }
         }
@@ -166,7 +167,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             touchBlockerMenu.setOnTouchListener { _, motionEvent ->
                 if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                     if (navigationMenuExpanded) {
-                        navigationMenuAnimation(View.GONE, convertToDP(this, 150f), convertToDP(this, 50f),
+                        navigationMenuAnimation(View.GONE, convertToDP(this, navigationMenuHeight), convertToDP(this, 50f),
                                 convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)
                     }
                 }
@@ -180,7 +181,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             touchBlockerMenuLeft.setOnTouchListener { _, motionEvent ->
                 if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                     if (navigationMenuExpanded) {
-                        navigationMenuAnimation(View.GONE, convertToDP(this, 150f), convertToDP(this, 50f),
+                        navigationMenuAnimation(View.GONE, convertToDP(this, navigationMenuHeight), convertToDP(this, 50f),
                                 convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)
                     }
                 }
@@ -189,7 +190,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             touchBlockerMenuRight.setOnTouchListener { _, motionEvent ->
                 if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                     if (navigationMenuExpanded) {
-                        navigationMenuAnimation(View.GONE, convertToDP(this, 150f), convertToDP(this, 50f),
+                        navigationMenuAnimation(View.GONE, convertToDP(this, navigationMenuHeight), convertToDP(this, 50f),
                                 convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)
                     }
                 }
@@ -206,6 +207,12 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             val searchGradientActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, searchIcon, "sharedSearchElement")
 
             startActivity(searchGradientIntent, searchGradientActivityOptions.toBundle())
+        }
+
+        buttonFeedback.setOnClickListener {
+            touchBlocker.visibility = View.VISIBLE
+            startActivity(Intent(this, Feedback::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
 
         buttonReload.setOnClickListener {
@@ -237,6 +244,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
         buttonSearch.visibility = visibility
         //buttonSettings.visibility = visibility
+        buttonFeedback.visibility = visibility
         buttonReload.visibility = visibility
 
         linearLayoutHeightAnimator(navigationHolder, startSize, endSize, 400, 0, DecelerateInterpolator(3f))
@@ -281,7 +289,12 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
                 "SearchGradient" -> {
                     Values.currentActivity = "Browse"
                     touchBlocker.visibility = View.GONE
-                    navigationMenuAnimation(View.GONE, convertToDP(this, 150f), convertToDP(this, 50f),
+                    navigationMenuAnimation(View.GONE, convertToDP(this, navigationMenuHeight), convertToDP(this, 50f),
+                            convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)
+                }
+                "Feedback" -> {
+                    touchBlocker.visibility = View.GONE
+                    navigationMenuAnimation(View.GONE, convertToDP(this, navigationMenuHeight), convertToDP(this, 50f),
                             convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)
                 }
             }

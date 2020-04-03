@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?ForegroundColour"
+    android:background="?BackgroundColour"
     android:animateLayoutChanges="true">
-
 
     <View
         android:id="@+id/navigationMenuPlacementHolder"
@@ -26,7 +25,7 @@
         app:layout_constraintStart_toStartOf="@+id/navigationMenuPlacementHolder"
         app:layout_constraintTop_toTopOf="@+id/navigationMenuPlacementHolder"
         android:background="@drawable/button_background"
-        android:animateLayoutChanges="true"
+        android:backgroundTint="?ForegroundColour"
         android:clickable="true"
         android:focusable="true">
         <LinearLayout
@@ -67,6 +66,18 @@
                 android:tint="?PrimaryTextColour"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/buttonFeedback"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:visibility="gone">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="12dp"
+                android:src="@drawable/icon_feedback"
+                android:tint="?PrimaryTextColour"/>
+        </LinearLayout>
+        <LinearLayout
             android:id="@+id/buttonReload"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -85,7 +96,7 @@
         android:id="@+id/helloText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="64dp"
         android:fontFamily="@font/googlesans_bold"
         android:text="Hello,\nchriscross12324"
@@ -166,8 +177,8 @@
             android:layout_height="match_parent"
             android:background="?BackgroundColour"
             android:transitionName="cardView"
-            app:cardBackgroundColor="?ForegroundColour"
-            app:cardCornerRadius="25dp"
+            app:cardBackgroundColor="?BackgroundColour"
+            app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 

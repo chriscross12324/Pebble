@@ -16,17 +16,21 @@
         android:supportsRtl="true"
         android:theme="@style/Main"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <activity android:name=".Feedback"></activity>
         <activity android:name=".ColourPickerTester" />
         <activity android:name=".CreateGradientNew" />
-        <activity android:name=".SearchGradient" android:screenOrientation="portrait"
+        <activity
+            android:name=".SearchGradient"
+            android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-        <activity android:name=".CreateGradient" />
-        <activity android:name=".ActivityGradientDetails" android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
+        <activity
+            android:name=".ActivityGradientDetails"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ActivitySplash"
-            android:theme="@style/splashTheme"
             android:screenOrientation="portrait"
+            android:theme="@style/splashTheme"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,13 +38,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityBrowse"
+        <activity
+            android:name=".ActivityBrowse"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
+            tools:ignore="LockedOrientationActivity" />
         <activity android:name=".ActivitySettings" />
-        <activity android:name=".ConnectingActivity"
+        <activity
+            android:name=".ConnectingActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ActivityPermissions"
             android:screenOrientation="portrait"

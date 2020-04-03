@@ -21,6 +21,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.simple.chris.pebble.UIElements.constraintLayoutObjectAnimator
 import kotlinx.android.synthetic.main.activity_gradient_details.*
+import com.simple.chris.pebble.Calculations.convertToDP
 import kotlin.math.roundToInt
 
 class ActivityGradientDetails : AppCompatActivity() {
@@ -36,6 +37,7 @@ class ActivityGradientDetails : AppCompatActivity() {
     private var detailsHolderExpanded = false
     private var copiedAnimationPlaying = false
 
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UIElements.setTheme(this)
@@ -52,10 +54,14 @@ class ActivityGradientDetails : AppCompatActivity() {
                 GradientDrawable.Orientation.TL_BR,
                 intArrayOf(startColourInt, endColourInt)
         )
+        gradientDrawable.cornerRadius = convertToDP(this, 20f)
         gradientViewStatic.background = gradientDrawable
         //gradientViewAnimated.background = gradientDrawable
 
-        corners.transitionName = gradientNameString
+        gradientViewStatic.transitionName = gradientNameString
+        if (Calculations.isAndroidPOrGreater()) {
+            gradientViewStatic.outlineSpotShadowColor = endColourInt
+        }
 
         if (gradientDescriptionString == "") {
             gradientDescription.visibility = View.GONE
@@ -205,7 +211,6 @@ class ActivityGradientDetails : AppCompatActivity() {
             dismissButton.setOnClickListener {
                 Values.detailsPushHoldPopupClosed = true
                 pushHoldDialog.dismiss()
-                Log.e("INFO", "Clicked")
             }
 
             val window = pushHoldDialog.window
@@ -214,7 +219,7 @@ class ActivityGradientDetails : AppCompatActivity() {
 
             Handler().postDelayed({
                 pushHoldDialog.show()
-            }, 1000)
+            }, 1500)
         }
     }
 

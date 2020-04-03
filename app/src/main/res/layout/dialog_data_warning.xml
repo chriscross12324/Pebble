@@ -20,7 +20,7 @@
         app:srcCompat="@drawable/icon_data" />
 
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/usersEmailField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -47,7 +47,7 @@
         android:textColor="?SecondaryTextColour"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text" />
+        app:layout_constraintTop_toBottomOf="@+id/usersEmailField" />
 
     <Button
         android:id="@+id/useButton"
