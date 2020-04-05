@@ -59,7 +59,7 @@
             android:clickable="true"
             android:elevation="12dp"
             android:focusable="true"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/actionsHolder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -211,33 +211,35 @@
                 android:layout_marginBottom="16dp"
                 android:orientation="horizontal"
                 android:visibility="gone"
-                android:weightSum="1"
+                android:weightSum="2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dividerOne">
 
                 <LinearLayout
+                    android:id="@+id/downloadGradient"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1">
 
-                    <TextView
+                    <!--<TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fontFamily="@font/googlesans_medium"
                         android:gravity="center"
                         android:text="Coming soon"
-                        android:textColor="?SecondaryTextColour" />
-                    <!--<ImageView
+                        android:textColor="?SecondaryTextColour" />-->
+                    <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
-                        android:src="@drawable/icon_download"
-                        android:tint="?SecondaryTextColour"/>-->
+                        android:src="@drawable/icon_save"
+                        android:tint="?SecondaryTextColour"/>
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/setWallpaper"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -246,7 +248,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
-                        android:src="@drawable/icon_share"
+                        android:src="@drawable/icon_wallpaper"
                         android:tint="?SecondaryTextColour" />
                 </LinearLayout>
 

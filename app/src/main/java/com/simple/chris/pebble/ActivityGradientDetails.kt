@@ -2,12 +2,15 @@ package com.simple.chris.pebble
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.app.WallpaperManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
@@ -17,6 +20,7 @@ import android.view.View
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.simple.chris.pebble.UIElements.constraintLayoutObjectAnimator
@@ -37,6 +41,8 @@ class ActivityGradientDetails : AppCompatActivity() {
     private var detailsHolderExpanded = false
     private var copiedAnimationPlaying = false
 
+    private lateinit var gradientDrawable: GradientDrawable
+
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +56,7 @@ class ActivityGradientDetails : AppCompatActivity() {
         startColourInt = Color.parseColor(intent.getStringExtra("startColour"))
         endColourInt = Color.parseColor(intent.getStringExtra("endColour"))
 
-        val gradientDrawable = GradientDrawable(
+        gradientDrawable = GradientDrawable(
                 GradientDrawable.Orientation.TL_BR,
                 intArrayOf(startColourInt, endColourInt)
         )
@@ -197,7 +203,14 @@ class ActivityGradientDetails : AppCompatActivity() {
                 optionsHolder.visibility = View.GONE
                 detailsHolderExpanded = false
             }
+        }
 
+        downloadGradient.setOnClickListener {
+            createBitmap(gradientDrawable, Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height"))
+        }
+
+        setWallpaper.setOnClickListener {
+            showSetWallpaperDialog()
         }
     }
 
@@ -257,6 +270,61 @@ class ActivityGradientDetails : AppCompatActivity() {
                 handler.postDelayed(this, 2000)
             }
         }, 2000)
+    }
+
+    private fun createBitmap(drawable: Drawable, width: Int, height: Int): Bitmap {
+        val mutableBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(mutableBitmap)
+        drawable.setBounds(0, 0, width, height)
+        drawable.draw(canvas)
+
+        return mutableBitmap
+    }
+
+    private fun showSetWallpaperDialog() {
+        val dialog = Dialog(this, R.style.dialogStyle)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dialog_set_wallpaper)
+
+        val buttonYes: LinearLayout = dialog.findViewById(R.id.yes)
+        buttonYes.setOnClickListener {
+            val wallpaperManager = WallpaperManager.getInstance(this)
+
+            try {
+                wallpaperManager.setBitmap(createBitmap(gradientDrawable, Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height")))
+            } catch (e: Exception) {
+                Log.e("ERR", "pebble.activity_gradient_details.buttons.setWallpaper: ${e.localizedMessage}")
+                showWallpaperFailedDialog()
+            }
+            dialog.dismiss()
+        }
+        val buttonNo: LinearLayout = dialog.findViewById(R.id.no)
+        buttonNo.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        val window = dialog.window
+        window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        window.setDimAmount(0.5f)
+
+        dialog.show()
+    }
+
+    private fun showWallpaperFailedDialog() {
+        val dialog = Dialog(this, R.style.dialogStyle)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dialog_set_wallpaper_failed)
+
+        val dismissPopup: LinearLayout = dialog.findViewById(R.id.dismissPopup)
+        dismissPopup.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        val window = dialog.window
+        window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        window.setDimAmount(0.5f)
+
+        dialog.show()
     }
 
     override fun onBackPressed() {

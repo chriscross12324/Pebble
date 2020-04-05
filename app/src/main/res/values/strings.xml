@@ -40,6 +40,9 @@
     <string name="dialog_text_eng_missing_info_body">It looks like you\'re missing some required information, please make sure you filled out your name and included some feedback.</string>
     <string name="dialog_text_eng_email">Email</string>
     <string name="dialog_text_eng_email_body">Providing an email is not required, it just helps us get in contact with you if we need anymore information.</string>
+    <string name="text_eng_yes">Yes</string>
+    <string name="text_eng_no">No</string>
+    <string name="dialog_set_wallpaper_body">Do you want to set this gradient as your wallpaper?</string>
 
     <string-array name="connecting_array">
         <item>This shouldn\'t take long</item>
