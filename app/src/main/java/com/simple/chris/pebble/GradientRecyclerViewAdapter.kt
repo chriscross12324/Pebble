@@ -27,18 +27,23 @@ class GradientRecyclerViewAdapter internal constructor(var context: Context, pri
 
     @SuppressLint("NewApi")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val details: HashMap<String, String> = gradients[position]
-        holder.gradientName.text = details["backgroundName"]
-        val startColour = Color.parseColor(details["startColour"])
-        val endColour = Color.parseColor(details["endColour"])
-        val gradientDrawable = GradientDrawable(
-                GradientDrawable.Orientation.TL_BR,
-                intArrayOf(startColour, endColour)
-        )
-        gradientDrawable.cornerRadius = Calculations.convertToDP(context, 20f)
-        holder.gradientView.background = gradientDrawable
-        if (Calculations.isAndroidPOrGreater()) {
-            holder.gradientView.outlineSpotShadowColor = endColour
+        try {
+            val details: HashMap<String, String> = gradients[position]
+            holder.gradientName.text = details["backgroundName"]
+            val startColour = Color.parseColor(details["startColour"])
+            val endColour = Color.parseColor(details["endColour"])
+            val gradientDrawable = GradientDrawable(
+                    GradientDrawable.Orientation.TL_BR,
+                    intArrayOf(startColour, endColour)
+            )
+            gradientDrawable.cornerRadius = Calculations.convertToDP(context, 20f)
+            holder.gradientView.background = gradientDrawable
+            if (Calculations.isAndroidPOrGreater()) {
+                holder.gradientView.outlineSpotShadowColor = endColour
+            }
+        } catch (e: Exception) {
+            holder.gradientView.setBackgroundColor(context.resources.getColor(R.color.pebbleEnd))
+            holder.gradientName.text = "(Something went wrong)"
         }
     }
 

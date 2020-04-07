@@ -52,6 +52,19 @@ object UIElements {
         }, delay)
     }
 
+    fun constraintLayoutElevationAnimator(layout: ConstraintLayout, startElevation: Float, endElevation: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
+        Handler().postDelayed({
+            val valueAnimator = ValueAnimator.ofFloat(startElevation, endElevation)
+            valueAnimator.addUpdateListener {
+                val current = it.animatedValue as Float
+                layout.elevation = current
+            }
+            valueAnimator.interpolator = interpolator
+            valueAnimator.duration = duration
+            valueAnimator.start()
+        }, delay)
+    }
+
     fun linearLayoutObjectAnimator(layout: LinearLayout, propertyName: String, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
         Handler().postDelayed({
             val objectAnimator = ObjectAnimator.ofFloat(layout, propertyName, endValue)

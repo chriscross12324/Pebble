@@ -111,6 +111,19 @@
                         android:tint="?PrimaryTextColour" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/buttonFeedback"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:visibility="gone">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="12dp"
+                        android:src="@drawable/icon_feedback"
+                        android:tint="?PrimaryTextColour"/>
+                </LinearLayout>
+
                 <!--<LinearLayout
                     android:id="@+id/buttonSettings"
                     android:layout_width="match_parent"

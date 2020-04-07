@@ -1,6 +1,11 @@
 package com.simple.chris.pebble
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.app.WallpaperManager
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.drawable.GradientDrawable
@@ -9,7 +14,10 @@ import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat
@@ -302,22 +310,49 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     }
 
     override fun onGradientClick(position: Int, view: View) {
-        Vibration.lowFeedback(this)
-        touchBlocker.visibility = View.VISIBLE
-        val details = Intent(this, ActivityGradientDetails::class.java)
-        val info = Values.browse[position]
+        try {
+            Vibration.lowFeedback(this)
+            touchBlocker.visibility = View.VISIBLE
+            val details = Intent(this, ActivityGradientDetails::class.java)
+            val info = Values.browse[position]
 
-        val gradientName = info["backgroundName"]
-        val startColour = info["startColour"]
-        val endColour = info["endColour"]
-        val description = info["description"]
+            val gradientName = info["backgroundName"]
+            val startColour = info["startColour"]
+            val endColour = info["endColour"]
+            val description = info["description"]
 
-        details.putExtra("gradientName", gradientName)
-        details.putExtra("startColour", startColour)
-        details.putExtra("endColour", endColour)
-        details.putExtra("description", description)
+            details.putExtra("gradientName", gradientName)
+            details.putExtra("startColour", startColour)
+            details.putExtra("endColour", endColour)
+            details.putExtra("description", description)
 
-        val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view.findViewById(R.id.gradient), gradientName as String)
-        startActivity(details, activityOptions.toBundle())
+            val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view.findViewById(R.id.gradient), gradientName as String)
+            startActivity(details, activityOptions.toBundle())
+        } catch (e: Exception) {
+            val dialog = Dialog(this, R.style.dialogStyle)
+            dialog.setCancelable(false)
+            dialog.setContentView(R.layout.dialog_something_wrong)
+
+            val dismissPopup: LinearLayout = dialog.findViewById(R.id.dismissPopup)
+            dismissPopup.setOnClickListener {
+                dialog.dismiss()
+            }
+            val copyError: LinearLayout = dialog.findViewById(R.id.copyError)
+            copyError.setOnClickListener {
+                val clipboardManager: ClipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData = ClipData.newPlainText("errorCode", e.localizedMessage)
+                clipboardManager.setPrimaryClip(clipData)
+                dialog.dismiss()
+            }
+
+            dialog.findViewById<TextView>(R.id.errorCode).text = e.localizedMessage
+
+            val window = dialog.window
+            window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+            window.setDimAmount(0.5f)
+
+            dialog.show()
+        }
+
     }
 }

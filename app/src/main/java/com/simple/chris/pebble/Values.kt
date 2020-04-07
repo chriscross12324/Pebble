@@ -1,6 +1,9 @@
 package com.simple.chris.pebble
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 import com.polyak.iconswitch.IconSwitch
 
 object Values {
@@ -35,6 +38,11 @@ object Values {
     var createGradientName: String = ""
     var createGradientDescription = ""
 
+    fun storagePermissionGiven(context: Context): Boolean {
+        val result = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        return result == PackageManager.PERMISSION_GRANTED
+    }
+
 
     fun saveValues(context: Context) {
         val sharedPreferences = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE)
@@ -44,11 +52,7 @@ object Values {
         editor.putBoolean("askMobileData", askMobileData)
         editor.putString("theme", theme)
         editor.putInt("lastVersion", lastVersion)
-        if (gridCount == IconSwitch.Checked.RIGHT) {
-            editor.putBoolean("normalGrid", true)
-        } else {
-            editor.putBoolean("normalGrid", false)
-        }
+        editor.putBoolean("detailsPushHoldPopupClosed", detailsPushHoldPopupClosed)
 
         editor.apply()
     }
@@ -57,18 +61,13 @@ object Values {
         val sharedPreferences = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE)
         firstStart = sharedPreferences.getBoolean("firstStart", true)
         vibrations = sharedPreferences.getBoolean("vibrations", true)
-        askMobileData = sharedPreferences.getBoolean("askMobileData", true)
+        detailsPushHoldPopupClosed = sharedPreferences.getBoolean("detailsPushHoldPopupClosed", false)
         theme = sharedPreferences.getString("theme", "dark").toString()
         lastVersion = sharedPreferences.getInt("lastVersion", 0)
         askMobileData = try {
             sharedPreferences.getBoolean("askMobileData", true)
         } catch (e: Exception) {
             sharedPreferences.getBoolean("askData", true)
-        }
-        gridCount = if (sharedPreferences.getBoolean("normalGrid", true)) {
-            IconSwitch.Checked.RIGHT
-        } else {
-            IconSwitch.Checked.LEFT
         }
 
     }

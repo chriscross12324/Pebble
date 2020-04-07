@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_marginStart="32dp"
-    android:layout_marginEnd="32dp"
     android:layout_marginTop="16dp"
+    android:layout_marginEnd="32dp"
     android:layout_marginBottom="16dp"
     android:background="@drawable/details_background"
     android:elevation="5dp">
@@ -14,11 +14,11 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/icon_view"
+        android:src="@drawable/icon_attention"
         android:tint="?PrimaryTextColour"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:fontFamily="@font/googlesans_bold"
-        android:text="Push &amp; Hold"
+        android:text="Oops"
         android:textColor="?PrimaryTextColour"
         android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
@@ -44,12 +44,26 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:fontFamily="@font/googlesans_regular"
-        android:text="@string/PushHoldGradient"
+        android:text="It looks like something went wrong, if you decide to submit feedback copy this:"
         android:textColor="?SecondaryTextColour"
-        app:layout_constraintBottom_toTopOf="@+id/dismissPopup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    <TextView
+        android:id="@+id/errorCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/googlesans_medium"
+        android:text="Error code goes here"
+        android:textColor="?PrimaryTextColour"
+        app:layout_constraintBottom_toTopOf="@+id/copyError"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <LinearLayout
         android:id="@+id/dismissPopup"
@@ -66,10 +80,29 @@
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="16dp"
             android:fontFamily="@font/googlesans_bold"
-            android:text="@string/appupdater_btn_dismiss"
+            android:text="@string/text_eng_yes"
             android:textColor="?PrimaryTextColour"
             android:textSize="16sp" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/copyError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/googlesans_bold"
+            android:text="@android:string/copy"
+            android:textColor="?PrimaryTextColour"
+            android:textSize="16sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

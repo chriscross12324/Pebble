@@ -59,7 +59,7 @@
             android:clickable="true"
             android:elevation="12dp"
             android:focusable="true"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/actionsHolder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -200,71 +200,65 @@
                 </LinearLayout>
 
             </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:id="@+id/optionsHolder"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginBottom="16dp"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                android:weightSum="2"
+        <View
+            android:id="@+id/optionsBaseView"
+            android:layout_width="2dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/actionsHolder"
+            app:layout_constraintEnd_toEndOf="@+id/detailsHolder"
+            app:layout_constraintStart_toStartOf="@+id/detailsHolder" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/saveGradientButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/details_background"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/actionsHolder"
+            app:layout_constraintEnd_toStartOf="@+id/optionsBaseView"
+            app:layout_constraintStart_toStartOf="@+id/detailsHolder">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="0dp"
+                android:layout_margin="12dp"
+                android:src="@drawable/icon_save"
+                android:tint="?PrimaryTextColour"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dividerOne">
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
-                    android:id="@+id/downloadGradient"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1">
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <!--<TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/googlesans_medium"
-                        android:gravity="center"
-                        android:text="Coming soon"
-                        android:textColor="?SecondaryTextColour" />-->
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="25dp"
-                        android:src="@drawable/icon_save"
-                        android:tint="?SecondaryTextColour"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/setWallpaper"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="25dp"
-                        android:src="@drawable/icon_wallpaper"
-                        android:tint="?SecondaryTextColour" />
-                </LinearLayout>
-
-            </LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/setWallpaperButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="7dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/details_background"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/actionsHolder"
+            app:layout_constraintEnd_toEndOf="@+id/detailsHolder"
+            app:layout_constraintStart_toEndOf="@+id/optionsBaseView">
 
             <ImageView
-                android:id="@+id/arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:alpha="0"
-                android:rotation="-90"
+                android:layout_width="50dp"
+                android:layout_height="0dp"
+                android:layout_margin="12dp"
+                android:src="@drawable/icon_wallpaper"
                 android:tint="?PrimaryTextColour"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/icon_arrow" />
+                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

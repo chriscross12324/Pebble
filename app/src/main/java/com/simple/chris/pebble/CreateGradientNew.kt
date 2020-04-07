@@ -86,8 +86,8 @@ class CreateGradientNew : AppCompatActivity() {
         )
         gradientViewer.background = gradientDrawable
 
-        UIElements.imageViewObjectAnimator(sharedElementView, "alpha", 0f, 150, 350, LinearInterpolator())
-        UIElements.imageViewVisibility(sharedElementView, View.GONE, 350)
+        UIElements.imageViewObjectAnimator(sharedElementView, "alpha", 0f, 250, 450, LinearInterpolator())
+        UIElements.imageViewVisibility(sharedElementView, View.GONE, 700)
     }
 
     private fun preViewPlacements() {

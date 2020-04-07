@@ -23,9 +23,13 @@ import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.simple.chris.pebble.UIElements.constraintLayoutObjectAnimator
 import kotlinx.android.synthetic.main.activity_gradient_details.*
 import com.simple.chris.pebble.Calculations.convertToDP
+import com.simple.chris.pebble.UIElements.constraintLayoutElevationAnimator
+import com.simple.chris.pebble.UIElements.linearLayoutObjectAnimator
+import java.util.jar.Manifest
 import kotlin.math.roundToInt
 
 class ActivityGradientDetails : AppCompatActivity() {
@@ -42,6 +46,7 @@ class ActivityGradientDetails : AppCompatActivity() {
     private var copiedAnimationPlaying = false
 
     private lateinit var gradientDrawable: GradientDrawable
+    private lateinit var saveGradientDrawable: GradientDrawable
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +67,7 @@ class ActivityGradientDetails : AppCompatActivity() {
         )
         gradientDrawable.cornerRadius = convertToDP(this, 20f)
         gradientViewStatic.background = gradientDrawable
-        //gradientViewAnimated.background = gradientDrawable
+        createGradients()
 
         gradientViewStatic.transitionName = gradientNameString
         if (Calculations.isAndroidPOrGreater()) {
@@ -151,7 +156,7 @@ class ActivityGradientDetails : AppCompatActivity() {
                 constraintLayoutObjectAnimator(copiedNotification, "translationY", 0f, 500,
                         0, DecelerateInterpolator(3f))
                 constraintLayoutObjectAnimator(copiedNotification, "translationY",
-                        Calculations.convertToDP(this, -60f), 500,
+                        convertToDP(this, -60f), 500,
                         2000, DecelerateInterpolator(3f))
                 UIElements.constraintLayoutVisibility(copiedNotification, View.INVISIBLE, 2500)
 
@@ -174,7 +179,7 @@ class ActivityGradientDetails : AppCompatActivity() {
                 constraintLayoutObjectAnimator(copiedNotification, "translationY", 0f, 500,
                         0, DecelerateInterpolator(3f))
                 constraintLayoutObjectAnimator(copiedNotification, "translationY",
-                        Calculations.convertToDP(this, -60f), 500,
+                        convertToDP(this, -60f), 500,
                         2000, DecelerateInterpolator(3f))
                 UIElements.constraintLayoutVisibility(copiedNotification, View.INVISIBLE, 2500)
 
@@ -195,21 +200,39 @@ class ActivityGradientDetails : AppCompatActivity() {
 
         hideButton.setOnClickListener {
             if (!detailsHolderExpanded) {
-                hexHolder.visibility = View.GONE
-                optionsHolder.visibility = View.VISIBLE
-                detailsHolderExpanded = true
+                constraintLayoutObjectAnimator(detailsHolder, "translationY", convertToDP(this, -66f), 500, 0, DecelerateInterpolator(3f))
+                constraintLayoutElevationAnimator(saveGradientButton, 0f, convertToDP(this, 12f), 500, 100, DecelerateInterpolator())
+                constraintLayoutElevationAnimator(setWallpaperButton, 0f, convertToDP(this, 12f), 500, 100, DecelerateInterpolator())
+                saveGradientButton.visibility = View.VISIBLE
+                setWallpaperButton.visibility = View.VISIBLE
+                Handler().postDelayed({
+                    detailsHolderExpanded = true
+                }, 500)
+
             } else {
-                hexHolder.visibility = View.VISIBLE
-                optionsHolder.visibility = View.GONE
-                detailsHolderExpanded = false
+                constraintLayoutObjectAnimator(detailsHolder, "translationY", convertToDP(this, 0f), 500, 0, DecelerateInterpolator(3f))
+                constraintLayoutElevationAnimator(saveGradientButton, convertToDP(this, 12f), 0f, 500, 0, DecelerateInterpolator())
+                constraintLayoutElevationAnimator(setWallpaperButton, convertToDP(this, 12f), 0f, 500, 0, DecelerateInterpolator())
+                Handler().postDelayed({
+                    if (detailsHolder.translationY == convertToDP(this, 0f)) {
+                        saveGradientButton.visibility = View.GONE
+                        setWallpaperButton.visibility = View.GONE
+                    }
+                    detailsHolderExpanded = false
+                }, 500)
             }
         }
 
-        downloadGradient.setOnClickListener {
-            createBitmap(gradientDrawable, Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height"))
+        saveGradientButton.setOnClickListener {
+            //createBitmap(saveGradientDrawable, Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height"))
+            if (!Values.storagePermissionGiven(this)) {
+                showStoragePermissionDialog()
+                Log.e("INFO", Values.storagePermissionGiven(this).toString())
+            }
+
         }
 
-        setWallpaper.setOnClickListener {
+        setWallpaperButton.setOnClickListener {
             showSetWallpaperDialog()
         }
     }
@@ -245,6 +268,14 @@ class ActivityGradientDetails : AppCompatActivity() {
                 constraintLayoutObjectAnimator(detailsHolder, "alpha", 0f, 100, 50, LinearInterpolator())
                 constraintLayoutObjectAnimator(actionsHolder, "translationY", 100f, 300, 0, DecelerateInterpolator(3f))
                 constraintLayoutObjectAnimator(actionsHolder, "alpha", 0f, 100, 0, LinearInterpolator())
+
+                constraintLayoutElevationAnimator(saveGradientButton, convertToDP(this, 12f), 0f, 100, 0, DecelerateInterpolator())
+                constraintLayoutElevationAnimator(setWallpaperButton, convertToDP(this, 12f), 0f, 100, 0, DecelerateInterpolator())
+                Handler().postDelayed({
+                    saveGradientButton.visibility = View.GONE
+                    setWallpaperButton.visibility = View.GONE
+                }, 100)
+                detailsHolderExpanded = false
             } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                 //Show UI
                 constraintLayoutObjectAnimator(detailsHolder, "translationY", 0f, 300, 0, DecelerateInterpolator(3f))
@@ -291,7 +322,7 @@ class ActivityGradientDetails : AppCompatActivity() {
             val wallpaperManager = WallpaperManager.getInstance(this)
 
             try {
-                wallpaperManager.setBitmap(createBitmap(gradientDrawable, Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height")))
+                wallpaperManager.setBitmap(createBitmap(saveGradientDrawable, Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height")))
             } catch (e: Exception) {
                 Log.e("ERR", "pebble.activity_gradient_details.buttons.setWallpaper: ${e.localizedMessage}")
                 showWallpaperFailedDialog()
@@ -327,6 +358,32 @@ class ActivityGradientDetails : AppCompatActivity() {
         dialog.show()
     }
 
+    private fun showStoragePermissionDialog() {
+        val dialog = Dialog(this, R.style.dialogStyle)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dialog_storage_access)
+
+        val dismissPopup: LinearLayout = dialog.findViewById(R.id.dismissPopup)
+        dismissPopup.setOnClickListener {
+            dialog.dismiss()
+
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 1)
+        }
+
+        val window = dialog.window
+        window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        window.setDimAmount(0.5f)
+
+        dialog.show()
+    }
+
+    private fun createGradients() {
+        saveGradientDrawable = GradientDrawable(
+                GradientDrawable.Orientation.TL_BR,
+                intArrayOf(startColourInt, endColourInt)
+        )
+    }
+
     override fun onBackPressed() {
         constraintLayoutObjectAnimator(detailsHolder, "translationY",
                 (90 * resources.displayMetrics.density + detailsHolder.height).roundToInt().toFloat(), 250,
@@ -339,6 +396,10 @@ class ActivityGradientDetails : AppCompatActivity() {
         UIElements.constraintLayoutVisibility(detailsHolder, View.INVISIBLE, 250)
         UIElements.constraintLayoutVisibility(actionsHolder, View.INVISIBLE, 250)
         UIElements.constraintLayoutVisibility(copiedNotification, View.INVISIBLE, 250)
+        Handler().postDelayed({
+            saveGradientButton.visibility = View.GONE
+            setWallpaperButton.visibility = View.GONE
+        }, 100)
 
         Vibration.mediumFeedback(this)
 
