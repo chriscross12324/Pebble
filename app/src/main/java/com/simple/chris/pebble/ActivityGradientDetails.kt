@@ -367,7 +367,7 @@ class ActivityGradientDetails : AppCompatActivity() {
         dismissPopup.setOnClickListener {
             dialog.dismiss()
 
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 1)
+            //ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 1)
         }
 
         val window = dialog.window
