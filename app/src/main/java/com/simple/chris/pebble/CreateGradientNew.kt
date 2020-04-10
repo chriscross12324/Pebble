@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import com.simple.chris.pebble.Calculations.convertToDP
 import com.simple.chris.pebble.UIElements.gradientDrawable
 import kotlinx.android.synthetic.main.activity_create_gradient_new.*
+import kotlinx.android.synthetic.main.activity_gradient_details.*
 
 class CreateGradientNew : AppCompatActivity() {
 
@@ -56,6 +57,13 @@ class CreateGradientNew : AppCompatActivity() {
         }
 
         startColourPicker.setOnClickListener {
+            Values.currentlyEditing = "start"
+            startActivity(Intent(this, ColourPickerTester::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
+
+        endColourPicker.setOnClickListener {
+            Values.currentlyEditing = "end"
             startActivity(Intent(this, ColourPickerTester::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }

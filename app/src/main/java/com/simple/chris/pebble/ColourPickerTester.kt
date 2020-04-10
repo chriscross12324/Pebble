@@ -15,14 +15,19 @@ import kotlinx.android.synthetic.main.colour_picker_test.*
 
 class ColourPickerTester : AppCompatActivity() {
 
+    var hexValue = 0
+
     var hueProgress = 0
     var satProgress = 0
     var valProgress = 0
+
+    var hsv = floatArrayOf(0f, 1f, 1f)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UIElements.setTheme(this)
         setContentView(R.layout.colour_picker_test)
+        Values.currentActivity = "ColourPicker"
 
         val gradientDrawable = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
@@ -38,18 +43,18 @@ class ColourPickerTester : AppCompatActivity() {
         saturationDrawable.cornerRadius = Calculations.convertToDP(this, 20f)
         saturation.background = saturationDrawable
 
-        val lightnessDrawable = GradientDrawable(
+        val valueDrawable = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
                 intArrayOf(Color.parseColor("#000000"), Color.parseColor("#EAEAEA"))
         )
-        lightnessDrawable.cornerRadius = Calculations.convertToDP(this, 20f)
-        lightness.background = lightnessDrawable
+        valueDrawable.cornerRadius = Calculations.convertToDP(this, 20f)
+        value.background = valueDrawable
 
 
         hueSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progressValue: Int, fromUser: Boolean) {
                 hueProgress = progressValue
-                updateView()
+                hueUpdate()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -60,7 +65,7 @@ class ColourPickerTester : AppCompatActivity() {
         saturationSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progressValue: Int, fromUser: Boolean) {
                 satProgress = progressValue
-                updateView()
+                satUpdate()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -71,7 +76,7 @@ class ColourPickerTester : AppCompatActivity() {
         valueSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progressValue: Int, fromUser: Boolean) {
                 valProgress = progressValue
-                updateView()
+                valUpdate()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -82,7 +87,7 @@ class ColourPickerTester : AppCompatActivity() {
         hueText.setOnKeyListener { _, _, keyEvent ->
             if (keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
                 hueProgress = hueText.text.toString().toInt()
-                updateView()
+                hueUpdate()
             }
             false
         }
@@ -91,37 +96,54 @@ class ColourPickerTester : AppCompatActivity() {
 
     }
 
+    private fun setInitialValues() {
+        if (Values.currentlyEditing == "start") {
+            hexValue = Color.parseColor(Values.createGradientStartColour)
+        } else {
+            hexValue = Color.parseColor(Values.createGradientEndColour)
+        }
+
+        updateView()
+    }
+
     private fun setPaddingForSeekBars() {
         hueSeekBar.setPadding(6, 0, 6, 0)
         saturationSeekBar.setPadding(6, 0, 6, 0)
         valueSeekBar.setPadding(6, 0, 6, 0)
     }
 
-    private fun updateView() {
-        val hsv = floatArrayOf(0f, 1f, 1f)
+    private fun hueUpdate() {
         hsv[0] = 360f * hueProgress / 360
-        hsv[1] = satProgress / 100f
-        hsv[2] = valProgress / 100f
-        imageView.setBackgroundColor(Color.HSVToColor(hsv))
         hueText.setText("$hueProgress")
-        hueSeekBar.progress = hueProgress
-        satText.setText("$satProgress")
-        saturationSeekBar.progress = satProgress
-        valText.setText("$valProgress")
-        valueSeekBar.progress = valProgress
-
-        val hexValue = "#" + Integer.toHexString(Color.HSVToColor(hsv)).substring(2)
+        updateView()
 
         val saturationDrawable = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
-                intArrayOf(Color.parseColor("#EAEAEA"), Color.parseColor(hexValue))
+                intArrayOf(Color.parseColor("#EAEAEA"), hexValue)
         )
         saturationDrawable.cornerRadius = Calculations.convertToDP(this, 20f)
         saturation.background = saturationDrawable
+    }
 
-        hexValueTextView.text = hexValue
+    private fun satUpdate() {
+        hsv[1] = satProgress / 100f
+        satText.setText("$satProgress")
+        updateView()
+    }
 
-        HEXToRGB(hexValue)
+    private fun valUpdate() {
+        hsv[2] = valProgress / 100f
+        valText.setText("$valProgress")
+        updateView()
+    }
+
+    private fun updateView() {
+        val hexString = "#" + Integer.toHexString(Color.HSVToColor(hsv)).substring(2)
+        hexValue = Color.HSVToColor(hsv)
+        imageView.setBackgroundColor(hexValue)
+        hexValueTextView.text = hexString
+
+        HEXToRGB(hexString)
     }
 
     private fun HEXToRGB(hex: String) {

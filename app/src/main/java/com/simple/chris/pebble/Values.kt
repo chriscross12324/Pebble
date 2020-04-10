@@ -24,6 +24,7 @@ object Values {
     var vibrations: Boolean = true
     var askMobileData: Boolean = true
     var detailsPushHoldPopupClosed: Boolean = false
+    var currentlyEditing: String = ""
 
     var theme: String = "dark"
 
