@@ -27,6 +27,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.simple.chris.pebble.Values.askMobileData
+import kotlinx.android.synthetic.main.activity_connecting.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -34,9 +35,6 @@ import kotlin.collections.HashMap
 class ConnectingActivity : AppCompatActivity() {
 
     private lateinit var mQueue: RequestQueue
-
-    private lateinit var connectingDialog: ConstraintLayout
-    private lateinit var notification: ConstraintLayout
 
     private lateinit var noConnectionDialog: Dialog
     private lateinit var dataWarningDialog: Dialog
@@ -47,17 +45,10 @@ class ConnectingActivity : AppCompatActivity() {
     private lateinit var openSystemSettings: Button
     private lateinit var dontAskAgain: Button
 
-    private lateinit var notificationText: TextView
-    private lateinit var connectionStatusText: TextView
-    private lateinit var connectionDialogBody: TextView
-
-    private lateinit var background: ImageView
-    private lateinit var animationView: ImageView
-
-
     private var oneTime = false
     var downloaded = false
 
+    private val checkDownload = Handler()
     private val connectionNotificationHandler = Handler()
     private val connectionRetryHandler = Handler()
 
@@ -69,33 +60,13 @@ class ConnectingActivity : AppCompatActivity() {
 
         mQueue = Volley.newRequestQueue(this)
 
-        //ConstraintLayout
-        connectingDialog = findViewById(R.id.connectingDialog)
-        notification = findViewById(R.id.notification)
-
         //Dialog
         noConnectionDialog = Dialog(this)
         dataWarningDialog = Dialog(this)
 
-        //TextView
-        notificationText = findViewById(R.id.notificationText)
-        connectionStatusText = findViewById(R.id.connectionStatusText)
-        connectionDialogBody = findViewById(R.id.connectingDialogBody)
-
-        //ImageView
-        background = findViewById(R.id.background)
-        animationView = findViewById(R.id.animationView)
-
-        background.setOnClickListener {
-            connectionNotificationHandler.removeCallbacksAndMessages(null)
-            connectionRetryHandler.removeCallbacksAndMessages(null)
-            startActivity(Intent(this, Feedback::class.java))
-            finish()
-        }
-
         //Random Connecting Body
         val randomConnectingBody = this.resources.getStringArray(R.array.connecting_array)
-        connectionDialogBody.text = randomConnectingBody[Random().nextInt(randomConnectingBody.size)]
+        connectingDialogBody.text = randomConnectingBody[Random().nextInt(randomConnectingBody.size)]
 
         notification.post {
             notification.translationY = Calculations.convertToDP(this, -(notification.height).toFloat())
@@ -137,8 +108,7 @@ class ConnectingActivity : AppCompatActivity() {
     }
 
     private fun itemsGrabbed() {
-        val handler = Handler()
-        handler.postDelayed(object : Runnable {
+        checkDownload.postDelayed(object : Runnable {
             @SuppressLint("SyntheticAccessor")
             override fun run() {
                 if (downloaded) {
@@ -148,7 +118,7 @@ class ConnectingActivity : AppCompatActivity() {
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                     finish()
                 } else {
-                    handler.postDelayed(this, 100)
+                    checkDownload.postDelayed(this, 100)
                 }
             }
 
@@ -190,7 +160,7 @@ class ConnectingActivity : AppCompatActivity() {
     }
 
     private fun playConnectionDialog() {
-        UIElements.constraintLayoutObjectAnimator(connectingDialog, "alpha", 1f, 300, 0, LinearInterpolator())
+        UIElements.viewObjectAnimator(connectingDialog, "alpha", 1f, 300, 0, LinearInterpolator())
 
         animationView.setBackgroundResource(R.drawable.animation_loading)
         val animationDrawable = animationView.background as AnimationDrawable
@@ -285,12 +255,20 @@ class ConnectingActivity : AppCompatActivity() {
         Handler().postDelayed({
             notification.alpha = 1f
             Vibration.notification(this)
-            UIElements.constraintLayoutObjectAnimator(notification, "translationY",
+            UIElements.viewObjectAnimator(notification, "translationY",
                     0f, 500, 0, DecelerateInterpolator(3f))
-            UIElements.constraintLayoutObjectAnimator(notification, "translationY",
+            UIElements.viewObjectAnimator(notification, "translationY",
                     Calculations.convertToDP(this, -(notification.height).toFloat()), 500, 3000, DecelerateInterpolator(3f))
-            UIElements.constraintLayoutObjectAnimator(notification, "alpha",
+            UIElements.viewObjectAnimator(notification, "alpha",
                     0f, 0, 3500, LinearInterpolator())
         }, delay)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        checkDownload.removeCallbacksAndMessages(null)
+        connectionNotificationHandler.removeCallbacksAndMessages(null)
+        connectionRetryHandler.removeCallbacksAndMessages(null)
+        finish()
     }
 }

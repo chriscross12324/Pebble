@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    tools:context=".ActivityPermissions">
+    tools:context=".ActivityPermissions"
+    android:background="?BackgroundColour">
 
     <ImageView
         android:id="@+id/background"
@@ -54,6 +55,4 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icon_error" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

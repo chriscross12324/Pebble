@@ -1,6 +1,9 @@
 package com.simple.chris.pebble
 
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -9,6 +12,7 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
@@ -68,18 +72,19 @@ class Feedback : AppCompatActivity() {
     }
 
     private fun animateViewsIn() {
-        UIElements.constraintLayoutObjectAnimator(feedbackFieldsHolder, "translationY", 0f, 700, 350, DecelerateInterpolator(3f))
-        UIElements.constraintLayoutObjectAnimator(submitButton, "translationY", 0f, 700, 450, DecelerateInterpolator(3f))
-        UIElements.constraintLayoutObjectAnimator(feedbackCancelButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(feedbackFieldsHolder, "translationY", 0f, 700, 350, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(submitButton, "translationY", 0f, 700, 450, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(feedbackCancelButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
     }
 
     private fun animateViewsOut() {
-        UIElements.constraintLayoutObjectAnimator(feedbackFieldsHolder, "translationY", feedbackHolderHeight + submitButton.height + Calculations.convertToDP(this, 48f), 700, 200, DecelerateInterpolator(3f))
-        UIElements.constraintLayoutObjectAnimator(submitButton, "translationY", (Calculations.convertToDP(this, 48f) + submitButton.height), 700, 100, DecelerateInterpolator(3f))
-        UIElements.constraintLayoutObjectAnimator(feedbackCancelButton, "translationY", (Calculations.convertToDP(this, 48f) + feedbackCancelButton.height), 700, 50, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(feedbackFieldsHolder, "translationY", feedbackHolderHeight + submitButton.height + Calculations.convertToDP(this, 48f), 700, 200, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(submitButton, "translationY", (Calculations.convertToDP(this, 48f) + submitButton.height), 700, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(feedbackCancelButton, "translationY", (Calculations.convertToDP(this, 48f) + feedbackCancelButton.height), 700, 50, DecelerateInterpolator(3f))
     }
 
     private fun submitFeedback() {
+        submitButton.isEnabled = false
         val feedbackDatabaseURL = "https://script.google.com/macros/s/AKfycbwQliBYeXxeQFNXixg-SpcoyVB_7mbkCGT0d0iLNo6cy6DxstI/exec"
 
         val stringRequest: StringRequest = object : StringRequest(Method.POST, feedbackDatabaseURL,
@@ -92,6 +97,7 @@ class Feedback : AppCompatActivity() {
                 Do this if Feedback fails to submit
                  */
                 Response.ErrorListener {
+                    submitButton.isEnabled = true
                     if (Connection.isNetworkAvailable(this)) {
                         showDialogs(R.layout.dialog_feedback_failed)
                     } else {

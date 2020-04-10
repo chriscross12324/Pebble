@@ -18,6 +18,7 @@
         <item name="PrimaryTextColour">@color/lightTextPrimary</item>
         <item name="SecondaryTextColour">@color/lightTextSecondary</item>
         <item name="SpecialBackground">@color/lightSpecialBackground</item>
+        <item name="BTTBBackground">@color/lightBTTBBackground</item>
     </style>
 
     <style name="ThemeDark" parent="Main">
@@ -26,6 +27,7 @@
         <item name="PrimaryTextColour">@color/darkTextPrimary</item>
         <item name="SecondaryTextColour">@color/darkTextSecondary</item>
         <item name="SpecialBackground">@color/darkSpecialBackground</item>
+        <item name="BTTBBackground">@color/darkBTTBBackground</item>
     </style>
 
     <style name="ThemeBlack" parent="Main">
@@ -34,6 +36,7 @@
         <item name="PrimaryTextColour">@color/blackTextPrimary</item>
         <item name="SecondaryTextColour">@color/blackTextSecondary</item>
         <item name="SpecialBackground">@color/blackSpecialBackground</item>
+        <item name="BTTBBackground">@color/darkBTTBBackground</item>
     </style>
 
     <style name="LoginScreenEditText" parent="Widget.AppCompat.EditText">

@@ -3,9 +3,13 @@ package com.simple.chris.pebble
 import android.animation.ObjectAnimator
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Handler
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -22,15 +26,37 @@ object UIElements {
         }
     }
 
-    fun constraintLayoutVisibility(layout: ConstraintLayout, visibility: Int, delay: Long) {
+    @SuppressLint("NewApi")
+    fun gradientDrawable(context: Context, setDrawable: Boolean, view: View?, startColour: Int, endColour: Int, cornerRadius: Float): Drawable? {
+        val gradientDrawable = GradientDrawable(
+                GradientDrawable.Orientation.TL_BR,
+                intArrayOf(startColour, endColour)
+        )
+        gradientDrawable.cornerRadius = Calculations.convertToDP(context, cornerRadius)
+
+        when (setDrawable) {
+            true -> {
+                view!!.background = gradientDrawable
+                if (Calculations.isAndroidPOrGreater()) {
+                    view!!.outlineSpotShadowColor = endColour
+                }
+            }
+            false -> {
+                return gradientDrawable
+            }
+        }
+        return null
+    }
+
+    fun viewVisibility(view: View, visibility: Int, delay: Long) {
         Handler().postDelayed({
-            layout.visibility = visibility
+            view.visibility = visibility
         }, delay)
     }
 
-    fun constraintLayoutObjectAnimator(layout: ConstraintLayout, propertyName: String, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
+    fun viewObjectAnimator(view: View, propertyName: String, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
         Handler().postDelayed({
-            val objectAnimator = ObjectAnimator.ofFloat(layout, propertyName, endValue)
+            val objectAnimator = ObjectAnimator.ofFloat(view, propertyName, endValue)
             objectAnimator.duration = duration
             objectAnimator.interpolator = interpolator
             objectAnimator.start()
@@ -65,15 +91,6 @@ object UIElements {
         }, delay)
     }
 
-    fun linearLayoutObjectAnimator(layout: LinearLayout, propertyName: String, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
-        Handler().postDelayed({
-            val objectAnimator = ObjectAnimator.ofFloat(layout, propertyName, endValue)
-            objectAnimator.duration = duration
-            objectAnimator.interpolator = interpolator
-            objectAnimator.start()
-        }, delay)
-    }
-
     fun linearLayoutHeightAnimator(layout: LinearLayout, startValue: Float, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
         Handler().postDelayed({
             val valueAnimator = ValueAnimator.ofInt(startValue.roundToInt(), endValue.roundToInt())
@@ -99,36 +116,6 @@ object UIElements {
             valueAnimator.interpolator = interpolator
             valueAnimator.duration = duration
             valueAnimator.start()
-        }, delay)
-    }
-
-    fun imageViewObjectAnimator(layout: ImageView, propertyName: String, value: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
-        Handler().postDelayed({
-            val objectAnimator = ObjectAnimator.ofFloat(layout, propertyName, value)
-            objectAnimator.duration = duration
-            objectAnimator.interpolator = interpolator
-            objectAnimator.start()
-        }, delay)
-    }
-
-    fun imageViewVisibility(layout: ImageView, visibility: Int, delay: Long) {
-        Handler().postDelayed({
-            layout.visibility = visibility
-        }, delay)
-    }
-
-    fun textViewVisibility(layout: TextView, visibility: Int, delay: Long) {
-        Handler().postDelayed({
-            layout.visibility = visibility
-        }, delay)
-    }
-
-    fun textViewObjectAnimator(layout: TextView, propertyName: String, value: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
-        Handler().postDelayed({
-            val objectAnimator = ObjectAnimator.ofFloat(layout, propertyName, value)
-            objectAnimator.duration = duration
-            objectAnimator.interpolator = interpolator
-            objectAnimator.start()
         }, delay)
     }
 

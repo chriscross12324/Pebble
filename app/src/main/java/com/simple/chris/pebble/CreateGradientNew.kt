@@ -1,8 +1,7 @@
 package com.simple.chris.pebble
 
+import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -13,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.simple.chris.pebble.Calculations.convertToDP
+import com.simple.chris.pebble.UIElements.gradientDrawable
+import kotlinx.android.synthetic.main.activity_create_gradient_new.*
 
 class CreateGradientNew : AppCompatActivity() {
 
@@ -54,6 +55,11 @@ class CreateGradientNew : AppCompatActivity() {
             }, 300)
         }
 
+        startColourPicker.setOnClickListener {
+            startActivity(Intent(this, ColourPickerTester::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
+
     }
 
     private fun gradientViewer() {
@@ -62,32 +68,17 @@ class CreateGradientNew : AppCompatActivity() {
          */
         val sharedStartColour = ContextCompat.getColor(this, R.color.pebbleStart)
         val sharedEndColour = ContextCompat.getColor(this, R.color.pebbleEnd)
-
-        val sharedGradientDrawable = GradientDrawable(
-                GradientDrawable.Orientation.TL_BR,
-                intArrayOf(sharedStartColour, sharedEndColour)
-        )
-        sharedGradientDrawable.cornerRadius = convertToDP(this, 20f)
-        sharedElementView.background = sharedGradientDrawable
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            sharedElementView.outlineSpotShadowColor = sharedEndColour
-        }
+        gradientDrawable(this, true, sharedElementView, sharedStartColour, sharedEndColour, 20f)
 
         /*
         Creates actual gradientView gradient
          */
         val startColour = Color.parseColor(Values.createGradientStartColour)
         val endColor = Color.parseColor(Values.createGradientEndColour)
+        gradientDrawable(this, true, gradientViewer, startColour, endColor, 0f)
 
-        val gradientDrawable = GradientDrawable(
-                GradientDrawable.Orientation.TL_BR,
-                intArrayOf(startColour, endColor)
-        )
-        gradientViewer.background = gradientDrawable
-
-        UIElements.imageViewObjectAnimator(sharedElementView, "alpha", 0f, 250, 450, LinearInterpolator())
-        UIElements.imageViewVisibility(sharedElementView, View.GONE, 700)
+        UIElements.viewObjectAnimator(sharedElementView, "alpha", 0f, 250, 450, LinearInterpolator())
+        UIElements.viewVisibility(sharedElementView, View.GONE, 700)
     }
 
     private fun preViewPlacements() {
@@ -96,16 +87,16 @@ class CreateGradientNew : AppCompatActivity() {
     }
 
     private fun cancelAnimation() {
-        UIElements.constraintLayoutObjectAnimator(firstStepNextButton, "translationY", convertToDP(this, (firstStepNextButton.height).toFloat()), 700, 0, DecelerateInterpolator(3f))
-        UIElements.constraintLayoutObjectAnimator(firstStepCancelButton, "translationY", convertToDP(this, (firstStepCancelButton.height).toFloat()), 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(firstStepNextButton, "translationY", convertToDP(this, (firstStepNextButton.height).toFloat()), 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(firstStepCancelButton, "translationY", convertToDP(this, (firstStepCancelButton.height).toFloat()), 700, 0, DecelerateInterpolator(3f))
 
-        UIElements.imageViewObjectAnimator(sharedElementView, "alpha", 1f, 150, 0, LinearInterpolator())
-        UIElements.imageViewVisibility(sharedElementView, View.VISIBLE, 0)
+        UIElements.viewObjectAnimator(sharedElementView, "alpha", 1f, 150, 0, LinearInterpolator())
+        UIElements.viewVisibility(sharedElementView, View.VISIBLE, 0)
     }
 
     private fun stepOneAnimationsIn() {
-        UIElements.constraintLayoutObjectAnimator(firstStepNextButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
-        UIElements.constraintLayoutObjectAnimator(firstStepCancelButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(firstStepNextButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(firstStepCancelButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
     }
 
     /*private fun stepOneAnimationsOut() {

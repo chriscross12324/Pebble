@@ -108,13 +108,13 @@ class SearchGradient : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
         searchField.setOnFocusChangeListener { _, b ->
             if (b) {
-                UIElements.linearLayoutObjectAnimator(backButton, "translationY", -80f, 300, 0, DecelerateInterpolator())
-                UIElements.linearLayoutObjectAnimator(searchFieldHolder, "translationY", -80f, 300, 0, DecelerateInterpolator())
-                UIElements.linearLayoutObjectAnimator(buttonSearch, "translationY", -80f, 300, 0, DecelerateInterpolator())
+                UIElements.viewObjectAnimator(backButton, "translationY", -80f, 300, 0, DecelerateInterpolator())
+                UIElements.viewObjectAnimator(searchFieldHolder, "translationY", -80f, 300, 0, DecelerateInterpolator())
+                UIElements.viewObjectAnimator(buttonSearch, "translationY", -80f, 300, 0, DecelerateInterpolator())
             } else {
-                UIElements.linearLayoutObjectAnimator(backButton, "translationY", 0f, 300, 0, DecelerateInterpolator())
-                UIElements.linearLayoutObjectAnimator(searchFieldHolder, "translationY", 0f, 300, 0, DecelerateInterpolator())
-                UIElements.linearLayoutObjectAnimator(buttonSearch, "translationY", 0f, 300, 0, DecelerateInterpolator())
+                UIElements.viewObjectAnimator(backButton, "translationY", 0f, 300, 0, DecelerateInterpolator())
+                UIElements.viewObjectAnimator(searchFieldHolder, "translationY", 0f, 300, 0, DecelerateInterpolator())
+                UIElements.viewObjectAnimator(buttonSearch, "translationY", 0f, 300, 0, DecelerateInterpolator())
             }
         }
     }
@@ -167,12 +167,7 @@ class SearchGradient : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     }
 
     private fun setResultsGrid() {
-        try {
-            val gridAdapter = GradientRecyclerViewAdapter(this, searchResults, this)
-            searchResultsRecycler.adapter = gridAdapter
-        } catch (e: Exception) {
-            Log.e("ERR", "pebble.search_gradient.set_results_grid: ${e.localizedMessage}")
-        }
+        RecyclerGrid.gradientGrid(this, searchResultsRecycler, searchResults, this)
 
         try {
             searchEntry.text = searchField.text.toString().replace(" ", "\n")
@@ -192,21 +187,6 @@ class SearchGradient : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     override fun onGradientClick(position: Int, view: View) {
         Vibration.lowFeedback(this)
         touchBlocker.visibility = View.VISIBLE
-
-        val details = Intent(this, ActivityGradientDetails::class.java)
-        val info = searchResults[position]
-
-        val gradientName = info["backgroundName"]
-        val startColour = info["startColour"]
-        val endColour = info["endColour"]
-        val description = info["description"]
-
-        details.putExtra("gradientName", gradientName)
-        details.putExtra("startColour", startColour)
-        details.putExtra("endColour", endColour)
-        details.putExtra("description", description)
-
-        val detailsActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view.findViewById(R.id.gradient), gradientName as String)
-        startActivity(details, detailsActivityOptions.toBundle())
+        RecyclerGrid.gradientGridOnClickListener(this, searchResults, view, position)
     }
 }

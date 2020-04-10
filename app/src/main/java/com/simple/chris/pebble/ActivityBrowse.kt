@@ -1,33 +1,23 @@
 package com.simple.chris.pebble
 
 import android.annotation.SuppressLint
-import android.app.Dialog
-import android.app.WallpaperManager
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.simple.chris.pebble.Calculations.convertToDP
-import com.simple.chris.pebble.UIElements.constraintLayoutObjectAnimator
 import com.simple.chris.pebble.UIElements.linearLayoutElevationAnimator
 import com.simple.chris.pebble.UIElements.linearLayoutHeightAnimator
+import com.simple.chris.pebble.UIElements.viewObjectAnimator
 import kotlinx.android.synthetic.main.activity_browse.*
 import java.util.*
 import kotlin.math.roundToInt
@@ -61,7 +51,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             uiSet()
             getTime()
         }
-        browseGrid()
+        RecyclerGrid.gradientGrid(this, browseGrid, Values.browse, this)
         createGradient()
         navigationMenu()
     }
@@ -92,38 +82,19 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         } else {
             bottomSheetBehavior.peekHeight = bottomSheetPeekHeight
         }
+
     }
 
     @SuppressLint("NewApi")
     private fun uiSet() {
-        val gradientDrawable = GradientDrawable(
-                GradientDrawable.Orientation.TL_BR,
-                intArrayOf(ContextCompat.getColor(this, R.color.pebbleStart), ContextCompat.getColor(this, R.color.pebbleEnd))
-        )
-        gradientDrawable.cornerRadius = convertToDP(this, 20f)
-        createGradientBanner.background = gradientDrawable
-        if (Calculations.isAndroidPOrGreater()) {
-            createGradientBanner.outlineSpotShadowColor = ContextCompat.getColor(this, R.color.pebbleEnd)
-        }
-    }
-
-    private fun browseGrid() {
-        try {
-            browseGrid.setHasFixedSize(true)
-
-            val gridLayoutManager = GridLayoutManager(this, 2)
-            browseGrid.layoutManager = gridLayoutManager
-            val browseGridAdapter = GradientRecyclerViewAdapter(this, Values.browse, this)
-            browseGrid.adapter = browseGridAdapter
-        } catch (e: Exception) {
-            Log.e("ERR", "pebble.browse.browse_grid: " + e.localizedMessage)
-        }
+        UIElements.gradientDrawable(this, true, createGradientBanner, ContextCompat.getColor(this, R.color.pebbleStart),
+                ContextCompat.getColor(this, R.color.pebbleEnd), 20f)
     }
 
     private fun createGradient() {
         createGradientBanner.setOnClickListener {
             touchBlocker.visibility = View.VISIBLE
-            constraintLayoutObjectAnimator(createGradientDetailsHolder, "alpha", 0f, 150, 0, DecelerateInterpolator())
+            viewObjectAnimator(createGradientDetailsHolder, "alpha", 0f, 150, 0, DecelerateInterpolator())
 
             val createGradientIntent = Intent(this, CreateGradientNew::class.java)
             val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, createGradientBanner, "gradientCreatorViewer")
@@ -225,7 +196,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
         buttonReload.setOnClickListener {
 
-            UIElements.imageViewObjectAnimator(reloadImage, "rotation", -360f, 1000, 0, DecelerateInterpolator(3f))
+            viewObjectAnimator(reloadImage, "rotation", -360f, 1000, 0, DecelerateInterpolator(3f))
 
             Handler().postDelayed({
                 startActivity(Intent(this, ConnectingActivity::class.java))
@@ -288,7 +259,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
                     Values.currentActivity = "Browse"
                     touchBlocker.visibility = View.GONE
 
-                    constraintLayoutObjectAnimator(createGradientDetailsHolder, "alpha", 1f, 250, 0, DecelerateInterpolator())
+                    viewObjectAnimator(createGradientDetailsHolder, "alpha", 1f, 250, 0, DecelerateInterpolator())
                 }
                 "GradientDetails" -> {
                     Values.currentActivity = "Browse"
@@ -310,49 +281,8 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     }
 
     override fun onGradientClick(position: Int, view: View) {
-        try {
-            Vibration.lowFeedback(this)
-            touchBlocker.visibility = View.VISIBLE
-            val details = Intent(this, ActivityGradientDetails::class.java)
-            val info = Values.browse[position]
-
-            val gradientName = info["backgroundName"]
-            val startColour = info["startColour"]
-            val endColour = info["endColour"]
-            val description = info["description"]
-
-            details.putExtra("gradientName", gradientName)
-            details.putExtra("startColour", startColour)
-            details.putExtra("endColour", endColour)
-            details.putExtra("description", description)
-
-            val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view.findViewById(R.id.gradient), gradientName as String)
-            startActivity(details, activityOptions.toBundle())
-        } catch (e: Exception) {
-            val dialog = Dialog(this, R.style.dialogStyle)
-            dialog.setCancelable(false)
-            dialog.setContentView(R.layout.dialog_something_wrong)
-
-            val dismissPopup: LinearLayout = dialog.findViewById(R.id.dismissPopup)
-            dismissPopup.setOnClickListener {
-                dialog.dismiss()
-            }
-            val copyError: LinearLayout = dialog.findViewById(R.id.copyError)
-            copyError.setOnClickListener {
-                val clipboardManager: ClipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clipData = ClipData.newPlainText("errorCode", e.localizedMessage)
-                clipboardManager.setPrimaryClip(clipData)
-                dialog.dismiss()
-            }
-
-            dialog.findViewById<TextView>(R.id.errorCode).text = e.localizedMessage
-
-            val window = dialog.window
-            window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
-            window.setDimAmount(0.5f)
-
-            dialog.show()
-        }
-
+        Vibration.lowFeedback(this)
+        touchBlocker.visibility = View.VISIBLE
+        RecyclerGrid.gradientGridOnClickListener(this, Values.browse, view, position)
     }
 }

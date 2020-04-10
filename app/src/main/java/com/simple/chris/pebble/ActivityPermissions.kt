@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.animation.DecelerateInterpolator
@@ -13,6 +14,7 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import kotlinx.android.synthetic.main.activity_permissions.*
 
 class ActivityPermissions : AppCompatActivity() {
 
@@ -40,11 +42,10 @@ class ActivityPermissions : AppCompatActivity() {
         wifiPermissionDialog.setCancelable(false)
         dataWarningDialog.setCancelable(false)
 
-        val background = findViewById<ImageView>(R.id.background)
-        val viewTreeObserver = background.viewTreeObserver
-        viewTreeObserver.addOnGlobalLayoutListener {
+        background.post {
             setLayout()
         }
+        Log.e("INFO", "Ran")
     }
 
     private fun setLayout() {
@@ -60,8 +61,8 @@ class ActivityPermissions : AppCompatActivity() {
         layoutParamsData.gravity = Gravity.CENTER
         windowData!!.attributes = layoutParamsData
 
-        wifiUnderstandButton = wifiPermissionDialog.findViewById(R.id.understandButton)
-        dataUnderstandButton = dataWarningDialog.findViewById(R.id.understandButton)
+        wifiUnderstandButton = wifiPermissionDialog.findViewById(R.id.wifiUnderstandButton)
+        dataUnderstandButton = dataWarningDialog.findViewById(R.id.dataUnderstandButton)
 
         warningNotification = findViewById(R.id.warningNotification)
         warningNotification.translationY = (-90 * resources.displayMetrics.density)
@@ -87,13 +88,13 @@ class ActivityPermissions : AppCompatActivity() {
     }
 
     private fun showDataPermissionDialog() {
-        UIElements.constraintLayoutObjectAnimator(warningNotification, "translationY",
+        UIElements.viewObjectAnimator(warningNotification, "translationY",
                 0f, 500,
                 200, DecelerateInterpolator(3f))
 
         dataWarningDialog.show()
         dataUnderstandButton.setOnClickListener {
-            UIElements.constraintLayoutObjectAnimator(warningNotification, "translationY",
+            UIElements.viewObjectAnimator(warningNotification, "translationY",
                     (-90 * resources.displayMetrics.density), 500,
                     0, DecelerateInterpolator(3f))
             Values.firstStart = false

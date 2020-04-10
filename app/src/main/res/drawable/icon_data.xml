@@ -3,7 +3,7 @@
 
     <item android:drawable="@drawable/icon_phone_gradient"/>
     <item>
-        <bitmap android:src="@drawable/icon_data_outline" android:tint="?SecondaryTextColour"/>
+        <bitmap android:src="@drawable/icon_data_outline" android:tint="#ffffff"/>
     </item>
 
 

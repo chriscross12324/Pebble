@@ -46,7 +46,7 @@
 
     <string-array name="connecting_array">
         <item>This shouldn\'t take long</item>
-        <item>Hold tight</item>
+        <item>Hold on tight</item>
         <item>Get ready for some inspiration!</item>
         <item>Preparing the colours…</item>
         <item>This is my favourite part</item>
@@ -56,11 +56,10 @@
         <item>Dark theme is pretty cool</item>
         <item>Beware the dark gradients…</item>
         <item>Sharing is caring!</item>
-        <item>I hear that the featured section is pretty cool…</item>
         <item>Visit \‘Settings\’ to make Pebble the way you like!</item>
         <item>Nice to see you!</item>
         <item>Pebble at your service to brighten up your day!</item>
-        <item>Report anything that goes wr0n*!g&amp;\n*\n*</item>
+        <item>Report anything that goes wr0n*!g&amp;\n*</item>
     </string-array>
 
     <string-array name="filter_array">

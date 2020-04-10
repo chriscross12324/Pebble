@@ -7,6 +7,30 @@
     android:background="?BackgroundColour"
     android:animateLayoutChanges="true">
 
+    <LinearLayout
+        android:id="@+id/backToTop"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/details_background"
+        android:backgroundTint="?BTTBBackground"
+        android:elevation="10dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:rotation="180"
+            android:src="@drawable/icon_download"
+            android:tint="?ForegroundColour"
+            android:translationY="2dp" />
+    </LinearLayout>
+
     <View
         android:id="@+id/navigationMenuPlacementHolder"
         android:layout_width="50dp"
@@ -199,6 +223,7 @@
                     android:visibility="visible"
                     app:layout_anchor="@+id/bottomSheet"
                     app:layout_anchorGravity="center" />
+
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
