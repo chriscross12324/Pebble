@@ -17,7 +17,7 @@ class ColourPickerTester : AppCompatActivity() {
 
     var hueProgress = 0
     var satProgress = 0
-    var lightProgress = 0
+    var valProgress = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +68,17 @@ class ColourPickerTester : AppCompatActivity() {
             }
         })
 
+        valueSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progressValue: Int, fromUser: Boolean) {
+                valProgress = progressValue
+                updateView()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+            }
+        })
+
         hueText.setOnKeyListener { _, _, keyEvent ->
             if (keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
                 hueProgress = hueText.text.toString().toInt()
@@ -81,19 +92,23 @@ class ColourPickerTester : AppCompatActivity() {
     }
 
     private fun setPaddingForSeekBars() {
-        hueSeekBar.setPadding(3, 0, 0, 0)
-        saturationSeekBar.setPadding(3, 0, 0, 0)
+        hueSeekBar.setPadding(6, 0, 6, 0)
+        saturationSeekBar.setPadding(6, 0, 6, 0)
+        valueSeekBar.setPadding(6, 0, 6, 0)
     }
 
     private fun updateView() {
         val hsv = floatArrayOf(0f, 1f, 1f)
         hsv[0] = 360f * hueProgress / 360
-        hsv[1] = 100f * satProgress / 100
+        hsv[1] = satProgress / 100f
+        hsv[2] = valProgress / 100f
         imageView.setBackgroundColor(Color.HSVToColor(hsv))
         hueText.setText("$hueProgress")
         hueSeekBar.progress = hueProgress
         satText.setText("$satProgress")
         saturationSeekBar.progress = satProgress
+        valText.setText("$valProgress")
+        valueSeekBar.progress = valProgress
 
         val hexValue = "#" + Integer.toHexString(Color.HSVToColor(hsv)).substring(2)
 
@@ -123,10 +138,8 @@ class ColourPickerTester : AppCompatActivity() {
 
         if (luminance > 0.5) {
             hexValueTextView.setTextColor(Color.parseColor("#000000"))
-            Log.e("INFO", "Dark Text")
         } else {
             hexValueTextView.setTextColor(Color.parseColor("#ffffff"))
-            Log.e("INFO", "Light Text")
         }
     }
 }
