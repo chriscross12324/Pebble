@@ -53,6 +53,23 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.kuassivi.component.RipplePulseRelativeLayout
+        android:id="@+id/testPulse"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/startColourPicker"
+        app:layout_constraintEnd_toEndOf="@+id/startColourPicker"
+        app:layout_constraintStart_toStartOf="@+id/startColourPicker"
+        app:layout_constraintTop_toTopOf="@+id/startColourPicker"
+        app:pulse_layout_PulseDuration="2000"
+        app:pulse_layout_PulseInterpolator="@android:anim/decelerate_interpolator"
+        app:pulse_layout_PulseType="stroke"
+        app:pulse_layout_RippleColor="#ffffff"
+        app:pulse_layout_RippleEndRadiusPercent="100"
+        app:pulse_layout_RippleStartRadiusPercent="0"
+        app:pulse_layout_RippleStrokeWidth="20dp"
+        app:pulse_layout_ShowPreview="true" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/firstStepCancelButton"
         android:layout_width="50dp"
@@ -134,8 +151,8 @@
 
     <ImageView
         android:id="@+id/startColourPicker"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -144,8 +161,8 @@
 
     <ImageView
         android:id="@+id/endColourPicker"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -158,6 +175,7 @@
         android:layout_height="20dp"
         android:layout_marginStart="16dp"
         android:rotation="45"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/startColourPicker"
         app:layout_constraintStart_toEndOf="@+id/startColourPicker"
         app:layout_constraintTop_toTopOf="@+id/startColourPicker"
@@ -169,6 +187,7 @@
         android:background="@drawable/rounded_square"
         android:orientation="vertical"
         android:translationX="-12dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/imageView10"
         app:layout_constraintStart_toEndOf="@+id/imageView10"
         app:layout_constraintTop_toTopOf="@+id/imageView10">

@@ -14,7 +14,6 @@ import androidx.core.content.ContextCompat
 import com.simple.chris.pebble.Calculations.convertToDP
 import com.simple.chris.pebble.UIElements.gradientDrawable
 import kotlinx.android.synthetic.main.activity_create_gradient_new.*
-import kotlinx.android.synthetic.main.activity_gradient_details.*
 
 class CreateGradientNew : AppCompatActivity() {
 
@@ -50,23 +49,31 @@ class CreateGradientNew : AppCompatActivity() {
         }
 
         firstStepCancelButton.setOnClickListener {
-            cancelAnimation()
+            cancelAnimation(true)
             Handler().postDelayed({
                 onBackPressed()
             }, 300)
         }
 
         startColourPicker.setOnClickListener {
-            Values.currentlyEditing = "start"
-            startActivity(Intent(this, ColourPickerTester::class.java))
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            Handler().postDelayed({
+                Values.currentlyEditing = "start"
+                startActivity(Intent(this, ColourPickerTester::class.java))
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }, 400)
+            cancelAnimation(false)
         }
 
         endColourPicker.setOnClickListener {
-            Values.currentlyEditing = "end"
-            startActivity(Intent(this, ColourPickerTester::class.java))
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            Handler().postDelayed({
+                Values.currentlyEditing = "end"
+                startActivity(Intent(this, ColourPickerTester::class.java))
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }, 400)
+            cancelAnimation(false)
         }
+
+        testPulse.startPulse()
 
     }
 
@@ -94,17 +101,22 @@ class CreateGradientNew : AppCompatActivity() {
         firstStepCancelButton.translationY = convertToDP(this, (firstStepCancelButton.height + 24).toFloat())
     }
 
-    private fun cancelAnimation() {
+    private fun cancelAnimation(leave: Boolean) {
+        if (leave) {
+            UIElements.viewObjectAnimator(sharedElementView, "alpha", 1f, 150, 0, LinearInterpolator())
+            UIElements.viewVisibility(sharedElementView, View.VISIBLE, 0)
+        }
         UIElements.viewObjectAnimator(firstStepNextButton, "translationY", convertToDP(this, (firstStepNextButton.height).toFloat()), 700, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(firstStepCancelButton, "translationY", convertToDP(this, (firstStepCancelButton.height).toFloat()), 700, 0, DecelerateInterpolator(3f))
-
-        UIElements.viewObjectAnimator(sharedElementView, "alpha", 1f, 150, 0, LinearInterpolator())
-        UIElements.viewVisibility(sharedElementView, View.VISIBLE, 0)
+        UIElements.viewObjectAnimator(startColourPicker, "alpha", 0f, 250, 0, LinearInterpolator())
+        UIElements.viewObjectAnimator(endColourPicker, "alpha", 0f, 250, 0, LinearInterpolator())
     }
 
     private fun stepOneAnimationsIn() {
         UIElements.viewObjectAnimator(firstStepNextButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(firstStepCancelButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(startColourPicker, "alpha", 1f, 250, 0, LinearInterpolator())
+        UIElements.viewObjectAnimator(endColourPicker, "alpha", 1f, 250, 0, LinearInterpolator())
     }
 
     /*private fun stepOneAnimationsOut() {
@@ -128,5 +140,20 @@ class CreateGradientNew : AppCompatActivity() {
     private fun stepThreeAnimationsOut() {
 
     }*/
+
+    private fun refreshGradient() {
+        val startColour = Color.parseColor(Values.createGradientStartColour)
+        val endColor = Color.parseColor(Values.createGradientEndColour)
+        gradientDrawable(this, true, gradientViewer, startColour, endColor, 0f)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (Values.currentActivity == "ColourPicker") {
+            Values.currentActivity = "CreateGradient"
+            refreshGradient()
+            stepOneAnimationsIn()
+        }
+    }
 
 }

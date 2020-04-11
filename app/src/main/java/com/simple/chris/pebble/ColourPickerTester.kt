@@ -3,31 +3,52 @@ package com.simple.chris.pebble
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.colour_picker_test.*
+import kotlinx.android.synthetic.main.colour_picker_test.hexValueTextView
+import kotlinx.android.synthetic.main.colour_picker_test.hueSeekBar
+import kotlinx.android.synthetic.main.colour_picker_test.hueText
+import kotlinx.android.synthetic.main.colour_picker_test.imageView
+import kotlinx.android.synthetic.main.colour_picker_test.multiGradient
+import kotlinx.android.synthetic.main.colour_picker_test.satText
+import kotlinx.android.synthetic.main.colour_picker_test.saturation
+import kotlinx.android.synthetic.main.colour_picker_test.saturationSeekBar
+import kotlinx.android.synthetic.main.colour_picker_test.valText
+import kotlinx.android.synthetic.main.colour_picker_test.value
+import kotlinx.android.synthetic.main.colour_picker_test.valueSeekBar
+import kotlinx.android.synthetic.main.layout_colour_picker.*
 
 
 class ColourPickerTester : AppCompatActivity() {
 
     var hexValue = 0
+    var hexString = ""
 
     var hueProgress = 0
     var satProgress = 0
     var valProgress = 0
 
     var hsv = floatArrayOf(0f, 1f, 1f)
+    var hue = floatArrayOf(0f, 1f, 1f)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UIElements.setTheme(this)
-        setContentView(R.layout.colour_picker_test)
+        setContentView(R.layout.layout_colour_picker)
         Values.currentActivity = "ColourPicker"
+
+        setViewPositions()
+        setInitialValues()
+        setPaddingForSeekBars()
 
         val gradientDrawable = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
@@ -87,12 +108,43 @@ class ColourPickerTester : AppCompatActivity() {
         hueText.setOnKeyListener { _, _, keyEvent ->
             if (keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
                 hueProgress = hueText.text.toString().toInt()
+                hueSeekBar.progress = hueProgress
                 hueUpdate()
             }
             false
         }
 
-        setPaddingForSeekBars()
+        satText.setOnKeyListener { _, _, keyEvent ->
+            if (keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
+                satProgress = satText.text.toString().toInt()
+                saturationSeekBar.progress = satProgress
+                satUpdate()
+            }
+            false
+        }
+
+        valText.setOnKeyListener { _, _, keyEvent ->
+            if (keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
+                valProgress = valText.text.toString().toInt()
+                valueSeekBar.progress = valProgress
+                valUpdate()
+            }
+            false
+        }
+
+        colourPickerSaveButton.setOnClickListener {
+            if (Values.currentlyEditing == "start") {
+                Values.createGradientStartColour = hexString
+            } else {
+                Values.createGradientEndColour = hexString
+            }
+
+            animationOut()
+        }
+
+        colourPickerBackButton.setOnClickListener {
+            animationOut()
+        }
 
     }
 
@@ -103,6 +155,19 @@ class ColourPickerTester : AppCompatActivity() {
             hexValue = Color.parseColor(Values.createGradientEndColour)
         }
 
+        Color.colorToHSV(hexValue, hsv)
+
+        hueProgress = hsv[0].toInt()
+        hueSeekBar.progress = hueProgress
+        satProgress = (hsv[1]*100).toInt()
+        saturationSeekBar.progress = satProgress
+        valProgress = (hsv[2]*100).toInt()
+        valueSeekBar.progress = valProgress
+
+        Log.e("INFO", "$hueProgress + $satProgress + $valProgress")
+        hueUpdate()
+        satUpdate()
+        valUpdate()
         updateView()
     }
 
@@ -114,12 +179,13 @@ class ColourPickerTester : AppCompatActivity() {
 
     private fun hueUpdate() {
         hsv[0] = 360f * hueProgress / 360
+        hue[0] = 360f * hueProgress / 360
         hueText.setText("$hueProgress")
         updateView()
 
         val saturationDrawable = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
-                intArrayOf(Color.parseColor("#EAEAEA"), hexValue)
+                intArrayOf(Color.parseColor("#EAEAEA"), Color.HSVToColor(hue))
         )
         saturationDrawable.cornerRadius = Calculations.convertToDP(this, 20f)
         saturation.background = saturationDrawable
@@ -138,9 +204,9 @@ class ColourPickerTester : AppCompatActivity() {
     }
 
     private fun updateView() {
-        val hexString = "#" + Integer.toHexString(Color.HSVToColor(hsv)).substring(2)
+        hexString = "#" + Integer.toHexString(Color.HSVToColor(hsv)).substring(2)
         hexValue = Color.HSVToColor(hsv)
-        imageView.setBackgroundColor(hexValue)
+        colourPickerColourViewer.setBackgroundColor(hexValue)
         hexValueTextView.text = hexString
 
         HEXToRGB(hexString)
@@ -163,5 +229,34 @@ class ColourPickerTester : AppCompatActivity() {
         } else {
             hexValueTextView.setTextColor(Color.parseColor("#ffffff"))
         }
+    }
+
+    private fun setViewPositions() {
+
+        colourPickerSliders.translationY = Calculations.convertToDP(this, colourPickerSliders.height + 94.toFloat())
+
+        colourPickerColourViewer.post {
+            animationIn()
+        }
+    }
+
+    private fun animationIn() {
+        UIElements.viewObjectAnimator(colourPickerBackButton, "translationY", 0f, 700, 250, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(colourPickerSaveButton, "translationY", 0f, 700, 250, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(colourPickerSliders, "translationY", 0f, 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(hexValueTextView, "alpha", 1f, 700, 500, LinearInterpolator())
+    }
+
+    private fun animationOut() {
+        UIElements.viewObjectAnimator(colourPickerBackButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(colourPickerSaveButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(colourPickerSliders, "translationY", colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f), 850, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(hexValueTextView, "translationY", (colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f))/2, 850, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(hexValueTextView, "alpha", 0f, 500, 450, LinearInterpolator())
+
+        Handler().postDelayed({
+            finish()
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }, 950)
     }
 }

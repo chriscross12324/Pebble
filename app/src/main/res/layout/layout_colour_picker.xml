@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/colourPickerColourViewer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#257CEF"
@@ -15,13 +14,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/hexValueTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/googlesans_bold"
+        android:text="#3a76f0"
+        android:textColor="#ffffff"
+        android:textSize="36sp"
+        android:alpha="0"
+        app:layout_constraintBottom_toTopOf="@+id/colourPickerSliders"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
+        android:id="@+id/colourPickerSliders"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/colour_picker_background"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/details_background"
         android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/colourPickerSaveButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
@@ -60,9 +76,9 @@
         <ImageView
             android:id="@+id/multiGradient"
             android:layout_width="0dp"
-            android:layout_height="20dp"
+            android:layout_height="15dp"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="16dp"
             android:background="#63ACE4"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
             app:layout_constraintEnd_toEndOf="parent"
@@ -72,9 +88,9 @@
         <ImageView
             android:id="@+id/saturation"
             android:layout_width="0dp"
-            android:layout_height="20dp"
+            android:layout_height="15dp"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="16dp"
             android:background="#63ACE4"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayout3"
             app:layout_constraintEnd_toEndOf="parent"
@@ -84,9 +100,9 @@
         <ImageView
             android:id="@+id/value"
             android:layout_width="0dp"
-            android:layout_height="20dp"
+            android:layout_height="15dp"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="16dp"
             android:background="#63ACE4"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayout4"
             app:layout_constraintEnd_toEndOf="parent"
@@ -96,9 +112,9 @@
 
         <LinearLayout
             android:id="@+id/linearLayout2"
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="24dp"
+            android:layout_width="65dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:background="@drawable/details_background"
             android:backgroundTint="?ForegroundColour"
@@ -125,8 +141,8 @@
         <LinearLayout
             android:id="@+id/linearLayout3"
             android:layout_width="65dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="24dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:background="@drawable/details_background"
             android:backgroundTint="?ForegroundColour"
@@ -157,7 +173,7 @@
                 android:inputType="number"
                 android:maxLength="3"
                 android:maxLines="1"
-                android:text="100"
+                android:text="85"
                 android:textAlignment="center"
                 android:textColor="?PrimaryTextColour"
                 android:textColorHint="?SecondaryTextColour" />
@@ -165,16 +181,16 @@
 
         <LinearLayout
             android:id="@+id/linearLayout4"
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="24dp"
+            android:layout_width="65dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
-            android:layout_marginBottom="64dp"
+            android:layout_marginBottom="32dp"
             android:background="@drawable/details_background"
             android:backgroundTint="?ForegroundColour"
             android:orientation="horizontal"
             android:weightSum="2"
-            app:layout_constraintBottom_toTopOf="@+id/view"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/linearLayout3">
 
@@ -251,79 +267,58 @@
             app:layout_constraintStart_toStartOf="@+id/value"
             app:layout_constraintTop_toTopOf="@+id/value" />
 
-        <View
-            android:id="@+id/view"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
-            android:layout_marginBottom="64dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout5"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="64dp"
-            android:background="@drawable/details_background"
-            android:backgroundTint="#3a76f0"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="@+id/view"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/view"
-            app:layout_constraintTop_toTopOf="@+id/view">
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:fontFamily="@font/googlesans_medium"
-                android:gravity="center"
-                android:text="Save"
-                android:textColor="?BackgroundColour"
-                android:textSize="18sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="64dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/details_background"
-            android:backgroundTint="?ForegroundColour"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="@+id/view"
-            app:layout_constraintEnd_toStartOf="@+id/view"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/view">
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:fontFamily="@font/googlesans_medium"
-                android:gravity="center"
-                android:text="@string/text_eng_cancel"
-                android:textColor="?SecondaryTextColour"
-                android:textSize="18sp" />
-        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/hexValueTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/googlesans_bold"
-        android:text="#3a76f0"
-        android:textColor="#ffffff"
-        android:textSize="36sp"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/colourPickerBackButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="24dp"
+        android:translationY="74dp"
+        android:background="@drawable/details_background"
+        android:elevation="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="12dp"
+            android:src="@drawable/icon_back"
+            android:tint="?SecondaryTextColour"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/colourPickerSaveButton"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="24dp"
+        android:translationY="74dp"
+        android:background="@drawable/details_background"
+        android:elevation="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:fontFamily="@font/googlesans_medium"
+            android:gravity="center"
+            android:text="Save"
+            android:textColor="?PrimaryTextColour"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

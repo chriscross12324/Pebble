@@ -55,6 +55,7 @@ dependencies {
     implementation 'com.jackandphantom.android:customtogglebutton:1.0.1'
     implementation 'com.github.glomadrian:MaterialAnimatedSwitch:1.1@aar'
     implementation 'com.polyak:icon-switch:1.0.0'
+    implementation 'com.kuassivi.android.view:ripple-pulse-layout:0.1.9'
 
     implementation 'org.jsoup:jsoup:1.12.2'
     implementation 'com.github.javiersantos:AppUpdater:2.6.4'
