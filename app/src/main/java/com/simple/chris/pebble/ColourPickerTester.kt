@@ -168,7 +168,7 @@ class ColourPickerTester : AppCompatActivity() {
         hueUpdate()
         satUpdate()
         valUpdate()
-        updateView()
+
     }
 
     private fun setPaddingForSeekBars() {

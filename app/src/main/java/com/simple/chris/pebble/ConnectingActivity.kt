@@ -127,7 +127,7 @@ class ConnectingActivity : AppCompatActivity() {
 
     private fun getItems() {
         connectionStatusText.visibility = View.VISIBLE
-        val gradientDatabaseURL = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getItems"
+        val gradientDatabaseURL = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getGradients"
 
         val request = JsonObjectRequest(Request.Method.GET, gradientDatabaseURL, null,
                 Response.Listener { response ->
@@ -140,9 +140,9 @@ class ConnectingActivity : AppCompatActivity() {
                             val downloadedItem = gradientArray.getJSONObject(i)
 
                             val item = HashMap<String, String>()
-                            item["backgroundName"] = downloadedItem.getString("backgroundName")
-                            item["startColour"] = downloadedItem.getString("leftColour")
-                            item["endColour"] = downloadedItem.getString("rightColour")
+                            item["backgroundName"] = downloadedItem.getString("gradientName")
+                            item["startColour"] = downloadedItem.getString("startColour")
+                            item["endColour"] = downloadedItem.getString("endColour")
                             item["description"] = downloadedItem.getString("description")
 
                             gradientList.add(item)

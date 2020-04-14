@@ -44,6 +44,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         super.onCreate(savedInstanceState)
         UIElements.setTheme(this)
         setContentView(R.layout.activity_browse)
+        Values.currentActivity = "Browse"
 
         coordinatorLayout.post {
             getHeights()
@@ -275,6 +276,11 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
                     touchBlocker.visibility = View.GONE
                     navigationMenuAnimation(View.GONE, convertToDP(this, navigationMenuHeight), convertToDP(this, 50f),
                             convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)
+                }
+                "SubmittedGradient" -> {
+                    startActivity(Intent(this, ConnectingActivity::class.java))
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                    finish()
                 }
             }
         }

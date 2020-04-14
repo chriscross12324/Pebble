@@ -28,7 +28,81 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/firstStepNextButton"
+        android:id="@+id/gradientInfoHolder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/details_background"
+        android:backgroundTint="?BackgroundColour"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toTopOf="@id/nextStepButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/gradientCreatorGradientName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/googlesans_bold"
+            android:hint="Gradient Name"
+            android:textAlignment="center"
+            android:textColor="?PrimaryTextColour"
+            android:textColorHint="?SecondaryTextColour"
+            android:textSize="24sp"
+            android:inputType="textCapWords"
+            android:maxLength="70"
+            android:singleLine="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/details_background"
+            android:backgroundTint="?ForegroundColour"
+            android:paddingStart="8dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gradientCreatorGradientName">
+
+            <EditText
+                android:id="@+id/gradientCreatorGradientDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/googlesans_medium"
+                android:hint="Gradient Description"
+                android:textAlignment="center"
+                android:textColor="?SecondaryTextColour"
+                android:textColorHint="?SecondaryTextColour"
+                android:textSize="14sp"
+                android:inputType="textMultiLine|textCapSentences"
+                android:maxHeight="160dp"
+                android:maxLength="200"/>
+        </LinearLayout>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/nextStepButton"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginBottom="24dp"
@@ -39,6 +113,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
+            android:id="@+id/nextStepText"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:fontFamily="@font/googlesans_medium"
@@ -53,25 +128,8 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.kuassivi.component.RipplePulseRelativeLayout
-        android:id="@+id/testPulse"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toBottomOf="@+id/startColourPicker"
-        app:layout_constraintEnd_toEndOf="@+id/startColourPicker"
-        app:layout_constraintStart_toStartOf="@+id/startColourPicker"
-        app:layout_constraintTop_toTopOf="@+id/startColourPicker"
-        app:pulse_layout_PulseDuration="2000"
-        app:pulse_layout_PulseInterpolator="@android:anim/decelerate_interpolator"
-        app:pulse_layout_PulseType="stroke"
-        app:pulse_layout_RippleColor="#ffffff"
-        app:pulse_layout_RippleEndRadiusPercent="100"
-        app:pulse_layout_RippleStartRadiusPercent="0"
-        app:pulse_layout_RippleStrokeWidth="20dp"
-        app:pulse_layout_ShowPreview="true" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/firstStepCancelButton"
+        android:id="@+id/lastStepButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
@@ -83,7 +141,7 @@
 
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/lastStepIcon"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="10dp"
@@ -150,26 +208,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
-        android:id="@+id/startColourPicker"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/circle" />
-
-    <ImageView
-        android:id="@+id/endColourPicker"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/circle" />
-
-    <ImageView
         android:id="@+id/imageView10"
         android:layout_width="20dp"
         android:layout_height="20dp"
@@ -203,5 +241,39 @@
             android:text="Tap this..."
             android:textColor="?SecondaryTextColour"
             android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/startColourPicker"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:srcCompat="@drawable/circle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/endColourPicker"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:srcCompat="@drawable/circle" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

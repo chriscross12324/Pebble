@@ -1,28 +1,43 @@
 package com.simple.chris.pebble
 
+import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import com.android.volley.DefaultRetryPolicy
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.simple.chris.pebble.Calculations.convertToDP
 import com.simple.chris.pebble.UIElements.gradientDrawable
+import com.simple.chris.pebble.UIElements.viewObjectAnimator
+import com.simple.chris.pebble.UIElements.viewVisibility
 import kotlinx.android.synthetic.main.activity_create_gradient_new.*
+import org.apache.commons.lang3.RandomStringUtils
+import java.util.*
+import kotlin.collections.HashMap
 
 class CreateGradientNew : AppCompatActivity() {
 
-    private lateinit var firstStepNextButton: ConstraintLayout
-    private lateinit var firstStepCancelButton: ConstraintLayout
-
-    private lateinit var sharedElementView: ImageView
-    private lateinit var gradientViewer: ImageView
-
+    var currentStep = 1
+    var submittedUID = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,28 +46,35 @@ class CreateGradientNew : AppCompatActivity() {
         postponeEnterTransition()
         Values.currentActivity = "CreateGradient"
 
-        //Initiate ConstraintLayouts
-        firstStepNextButton = findViewById(R.id.firstStepNextButton)
-        firstStepCancelButton = findViewById(R.id.firstStepCancelButton)
-
-        //Initiate ImageViews
-        sharedElementView = findViewById(R.id.sharedElementsTransitionView)
-        gradientViewer = findViewById(R.id.gradientCreatorGradientViewer)
-
         preViewPlacements()
         gradientViewer()
 
-        gradientViewer.post {
+        gradientCreatorGradientViewer.post {
             preViewPlacements()
             startPostponedEnterTransition()
             stepOneAnimationsIn()
         }
 
-        firstStepCancelButton.setOnClickListener {
-            cancelAnimation(true)
-            Handler().postDelayed({
-                onBackPressed()
-            }, 300)
+        nextStepButton.setOnClickListener {
+            if (currentStep == 2) {
+                stepTwoAnimationsOut(true)
+            } else {
+                stepOneAnimationsOut()
+                currentStep = 2
+            }
+        }
+
+        lastStepButton.setOnClickListener {
+            currentStep -= 1
+            if (currentStep == 0) {
+                leaveFirstStepAnimation(true)
+                Handler().postDelayed({
+                    onBackPressed()
+                }, 300)
+            } else {
+                stepTwoAnimationsOut(false)
+            }
+
         }
 
         startColourPicker.setOnClickListener {
@@ -61,7 +83,7 @@ class CreateGradientNew : AppCompatActivity() {
                 startActivity(Intent(this, ColourPickerTester::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }, 400)
-            cancelAnimation(false)
+            leaveFirstStepAnimation(false)
         }
 
         endColourPicker.setOnClickListener {
@@ -70,11 +92,11 @@ class CreateGradientNew : AppCompatActivity() {
                 startActivity(Intent(this, ColourPickerTester::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }, 400)
-            cancelAnimation(false)
+            leaveFirstStepAnimation(false)
         }
 
-        testPulse.startPulse()
-
+        gradientCreatorGradientName.setText(Values.createGradientName)
+        gradientCreatorGradientDescription.setText(Values.createGradientDescription)
     }
 
     private fun gradientViewer() {
@@ -83,68 +105,169 @@ class CreateGradientNew : AppCompatActivity() {
          */
         val sharedStartColour = ContextCompat.getColor(this, R.color.pebbleStart)
         val sharedEndColour = ContextCompat.getColor(this, R.color.pebbleEnd)
-        gradientDrawable(this, true, sharedElementView, sharedStartColour, sharedEndColour, 20f)
+        gradientDrawable(this, true, sharedElementsTransitionView, sharedStartColour, sharedEndColour, 20f)
 
         /*
         Creates actual gradientView gradient
          */
         val startColour = Color.parseColor(Values.createGradientStartColour)
         val endColor = Color.parseColor(Values.createGradientEndColour)
-        gradientDrawable(this, true, gradientViewer, startColour, endColor, 0f)
+        gradientDrawable(this, true, gradientCreatorGradientViewer, startColour, endColor, 0f)
 
-        UIElements.viewObjectAnimator(sharedElementView, "alpha", 0f, 250, 450, LinearInterpolator())
-        UIElements.viewVisibility(sharedElementView, View.GONE, 700)
+        viewObjectAnimator(sharedElementsTransitionView, "alpha", 0f, 250, 450, LinearInterpolator())
+        viewVisibility(sharedElementsTransitionView, View.GONE, 700)
     }
 
     private fun preViewPlacements() {
-        firstStepNextButton.translationY = convertToDP(this, (firstStepNextButton.height + 24).toFloat())
-        firstStepCancelButton.translationY = convertToDP(this, (firstStepCancelButton.height + 24).toFloat())
+        nextStepButton.translationY = convertToDP(this, 74f)
+        lastStepButton.translationY = convertToDP(this, 74f)
+        gradientInfoHolder.translationY = convertToDP(this, 94f) + gradientInfoHolder.height
     }
 
-    private fun cancelAnimation(leave: Boolean) {
-        if (leave) {
-            UIElements.viewObjectAnimator(sharedElementView, "alpha", 1f, 150, 0, LinearInterpolator())
-            UIElements.viewVisibility(sharedElementView, View.VISIBLE, 0)
+    private fun leaveFirstStepAnimation(cancel: Boolean) {
+        if (cancel) {
+            viewObjectAnimator(sharedElementsTransitionView, "alpha", 1f, 150, 0, LinearInterpolator())
+            viewVisibility(sharedElementsTransitionView, View.VISIBLE, 0)
         }
-        UIElements.viewObjectAnimator(firstStepNextButton, "translationY", convertToDP(this, (firstStepNextButton.height).toFloat()), 700, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(firstStepCancelButton, "translationY", convertToDP(this, (firstStepCancelButton.height).toFloat()), 700, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(startColourPicker, "alpha", 0f, 250, 0, LinearInterpolator())
-        UIElements.viewObjectAnimator(endColourPicker, "alpha", 0f, 250, 0, LinearInterpolator())
+        viewObjectAnimator(nextStepButton, "translationY", convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        viewObjectAnimator(lastStepButton, "translationY", convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        viewObjectAnimator(startColourPicker, "alpha", 0f, 250, 0, LinearInterpolator())
+        viewObjectAnimator(endColourPicker, "alpha", 0f, 250, 0, LinearInterpolator())
     }
 
     private fun stepOneAnimationsIn() {
-        UIElements.viewObjectAnimator(firstStepNextButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(firstStepCancelButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(startColourPicker, "alpha", 1f, 250, 0, LinearInterpolator())
-        UIElements.viewObjectAnimator(endColourPicker, "alpha", 1f, 250, 0, LinearInterpolator())
+        viewObjectAnimator(nextStepButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
+        viewObjectAnimator(lastStepButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
+        viewObjectAnimator(startColourPicker, "alpha", 1f, 250, 0, LinearInterpolator())
+        viewObjectAnimator(endColourPicker, "alpha", 1f, 250, 0, LinearInterpolator())
+        viewVisibility(startColourPicker, View.VISIBLE, 0)
+        viewVisibility(endColourPicker, View.VISIBLE, 0)
     }
 
-    /*private fun stepOneAnimationsOut() {
+    private fun stepOneAnimationsOut() {
+        viewObjectAnimator(nextStepButton, "translationY", convertToDP(this, 74f),
+                700, 100, DecelerateInterpolator(3f))
+        viewObjectAnimator(lastStepButton, "translationY", convertToDP(this, 74f),
+                700, 0, DecelerateInterpolator(3f))
+        viewObjectAnimator(startColourPicker, "alpha", 0f, 250, 0, LinearInterpolator())
+        viewObjectAnimator(endColourPicker, "alpha", 0f, 250, 0, LinearInterpolator())
+        viewVisibility(startColourPicker, View.GONE, 250)
+        viewVisibility(endColourPicker, View.GONE, 250)
+
+        Handler().postDelayed({
+            lastStepIcon.setImageResource(R.drawable.icon_back)
+            nextStepText.setText(R.string.text_eng_submit)
+            stepTwoAnimationsIn()
+        }, 800)
 
     }
 
     private fun stepTwoAnimationsIn() {
-        UIElements.constraintLayoutObjectAnimator(firstStepNextButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
-        UIElements.constraintLayoutObjectAnimator(firstStepCancelButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
+        viewObjectAnimator(gradientInfoHolder, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
+        viewObjectAnimator(nextStepButton, "translationY", 0f, 700, 600, DecelerateInterpolator(3f))
+        viewObjectAnimator(lastStepButton, "translationY", 0f, 700, 650, DecelerateInterpolator(3f))
     }
 
-    private fun stepTwoAnimationsOut() {
+    private fun stepTwoAnimationsOut(submit: Boolean) {
+        if (!submit) {
+            viewObjectAnimator(gradientInfoHolder, "translationY", convertToDP(this, 94f) + gradientInfoHolder.height, 700, 200, DecelerateInterpolator(3f))
+            viewObjectAnimator(nextStepButton, "translationY", convertToDP(this, 74f),
+                    700, 0, DecelerateInterpolator(3f))
+            viewObjectAnimator(lastStepButton, "translationY", convertToDP(this, 74f),
+                    700, 100, DecelerateInterpolator(3f))
+
+            Handler().postDelayed({
+                lastStepIcon.setImageResource(R.drawable.icon_close)
+                nextStepText.setText(R.string.text_eng_next)
+                stepOneAnimationsIn()
+            }, 900)
+            Values.createGradientName = gradientCreatorGradientName.text.toString()
+            Values.createGradientDescription = gradientCreatorGradientDescription.text.toString()
+        } else {
+            if (gradientCreatorGradientName.text.toString().trim().replace(" ", "") != "") {
+                submitGradient()
+            }
+        }
 
     }
-
-    private fun stepThreeAnimationsIn() {
-        UIElements.constraintLayoutObjectAnimator(firstStepNextButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
-        UIElements.constraintLayoutObjectAnimator(firstStepCancelButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
-    }
-
-    private fun stepThreeAnimationsOut() {
-
-    }*/
 
     private fun refreshGradient() {
         val startColour = Color.parseColor(Values.createGradientStartColour)
         val endColor = Color.parseColor(Values.createGradientEndColour)
-        gradientDrawable(this, true, gradientViewer, startColour, endColor, 0f)
+        gradientDrawable(this, true, gradientCreatorGradientViewer, startColour, endColor, 0f)
+    }
+
+    private fun submitGradient() {
+        submittedUID = RandomStringUtils.randomAlphanumeric(12)
+        val gradientDatabaseURL = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec"
+
+        val stringRequest: StringRequest = object : StringRequest(Method.POST, gradientDatabaseURL,
+        Response.Listener { submitSuccess() },
+        Response.ErrorListener { Log.e("ERR", "Failed")
+        }) {
+            override fun getParams(): MutableMap<String, String> {
+                val details: MutableMap<String, String> = HashMap()
+                details["action"] = "addGradient"
+                details["gradientName"] = gradientCreatorGradientName.text.toString()
+                details["startColour"] = Values.createGradientStartColour
+                details["endColour"] = Values.createGradientEndColour
+                details["gradientDescription"] = gradientCreatorGradientDescription.text.toString()
+                details["gradientAuthor"] = "chriscross12324"
+                details["gradientUID"] = submittedUID
+                return details
+            }
+        }
+
+        val retryPolicy = DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        stringRequest.retryPolicy = retryPolicy
+
+        val queue = Volley.newRequestQueue(this)
+        queue.add(stringRequest)
+    }
+
+    @SuppressLint("NewApi")
+    private fun submitSuccess() {
+        Values.currentActivity = "SubmittedGradient"
+        val successDialog = Dialog(this, R.style.dialogStyle)
+        successDialog.setCancelable(false)
+        successDialog.setContentView(R.layout.dialog_gradient_submitted)
+
+        val leaveButton = successDialog.findViewById<Button>(R.id.leave)
+        leaveButton.setOnClickListener {
+            successDialog.dismiss()
+            stepTwoAnimationsOut(false)
+            onBackPressed()
+        }
+        val uidTextView = successDialog.findViewById<TextView>(R.id.UIDTextView)
+        uidTextView.text = submittedUID
+        uidTextView.setOnLongClickListener {
+            val clipData = ClipData.newPlainText("uniqueID", submittedUID)
+            val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            clipboardManager.setPrimaryClip(clipData)
+            uidTextView.text = "Copied..."
+
+            Handler().postDelayed({
+                uidTextView.text = submittedUID
+            }, 1500)
+
+            Vibration.mediumFeedback(this)
+            false
+        }
+
+        if (Calculations.isAndroidPOrGreater()) {
+            leaveButton.outlineSpotShadowColor = ContextCompat.getColor(this, R.color.pebbleEnd)
+        }
+
+        val window = successDialog.window
+        window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        window.setDimAmount(0.5f)
+
+        successDialog.show()
+
+        Values.createGradientName = ""
+        Values.createGradientDescription = ""
+        Values.createGradientStartColour = "#acd77b"
+        Values.createGradientEndColour = "#74d77b"
     }
 
     override fun onResume() {
