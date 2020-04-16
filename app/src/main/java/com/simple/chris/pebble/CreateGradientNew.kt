@@ -79,7 +79,7 @@ class CreateGradientNew : AppCompatActivity() {
 
         startColourPicker.setOnClickListener {
             Handler().postDelayed({
-                Values.currentlyEditing = "start"
+                Values.currentColourPOS = "start"
                 startActivity(Intent(this, ColourPickerTester::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }, 400)
@@ -88,15 +88,15 @@ class CreateGradientNew : AppCompatActivity() {
 
         endColourPicker.setOnClickListener {
             Handler().postDelayed({
-                Values.currentlyEditing = "end"
+                Values.currentColourPOS = "end"
                 startActivity(Intent(this, ColourPickerTester::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }, 400)
             leaveFirstStepAnimation(false)
         }
 
-        gradientCreatorGradientName.setText(Values.createGradientName)
-        gradientCreatorGradientDescription.setText(Values.createGradientDescription)
+        gradientCreatorGradientName.setText(Values.gradientCreatorGradientName)
+        gradientCreatorGradientDescription.setText(Values.gradientCreatorDescription)
     }
 
     private fun gradientViewer() {
@@ -110,8 +110,8 @@ class CreateGradientNew : AppCompatActivity() {
         /*
         Creates actual gradientView gradient
          */
-        val startColour = Color.parseColor(Values.createGradientStartColour)
-        val endColor = Color.parseColor(Values.createGradientEndColour)
+        val startColour = Color.parseColor(Values.gradientCreatorStartColour)
+        val endColor = Color.parseColor(Values.gradientCreatorEndColour)
         gradientDrawable(this, true, gradientCreatorGradientViewer, startColour, endColor, 0f)
 
         viewObjectAnimator(sharedElementsTransitionView, "alpha", 0f, 250, 450, LinearInterpolator())
@@ -181,8 +181,8 @@ class CreateGradientNew : AppCompatActivity() {
                 nextStepText.setText(R.string.text_eng_next)
                 stepOneAnimationsIn()
             }, 900)
-            Values.createGradientName = gradientCreatorGradientName.text.toString()
-            Values.createGradientDescription = gradientCreatorGradientDescription.text.toString()
+            Values.gradientCreatorGradientName = gradientCreatorGradientName.text.toString()
+            Values.gradientCreatorDescription = gradientCreatorGradientDescription.text.toString()
         } else {
             if (gradientCreatorGradientName.text.toString().trim().replace(" ", "") != "") {
                 submitGradient()
@@ -192,8 +192,8 @@ class CreateGradientNew : AppCompatActivity() {
     }
 
     private fun refreshGradient() {
-        val startColour = Color.parseColor(Values.createGradientStartColour)
-        val endColor = Color.parseColor(Values.createGradientEndColour)
+        val startColour = Color.parseColor(Values.gradientCreatorStartColour)
+        val endColor = Color.parseColor(Values.gradientCreatorEndColour)
         gradientDrawable(this, true, gradientCreatorGradientViewer, startColour, endColor, 0f)
     }
 
@@ -209,8 +209,8 @@ class CreateGradientNew : AppCompatActivity() {
                 val details: MutableMap<String, String> = HashMap()
                 details["action"] = "addGradient"
                 details["gradientName"] = gradientCreatorGradientName.text.toString()
-                details["startColour"] = Values.createGradientStartColour
-                details["endColour"] = Values.createGradientEndColour
+                details["startColour"] = Values.gradientCreatorStartColour
+                details["endColour"] = Values.gradientCreatorEndColour
                 details["gradientDescription"] = gradientCreatorGradientDescription.text.toString()
                 details["gradientAuthor"] = "chriscross12324"
                 details["gradientUID"] = submittedUID
@@ -264,10 +264,10 @@ class CreateGradientNew : AppCompatActivity() {
 
         successDialog.show()
 
-        Values.createGradientName = ""
-        Values.createGradientDescription = ""
-        Values.createGradientStartColour = "#acd77b"
-        Values.createGradientEndColour = "#74d77b"
+        Values.gradientCreatorGradientName = ""
+        Values.gradientCreatorDescription = ""
+        Values.gradientCreatorStartColour = "#acd77b"
+        Values.gradientCreatorEndColour = "#74d77b"
     }
 
     override fun onResume() {

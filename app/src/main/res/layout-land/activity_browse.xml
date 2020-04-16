@@ -74,7 +74,7 @@
                 android:id="@+id/navigationHolder"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:background="@drawable/button_background"
+                android:background="@drawable/details_background"
                 android:backgroundTint="?ForegroundColour"
                 android:clickable="true"
                 android:focusable="true"

@@ -198,14 +198,14 @@ class ActivityGradientDetails : AppCompatActivity() {
     }
 
     private fun pushHoldPopup() {
-        if (!Values.detailsPushHoldPopupClosed) {
+        if (!Values.hintPushHoldDismissed) {
             val pushHoldDialog = Dialog(this, R.style.dialogStyle)
             pushHoldDialog.setCancelable(false)
             pushHoldDialog.setContentView(R.layout.dialog_push_hold)
 
             val dismissButton: LinearLayout = pushHoldDialog.findViewById(R.id.dismissPopup)
             dismissButton.setOnClickListener {
-                Values.detailsPushHoldPopupClosed = true
+                Values.hintPushHoldDismissed = true
                 pushHoldDialog.dismiss()
             }
 

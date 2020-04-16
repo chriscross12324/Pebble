@@ -2,42 +2,42 @@ package com.simple.chris.pebble
 
 import android.Manifest
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.polyak.iconswitch.IconSwitch
 
 object Values {
-
     private const val SAVE = "SavedValues"
 
+    //Vibrations
+    val notificationPattern = longArrayOf(0, 5, 5, 5)
+    val weakVibration = longArrayOf(0, 1)
+    val mediumVibration = longArrayOf(0, 3)
+    val strongVibration = longArrayOf(0, 5)
+
+    //Hidden Values
+    var firstStart: Boolean = true
+    var lastVersion = 0
+    var hintPushHoldDismissed = false
     var currentActivity: String = ""
+    lateinit var gradientList: ArrayList<HashMap<String, String>>
+
+    //Settings
+    var vibrationEnabled: Boolean = true
+    var theme: String = "dark"
+    var askMobileData: Boolean = true
     var userName: String = "User"
 
-    //Vibrations
-    val notification = longArrayOf(0, 5, 5, 5)
-    const val strongVibration: Long = 5
-    const val mediumVibration: Long = 3
-    const val lowVibration: Long = 1
+    //Gradient Creator
+    var gradientCreatorGradientName = ""
+    var gradientCreatorStartColour = ""
+    var gradientCreatorEndColour = ""
+    var gradientCreatorDescription = ""
+    var currentColourPOS = ""
+    var currentColourInt = 0
+    var currentColourHEX = ""
 
-    //App Values
-    var firstStart: Boolean = true
-    var vibrations: Boolean = true
-    var askMobileData: Boolean = true
-    var detailsPushHoldPopupClosed: Boolean = false
-    var currentlyEditing: String = ""
-
-    var theme: String = "dark"
-
-    var lastVersion = 0
-    lateinit var browse: ArrayList<HashMap<String, String>>
-
-    var gridCount: IconSwitch.Checked = IconSwitch.Checked.RIGHT
-
-    //Gradient Creator Saved values
-    var createGradientStartColour: String = "#acd77b"
-    var createGradientEndColour: String = "#74d77b"
-    var createGradientName: String = ""
-    var createGradientDescription = ""
 
     fun storagePermissionGiven(context: Context): Boolean {
         val result = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -46,31 +46,35 @@ object Values {
 
 
     fun saveValues(context: Context) {
-        val sharedPreferences = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
+        val sharedPrefs = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE)
+        val editor = sharedPrefs.edit()
         editor.putBoolean("firstStart", firstStart)
-        editor.putBoolean("vibrations", vibrations)
-        editor.putBoolean("askMobileData", askMobileData)
-        editor.putString("theme", theme)
         editor.putInt("lastVersion", lastVersion)
-        editor.putBoolean("detailsPushHoldPopupClosed", detailsPushHoldPopupClosed)
-
+        editor.putBoolean("hintPushHoldDismissed", hintPushHoldDismissed)
+        editor.putBoolean("vibrationEnabled", vibrationEnabled)
+        editor.putString("theme", theme)
+        editor.putBoolean("askMobileData", askMobileData)
+        editor.putString("userName", userName)
+        editor.putString("gradientCreatorGradientName", gradientCreatorGradientName)
+        editor.putString("gradientCreatorStartColour", gradientCreatorStartColour)
+        editor.putString("gradientCreatorEndColour", gradientCreatorEndColour)
+        editor.putString("gradientCreatorDescription", gradientCreatorDescription)
         editor.apply()
     }
 
     fun loadValues(context: Context) {
-        val sharedPreferences = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE)
-        firstStart = sharedPreferences.getBoolean("firstStart", true)
-        vibrations = sharedPreferences.getBoolean("vibrations", true)
-        detailsPushHoldPopupClosed = sharedPreferences.getBoolean("detailsPushHoldPopupClosed", false)
-        theme = sharedPreferences.getString("theme", "dark").toString()
-        lastVersion = sharedPreferences.getInt("lastVersion", 0)
-        askMobileData = try {
-            sharedPreferences.getBoolean("askMobileData", true)
-        } catch (e: Exception) {
-            sharedPreferences.getBoolean("askData", true)
-        }
-
+        val sharedPrefs = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE)
+        firstStart = sharedPrefs.getBoolean("firstStart", true)
+        lastVersion = sharedPrefs.getInt("lastVersion", 0)
+        hintPushHoldDismissed = sharedPrefs.getBoolean("hintPushHoldDismissed", false)
+        vibrationEnabled = sharedPrefs.getBoolean("vibrationEnabled", true)
+        theme = sharedPrefs.getString("theme", "dark")!!
+        askMobileData = sharedPrefs.getBoolean("askMobileData", true)
+        userName = sharedPrefs.getString("userName", "")!!
+        gradientCreatorGradientName = sharedPrefs.getString("gradientCreatorGradientName", "")!!
+        gradientCreatorStartColour = sharedPrefs.getString("gradientCreatorStartColour", "#acd77b")!!
+        gradientCreatorEndColour = sharedPrefs.getString("gradientCreatorEndColour", "#74d77b")!!
+        gradientCreatorDescription = sharedPrefs.getString("gradientCreatorDescription", "")!!
     }
 
 }

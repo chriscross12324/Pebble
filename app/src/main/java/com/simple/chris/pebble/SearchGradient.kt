@@ -62,7 +62,7 @@ class SearchGradient : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         searchFieldHolder = findViewById(R.id.searchFieldHolder)
         searchEntry = findViewById(R.id.textEntry)
 
-        browseItems = Values.browse
+        browseItems = Values.gradientList
         searchResults = ArrayList()
 
         searchField.post {

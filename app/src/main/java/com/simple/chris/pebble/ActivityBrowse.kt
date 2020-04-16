@@ -52,7 +52,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             uiSet()
             getTime()
         }
-        RecyclerGrid.gradientGrid(this, browseGrid, Values.browse, this)
+        RecyclerGrid.gradientGrid(this, browseGrid, Values.gradientList, this)
         createGradient()
         navigationMenu()
     }
@@ -289,6 +289,6 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     override fun onGradientClick(position: Int, view: View) {
         Vibration.lowFeedback(this)
         touchBlocker.visibility = View.VISIBLE
-        RecyclerGrid.gradientGridOnClickListener(this, Values.browse, view, position)
+        RecyclerGrid.gradientGridOnClickListener(this, Values.gradientList, view, position)
     }
 }

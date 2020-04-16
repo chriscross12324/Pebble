@@ -4,8 +4,6 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.animation.DecelerateInterpolator
@@ -13,18 +11,6 @@ import android.view.animation.LinearInterpolator
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.colour_picker_test.*
-import kotlinx.android.synthetic.main.colour_picker_test.hexValueTextView
-import kotlinx.android.synthetic.main.colour_picker_test.hueSeekBar
-import kotlinx.android.synthetic.main.colour_picker_test.hueText
-import kotlinx.android.synthetic.main.colour_picker_test.imageView
-import kotlinx.android.synthetic.main.colour_picker_test.multiGradient
-import kotlinx.android.synthetic.main.colour_picker_test.satText
-import kotlinx.android.synthetic.main.colour_picker_test.saturation
-import kotlinx.android.synthetic.main.colour_picker_test.saturationSeekBar
-import kotlinx.android.synthetic.main.colour_picker_test.valText
-import kotlinx.android.synthetic.main.colour_picker_test.value
-import kotlinx.android.synthetic.main.colour_picker_test.valueSeekBar
 import kotlinx.android.synthetic.main.layout_colour_picker.*
 
 
@@ -133,10 +119,10 @@ class ColourPickerTester : AppCompatActivity() {
         }
 
         colourPickerSaveButton.setOnClickListener {
-            if (Values.currentlyEditing == "start") {
-                Values.createGradientStartColour = hexString
+            if (Values.currentColourPOS == "start") {
+                Values.gradientCreatorStartColour = hexString
             } else {
-                Values.createGradientEndColour = hexString
+                Values.gradientCreatorEndColour = hexString
             }
 
             animationOut()
@@ -149,19 +135,19 @@ class ColourPickerTester : AppCompatActivity() {
     }
 
     private fun setInitialValues() {
-        if (Values.currentlyEditing == "start") {
-            hexValue = Color.parseColor(Values.createGradientStartColour)
+        if (Values.currentColourPOS == "start") {
+            hexValue = Color.parseColor(Values.gradientCreatorStartColour)
         } else {
-            hexValue = Color.parseColor(Values.createGradientEndColour)
+            hexValue = Color.parseColor(Values.gradientCreatorEndColour)
         }
 
         Color.colorToHSV(hexValue, hsv)
 
         hueProgress = hsv[0].toInt()
         hueSeekBar.progress = hueProgress
-        satProgress = (hsv[1]*100).toInt()
+        satProgress = (hsv[1] * 100).toInt()
         saturationSeekBar.progress = satProgress
-        valProgress = (hsv[2]*100).toInt()
+        valProgress = (hsv[2] * 100).toInt()
         valueSeekBar.progress = valProgress
 
         Log.e("INFO", "$hueProgress + $satProgress + $valProgress")
@@ -251,7 +237,7 @@ class ColourPickerTester : AppCompatActivity() {
         UIElements.viewObjectAnimator(colourPickerBackButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(colourPickerSaveButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(colourPickerSliders, "translationY", colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f), 850, 100, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(hexValueTextView, "translationY", (colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f))/2, 850, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(hexValueTextView, "translationY", (colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f)) / 2, 850, 100, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(hexValueTextView, "alpha", 0f, 500, 450, LinearInterpolator())
 
         Handler().postDelayed({

@@ -146,7 +146,7 @@ class ConnectingActivity : AppCompatActivity() {
                             item["description"] = downloadedItem.getString("description")
 
                             gradientList.add(item)
-                            Values.browse = gradientList
+                            Values.gradientList = gradientList
                         }
                         downloaded = true
                     } catch (e: Exception) {

@@ -8,6 +8,7 @@
     <string name="text_eng_cancel">Cancel</string>
     <string name="text_eng_options">Options</string>
     <string name="text_eng_submit">Submit</string>
+    <string name="text_eng_i_understand">I Understand</string>
 
     <string name="create_group_body">Create a new group to store gradients in</string>
     <string name="pebble">Pebble</string>
