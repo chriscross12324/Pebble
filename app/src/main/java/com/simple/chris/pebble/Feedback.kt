@@ -7,6 +7,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.widget.Button
@@ -37,8 +38,7 @@ class Feedback : AppCompatActivity() {
         usersEmailField.setOnFocusChangeListener { _, b ->
             if (b) {
                 if (!emailDialogShown) {
-                    emailDialogShown = true
-                    showDialogs(R.layout.dialog_email)
+                    UIElements.oneButtonDialog(this, R.drawable.icon_email, R.string.dialog_text_eng_email, R.string.dialog_text_eng_email_body, R.string.text_eng_ok, emailDialogListener)
                 }
             }
         }
@@ -127,6 +127,10 @@ class Feedback : AppCompatActivity() {
         queue.add(stringRequest)
     }
 
+    private val emailDialogListener = View.OnClickListener {
+        emailDialogShown = true
+        UIElements.oneButtonHider(this)
+    }
     private fun showDialogs(view: Int) {
         val dialog = Dialog(this, R.style.dialogStyle)
         dialog.setCancelable(false)

@@ -9,102 +9,69 @@ import android.os.Handler
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import kotlinx.android.synthetic.main.activity_permissions.*
+import com.simple.chris.pebble.Calculations.convertToDP
+import com.simple.chris.pebble.UIElements.viewObjectAnimator
 
 class ActivityPermissions : AppCompatActivity() {
 
-    private lateinit var wifiPermissionDialog: Dialog
-    private lateinit var dataWarningDialog: Dialog
-
-    private lateinit var wifiUnderstandButton: Button
-    private lateinit var dataUnderstandButton: Button
-
-    private lateinit var warningNotification: ConstraintLayout
-
-    private var dialogWidth: Int = 0
+    private var noticeShown = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UIElements.setTheme(this)
         setContentView(R.layout.activity_permissions)
 
-        wifiPermissionDialog = Dialog(this)
-        dataWarningDialog = Dialog(this)
-
-        wifiPermissionDialog.setContentView(R.layout.dialog_wifi)
-        dataWarningDialog.setContentView(R.layout.dialog_data)
-
-        wifiPermissionDialog.setCancelable(false)
-        dataWarningDialog.setCancelable(false)
-
         background.post {
-            setLayout()
-        }
-        Log.e("INFO", "Ran")
-    }
-
-    private fun setLayout() {
-        val layoutParamsWifi = wifiPermissionDialog.window?.attributes
-        val windowWifi = wifiPermissionDialog.window
-        layoutParamsWifi!!.dimAmount = 0f
-        layoutParamsWifi.gravity = Gravity.CENTER
-        windowWifi!!.attributes = layoutParamsWifi
-
-        val layoutParamsData = dataWarningDialog.window?.attributes
-        val windowData = dataWarningDialog.window
-        layoutParamsData!!.dimAmount = 0f
-        layoutParamsData.gravity = Gravity.CENTER
-        windowData!!.attributes = layoutParamsData
-
-        wifiUnderstandButton = wifiPermissionDialog.findViewById(R.id.wifiUnderstandButton)
-        dataUnderstandButton = dataWarningDialog.findViewById(R.id.dataUnderstandButton)
-
-        warningNotification = findViewById(R.id.warningNotification)
-        warningNotification.translationY = (-90 * resources.displayMetrics.density)
-
-        wifiPermissionDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dataWarningDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        showWifiPermissionDialog()
-    }
-
-    private fun showWifiPermissionDialog() {
-        wifiPermissionDialog.setOnShowListener {
-            val dialog = wifiPermissionDialog.findViewById<View>(R.id.rootLayout)
-            dialogWidth = dialog.width
-        }
-        wifiPermissionDialog.show()
-
-        wifiUnderstandButton.setOnClickListener {
-            wifiPermissionDialog.dismiss()
-            showDataPermissionDialog()
-            warningNotification.alpha = 1F
+            showNetworkDialog()
         }
     }
 
-    private fun showDataPermissionDialog() {
-        UIElements.viewObjectAnimator(warningNotification, "translationY",
-                0f, 500,
-                200, DecelerateInterpolator(3f))
+    private fun showNetworkDialog() {
+        val networkDialog = Dialog(this, R.style.dialogStyle)
+        networkDialog.setCancelable(false)
+        networkDialog.setContentView(R.layout.dialog_network_permission)
 
-        dataWarningDialog.show()
-        dataUnderstandButton.setOnClickListener {
-            UIElements.viewObjectAnimator(warningNotification, "translationY",
-                    (-90 * resources.displayMetrics.density), 500,
-                    0, DecelerateInterpolator(3f))
-            Values.firstStart = false
-            dataWarningDialog.dismiss()
+        val networkMain = networkDialog.findViewById<ConstraintLayout>(R.id.networkMain)
+        val networkNotice = networkDialog.findViewById<ConstraintLayout>(R.id.networkNotice)
+        val networkUnderstand = networkDialog.findViewById<ConstraintLayout>(R.id.networkUnderstand)
+        val networkUnderstandText = networkDialog.findViewById<TextView>(R.id.networkUnderstandText)
 
-            Handler().postDelayed({
+        networkMain.post {
+            networkUnderstand.translationY = networkUnderstand.height + convertToDP(this, 24f)
+            networkMain.translationY = networkMain.height + networkNotice.height + networkUnderstand.height + convertToDP(this, 56f)
+
+            UIElements.viewVisibility(networkMain, View.VISIBLE, 100)
+            viewObjectAnimator(networkMain, "translationY", 0f + networkNotice.height + convertToDP(this, 16f), 700, 100, DecelerateInterpolator(3f))
+            viewObjectAnimator(networkUnderstand, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
+        }
+
+        networkUnderstand.setOnClickListener {
+            if (!noticeShown) {
+                viewObjectAnimator(networkMain, "translationY", 0f, 700, 0, DecelerateInterpolator(3f))
+                UIElements.viewVisibility(networkNotice, View.VISIBLE, 0)
+                noticeShown = true
+                networkUnderstandText.setText(R.string.text_eng_i_understand)
+            } else {
+                Values.firstStart = false
                 startActivity(Intent(this, ConnectingActivity::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 finish()
-            }, 700)
+            }
         }
+
+        val networkWindow = networkDialog.window
+        networkWindow!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        networkWindow.setDimAmount(0f)
+        networkWindow.setGravity(Gravity.BOTTOM)
+
+        networkDialog.show()
     }
 }

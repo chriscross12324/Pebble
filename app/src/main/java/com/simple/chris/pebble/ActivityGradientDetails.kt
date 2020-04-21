@@ -20,6 +20,7 @@ import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.simple.chris.pebble.Calculations.convertToDP
 import com.simple.chris.pebble.UIElements.constraintLayoutElevationAnimator
@@ -197,24 +198,15 @@ class ActivityGradientDetails : AppCompatActivity() {
         }
     }
 
+    private val pushHoldListener = View.OnClickListener {
+        Values.hintPushHoldDismissed = true
+        UIElements.oneButtonHider(this)
+    }
+
     private fun pushHoldPopup() {
         if (!Values.hintPushHoldDismissed) {
-            val pushHoldDialog = Dialog(this, R.style.dialogStyle)
-            pushHoldDialog.setCancelable(false)
-            pushHoldDialog.setContentView(R.layout.dialog_push_hold)
-
-            val dismissButton: LinearLayout = pushHoldDialog.findViewById(R.id.dismissPopup)
-            dismissButton.setOnClickListener {
-                Values.hintPushHoldDismissed = true
-                pushHoldDialog.dismiss()
-            }
-
-            val window = pushHoldDialog.window
-            window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
-            window.setDimAmount(0.5f)
-
             Handler().postDelayed({
-                pushHoldDialog.show()
+                UIElements.oneButtonDialog(this, R.drawable.icon_view, R.string.pushHoldTitle, R.string.PushHoldGradient, R.string.text_eng_ok, pushHoldListener)
             }, 1500)
         }
     }

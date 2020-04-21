@@ -26,6 +26,7 @@
 
     <string name="noWifi">Not connected to Wi-Fi</string>
     <string name="noNetwork">No network connection</string>
+    <string name="pushHoldTitle">Push &amp; Hold</string>
     <string name="PushHoldGradient">Touch the gradient to hide its details and expand the gradient fullscreen. Release to show its details again.</string>
     <string name="EdgeSlide">Tap and Slide down along the edge of the screen to hide the grid of Gradients.</string>
     <string name="search_field_hint">Search…</string>
