@@ -10,6 +10,14 @@
     <string name="text_eng_submit">Submit</string>
     <string name="text_eng_i_understand">I Understand</string>
 
+    <!-- Dialog Strings English -->
+    <string name="dialog_title_eng_gradient_create">Create Gradient</string>
+    <string name="dialog_body_eng_gradient_create">It’s time to create your first Gradient! Choose your ‘start’ and ‘end’ colours by tapping one of the circles.\n\nThe developer has full right to remove a gradient.</string>
+    <string name="dialog_title_eng_gradient_create_missing">Missing Info</string>
+    <string name="dialog_body_eng_gradient_create_missing">It looks like you’re missing a name for your gradient, add one to submit it…</string>
+    <string name="dialog_title_eng_secret">Secret</string>
+    <string name="dialog_body_eng_secret">You found the secret! Pebble is really unstable and jenga like, Settings still isn’t added and I don’t know what design to go with for it.</string>
+
     <string name="create_group_body">Create a new group to store gradients in</string>
     <string name="pebble">Pebble</string>
     <string name="title_activity_gradient_grid_test">gradient_grid_test</string>

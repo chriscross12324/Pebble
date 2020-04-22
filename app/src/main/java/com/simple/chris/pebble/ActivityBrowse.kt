@@ -1,16 +1,23 @@
 package com.simple.chris.pebble
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.MotionEvent
-import android.view.View
+import android.view.*
 import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -18,11 +25,12 @@ import com.simple.chris.pebble.Calculations.convertToDP
 import com.simple.chris.pebble.UIElements.linearLayoutElevationAnimator
 import com.simple.chris.pebble.UIElements.linearLayoutHeightAnimator
 import com.simple.chris.pebble.UIElements.viewObjectAnimator
+import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.activity_browse.*
 import java.util.*
 import kotlin.math.roundToInt
 
-class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener {
+class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener {
 
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
@@ -34,12 +42,14 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     private var navigationMenuExpanded = false
     private val navigationMenuHeight = 200f
 
+    private var secretNumber = 0
+    private var secretAttempt = 0
+
 
     /*
     This is the Main Browse Activity, here users can view any gradient that is found on the database. This
     code allows users to navigate to different views as well as view any gradient fullscreen.
      */
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UIElements.setTheme(this)
@@ -52,7 +62,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             uiSet()
             getTime()
         }
-        RecyclerGrid.gradientGrid(this, browseGrid, Values.gradientList, this)
+        RecyclerGrid.gradientGrid(this, browseGrid, Values.gradientList, this, this)
         createGradient()
         navigationMenu()
     }
@@ -64,8 +74,8 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         try {
             screenHeight = Calculations.screenMeasure(this, "height")
 
-            helloTextHeight = helloText.measuredHeight
-            createGradientBannerHeight = createGradientBanner.measuredHeight
+            helloTextHeight = helloText.height
+            createGradientBannerHeight = createGradientBanner.height
 
             bottomSheetPeekHeight = screenHeight - (convertToDP(this, 160f) + helloTextHeight + createGradientBannerHeight).roundToInt()
         } catch (e: Exception) {
@@ -222,10 +232,10 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         } catch (e: Exception) {
         }
 
-        buttonSearch.visibility = visibility
+        /*buttonSearch.visibility = visibility
         //buttonSettings.visibility = visibility
         buttonFeedback.visibility = visibility
-        buttonReload.visibility = visibility
+        buttonReload.visibility = visibility*/
 
         linearLayoutHeightAnimator(navigationHolder, startSize, endSize, 400, 0, DecelerateInterpolator(3f))
         linearLayoutElevationAnimator(navigationHolder, startElevation, endElevation, 400, 0, DecelerateInterpolator(3f))
@@ -286,9 +296,77 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         }
     }
 
+    private fun navigationDialog(x: Int, y: Int) {
+        runOnUiThread {
+            val navigationDialog = Dialog(this, R.style.dialogStyle)
+            navigationDialog.setCancelable(true)
+            navigationDialog.setContentView(R.layout.dialog_navigation_menu)
+
+            val navigationHolder = navigationDialog.findViewById<LinearLayout>(R.id.navigationHolder)
+
+            val dialogWindow = navigationDialog.window
+            dialogWindow!!.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
+            dialogWindow.setDimAmount(0.5f)
+            dialogWindow.setGravity(Gravity.TOP)
+            dialogWindow.attributes.x = x
+            dialogWindow.attributes.y = y
+            navigationDialog.show()
+
+            navigationHolder.post {
+                //linearLayoutHeightAnimator(navigationHolder, convertToDP(this, 50f), convertToDP(this, 200f), 700, 200, DecelerateInterpolator(3f))
+                Handler().postDelayed({
+                    navigationHolder.layoutParams.height = convertToDP(this, 200f).roundToInt()
+                    navigationHolder.requestLayout()
+                }, 1000)
+                Log.e("INFO", "Animated")
+            }
+        }
+    }
+
     override fun onGradientClick(position: Int, view: View) {
         Vibration.lowFeedback(this)
         touchBlocker.visibility = View.VISIBLE
         RecyclerGrid.gradientGridOnClickListener(this, Values.gradientList, view, position)
+    }
+
+    override fun onGradientLongClick(position: Int, view: View) {
+        Vibration.strongFeedback(this)
+        Log.e("INFO", "Long press detected")
+        secretAttempt++
+        secretNumber += position + 1
+
+        if (secretAttempt == 5) {
+            if (secretNumber == 7) {
+                /*startActivity(Intent(this, ActivitySplash::class.java))
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                finish()*/
+                UIElements.oneButtonDialog(this, R.drawable.icon_settings, R.string.dialog_title_eng_secret, R.string.dialog_body_eng_secret, R.string.text_eng_ok, secretListener)
+                secretAttempt = 0
+                secretNumber = 0
+            } else {
+                Toast.makeText(this, "Wrong code", Toast.LENGTH_SHORT).show()
+                secretAttempt = 0
+                secretNumber = 0
+            }
+        }
+
+        /*blurLayout.visibility = View.VISIBLE
+        blurLayout.startBlur()
+        blurLayout.invalidate()*/
+
+        /*val radius = 20f
+        val decorView = window.decorView
+        val rootView = decorView.findViewById<ViewGroup>(android.R.id.content)
+        val windowBackground = decorView.background
+
+        blurView.setupWith(rootView)
+                .setFrameClearDrawable(windowBackground)
+                .setBlurAlgorithm(RenderScriptBlur(this))
+                .setBlurRadius(radius)
+                .setHasFixedTransformationMatrix(true)*/
+    }
+
+    private val secretListener = View.OnClickListener {
+        UIElements.oneButtonHider(this)
     }
 }

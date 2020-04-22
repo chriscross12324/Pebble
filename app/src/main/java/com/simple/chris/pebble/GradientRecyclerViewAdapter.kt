@@ -13,12 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.module_browse_normal.view.*
 
 
-class GradientRecyclerViewAdapter internal constructor(var context: Context, private val gradients: ArrayList<HashMap<String, String>>, onGradientListener: OnGradientListener) : RecyclerView.Adapter<GradientRecyclerViewAdapter.ViewHolder>() {
+class GradientRecyclerViewAdapter internal constructor(var context: Context, private val gradients: ArrayList<HashMap<String, String>>, onGradientListener: OnGradientListener, onGradientLongClickListener: OnGradientLongClickListener) : RecyclerView.Adapter<GradientRecyclerViewAdapter.ViewHolder>() {
     private var mOnGradientListener: OnGradientListener = onGradientListener
+    private var mOnGradientLongClickListener: OnGradientLongClickListener = onGradientLongClickListener
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(layoutInflater.inflate(R.layout.module_browse_normal, parent, false), mOnGradientListener)
+        return ViewHolder(layoutInflater.inflate(R.layout.module_browse_normal, parent, false), mOnGradientListener, mOnGradientLongClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -39,22 +40,33 @@ class GradientRecyclerViewAdapter internal constructor(var context: Context, pri
         }
     }
 
-    inner class ViewHolder internal constructor(view: View, onGradientListener: OnGradientListener) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    inner class ViewHolder internal constructor(view: View, onGradientListener: OnGradientListener, onGradientLongClickListener: OnGradientLongClickListener) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener {
         var gradientName: TextView = view.gradientName
         var gradientView: ImageView = view.gradient
         private val myOnGradientListener = onGradientListener
+        private val myOnGradientLongClickListener = onGradientLongClickListener
 
         init {
             view.setOnClickListener(this)
+            view.setOnLongClickListener(this)
         }
 
         override fun onClick(p0: View?) {
             myOnGradientListener.onGradientClick(adapterPosition, p0 as View)
         }
 
+        override fun onLongClick(v: View?): Boolean {
+            myOnGradientLongClickListener.onGradientLongClick(adapterPosition, v as View)
+            return true
+        }
+
     }
 
     interface OnGradientListener {
         fun onGradientClick(position: Int, view: View)
+    }
+
+    interface OnGradientLongClickListener {
+        fun onGradientLongClick(position: Int, view: View)
     }
 }

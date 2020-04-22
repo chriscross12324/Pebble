@@ -97,6 +97,10 @@ class CreateGradientNew : AppCompatActivity() {
 
         gradientCreatorGradientName.setText(Values.gradientCreatorGradientName)
         gradientCreatorGradientDescription.setText(Values.gradientCreatorDescription)
+
+        if (!Values.hintCreateGradientDismissed) {
+            UIElements.oneButtonDialog(this, R.drawable.icon_apps, R.string.dialog_title_eng_gradient_create, R.string.dialog_body_eng_gradient_create, R.string.text_eng_i_understand, dialogCreateGradientListener)
+        }
     }
 
     private fun gradientViewer() {
@@ -121,7 +125,8 @@ class CreateGradientNew : AppCompatActivity() {
     private fun preViewPlacements() {
         nextStepButton.translationY = convertToDP(this, 74f)
         lastStepButton.translationY = convertToDP(this, 74f)
-        gradientInfoHolder.translationY = convertToDP(this, 94f) + gradientInfoHolder.height
+        gradientNameHolder.translationY = convertToDP(this, 106f) + gradientNameHolder.height + gradientDescriptionHolder.height
+        gradientDescriptionHolder.translationY = convertToDP(this, 90f) + gradientDescriptionHolder.height
     }
 
     private fun leaveFirstStepAnimation(cancel: Boolean) {
@@ -130,7 +135,7 @@ class CreateGradientNew : AppCompatActivity() {
             viewVisibility(sharedElementsTransitionView, View.VISIBLE, 0)
         }
         viewObjectAnimator(nextStepButton, "translationY", convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
-        viewObjectAnimator(lastStepButton, "translationY", convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        viewObjectAnimator(lastStepButton, "translationY", convertToDP(this, 74f), 700, 100, DecelerateInterpolator(3f))
         viewObjectAnimator(startColourPicker, "alpha", 0f, 250, 0, LinearInterpolator())
         viewObjectAnimator(endColourPicker, "alpha", 0f, 250, 0, LinearInterpolator())
     }
@@ -163,14 +168,16 @@ class CreateGradientNew : AppCompatActivity() {
     }
 
     private fun stepTwoAnimationsIn() {
-        viewObjectAnimator(gradientInfoHolder, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
+        viewObjectAnimator(gradientNameHolder, "translationY", 0f, 700, 400, DecelerateInterpolator(3f))
+        viewObjectAnimator(gradientDescriptionHolder, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
         viewObjectAnimator(nextStepButton, "translationY", 0f, 700, 600, DecelerateInterpolator(3f))
         viewObjectAnimator(lastStepButton, "translationY", 0f, 700, 650, DecelerateInterpolator(3f))
     }
 
     private fun stepTwoAnimationsOut(submit: Boolean) {
         if (!submit) {
-            viewObjectAnimator(gradientInfoHolder, "translationY", convertToDP(this, 94f) + gradientInfoHolder.height, 700, 200, DecelerateInterpolator(3f))
+            viewObjectAnimator(gradientNameHolder, "translationY", convertToDP(this, 106f) + gradientNameHolder.height + gradientDescriptionHolder.height, 700, 250, DecelerateInterpolator(3f))
+            viewObjectAnimator(gradientDescriptionHolder, "translationY", convertToDP(this, 90f) + gradientNameHolder.height + gradientDescriptionHolder.height, 700, 200, DecelerateInterpolator(3f))
             viewObjectAnimator(nextStepButton, "translationY", convertToDP(this, 74f),
                     700, 0, DecelerateInterpolator(3f))
             viewObjectAnimator(lastStepButton, "translationY", convertToDP(this, 74f),
@@ -186,6 +193,8 @@ class CreateGradientNew : AppCompatActivity() {
         } else {
             if (gradientCreatorGradientName.text.toString().trim().replace(" ", "") != "") {
                 submitGradient()
+            } else {
+                UIElements.oneButtonDialog(this, R.drawable.icon_question, R.string.dialog_title_eng_gradient_create_missing, R.string.dialog_body_eng_gradient_create_missing, R.string.text_eng_ok, dialogMissingInfoListener)
             }
         }
 
@@ -268,6 +277,15 @@ class CreateGradientNew : AppCompatActivity() {
         Values.gradientCreatorDescription = ""
         Values.gradientCreatorStartColour = "#acd77b"
         Values.gradientCreatorEndColour = "#74d77b"
+    }
+
+    private val dialogCreateGradientListener = View.OnClickListener {
+        Values.hintCreateGradientDismissed = true
+        UIElements.oneButtonHider(this)
+    }
+
+    private val dialogMissingInfoListener = View.OnClickListener {
+        UIElements.oneButtonHider(this)
     }
 
     override fun onResume() {

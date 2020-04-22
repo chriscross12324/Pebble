@@ -19,7 +19,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class SearchGradient : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener {
+class SearchGradient : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener {
 
     private lateinit var backButton: LinearLayout
     private lateinit var buttonSearch: LinearLayout
@@ -167,7 +167,7 @@ class SearchGradient : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     }
 
     private fun setResultsGrid() {
-        RecyclerGrid.gradientGrid(this, searchResultsRecycler, searchResults, this)
+        RecyclerGrid.gradientGrid(this, searchResultsRecycler, searchResults, this, this)
 
         try {
             searchEntry.text = searchField.text.toString().replace(" ", "\n")
@@ -188,5 +188,9 @@ class SearchGradient : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         Vibration.lowFeedback(this)
         touchBlocker.visibility = View.VISIBLE
         RecyclerGrid.gradientGridOnClickListener(this, searchResults, view, position)
+    }
+
+    override fun onGradientLongClick(position: Int, view: View) {
+        Vibration.strongFeedback(this)
     }
 }

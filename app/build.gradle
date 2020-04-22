@@ -51,7 +51,11 @@ dependencies {
 
     implementation 'org.jsoup:jsoup:1.12.2'
     implementation 'com.github.javiersantos:AppUpdater:2.6.4'
+    implementation 'com.eightbitlab:blurview:1.6.3'
+    compile 'com.fivehundredpx:blurringview:1.0.0'
+    implementation 'io.alterac.blurkit:blurkit:1.1.0'
 }
 repositories {
     mavenCentral()
+    maven { url 'https://github.com/500px/500px-android-blur/raw/master/releases/' }
 }

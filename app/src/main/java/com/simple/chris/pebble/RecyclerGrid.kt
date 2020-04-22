@@ -13,10 +13,10 @@ import java.lang.Exception
 
 object RecyclerGrid {
 
-    fun gradientGrid(context: Context, view: RecyclerView, gradientJSON: ArrayList<HashMap<String, String>>, onGradientListener: GradientRecyclerViewAdapter.OnGradientListener) {
+    fun gradientGrid(context: Context, view: RecyclerView, gradientJSON: ArrayList<HashMap<String, String>>, onGradientListener: GradientRecyclerViewAdapter.OnGradientListener, onGradientLongClickListener: GradientRecyclerViewAdapter.OnGradientLongClickListener) {
         try {
             val gridLayoutManager = GridLayoutManager(context, 2)
-            val gridLayoutAdapter = GradientRecyclerViewAdapter(context, gradientJSON, onGradientListener)
+            val gridLayoutAdapter = GradientRecyclerViewAdapter(context, gradientJSON, onGradientListener, onGradientLongClickListener)
             view.setHasFixedSize(true)
             view.layoutManager = gridLayoutManager
             view.adapter = gridLayoutAdapter
@@ -42,6 +42,12 @@ object RecyclerGrid {
             Log.e("ERR", "pebble.recycler_grid.gradient_grid_on_click_listener: ${e.localizedMessage}")
 
         }
+    }
+
+    fun gradientGridOnLongClickListener(context: Activity, gradientJSON: ArrayList<HashMap<String, String>>, view: View, position: Int) {
+        try {
+
+        } catch (e: Exception){}
     }
 
 }

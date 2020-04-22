@@ -14,12 +14,13 @@ object Values {
     val notificationPattern = longArrayOf(0, 5, 5, 5)
     val weakVibration = longArrayOf(0, 1)
     val mediumVibration = longArrayOf(0, 3)
-    val strongVibration = longArrayOf(0, 5)
+    val strongVibration = longArrayOf(0, 200)
 
     //Hidden Values
     var firstStart: Boolean = true
     var lastVersion = 0
     var hintPushHoldDismissed = false
+    var hintCreateGradientDismissed = false
     var currentActivity: String = ""
     lateinit var gradientList: ArrayList<HashMap<String, String>>
 

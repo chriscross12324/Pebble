@@ -47,7 +47,7 @@ class Feedback : AppCompatActivity() {
             if (usersNameField.text.toString().trim().replace(" ", "") != "" && usersMessageField.text.toString().trim().replace(" ", "") != "") {
                 submitFeedback()
             } else {
-                showDialogs(R.layout.dialog_missing_feedback)
+                UIElements.oneButtonDialog(this, R.drawable.icon_question, R.string.dialog_text_eng_missing_info, R.string.dialog_text_eng_missing_info_body, R.string.text_eng_ok, missingInfoListener)
             }
         }
 
@@ -165,6 +165,10 @@ class Feedback : AppCompatActivity() {
         window.setDimAmount(0.5f)
 
         dialog.show()
+    }
+
+    private val missingInfoListener = View.OnClickListener {
+        UIElements.oneButtonHider(this)
     }
 
     override fun onBackPressed() {
