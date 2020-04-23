@@ -9,8 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.*
-import android.view.animation.DecelerateInterpolator
-import android.view.animation.LinearInterpolator
+import android.view.animation.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -331,28 +330,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
     override fun onGradientLongClick(position: Int, view: View) {
         Vibration.strongFeedback(this)
-        Log.e("INFO", "Long press detected")
-        secretAttempt++
-        secretNumber += position + 1
-
-        if (secretAttempt == 5) {
-            if (secretNumber == 7) {
-                /*startActivity(Intent(this, ActivitySplash::class.java))
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                finish()*/
-                UIElements.oneButtonDialog(this, R.drawable.icon_settings, R.string.dialog_title_eng_secret, R.string.dialog_body_eng_secret, R.string.text_eng_ok, secretListener)
-                secretAttempt = 0
-                secretNumber = 0
-            } else {
-                Toast.makeText(this, "Wrong code", Toast.LENGTH_SHORT).show()
-                secretAttempt = 0
-                secretNumber = 0
-            }
-        }
-
-        /*blurLayout.visibility = View.VISIBLE
-        blurLayout.startBlur()
-        blurLayout.invalidate()*/
+        RecyclerGrid.gradientGridOnLongClickListener(this, Values.gradientList, position, blurLayout)
 
         /*val radius = 20f
         val decorView = window.decorView
@@ -364,9 +342,5 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
                 .setBlurAlgorithm(RenderScriptBlur(this))
                 .setBlurRadius(radius)
                 .setHasFixedTransformationMatrix(true)*/
-    }
-
-    private val secretListener = View.OnClickListener {
-        UIElements.oneButtonHider(this)
     }
 }

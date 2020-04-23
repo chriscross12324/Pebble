@@ -13,8 +13,8 @@ object Values {
     //Vibrations
     val notificationPattern = longArrayOf(0, 5, 5, 5)
     val weakVibration = longArrayOf(0, 1)
-    val mediumVibration = longArrayOf(0, 3)
-    val strongVibration = longArrayOf(0, 200)
+    val mediumVibration = longArrayOf(0, 7)
+    val strongVibration = longArrayOf(0, 20)
 
     //Hidden Values
     var firstStart: Boolean = true
