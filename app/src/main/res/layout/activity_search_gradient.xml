@@ -160,14 +160,13 @@
         android:visibility="gone"
         android:elevation="10dp" />
 
-    <TextView
-        android:id="@+id/textEntry"
+    <io.alterac.blurkit.BlurLayout
+        android:id="@+id/blurLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Search"
-        android:textColor="?PrimaryTextColour"
-        android:textSize="48sp"
-        android:fontFamily="@font/googlesans_bold"
-        android:gravity="center"
-        android:visibility="gone"/>
+        android:elevation="10dp"
+        app:blk_blurRadius="10"
+        android:visibility="gone"
+        app:blk_fps="0"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

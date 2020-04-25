@@ -39,7 +39,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     private var bottomSheetPeekHeight = 0
 
     private var navigationMenuExpanded = false
-    private val navigationMenuHeight = 200f
+    private val navigationMenuHeight = 250f
 
     private var secretNumber = 0
     private var secretAttempt = 0
@@ -198,6 +198,17 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             startActivity(searchGradientIntent, searchGradientActivityOptions.toBundle())
         }
 
+        buttonSettings.setOnClickListener {
+            touchBlocker.visibility = View.VISIBLE
+            viewObjectAnimator(settingsIcons, "rotation", -360f, 1000, 0, DecelerateInterpolator(3f))
+
+            Handler().postDelayed({
+                startActivity(Intent(this, Settings::class.java))
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }, 550)
+
+        }
+
         buttonFeedback.setOnClickListener {
             touchBlocker.visibility = View.VISIBLE
             startActivity(Intent(this, Feedback::class.java))
@@ -291,6 +302,15 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                     finish()
                 }
+                "Settings" -> {
+                    Values.currentActivity = "Browse"
+                    touchBlocker.visibility = View.GONE
+                    Handler().postDelayed({
+                        navigationMenuAnimation(View.GONE, convertToDP(this, navigationMenuHeight), convertToDP(this, 50f),
+                                convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)
+                    }, 250)
+
+                }
             }
         }
     }
@@ -314,7 +334,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             navigationHolder.post {
                 //linearLayoutHeightAnimator(navigationHolder, convertToDP(this, 50f), convertToDP(this, 200f), 700, 200, DecelerateInterpolator(3f))
                 Handler().postDelayed({
-                    navigationHolder.layoutParams.height = convertToDP(this, 200f).roundToInt()
+                    navigationHolder.layoutParams.height = convertToDP(this, navigationMenuHeight).roundToInt()
                     navigationHolder.requestLayout()
                 }, 1000)
                 Log.e("INFO", "Animated")

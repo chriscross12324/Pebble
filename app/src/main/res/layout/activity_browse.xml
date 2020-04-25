@@ -57,8 +57,9 @@
             android:id="@+id/buttonSettings"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:visibility="gone">
+            android:visibility="visible">
             <ImageView
+                android:id="@+id/settingsIcons"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="12dp"

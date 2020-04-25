@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.activity_search_gradient.*
 
 class SearchGradient : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener {
 
@@ -60,7 +61,6 @@ class SearchGradient : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         //Initiate EditText
         searchField = findViewById(R.id.searchField)
         searchFieldHolder = findViewById(R.id.searchFieldHolder)
-        searchEntry = findViewById(R.id.textEntry)
 
         browseItems = Values.gradientList
         searchResults = ArrayList()
@@ -192,5 +192,6 @@ class SearchGradient : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
     override fun onGradientLongClick(position: Int, view: View) {
         Vibration.strongFeedback(this)
+        RecyclerGrid.gradientGridOnLongClickListener(this, searchResults, position, blurLayout)
     }
 }

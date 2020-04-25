@@ -27,6 +27,7 @@ import com.simple.chris.pebble.UIElements.constraintLayoutElevationAnimator
 import com.simple.chris.pebble.UIElements.gradientDrawable
 import com.simple.chris.pebble.UIElements.viewObjectAnimator
 import kotlinx.android.synthetic.main.activity_gradient_details.*
+import java.io.FileOutputStream
 import kotlin.math.roundToInt
 
 class ActivityGradientDetails : AppCompatActivity() {
@@ -186,9 +187,13 @@ class ActivityGradientDetails : AppCompatActivity() {
 
         saveGradientButton.setOnClickListener {
             //createBitmap(saveGradientDrawable, Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height"))
-            if (!Values.storagePermissionGiven(this)) {
-                showStoragePermissionDialog()
-                Log.e("INFO", Values.storagePermissionGiven(this).toString())
+
+            if (Permissions.readWritePermission(this, this, blurLayout)) {
+                try {
+                   val fileOutputStream = FileOutputStream(gradientNameString.replace(" ", "_").toLowerCase())
+                    createBitmap(gradientDrawable(this, false, null, startColourInt, endColourInt, 0f) as Drawable,
+                    Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height")).compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+                } catch (e: java.lang.Exception) {}
             }
 
         }

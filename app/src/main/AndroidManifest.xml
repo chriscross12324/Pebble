@@ -3,13 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.simple.chris.pebble">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.SET_WALLPAPER" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,8 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Main"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".Feedback"></activity>
-        <activity android:name=".ColourPickerTester" />
+        <activity android:name=".Settings"></activity>
+        <activity android:name=".Feedback" />
+        <activity android:name=".ColourPicker" />
         <activity android:name=".CreateGradientNew" />
         <activity
             android:name=".SearchGradient"
@@ -40,8 +34,8 @@
         </activity>
         <activity
             android:name=".ActivityBrowse"
-            tools:ignore="LockedOrientationActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity android:name=".ActivitySettings" />
         <activity
             android:name=".ConnectingActivity"
@@ -51,5 +45,12 @@
             android:name=".ActivityPermissions"
             tools:ignore="LockedOrientationActivity" />
     </application>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

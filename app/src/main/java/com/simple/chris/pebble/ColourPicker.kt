@@ -1,20 +1,27 @@
 package com.simple.chris.pebble
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
+import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.view.inputmethod.InputMethodManager
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.layout_colour_picker.*
+import java.lang.Exception
+import java.nio.file.WatchEvent
 
 
-class ColourPickerTester : AppCompatActivity() {
+class ColourPicker : AppCompatActivity() {
 
     var hexValue = 0
     var hexString = ""
@@ -135,10 +142,10 @@ class ColourPickerTester : AppCompatActivity() {
     }
 
     private fun setInitialValues() {
-        if (Values.currentColourPOS == "start") {
-            hexValue = Color.parseColor(Values.gradientCreatorStartColour)
+        hexValue = if (Values.currentColourPOS == "start") {
+            Color.parseColor(Values.gradientCreatorStartColour)
         } else {
-            hexValue = Color.parseColor(Values.gradientCreatorEndColour)
+            Color.parseColor(Values.gradientCreatorEndColour)
         }
 
         Color.colorToHSV(hexValue, hsv)
@@ -150,11 +157,20 @@ class ColourPickerTester : AppCompatActivity() {
         valProgress = (hsv[2] * 100).toInt()
         valueSeekBar.progress = valProgress
 
-        Log.e("INFO", "$hueProgress + $satProgress + $valProgress")
         hueUpdate()
         satUpdate()
         valUpdate()
 
+        hexValueTextView.setOnKeyListener { _, _, keyEvent ->
+            if (keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
+                hexValue = Color.parseColor(hexValueTextView.text.toString())
+                updateView()
+                hexValueTextView.clearFocus()
+                val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(hexValueTextView.windowToken, 0)
+            }
+            false
+        }
     }
 
     private fun setPaddingForSeekBars() {
@@ -193,7 +209,7 @@ class ColourPickerTester : AppCompatActivity() {
         hexString = "#" + Integer.toHexString(Color.HSVToColor(hsv)).substring(2)
         hexValue = Color.HSVToColor(hsv)
         colourPickerColourViewer.setBackgroundColor(hexValue)
-        hexValueTextView.text = hexString
+        hexValueTextView.setText(hexString)
 
         HEXToRGB(hexString)
     }
@@ -218,7 +234,6 @@ class ColourPickerTester : AppCompatActivity() {
     }
 
     private fun setViewPositions() {
-
         colourPickerSliders.translationY = Calculations.convertToDP(this, colourPickerSliders.height + 94.toFloat())
 
         colourPickerColourViewer.post {

@@ -39,13 +39,6 @@ object Values {
     var currentColourInt = 0
     var currentColourHEX = ""
 
-
-    fun storagePermissionGiven(context: Context): Boolean {
-        val result = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        return result == PackageManager.PERMISSION_GRANTED
-    }
-
-
     fun saveValues(context: Context) {
         val sharedPrefs = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE)
         val editor = sharedPrefs.edit()

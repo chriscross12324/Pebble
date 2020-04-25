@@ -11,13 +11,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.view.Window
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -31,7 +28,6 @@ import com.simple.chris.pebble.UIElements.viewObjectAnimator
 import com.simple.chris.pebble.UIElements.viewVisibility
 import kotlinx.android.synthetic.main.activity_create_gradient_new.*
 import org.apache.commons.lang3.RandomStringUtils
-import java.util.*
 import kotlin.collections.HashMap
 
 class CreateGradientNew : AppCompatActivity() {
@@ -80,7 +76,7 @@ class CreateGradientNew : AppCompatActivity() {
         startColourPicker.setOnClickListener {
             Handler().postDelayed({
                 Values.currentColourPOS = "start"
-                startActivity(Intent(this, ColourPickerTester::class.java))
+                startActivity(Intent(this, ColourPicker::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }, 400)
             leaveFirstStepAnimation(false)
@@ -89,7 +85,7 @@ class CreateGradientNew : AppCompatActivity() {
         endColourPicker.setOnClickListener {
             Handler().postDelayed({
                 Values.currentColourPOS = "end"
-                startActivity(Intent(this, ColourPickerTester::class.java))
+                startActivity(Intent(this, ColourPicker::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }, 400)
             leaveFirstStepAnimation(false)
