@@ -2,21 +2,19 @@ package com.simple.chris.pebble
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.*
-import android.view.animation.*
-import android.widget.ImageView
+import android.view.Gravity
+import android.view.MotionEvent
+import android.view.View
+import android.view.WindowManager
+import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -24,7 +22,6 @@ import com.simple.chris.pebble.Calculations.convertToDP
 import com.simple.chris.pebble.UIElements.linearLayoutElevationAnimator
 import com.simple.chris.pebble.UIElements.linearLayoutHeightAnimator
 import com.simple.chris.pebble.UIElements.viewObjectAnimator
-import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.activity_browse.*
 import java.util.*
 import kotlin.math.roundToInt
@@ -41,13 +38,8 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     private var navigationMenuExpanded = false
     private val navigationMenuHeight = 250f
 
-    private var secretNumber = 0
-    private var secretAttempt = 0
-
-
-    /*
-    This is the Main Browse Activity, here users can view any gradient that is found on the database. This
-    code allows users to navigate to different views as well as view any gradient fullscreen.
+    /**
+     * Browse Activity - Handles gradient RecyclerView, Gradient Creator Banner & Click events
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,8 +58,8 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         navigationMenu()
     }
 
-    /*
-    Gets the height of the screen and other UI elements to use for UI elements that reference screen size
+    /**
+     * Get/Set bottomSheetPeekHeight based on screen height and other elements
      */
     private fun getHeights() {
         try {
@@ -136,8 +128,8 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         }
     }
 
-    /*
-    Handles the Navigation Menu
+    /**
+     * Navigation Menu - Click Events & Animations
      */
     private fun navigationMenu() {
         buttonOptions.setOnClickListener {
@@ -152,43 +144,15 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             }
         }
 
-        try {
-            touchBlockerMenu.setOnTouchListener { _, motionEvent ->
-                if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                    if (navigationMenuExpanded) {
-                        navigationMenuAnimation(View.GONE, convertToDP(this, navigationMenuHeight), convertToDP(this, 50f),
-                                convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)
-                    }
+        touchBlockerMenu.setOnTouchListener { _, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                if (navigationMenuExpanded) {
+                    navigationMenuAnimation(View.GONE, convertToDP(this, navigationMenuHeight), convertToDP(this, 50f),
+                            convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)
                 }
-                true
             }
-        } catch (e: Exception) {
-            Log.e("ERR", "touchBlockerMenu not available in Landscape mode")
+            true
         }
-
-        try {
-            touchBlockerMenuLeft.setOnTouchListener { _, motionEvent ->
-                if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                    if (navigationMenuExpanded) {
-                        navigationMenuAnimation(View.GONE, convertToDP(this, navigationMenuHeight), convertToDP(this, 50f),
-                                convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)
-                    }
-                }
-                true
-            }
-            touchBlockerMenuRight.setOnTouchListener { _, motionEvent ->
-                if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                    if (navigationMenuExpanded) {
-                        navigationMenuAnimation(View.GONE, convertToDP(this, navigationMenuHeight), convertToDP(this, 50f),
-                                convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)
-                    }
-                }
-                true
-            }
-        } catch (e: Exception) {
-            Log.e("ERR", "touchBlockerMenuLeft/Right not available in Portrait mode")
-        }
-
 
         buttonSearch.setOnClickListener {
             touchBlocker.visibility = View.VISIBLE
@@ -232,20 +196,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
      */
     private fun navigationMenuAnimation(visibility: Int, startSize: Float, endSize: Float, startElevation: Float, endElevation: Float, drawable: Int, expanded: Boolean) {
         touchBlocker.visibility = View.VISIBLE
-        try {
-            touchBlockerMenu.visibility = visibility
-        } catch (e: Exception) {
-        }
-        try {
-            touchBlockerMenuLeft.visibility = visibility
-            touchBlockerMenuRight.visibility = visibility
-        } catch (e: Exception) {
-        }
-
-        /*buttonSearch.visibility = visibility
-        //buttonSettings.visibility = visibility
-        buttonFeedback.visibility = visibility
-        buttonReload.visibility = visibility*/
+        touchBlockerMenu.visibility = visibility
 
         linearLayoutHeightAnimator(navigationHolder, startSize, endSize, 400, 0, DecelerateInterpolator(3f))
         linearLayoutElevationAnimator(navigationHolder, startElevation, endElevation, 400, 0, DecelerateInterpolator(3f))
@@ -351,16 +302,5 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     override fun onGradientLongClick(position: Int, view: View) {
         Vibration.strongFeedback(this)
         RecyclerGrid.gradientGridOnLongClickListener(this, Values.gradientList, position, blurLayout)
-
-        /*val radius = 20f
-        val decorView = window.decorView
-        val rootView = decorView.findViewById<ViewGroup>(android.R.id.content)
-        val windowBackground = decorView.background
-
-        blurView.setupWith(rootView)
-                .setFrameClearDrawable(windowBackground)
-                .setBlurAlgorithm(RenderScriptBlur(this))
-                .setBlurRadius(radius)
-                .setHasFixedTransformationMatrix(true)*/
     }
 }

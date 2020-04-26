@@ -1,12 +1,10 @@
 package com.simple.chris.pebble
 
-import android.Manifest
 import android.content.Context
-import android.content.SharedPreferences
-import android.content.pm.PackageManager
-import androidx.core.content.ContextCompat
-import com.polyak.iconswitch.IconSwitch
 
+/**
+ * Stores all essential values, can be referenced and changed from Activities
+ */
 object Values {
     private const val SAVE = "SavedValues"
 
@@ -39,6 +37,9 @@ object Values {
     var currentColourInt = 0
     var currentColourHEX = ""
 
+    /**
+     * Saves all values to a SharedPreferences file - Ran whenever a value might have changed
+     */
     fun saveValues(context: Context) {
         val sharedPrefs = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE)
         val editor = sharedPrefs.edit()
@@ -56,6 +57,9 @@ object Values {
         editor.apply()
     }
 
+    /**
+     * Loads all values from a SharedPreferences file - Only used when app is opened or when a crash may happen
+     */
     fun loadValues(context: Context) {
         val sharedPrefs = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE)
         firstStart = sharedPrefs.getBoolean("firstStart", true)

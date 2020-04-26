@@ -14,7 +14,8 @@
         android:elevation="9dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/bottomSheet"
@@ -22,7 +23,7 @@
             android:layout_height="match_parent"
             android:background="?BackgroundColour"
             android:transitionName="cardView"
-            app:cardBackgroundColor="?BackgroundColour"
+            app:cardBackgroundColor="#ffffff"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">

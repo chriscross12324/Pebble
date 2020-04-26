@@ -3,7 +3,6 @@ package com.simple.chris.pebble
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +11,23 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.module_browse_normal.view.*
 
-
+/**
+ * Creates a gradient modules for each gradient
+ *
+ * @param context Activity context to perform certain tasks only available from an activity
+ * @param gradients List of gradients used to populate modules
+ * @param onGradientListener Actions to perform when a module is clicked
+ * @param onGradientLongClickListener Actions to perform when module is long pressed
+ *
+ */
 class GradientRecyclerViewAdapter internal constructor(var context: Context, private val gradients: ArrayList<HashMap<String, String>>, onGradientListener: OnGradientListener, onGradientLongClickListener: OnGradientLongClickListener) : RecyclerView.Adapter<GradientRecyclerViewAdapter.ViewHolder>() {
     private var mOnGradientListener: OnGradientListener = onGradientListener
     private var mOnGradientLongClickListener: OnGradientLongClickListener = onGradientLongClickListener
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
+    /**
+     * @return Populated module to display in RecyclerView
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(layoutInflater.inflate(R.layout.module_browse_normal, parent, false), mOnGradientListener, mOnGradientLongClickListener)
     }
@@ -26,6 +36,14 @@ class GradientRecyclerViewAdapter internal constructor(var context: Context, pri
         return gradients.size
     }
 
+    /**
+     * Populates a module
+     *
+     * @param holder References ViewHolder to use its internal views
+     * @param position Grabs required information for a gradient at a specific position from the ArrayList
+     *
+     * If information for a module is invalid/missing, the module will be populated with fallback info
+     */
     @SuppressLint("NewApi")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
@@ -40,6 +58,9 @@ class GradientRecyclerViewAdapter internal constructor(var context: Context, pri
         }
     }
 
+    /**
+     * Referenced to get the views from the module layout
+     */
     inner class ViewHolder internal constructor(view: View, onGradientListener: OnGradientListener, onGradientLongClickListener: OnGradientLongClickListener) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener {
         var gradientName: TextView = view.gradientName
         var gradientView: ImageView = view.gradient

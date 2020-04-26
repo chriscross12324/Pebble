@@ -12,6 +12,7 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
@@ -22,12 +23,15 @@ import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.EnvironmentCompat
 import com.simple.chris.pebble.Calculations.convertToDP
 import com.simple.chris.pebble.UIElements.constraintLayoutElevationAnimator
 import com.simple.chris.pebble.UIElements.gradientDrawable
 import com.simple.chris.pebble.UIElements.viewObjectAnimator
 import kotlinx.android.synthetic.main.activity_gradient_details.*
+import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
 
 class ActivityGradientDetails : AppCompatActivity() {
@@ -189,11 +193,29 @@ class ActivityGradientDetails : AppCompatActivity() {
             //createBitmap(saveGradientDrawable, Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height"))
 
             if (Permissions.readWritePermission(this, this, blurLayout)) {
+                //Make the directory to save gradients
+                val savePath = Environment.getExternalStorageDirectory()
+                val saveDir = File("$savePath/Pebble")
+                saveDir.mkdirs()
+
                 try {
-                   val fileOutputStream = FileOutputStream(gradientNameString.replace(" ", "_").toLowerCase())
+                    //Makes the file to populate
+                    val file = File(saveDir, "$gradientNameString.png".replace(" ", "_").toLowerCase())
+                    val fileOutputStream = FileOutputStream(file)
+
+                    //Creates the gradient Bitmap to populate the file above
                     createBitmap(gradientDrawable(this, false, null, startColourInt, endColourInt, 0f) as Drawable,
-                    Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height")).compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
-                } catch (e: java.lang.Exception) {}
+                            Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height")).compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+
+                    fileOutputStream.flush()
+                    fileOutputStream.close()
+
+                    Log.e("INFO", "Successfully Saved to $saveDir")
+                    UIElements.popupDialog(this, R.drawable.icon_question, R.string.pushHoldTitle, R.string.descriptionTitleGradients, blurLayout, "${Environment.getExternalStorageDirectory()}/Pebble")
+
+                } catch (e: java.lang.Exception) {
+                    Log.e("INFO", "Failed to save due to: ${e.localizedMessage}")
+                }
             }
 
         }

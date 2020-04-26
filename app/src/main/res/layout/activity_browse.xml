@@ -106,7 +106,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/createGradientBanner"
         android:transitionName="gradientCreatorViewer"
         android:layout_width="0dp"
@@ -114,7 +114,8 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="64dp"
         android:layout_marginEnd="32dp"
-        android:background="@drawable/placeholder_gradient"
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@android:color/transparent"
         android:elevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -124,12 +125,13 @@
             android:id="@+id/createGradientDetailsHolder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/placeholder_gradient"
             android:alpha="1">
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:src="@drawable/create_gradient_banners"
+                android:src="@drawable/create_gradient_banner"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -160,7 +162,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"

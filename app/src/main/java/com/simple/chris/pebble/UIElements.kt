@@ -4,21 +4,31 @@ import android.animation.ObjectAnimator
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Handler
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
+import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import com.simple.chris.pebble.Calculations.convertToDP
+import io.alterac.blurkit.BlurLayout
+import java.io.File
 import kotlin.math.roundToInt
 
 object UIElements {
@@ -183,6 +193,62 @@ object UIElements {
         Handler().postDelayed({
             dialogOneButton.dismiss()
         }, 800)
+    }
+
+    fun popupDialog(context: Context, icon: Int, title: Int, description: Int, blur: BlurLayout, dir: String) {
+        blur.visibility = View.VISIBLE
+        blur.startBlur()
+        blur.invalidate()
+
+        val dialog = Dialog(context, R.style.dialogStyle)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dialog_popup)
+
+        val holder = dialog.findViewById<ConstraintLayout>(R.id.holder)
+        val permissionIcon = dialog.findViewById<ImageView>(R.id.permissionIcon)
+        val permissionTitle = dialog.findViewById<TextView>(R.id.permissionTitle)
+        val permissionDescription = dialog.findViewById<TextView>(R.id.permissionDescription)
+        val button = dialog.findViewById<ConstraintLayout>(R.id.button)
+
+        /*permissionIcon.setImageResource(icon)
+        permissionTitle.setText(title)
+        permissionDescription.setText(description)*/
+
+        val dialogWindow = dialog.window
+        dialogWindow!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+        dialogWindow.setDimAmount(0f)
+        dialogWindow.setGravity(Gravity.CENTER)
+        dialog.show()
+
+        holder.post {
+            viewObjectAnimator(holder, "scaleX", 1f, 350, 100, OvershootInterpolator())
+            viewObjectAnimator(holder, "scaleY", 1f, 350, 100, OvershootInterpolator())
+            viewObjectAnimator(holder, "alpha", 1f, 100, 100, LinearInterpolator())
+        }
+
+        Handler().postDelayed({
+            viewObjectAnimator(holder, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
+            viewObjectAnimator(holder, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
+            viewObjectAnimator(holder, "alpha", 0f, 200, 200, LinearInterpolator())
+
+            Handler().postDelayed({
+                dialog.dismiss()
+                blur.pauseBlur()
+                blur.visibility = View.GONE
+            }, 450)
+        }, 2500)
+
+        button.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(Uri.parse(dir), "folder")
+
+            if (intent.resolveActivityInfo(context.packageManager, 0) != null) {
+                context.startActivity(intent)
+            } else {
+                Log.e("ERR", "No file explorer")
+                context.startActivity(intent)
+            }
+        }
     }
 
 }

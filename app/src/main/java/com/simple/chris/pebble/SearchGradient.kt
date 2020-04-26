@@ -2,39 +2,20 @@ package com.simple.chris.pebble
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_search_gradient.*
 
 class SearchGradient : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener {
 
-    private lateinit var backButton: LinearLayout
-    private lateinit var buttonSearch: LinearLayout
-    private lateinit var searchPopup: LinearLayout
-    private lateinit var touchBlocker: View
-
-    private lateinit var searchResultsRecycler: RecyclerView
-
-    private lateinit var searchField: EditText
-    private lateinit var searchFieldHolder: LinearLayout
-    private lateinit var searchEntry: TextView
-
-    private lateinit var browseItems: ArrayList<HashMap<String, String>>
-    private lateinit var searchResults: ArrayList<HashMap<String, String>>
+    private var browseItems: ArrayList<HashMap<String, String>> = Values.gradientList
+    private var searchResults: ArrayList<HashMap<String, String>> = ArrayList()
 
     var searchChanged = true
 
@@ -43,102 +24,61 @@ class SearchGradient : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         super.onCreate(savedInstanceState)
         UIElements.setTheme(this)
         setContentView(R.layout.activity_search_gradient)
-        postponeEnterTransition()
-
-        //Initiate LinearLayouts
-        backButton = findViewById(R.id.buttonBack)
-        buttonSearch = findViewById(R.id.buttonSearch)
-        searchPopup = findViewById(R.id.searchPopup)
-
-        touchBlocker = findViewById(R.id.touchBlocker)
-
-        //Initiate RecyclerView
-        searchResultsRecycler = findViewById(R.id.searchResultsRecycler)
-        searchResultsRecycler.setHasFixedSize(true)
-        val gridLayoutManager = GridLayoutManager(this, 2)
-        searchResultsRecycler.layoutManager = gridLayoutManager
-
-        //Initiate EditText
-        searchField = findViewById(R.id.searchField)
-        searchFieldHolder = findViewById(R.id.searchFieldHolder)
-
-        browseItems = Values.gradientList
-        searchResults = ArrayList()
-
-        searchField.post {
-            startPostponedEnterTransition()
-            Values.currentActivity = "SearchGradient"
-        }
-
+        Values.currentActivity = "SearchGradient"
         searchLogic()
 
+        //Initiate RecyclerView
+        searchResultsRecycler.setHasFixedSize(true)
+        searchResultsRecycler.layoutManager = GridLayoutManager(this, 2)
 
-        backButton.setOnClickListener {
+        buttonBack.setOnClickListener {
             touchBlocker.visibility = View.VISIBLE
             onBackPressed()
         }
     }
 
     private fun searchLogic() {
-
-        buttonSearch.setOnClickListener {
-            searchGradients()
-        }
-
         searchField.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
+            override fun afterTextChanged(s: Editable?) {}
 
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchChanged = true
             }
         })
 
-        searchField.setOnKeyListener { _, _, keyEvent ->
-            if (keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
-                searchGradients()
+        searchField.setOnKeyListener { _, _, event ->
+            if (event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                if (searchChanged) {
+                    searchChanged = false
+                    searchGradients()
+                }
             }
             false
         }
-
-        searchField.setOnFocusChangeListener { _, b ->
-            if (b) {
-                UIElements.viewObjectAnimator(backButton, "translationY", -80f, 300, 0, DecelerateInterpolator())
-                UIElements.viewObjectAnimator(searchFieldHolder, "translationY", -80f, 300, 0, DecelerateInterpolator())
-                UIElements.viewObjectAnimator(buttonSearch, "translationY", -80f, 300, 0, DecelerateInterpolator())
-            } else {
-                UIElements.viewObjectAnimator(backButton, "translationY", 0f, 300, 0, DecelerateInterpolator())
-                UIElements.viewObjectAnimator(searchFieldHolder, "translationY", 0f, 300, 0, DecelerateInterpolator())
-                UIElements.viewObjectAnimator(buttonSearch, "translationY", 0f, 300, 0, DecelerateInterpolator())
-            }
-        }
     }
 
+    /**
+     * Scans browseItems for gradients with a name containing searchField text
+     */
     @SuppressLint("DefaultLocale")
     private fun searchGradients() {
         searchField.clearFocus()
         val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+        imm.hideSoftInputFromWindow(searchField.windowToken, 0)
 
         searchResults.clear()
 
         val searchFieldText = searchField.text.toString()
         val textForCode = searchFieldText.replace(" ", "").toLowerCase()
 
-        var searchedGradients = 0
         var foundGradients = 0
 
         if (textForCode != "") {
             searchChanged = false
             for (count in 0 until browseItems.size) {
                 val found = HashMap<String, String>()
-
-                searchedGradients++
 
                 if (browseItems[count]["backgroundName"]!!.replace(" ", "").toLowerCase()
                                 .contains(textForCode)) {
@@ -153,26 +93,15 @@ class SearchGradient : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
                     foundGradients++
                 }
             }
-            setResultsGrid()
+            RecyclerGrid.gradientGrid(this, searchResultsRecycler, searchResults, this, this)
 
             if (foundGradients == 0) {
                 searchPopup.visibility = View.VISIBLE
             } else {
                 searchPopup.visibility = View.GONE
             }
-
         } else {
             searchPopup.visibility = View.VISIBLE
-        }
-    }
-
-    private fun setResultsGrid() {
-        RecyclerGrid.gradientGrid(this, searchResultsRecycler, searchResults, this, this)
-
-        try {
-            searchEntry.text = searchField.text.toString().replace(" ", "\n")
-        } catch (e: Exception) {
-            Log.e("ERR", "No TextView")
         }
     }
 

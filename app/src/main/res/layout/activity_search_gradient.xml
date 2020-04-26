@@ -19,23 +19,6 @@
         android:paddingBottom="98dp"
         android:requiresFadingEdge="none" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="24dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
     <LinearLayout
         android:id="@+id/buttonBack"
         android:layout_width="50dp"
@@ -63,13 +46,13 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/details_background"
         android:backgroundTint="?ForegroundColour"
         android:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonSearch"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonBack">
 
         <EditText
@@ -91,33 +74,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/buttonSearch"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/details_background"
-        android:backgroundTint="?ForegroundColour"
-        android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="12dp"
-            android:contentDescription="@string/description_button_search"
-            android:src="@drawable/icon_search"
-            android:tint="?PrimaryTextColour"
-            android:transitionName="sharedSearchElement" />
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/searchPopup"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintBottom_toTopOf="@+id/searchFieldHolder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -143,13 +104,12 @@
             android:id="@+id/searchProblemBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="We tried searching but couldn't find anything under that name, try searching for something else."
+            android:text="It doesn't look like any gradient has that in its name, try something else..."
             android:textSize="14sp"
             android:textColor="?PrimaryTextColour"
             android:fontFamily="@font/googlesans_medium"
             android:gravity="center"/>
     </LinearLayout>
-
 
     <View
         android:id="@+id/touchBlocker"

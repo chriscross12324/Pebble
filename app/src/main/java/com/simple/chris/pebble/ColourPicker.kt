@@ -41,7 +41,6 @@ class ColourPicker : AppCompatActivity() {
 
         setViewPositions()
         setInitialValues()
-        setPaddingForSeekBars()
 
         val gradientDrawable = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
@@ -171,12 +170,6 @@ class ColourPicker : AppCompatActivity() {
             }
             false
         }
-    }
-
-    private fun setPaddingForSeekBars() {
-        hueSeekBar.setPadding(6, 0, 6, 0)
-        saturationSeekBar.setPadding(6, 0, 6, 0)
-        valueSeekBar.setPadding(6, 0, 6, 0)
     }
 
     private fun hueUpdate() {
