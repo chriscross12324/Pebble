@@ -6,14 +6,17 @@ import android.app.WallpaperManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.provider.DocumentsContract
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -191,11 +194,12 @@ class ActivityGradientDetails : AppCompatActivity() {
 
         saveGradientButton.setOnClickListener {
             //createBitmap(saveGradientDrawable, Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height"))
+            Log.e("INFO", "Here")
 
             if (Permissions.readWritePermission(this, this, blurLayout)) {
                 //Make the directory to save gradients
-                val savePath = Environment.getExternalStorageDirectory()
-                val saveDir = File("$savePath/Pebble")
+                val savePath = getExternalFilesDir(null)!!.absolutePath
+                val saveDir = File(savePath + File.separator + "Pebble" + File.separator)
                 saveDir.mkdirs()
 
                 try {
@@ -211,7 +215,7 @@ class ActivityGradientDetails : AppCompatActivity() {
                     fileOutputStream.close()
 
                     Log.e("INFO", "Successfully Saved to $saveDir")
-                    UIElements.popupDialog(this, R.drawable.icon_question, R.string.pushHoldTitle, R.string.descriptionTitleGradients, blurLayout, "${Environment.getExternalStorageDirectory()}/Pebble")
+                    UIElements.popupDialog(this, R.drawable.icon_save, R.string.dialog_title_eng_gradient_saved, R.string.dialog_body_eng_gradient_saved, R.string.text_eng_open, blurLayout, codeCopyListener)
 
                 } catch (e: java.lang.Exception) {
                     Log.e("INFO", "Failed to save due to: ${e.localizedMessage}")
@@ -289,6 +293,13 @@ class ActivityGradientDetails : AppCompatActivity() {
         drawable.draw(canvas)
 
         return mutableBitmap
+    }
+
+    private val codeCopyListener = View.OnClickListener {
+        val intent = Intent(Intent.ACTION_VIEW)
+        val uri = Uri.parse(Environment.getExternalStorageDirectory().path + File.pathSeparator + "Pebble" + File.pathSeparator)
+        intent.setDataAndType(uri, DocumentsContract.Document.MIME_TYPE_DIR)
+        startActivity(Intent.createChooser(intent, "Open folder"))
     }
 
     private fun showSetWallpaperDialog() {

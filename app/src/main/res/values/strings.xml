@@ -9,6 +9,7 @@
     <string name="text_eng_options">Options</string>
     <string name="text_eng_submit">Submit</string>
     <string name="text_eng_i_understand">I Understand</string>
+    <string name="text_eng_open">Open</string>
 
     <!-- Dialog Strings English -->
     <string name="dialog_title_eng_gradient_create">Create Gradient</string>
@@ -19,6 +20,8 @@
     <string name="dialog_body_eng_secret">You found the secret! Pebble is really unstable and jenga like, Settings still isn’t added and I don’t know what design to go with for it.</string>
     <string name="dialog_title_eng_permission_storage">Storage</string>
     <string name="dialog_body_eng_permission_storage">Pebble needs access to your storage in order to save the gradient…\n\nAfter giving access click the ‘Save’ button again</string>
+    <string name="dialog_title_eng_gradient_saved">Gradient Saved</string>
+    <string name="dialog_body_eng_gradient_saved">The gradient was successfully saved!</string>
 
     <string name="create_group_body">Create a new group to store gradients in</string>
     <string name="pebble">Pebble</string>

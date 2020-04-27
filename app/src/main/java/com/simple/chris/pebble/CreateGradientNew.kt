@@ -203,7 +203,7 @@ class CreateGradientNew : AppCompatActivity() {
     }
 
     private fun submitGradient() {
-        submittedUID = RandomStringUtils.randomAlphanumeric(12)
+        submittedUID = RandomStringUtils.randomAlphanumeric(5)
         val gradientDatabaseURL = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec"
 
         val stringRequest: StringRequest = object : StringRequest(Method.POST, gradientDatabaseURL,

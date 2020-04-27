@@ -24,6 +24,7 @@ import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import com.simple.chris.pebble.Calculations.convertToDP
@@ -195,7 +196,7 @@ object UIElements {
         }, 800)
     }
 
-    fun popupDialog(context: Context, icon: Int, title: Int, description: Int, blur: BlurLayout, dir: String) {
+    fun popupDialog(context: Context, icon: Int, title: Int, description: Int, buttonText: Int?, blur: BlurLayout, listener: View.OnClickListener) {
         blur.visibility = View.VISIBLE
         blur.startBlur()
         blur.invalidate()
@@ -204,15 +205,17 @@ object UIElements {
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.dialog_popup)
 
+        val dismiss = dialog.findViewById<ImageView>(R.id.dismiss)
         val holder = dialog.findViewById<ConstraintLayout>(R.id.holder)
         val permissionIcon = dialog.findViewById<ImageView>(R.id.permissionIcon)
         val permissionTitle = dialog.findViewById<TextView>(R.id.permissionTitle)
         val permissionDescription = dialog.findViewById<TextView>(R.id.permissionDescription)
         val button = dialog.findViewById<ConstraintLayout>(R.id.button)
+        val buttonTextView = dialog.findViewById<TextView>(R.id.text)
 
-        /*permissionIcon.setImageResource(icon)
+        permissionIcon.setImageResource(icon)
         permissionTitle.setText(title)
-        permissionDescription.setText(description)*/
+        permissionDescription.setText(description)
 
         val dialogWindow = dialog.window
         dialogWindow!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
@@ -224,21 +227,33 @@ object UIElements {
             viewObjectAnimator(holder, "scaleX", 1f, 350, 100, OvershootInterpolator())
             viewObjectAnimator(holder, "scaleY", 1f, 350, 100, OvershootInterpolator())
             viewObjectAnimator(holder, "alpha", 1f, 100, 100, LinearInterpolator())
+
+            if (buttonText != null) {
+                viewObjectAnimator(button, "scaleX", 1f, 350, 100, OvershootInterpolator())
+                viewObjectAnimator(button, "scaleY", 1f, 350, 100, OvershootInterpolator())
+                viewObjectAnimator(button, "alpha", 1f, 100, 100, LinearInterpolator())
+                buttonTextView.setText(buttonText)
+            }
+
         }
 
-        Handler().postDelayed({
+        dismiss.setOnClickListener {
             viewObjectAnimator(holder, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
             viewObjectAnimator(holder, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
             viewObjectAnimator(holder, "alpha", 0f, 200, 200, LinearInterpolator())
+
+            viewObjectAnimator(button, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
+            viewObjectAnimator(button, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
+            viewObjectAnimator(button, "alpha", 0f, 200, 200, LinearInterpolator())
 
             Handler().postDelayed({
                 dialog.dismiss()
                 blur.pauseBlur()
                 blur.visibility = View.GONE
             }, 450)
-        }, 2500)
+        }
 
-        button.setOnClickListener {
+        /*button.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setDataAndType(Uri.parse(dir), "folder")
 
@@ -248,7 +263,8 @@ object UIElements {
                 Log.e("ERR", "No file explorer")
                 context.startActivity(intent)
             }
-        }
+        }*/
+        button.setOnClickListener(listener)
     }
 
 }
