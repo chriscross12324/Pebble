@@ -25,8 +25,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.simple.chris.pebble.Calculations.convertToDP
 import io.alterac.blurkit.BlurLayout
 import java.io.File
@@ -147,6 +149,20 @@ object UIElements {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             layout.outlineSpotShadowColor = colour
         }
+    }
+
+    fun bottomSheetPeekHeightAnim(bottomSheet: BottomSheetBehavior<CardView>, peekHeight: Int, duration: Long, delay: Long, interpolator: TimeInterpolator) {
+        Handler().postDelayed({
+            var valueAnimator = ValueAnimator()
+            valueAnimator.setIntValues(bottomSheet.peekHeight, peekHeight)
+            valueAnimator.duration = duration
+            valueAnimator.interpolator = interpolator
+            valueAnimator.addUpdateListener {
+                val current = it.animatedValue as Int
+                bottomSheet.peekHeight = current
+            }
+            valueAnimator.start()
+        }, delay)
     }
 
     fun oneButtonDialog(context: Context, icon: Int, title: Int, body: Int, buttonText: Int, listener: View.OnClickListener) {
