@@ -7,7 +7,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import android.widget.Switch
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -18,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_connecting.*
 import kotlinx.android.synthetic.main.activity_main_menu.*
 
 
-class MainMenu : AppCompatActivity() {
+class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +31,7 @@ class MainMenu : AppCompatActivity() {
         initialPlacement()
         setWallpaperBlur()
         getGradients()
+        menuButtons()
 
         pebbleLogo.setOnClickListener {
             startActivity(Intent(this, ConnectingActivity::class.java))
@@ -38,22 +43,26 @@ class MainMenu : AppCompatActivity() {
     private fun initialPlacement() {
         pebbleLogo.translationY = Calculations.screenMeasure(this, "height") / 2 - Calculations.convertToDP(this, 90f) - Calculations.convertToDP(this, 32f)
         pebbleText.translationY = Calculations.convertToDP(this, 20f)
+        menuButtonRecycler.translationY = Calculations.convertToDP(this, 120f)
         UIElements.setWallpaper(this, wallpaperImageViewer)
         inAnimation()
     }
 
     private fun inAnimation() {
         //Animate pebbleLogo
-        UIElements.viewObjectAnimator(pebbleLogo, "translationY", 0f, 500, 1000, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(pebbleLogo, "scaleX", 0.7f, 400, 950, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(pebbleLogo, "scaleY", 0.7f, 400, 950, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(pebbleLogo, "translationY", 0f, 700, 1000, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(pebbleLogo, "scaleX", 0.7f, 700, 1000, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(pebbleLogo, "scaleY", 0.7f, 700, 1000, DecelerateInterpolator(3f))
 
         //Animate pebbleText
-        UIElements.viewObjectAnimator(pebbleText, "translationY", 0f, 500, 1200, DecelerateInterpolator())
+        UIElements.viewObjectAnimator(pebbleText, "translationY", Calculations.convertToDP(this, -12f), 500, 1200, DecelerateInterpolator())
         UIElements.viewObjectAnimator(pebbleText, "alpha", 1f, 150, 1200, DecelerateInterpolator())
 
         //Animate wallpaperAlpha
         UIElements.viewObjectAnimator(wallpaperAlpha, "alpha", 0.9f, 300, 1000, DecelerateInterpolator())
+
+        UIElements.viewObjectAnimator(menuButtonRecycler, "translationY", 0f, 700, 1000, DecelerateInterpolator())
+        UIElements.viewObjectAnimator(menuButtonRecycler, "alpha", 1f, 150, 1200, DecelerateInterpolator())
     }
 
     private fun setWallpaperBlur() {
@@ -109,6 +118,7 @@ class MainMenu : AppCompatActivity() {
                     Log.e("ERR", "pebble.main_menu.get_gradients.request.error_listener: ${it.networkResponse}")
                 })
         mQueue.add(request)
+        request.retryPolicy = DefaultRetryPolicy(20000, 5, 1.25f)
     }
 
     private fun connectionOnline() {
@@ -123,5 +133,63 @@ class MainMenu : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         UIElements.setWallpaper(this, wallpaperImageViewer)
+    }
+
+    private fun menuButtons() {
+        val buttonArray = ArrayList<HashMap<String, String>>()
+        val buttonHash = HashMap<String, String>()
+        buttonHash["buttonTitle"] = "Browse"
+        buttonHash["buttonIcon"] = R.drawable.icon_browse.toString()
+        buttonArray.add(buttonHash)
+
+        val buttonHash1 = HashMap<String, String>()
+        buttonHash1["buttonTitle"] = "Create"
+        buttonHash1["buttonIcon"] = R.drawable.icon_apps.toString()
+        buttonArray.add(buttonHash1)
+
+        val buttonHash2 = HashMap<String, String>()
+        buttonHash2["buttonTitle"] = "Feedback"
+        buttonHash2["buttonIcon"] = R.drawable.icon_feedback.toString()
+        buttonArray.add(buttonHash2)
+
+        val buttonHash3 = HashMap<String, String>()
+        buttonHash3["buttonTitle"] = "Settings"
+        buttonHash3["buttonIcon"] = R.drawable.icon_settings.toString()
+        buttonArray.add(buttonHash3)
+
+        val buttonHash4 = HashMap<String, String>()
+        buttonHash4["buttonTitle"] = "Refresh"
+        buttonHash4["buttonIcon"] = R.drawable.icon_reload.toString()
+        buttonArray.add(buttonHash4)
+
+        menuButtonRecycler.setHasFixedSize(true)
+        val buttonLayoutManager = GridLayoutManager(this, 2)
+        val buttonAdapter = MainMenuRecyclerViewAdapter(this, buttonArray, this)
+
+        menuButtonRecycler.layoutManager = buttonLayoutManager
+        menuButtonRecycler.adapter = buttonAdapter
+    }
+
+    override fun onButtonClick(position: Int, view: View) {
+        when (position) {
+            0 -> {
+                startActivity(Intent(this, ActivityBrowse::class.java))
+            }
+            1 -> {
+                startActivity(Intent(this, CreateGradientNew::class.java))
+            }
+            2 -> {
+                startActivity(Intent(this, Feedback::class.java))
+            }
+            3 -> Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show()
+            4 -> {
+                getGradients()
+                connectionText.text = "Connecting..."
+                connectionProgress.visibility = View.VISIBLE
+                connectionIcon.visibility = View.INVISIBLE
+                UIElements.viewObjectAnimator(connectionHolder, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
+                //connectionHolder.backgroundTintList = this.resources.getColorStateList(R.color.connectionOnline)
+            }
+        }
     }
 }
