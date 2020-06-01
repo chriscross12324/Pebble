@@ -1,29 +1,31 @@
 package com.simple.chris.pebble
 
 import android.annotation.SuppressLint
-import android.app.Dialog
+import android.app.WallpaperManager
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.*
-import android.view.View.OnLongClickListener
+import android.util.Pair
+import android.util.Pair.create
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.util.Pair.create
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.simple.chris.pebble.Calculations.convertToDP
-import com.simple.chris.pebble.UIElements.linearLayoutElevationAnimator
-import com.simple.chris.pebble.UIElements.linearLayoutHeightAnimator
-import com.simple.chris.pebble.UIElements.viewObjectAnimator
 import kotlinx.android.synthetic.main.activity_browse.*
 import java.util.*
-import kotlin.math.roundToInt
 
 class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener {
 
@@ -45,6 +47,11 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         UIElements.setTheme(this)
         setContentView(R.layout.activity_browse)
         Values.currentActivity = "Browse"
+
+        val wallpaper: WallpaperManager = WallpaperManager.getInstance(this)
+        val wallpaperDrawable: Drawable = wallpaper.drawable
+        val bm: Bitmap = (wallpaperDrawable as BitmapDrawable).bitmap
+        wallpaperImageViewer.setImageDrawable(wallpaperDrawable)
 
         coordinatorLayout.post {
             getHeights()
@@ -188,8 +195,11 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         buttonSearch.setOnClickListener {
             touchBlocker.visibility = View.VISIBLE
             val searchGradientIntent = Intent(this, SearchGradient::class.java)
+            val p1 = androidx.core.util.Pair.create<View, String>(buttonSearch, "searchBackground")
+            val p2 = androidx.core.util.Pair.create<View, String>(searchText, "searchText")
+            val searchShared = ActivityOptionsCompat.makeSceneTransitionAnimation(this, p1, p2)
 
-            startActivity(searchGradientIntent)
+            startActivity(searchGradientIntent, searchShared.toBundle())
         }
 
         /*buttonSettings.setOnClickListener {
@@ -203,11 +213,11 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
         }*/
 
-        /*buttonFeedback.setOnClickListener {
+        buttonFeedback.setOnClickListener {
             touchBlocker.visibility = View.VISIBLE
             startActivity(Intent(this, Feedback::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }*/
+        }
 
         /*buttonReload.setOnClickListener {
 
@@ -295,7 +305,6 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             }
         }
     }
-
 
 
     override fun onGradientClick(position: Int, view: View) {

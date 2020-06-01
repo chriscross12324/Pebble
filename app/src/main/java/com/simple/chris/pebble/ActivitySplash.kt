@@ -12,7 +12,7 @@ class ActivitySplash : AppCompatActivity() {
         Values.loadValues(this)
 
         if (!Values.firstStart) {
-            startActivity(Intent(this, ConnectingActivity::class.java))
+            startActivity(Intent(this, MainMenu::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         } else {

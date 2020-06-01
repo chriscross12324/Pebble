@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.ColorDrawable
+import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
@@ -16,18 +17,16 @@ import android.view.Window
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import com.android.volley.Request
-import com.android.volley.RequestQueue
-import com.android.volley.Response
+import com.android.volley.*
+import com.android.volley.toolbox.HttpHeaderParser
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.simple.chris.pebble.Values.askMobileData
 import kotlinx.android.synthetic.main.activity_connecting.*
+import java.io.UnsupportedEncodingException
+import java.nio.charset.Charset
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -136,18 +135,21 @@ class ConnectingActivity : AppCompatActivity() {
                         val gradientArray = response.getJSONArray("items")
                         val gradientList = ArrayList<HashMap<String, String>>()
 
-                        for (i in gradientArray.length() - 1 downTo 0) {
-                            val downloadedItem = gradientArray.getJSONObject(i)
+                        AsyncTask.execute {
+                            for (i in gradientArray.length() - 1 downTo 0) {
+                                val downloadedItem = gradientArray.getJSONObject(i)
 
-                            val item = HashMap<String, String>()
-                            item["backgroundName"] = downloadedItem.getString("gradientName")
-                            item["startColour"] = downloadedItem.getString("startColour")
-                            item["endColour"] = downloadedItem.getString("endColour")
-                            item["description"] = downloadedItem.getString("description")
+                                val item = HashMap<String, String>()
+                                item["backgroundName"] = downloadedItem.getString("gradientName")
+                                item["startColour"] = downloadedItem.getString("startColour")
+                                item["endColour"] = downloadedItem.getString("endColour")
+                                item["description"] = downloadedItem.getString("description")
 
-                            gradientList.add(item)
-                            Values.gradientList = gradientList
+                                gradientList.add(item)
+                                Values.gradientList = gradientList
+                            }
                         }
+
                         downloaded = true
                     } catch (e: Exception) {
                         Log.e("ERR", "pebble.connecting_activity.get_items: ${e.localizedMessage}")

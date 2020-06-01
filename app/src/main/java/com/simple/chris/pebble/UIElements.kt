@@ -6,8 +6,11 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
+import android.app.WallpaperManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
@@ -164,6 +167,13 @@ object UIElements {
             valueAnimator.start()
         }, delay)
     }
+
+    fun setWallpaper(context: Context, imageView: ImageView) {
+        val wallpaper: WallpaperManager = WallpaperManager.getInstance(context)
+        val wallpaperDrawable: Drawable = wallpaper.drawable
+        imageView.setImageDrawable(wallpaperDrawable)
+    }
+
 
     fun oneButtonDialog(context: Context, icon: Int, title: Int, body: Int, buttonText: Int, listener: View.OnClickListener) {
         dialogOneButton = Dialog(context, R.style.dialogStyle)

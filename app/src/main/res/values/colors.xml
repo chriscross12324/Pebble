@@ -32,5 +32,9 @@
     <color name="pebbleStart">#f6d365</color>
     <color name="pebbleEnd">#fda085</color>
 
+    <color name="connectionOnline">#10A317</color>
+    <color name="connectionWarning">#C15711</color>
+    <color name="connectionError">#AE1106</color>
+
 </resources>
 
