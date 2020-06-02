@@ -4,304 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?BackgroundColour"
     android:animateLayoutChanges="true">
 
     <ImageView
         android:id="@+id/wallpaperImageViewer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?BackgroundColour"
-        android:alpha="0.9"/>
+        android:alpha="0.9"
+        android:background="?BackgroundColour" />
 
-    <View
-        android:id="@+id/navigationMenuPlacementHolder"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintBottom_toBottomOf="@+id/helloText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/helloText"/>
-
-    <!--<LinearLayout
-        android:id="@+id/navigationHolder"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="@+id/navigationMenuPlacementHolder"
-        app:layout_constraintStart_toStartOf="@+id/navigationMenuPlacementHolder"
-        app:layout_constraintTop_toTopOf="@+id/navigationMenuPlacementHolder"
-        android:background="@drawable/details_background"
-        android:backgroundTint="?ForegroundColour"
-        android:clickable="true"
-        android:focusable="true">
-        <LinearLayout
-            android:id="@+id/buttonOptions"
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-            <ImageView
-                android:id="@+id/imageOptionsButton"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:background="@drawable/icon_menu"
-                android:backgroundTint="?SecondaryTextColour"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/buttonSearch"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:visibility="visible">
-            <ImageView
-                android:id="@+id/searchIcon"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="12dp"
-                android:src="@drawable/icon_search"
-                android:tint="?PrimaryTextColour"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/buttonSettings"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:visibility="visible">
-            <ImageView
-                android:id="@+id/settingsIcons"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="12dp"
-                android:src="@drawable/icon_settings"
-                android:tint="?PrimaryTextColour"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/buttonFeedback"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:visibility="visible">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="12dp"
-                android:src="@drawable/icon_feedback"
-                android:tint="?PrimaryTextColour"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/buttonReload"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:visibility="visible">
-            <ImageView
-                android:id="@+id/reloadImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="12dp"
-                android:src="@drawable/icon_reload"
-                android:tint="?PrimaryTextColour"/>
-        </LinearLayout>
-    </LinearLayout>-->
-
-    <TextView
-        android:id="@+id/helloText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="64dp"
-        android:fontFamily="@font/googlesans_bold"
-        android:text="Hello,\nchriscross12324"
-        android:textColor="?PrimaryTextColour"
-        android:textSize="26sp"
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:alpha="0.1"
+        android:src="@drawable/icon_browse"
+        android:tint="?SecondaryTextColour"
+        android:translationX="50dp"
+        android:translationY="50dp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/navigationHolderBrowse"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/screenTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/googlesans_bold"
+        android:text="Browse"
+        android:textColor="?PrimaryTextColour"
+        android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/helloText">
-
-        <LinearLayout
-            android:id="@+id/linearLayout5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/buttonFeedback"
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="12dp"
-                android:layout_marginBottom="12dp"
-                android:layout_weight="1"
-                android:background="@drawable/details_background"
-                android:backgroundTint="?ForegroundColour">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Feedback"
-                    android:fontFamily="@font/googlesans_medium"
-                    android:textSize="24sp"
-                    android:textColor="?PrimaryTextColour"
-                    android:gravity="center"/>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="130dp"
-                    android:src="@drawable/icon_feedback"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:tint="?SecondaryTextColour"
-                    android:alpha="0.1"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/buttonSearch"
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="12dp"
-                android:layout_weight="1"
-                android:background="@drawable/details_background"
-                android:backgroundTint="?ForegroundColour">
-
-                <TextView
-                    android:id="@+id/searchText"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Search"
-                    android:fontFamily="@font/googlesans_medium"
-                    android:textSize="24sp"
-                    android:textColor="?PrimaryTextColour"
-                    android:gravity="center"/>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:src="@drawable/icon_search"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:tint="?SecondaryTextColour"
-                    android:alpha="0.1"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </LinearLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/createGradientBanner"
-            android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="24dp"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/button_dialog_permission"
-                android:alpha="0.9"/>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="340dp"
-                android:translationY="40dp"
-                android:src="@drawable/create_gradient_banner"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:alpha="0.2"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Create Gradient"
-                android:fontFamily="@font/googlesans_bold"
-                android:textSize="32sp"
-                android:textColor="#ffffff"
-                android:gravity="center"/>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--<androidx.cardview.widget.CardView
-        android:id="@+id/createGradientBanner"
-        android:transitionName="gradientCreatorViewer"
-        android:layout_width="0dp"
-        android:layout_height="140dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="32dp"
-        app:cardCornerRadius="20dp"
-        app:cardBackgroundColor="@android:color/transparent"
-        android:elevation="8dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/helloText">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/createGradientDetailsHolder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/placeholder_gradient"
-            android:alpha="1">
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:src="@drawable/create_gradient_banner"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:fontFamily="@font/googlesans_medium"
-                android:text="Create a"
-                android:textColor="@color/lightBackground"
-                android:textSize="22sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:fontFamily="@font/googlesans_bold"
-                android:text="Gradient"
-                android:textColor="@color/lightBackground"
-                android:textSize="26sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.cardview.widget.CardView>-->
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
         android:elevation="9dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="parent">
@@ -339,40 +86,68 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!--<eightbitlab.com.blurview.BlurView
-            android:id="@+id/blurView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:blurOverlayColor="#99000000"/>-->
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <View
-        android:id="@+id/touchBlockerMenu"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <LinearLayout
+        android:id="@+id/backButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/details_background"
+        android:backgroundTint="?ForegroundColour"
         android:clickable="true"
+        android:elevation="10dp"
         android:focusable="true"
-        android:visibility="gone"
-        android:elevation="11dp"
-        android:background="#4A000000" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:src="@drawable/icon_back"
+            android:tint="?PrimaryTextColour" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/searchButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/details_background"
+        android:backgroundTint="?ForegroundColour"
+        android:clickable="true"
+        android:elevation="10dp"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:src="@drawable/icon_search"
+            android:tint="?PrimaryTextColour" />
+    </LinearLayout>
 
     <View
         android:id="@+id/touchBlocker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
+        android:elevation="21dp"
         android:focusable="true"
-        android:visibility="gone"
-        android:elevation="21dp" />
+        android:visibility="gone" />
 
     <io.alterac.blurkit.BlurLayout
         android:id="@+id/blurLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="9dp"
-        app:blk_blurRadius="10"
         android:visibility="gone"
-        app:blk_fps="0"/>
+        app:blk_blurRadius="10"
+        app:blk_fps="0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

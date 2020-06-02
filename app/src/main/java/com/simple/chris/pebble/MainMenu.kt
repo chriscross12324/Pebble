@@ -24,6 +24,8 @@ import kotlinx.android.synthetic.main.activity_main_menu.*
 
 class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListener {
 
+    var downloading = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UIElements.setTheme(this)
@@ -87,6 +89,7 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
     }
 
     private fun getGradients() {
+        downloading = true
         val mQueue: RequestQueue = Volley.newRequestQueue(this)
         val gradientDatabaseURL = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getGradients"
 
@@ -122,11 +125,12 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
     }
 
     private fun connectionOnline() {
+        downloading = false
         connectionText.text = "Online"
         connectionProgress.visibility = View.INVISIBLE
         connectionIcon.visibility = View.VISIBLE
         connectionIcon.setImageResource(R.drawable.icon_check)
-        UIElements.viewObjectAnimator(connectionHolder, "translationY", connectionHolder.height + Calculations.convertToDP(this, 24f), 500, 2000, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(connectionHolder, "translationY", connectionHolder.height + Calculations.convertToDP(this, 24f), 500, 1000, DecelerateInterpolator(3f))
         //connectionHolder.backgroundTintList = this.resources.getColorStateList(R.color.connectionOnline)
     }
 
@@ -173,7 +177,12 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
     override fun onButtonClick(position: Int, view: View) {
         when (position) {
             0 -> {
-                startActivity(Intent(this, ActivityBrowse::class.java))
+                if (downloading) {
+                    Toast.makeText(this, "Downloading Gradients", Toast.LENGTH_SHORT).show()
+                } else {
+                    startActivity(Intent(this, ActivityBrowse::class.java))
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                }
             }
             1 -> {
                 startActivity(Intent(this, CreateGradientNew::class.java))
