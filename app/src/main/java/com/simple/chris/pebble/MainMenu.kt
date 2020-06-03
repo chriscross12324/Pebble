@@ -1,5 +1,6 @@
 package com.simple.chris.pebble
 
+import android.Manifest
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.AsyncTask
@@ -10,6 +11,7 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -36,9 +38,22 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
         menuButtons()
 
         pebbleLogo.setOnClickListener {
-            startActivity(Intent(this, ConnectingActivity::class.java))
+            when (Values.theme) {
+                "light" -> Values.theme = "dark"
+                "dark" -> Values.theme = "black"
+                "black" -> Values.theme = "light"
+            }
+
+            startActivity(Intent(this, MainMenu::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
+        }
+
+        if (!Permissions.readStoragePermissionGiven(this)) {
+            UIElements.oneButtonDialog(this, R.drawable.icon_storage, R.string.dialog_title_eng_permission_storage, R.string.dialog_body_eng_permission_storage_read, R.string.text_eng_ok, storageDialogListener)
+            Log.e("ERR", "Made it")
+        } else {
+            Log.e("ERR", "Made else")
         }
     }
 
@@ -200,5 +215,10 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
                 //connectionHolder.backgroundTintList = this.resources.getColorStateList(R.color.connectionOnline)
             }
         }
+    }
+
+    private val storageDialogListener = View.OnClickListener {
+        UIElements.oneButtonHider(this)
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
     }
 }

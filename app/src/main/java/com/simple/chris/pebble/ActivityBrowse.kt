@@ -16,6 +16,8 @@ import androidx.cardview.widget.CardView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import kotlinx.android.synthetic.main.activity_browse.*
+import kotlinx.android.synthetic.main.activity_browse.wallpaperImageViewer
+import kotlinx.android.synthetic.main.activity_main_menu.*
 
 
 class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener {
@@ -39,10 +41,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         setContentView(R.layout.activity_browse)
         Values.currentActivity = "Browse"
 
-        val wallpaper: WallpaperManager = WallpaperManager.getInstance(this)
-        val wallpaperDrawable: Drawable = wallpaper.drawable
-        val bm: Bitmap = (wallpaperDrawable as BitmapDrawable).bitmap
-        wallpaperImageViewer.setImageDrawable(wallpaperDrawable)
+        UIElements.setWallpaper(this, wallpaperImageViewer)
 
         coordinatorLayout.post {
             getHeights()

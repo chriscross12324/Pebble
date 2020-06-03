@@ -30,8 +30,8 @@ object Values {
 
     //Gradient Creator
     var gradientCreatorGradientName = ""
-    var gradientCreatorStartColour = ""
-    var gradientCreatorEndColour = ""
+    var gradientCreatorStartColour = "#acd77b"
+    var gradientCreatorEndColour = "#74d77b"
     var gradientCreatorDescription = ""
     var currentColourPOS = ""
     var currentColourInt = 0

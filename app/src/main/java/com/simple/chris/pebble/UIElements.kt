@@ -169,9 +169,14 @@ object UIElements {
     }
 
     fun setWallpaper(context: Context, imageView: ImageView) {
-        val wallpaper: WallpaperManager = WallpaperManager.getInstance(context)
-        val wallpaperDrawable: Drawable = wallpaper.drawable
-        imageView.setImageDrawable(wallpaperDrawable)
+        try {
+            val wallpaper: WallpaperManager = WallpaperManager.getInstance(context)
+            val wallpaperDrawable: Drawable = wallpaper.drawable
+            imageView.setImageDrawable(wallpaperDrawable)
+        } catch (e: Exception) {
+            Log.e("ERR", "pebble.ui_elements.set_wallpaper.from.$context.${e.localizedMessage}")
+        }
+
     }
 
 

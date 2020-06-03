@@ -25,6 +25,17 @@ object Permissions {
     /*
     This checks for and asks for permissions
      */
+
+    fun readStoragePermissionGiven(context: Context): Boolean {
+        val readPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
+        return readPermission == PackageManager.PERMISSION_GRANTED
+    }
+
+    fun writeStoragePermissionGiven(context: Context): Boolean {
+        val writePermission = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        return writePermission == PackageManager.PERMISSION_GRANTED
+    }
+
     fun readWritePermission(activity: Activity, context: Context, blur: BlurLayout) : Boolean {
         val writePermission = ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
@@ -85,7 +96,7 @@ object Permissions {
                 blur.pauseBlur()
                 blur.visibility = View.GONE
 
-                ActivityCompat.requestPermissions(activity, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
             }, 450)
         }
     }
