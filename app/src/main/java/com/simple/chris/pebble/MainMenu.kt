@@ -3,15 +3,15 @@ package com.simple.chris.pebble
 import android.Manifest
 import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
-import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.GridLayoutManager
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -20,7 +20,6 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import eightbitlab.com.blurview.RenderScriptBlur
-import kotlinx.android.synthetic.main.activity_connecting.*
 import kotlinx.android.synthetic.main.activity_main_menu.*
 
 
@@ -87,13 +86,9 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
 
         val decorView: View = window.decorView
         //ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
-        //ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
         //Set drawable to draw in the beginning of each blurred frame (Optional).
         //Can be used in case your layout has a lot of transparent space and your content
-        //gets kinda lost after after blur is applied.
-        //Set drawable to draw in the beginning of each blurred frame (Optional).
-        //Can be used in case your layout has a lot of transparent space and your content
-        //gets kinda lost after after blur is applied.
+        //gets kinda lost after blur is applied.
         val windowBackground: Drawable = decorView.background
 
         blurView.setupWith(decorView.findViewById(android.R.id.content))
@@ -195,8 +190,8 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
                 if (downloading) {
                     Toast.makeText(this, "Downloading Gradients", Toast.LENGTH_SHORT).show()
                 } else {
-                    startActivity(Intent(this, ActivityBrowse::class.java))
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                    val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view.findViewById(R.id.buttonIcon), "buttonIcon")
+                    startActivity(Intent(this, ActivityBrowse::class.java), activityOptions.toBundle())
                 }
             }
             1 -> {

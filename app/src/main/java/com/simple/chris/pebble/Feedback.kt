@@ -18,7 +18,9 @@ import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import kotlinx.android.synthetic.main.activity_browse.*
 import kotlinx.android.synthetic.main.activity_feedback.*
+import kotlinx.android.synthetic.main.activity_feedback.wallpaperImageViewer
 import java.util.*
 
 class Feedback : AppCompatActivity() {
@@ -34,6 +36,8 @@ class Feedback : AppCompatActivity() {
         UIElements.setTheme(this)
         setContentView(R.layout.activity_feedback)
         Values.currentActivity = "Feedback"
+
+        UIElements.setWallpaper(this, wallpaperImageViewer)
 
         usersEmailField.setOnFocusChangeListener { _, b ->
             if (b) {

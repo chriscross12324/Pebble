@@ -24,14 +24,13 @@ import com.android.volley.toolbox.HttpHeaderParser
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.simple.chris.pebble.Values.askMobileData
-import kotlinx.android.synthetic.main.activity_connecting.*
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class ConnectingActivity : AppCompatActivity() {
+/*class ConnectingActivity : AppCompatActivity() {
 
     private lateinit var mQueue: RequestQueue
 
@@ -273,4 +272,4 @@ class ConnectingActivity : AppCompatActivity() {
         connectionRetryHandler.removeCallbacksAndMessages(null)
         finish()
     }
-}
+}*/

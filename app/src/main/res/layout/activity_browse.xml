@@ -18,12 +18,13 @@
         android:background="?BackgroundColour" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/buttonIcon"
         android:layout_width="400dp"
         android:layout_height="400dp"
         android:alpha="0.1"
         android:src="@drawable/icon_browse"
         android:tint="?SecondaryTextColour"
+        android:transitionName="buttonIcon"
         android:translationX="50dp"
         android:translationY="50dp"
         app:layout_constraintBottom_toTopOf="parent"
@@ -39,6 +40,7 @@
         android:text="Browse"
         android:textColor="?PrimaryTextColour"
         android:textSize="36sp"
+        android:transitionName="buttonTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -77,6 +79,7 @@
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
                     android:fadingEdge="none"
+                    android:paddingBottom="98dp"
                     android:requiresFadingEdge="none"
                     android:visibility="visible"
                     app:layout_anchor="@+id/bottomSheet"
@@ -106,8 +109,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:src="@drawable/icon_arrow"
             android:rotation="180"
+            android:src="@drawable/icon_arrow"
             android:tint="?PrimaryTextColour" />
     </LinearLayout>
 

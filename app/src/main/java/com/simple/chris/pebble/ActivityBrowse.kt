@@ -1,13 +1,9 @@
 package com.simple.chris.pebble
 
-import android.app.WallpaperManager
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
@@ -16,8 +12,6 @@ import androidx.cardview.widget.CardView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import kotlinx.android.synthetic.main.activity_browse.*
-import kotlinx.android.synthetic.main.activity_browse.wallpaperImageViewer
-import kotlinx.android.synthetic.main.activity_main_menu.*
 
 
 class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener {
@@ -25,12 +19,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
     private var screenHeight = 0
-    private var helloTextHeight = 0
-    private var createGradientBannerHeight = 0
     private var bottomSheetPeekHeight = 0
-
-    private var navigationMenuExpanded = false
-    private val navigationMenuHeight = 250f
 
     /**
      * Browse Activity - Handles gradient RecyclerView, Gradient Creator Banner & Click events
@@ -40,6 +29,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         UIElements.setTheme(this)
         setContentView(R.layout.activity_browse)
         Values.currentActivity = "Browse"
+        animateButtonIcon(1f, 0.1f)
 
         UIElements.setWallpaper(this, wallpaperImageViewer)
 
@@ -50,12 +40,12 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         RecyclerGrid.gradientGrid(this, browseGrid, Values.gradientList, this, this)
 
         backButton.setOnClickListener {
-            finish()
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            animateButtonIcon(0.1f, 1f)
+            onBackPressed()
         }
 
         searchButton.setOnClickListener {
-            startActivity(Intent(this, SearchGradient::class.java))
+            startActivity(Intent(this, SearchActivity::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
     }
@@ -80,7 +70,6 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     Sets anything related to the bottomSheet
      */
     private fun bottomSheet() {
-        //Toast.makeText(this, "Got here", Toast.LENGTH_SHORT).show()
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             bottomSheetPeekHeight = Calculations.screenMeasure(this, "height")
@@ -91,12 +80,10 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
         bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                //if (BottomSheetBehavior.STATE_DRAGGING == newState) Log.i("MainActivity", "onStateChanged  >>  " + bottomSheet.height)
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                Log.e("INFO", "${((screenHeight * (0.333) * slideOffset)/2.toInt())}")
-                screenTitle.translationY = (((screenHeight * (-0.333) * slideOffset) + (screenHeight * (0.333)) - (screenTitle.measuredHeight))/2).toFloat()
+                screenTitle.translationY = ((screenHeight * (-0.333) * slideOffset + screenHeight * (0.333) - (screenTitle.measuredHeight)) / 2).toFloat()
             }
         })
 
@@ -114,17 +101,11 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         //Checks to see if the Gradient Grid is still populated (known to depopulate if the app is paused for too long)
         if (browseGrid.adapter == null) {
             Values.loadValues(this)
-            startActivity(Intent(this, ConnectingActivity::class.java))
+            startActivity(Intent(this, ActivitySplash::class.java))
         } else {
             Values.saveValues(this)
 
             when (Values.currentActivity) {
-                "CreateGradient" -> {
-                    Values.currentActivity = "Browse"
-                    touchBlocker.visibility = View.GONE
-
-                    //viewObjectAnimator(createGradientDetailsHolder, "alpha", 1f, 250, 0, DecelerateInterpolator())
-                }
                 "GradientDetails" -> {
                     Values.currentActivity = "Browse"
                     touchBlocker.visibility = View.GONE
@@ -132,32 +113,21 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
                 "SearchGradient" -> {
                     Values.currentActivity = "Browse"
                     touchBlocker.visibility = View.GONE
-                    /*navigationMenuAnimation(View.GONE, convertToDP(this, navigationMenuHeight), convertToDP(this, 50f),
-                            convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)*/
-                }
-                "Feedback" -> {
-                    touchBlocker.visibility = View.GONE
-                    /*navigationMenuAnimation(View.GONE, convertToDP(this, navigationMenuHeight), convertToDP(this, 50f),
-                            convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)*/
-                }
-                "SubmittedGradient" -> {
-                    startActivity(Intent(this, ConnectingActivity::class.java))
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                    finish()
-                }
-                "Settings" -> {
-                    Values.currentActivity = "Browse"
-                    touchBlocker.visibility = View.GONE
-                    Handler().postDelayed({
-                        /*navigationMenuAnimation(View.GONE, convertToDP(this, navigationMenuHeight), convertToDP(this, 50f),
-                                convertToDP(this, 20f), convertToDP(this, 0f), R.drawable.icon_menu, false)*/
-                    }, 250)
-
                 }
             }
         }
     }
 
+    private fun animateButtonIcon(start: Float, end: Float) {
+        val valueAnimator = ValueAnimator.ofFloat(start, end)
+        valueAnimator.duration = 250
+
+        valueAnimator.addUpdateListener {
+            val animatedValue = valueAnimator.animatedValue as Float
+            buttonIcon.alpha = animatedValue
+        }
+        valueAnimator.start()
+    }
 
     override fun onGradientClick(position: Int, view: View) {
         Vibration.lowFeedback(this)

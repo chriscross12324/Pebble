@@ -18,14 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/Main"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".MainMenu"></activity>
+        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".MainMenu" />
         <activity android:name=".Settings" />
         <activity android:name=".Feedback" />
         <activity android:name=".ColourPicker" />
         <activity android:name=".CreateGradientNew" />
-        <activity
-            android:name=".SearchGradient"
-            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ActivityGradientDetails"
             tools:ignore="LockedOrientationActivity" />
@@ -42,11 +40,6 @@
         </activity>
         <activity
             android:name=".ActivityBrowse"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
-        <activity android:name=".ActivitySettings" />
-        <activity
-            android:name=".ConnectingActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
