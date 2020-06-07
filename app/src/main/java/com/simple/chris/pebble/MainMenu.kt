@@ -147,6 +147,22 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
     override fun onResume() {
         super.onResume()
         UIElements.setWallpaper(this, wallpaperImageViewer)
+
+        //Detects if menuButtonRecycler has an adapter; known to disconnect if app is paused for too long
+        if (menuButtonRecycler.adapter == null) {
+            startActivity(Intent(this, ActivitySplash::class.java))
+        } else {
+            Values.saveValues(this)
+            Values.currentActivity = "MainMenu"
+            if (Values.justSubmitted) {
+                Values.justSubmitted = false
+                getGradients()
+                connectionText.text = "Connecting..."
+                connectionProgress.visibility = View.VISIBLE
+                connectionIcon.visibility = View.INVISIBLE
+                UIElements.viewObjectAnimator(connectionHolder, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
+            }
+        }
     }
 
     private fun menuButtons() {
@@ -195,7 +211,8 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
                 }
             }
             1 -> {
-                startActivity(Intent(this, CreateGradientNew::class.java))
+                val createGradientSharedOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, gradientCreatorSharedElementPlaceholder, "gradientCreatorViewer")
+                startActivity(Intent(this, CreateGradientNew::class.java), createGradientSharedOptions.toBundle())
             }
             2 -> {
                 startActivity(Intent(this, Feedback::class.java))

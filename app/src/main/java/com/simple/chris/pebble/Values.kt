@@ -36,6 +36,7 @@ object Values {
     var currentColourPOS = ""
     var currentColourInt = 0
     var currentColourHEX = ""
+    var justSubmitted = false
 
     /**
      * Saves all values to a SharedPreferences file - Ran whenever a value might have changed

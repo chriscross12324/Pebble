@@ -10,6 +10,8 @@
     <string name="text_eng_submit">Submit</string>
     <string name="text_eng_i_understand">I Understand</string>
     <string name="text_eng_open">Open</string>
+    <string name="text_eng_processing">Processing</string>
+    <string name="text_eng_uploading">Uploading</string>
 
     <!-- Dialog Strings English -->
     <string name="dialog_title_eng_gradient_create">Create Gradient</string>
@@ -23,6 +25,10 @@
     <string name="dialog_body_eng_permission_storage_read">Pebble needs read permissions in order to make the app look better. No files are collected and everything stays local.</string>
     <string name="dialog_title_eng_gradient_saved">Gradient Saved</string>
     <string name="dialog_body_eng_gradient_saved">The gradient was successfully saved!</string>
+
+    <!-- Gradient Creator string -->
+    <string name="dialog_body_eng_processing">Checking gradient before upload</string>
+    <string name="dialog_body_eng_uploading">Uploading gradient to Pebble</string>
 
     <string name="create_group_body">Create a new group to store gradients in</string>
     <string name="pebble">Pebble</string>

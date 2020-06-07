@@ -16,6 +16,7 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.IntegerRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.android.volley.DefaultRetryPolicy
@@ -28,12 +29,14 @@ import com.simple.chris.pebble.UIElements.viewObjectAnimator
 import com.simple.chris.pebble.UIElements.viewVisibility
 import kotlinx.android.synthetic.main.activity_create_gradient_new.*
 import org.apache.commons.lang3.RandomStringUtils
+import java.security.spec.ECField
 import kotlin.collections.HashMap
 
 class CreateGradientNew : AppCompatActivity() {
 
     var currentStep = 1
     var submittedUID = ""
+    var gradientExists = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +57,7 @@ class CreateGradientNew : AppCompatActivity() {
         nextStepButton.setOnClickListener {
             if (currentStep == 2) {
                 stepTwoAnimationsOut(true)
+                submitLogic()
             } else {
                 stepOneAnimationsOut()
                 currentStep = 2
@@ -188,7 +192,7 @@ class CreateGradientNew : AppCompatActivity() {
             Values.gradientCreatorDescription = gradientCreatorGradientDescription.text.toString()
         } else {
             if (gradientCreatorGradientName.text.toString().trim().replace(" ", "") != "") {
-                submitGradient()
+                touchBlocker.visibility = View.VISIBLE
             } else {
                 UIElements.oneButtonDialog(this, R.drawable.icon_question, R.string.dialog_title_eng_gradient_create_missing, R.string.dialog_body_eng_gradient_create_missing, R.string.text_eng_ok, dialogMissingInfoListener)
             }
@@ -202,7 +206,37 @@ class CreateGradientNew : AppCompatActivity() {
         gradientDrawable(this, true, gradientCreatorGradientViewer, startColour, endColor, 0f)
     }
 
+    /**
+     * Checks if gradient already exists
+     */
+    private fun submitLogic() {
+        try {
+            UIElements.progressPopupDialog(this, false, R.string.text_eng_processing, R.string.dialog_body_eng_processing, null, blurLayout, null)
+            for (count in 0 until Values.gradientList.size) {
+                if (Values.gradientList[count]["startColour"].equals(Values.gradientCreatorStartColour)) {
+                    Log.e("INFO", "Start: Exists")
+                    if (Values.gradientList[count]["endColour"].equals(Values.gradientCreatorEndColour)) {
+                        gradientExists = true
+                        Log.e("INFO", "${Values.gradientList[count]["backgroundName"]} has those colours")
+                    }
+                }
+
+                Log.e("INFO", "$count of ${Values.gradientList.size}")
+
+                if (count+1 == Values.gradientList.size && !gradientExists) {
+                    submitGradient()
+                    UIElements.progressPopupDialog(this, false, R.string.text_eng_uploading, R.string.dialog_body_eng_uploading, null, blurLayout, null)
+                } else {
+
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("ERR", "pebble.create_gradient_new.submit_logic: ${e.localizedMessage}")
+        }
+    }
+
     private fun submitGradient() {
+
         submittedUID = RandomStringUtils.randomAlphanumeric(5)
         val gradientDatabaseURL = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec"
 
@@ -212,12 +246,11 @@ class CreateGradientNew : AppCompatActivity() {
         }) {
             override fun getParams(): MutableMap<String, String> {
                 val details: MutableMap<String, String> = HashMap()
-                details["action"] = "addGradient"
+                details["action"] = "addGradientV2"
                 details["gradientName"] = gradientCreatorGradientName.text.toString()
                 details["startColour"] = Values.gradientCreatorStartColour
                 details["endColour"] = Values.gradientCreatorEndColour
                 details["gradientDescription"] = gradientCreatorGradientDescription.text.toString()
-                details["gradientAuthor"] = "chriscross12324"
                 details["gradientUID"] = submittedUID
                 return details
             }
@@ -232,7 +265,7 @@ class CreateGradientNew : AppCompatActivity() {
 
     @SuppressLint("NewApi")
     private fun submitSuccess() {
-        Values.currentActivity = "SubmittedGradient"
+        Values.justSubmitted = true
         val successDialog = Dialog(this, R.style.dialogStyle)
         successDialog.setCancelable(false)
         successDialog.setContentView(R.layout.dialog_gradient_submitted)

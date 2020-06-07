@@ -1,6 +1,7 @@
 package com.simple.chris.pebble
 
 import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -30,6 +31,7 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         super.onCreate(savedInstanceState)
         UIElements.setTheme(this)
         setContentView(R.layout.activity_search)
+        Values.currentActivity = "SearchActivity"
         UIElements.setWallpaper(this, wallpaperImageViewer)
         searchLogic()
 
@@ -146,6 +148,18 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             resultsText.text = "Enter text below"
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        //Detects if gradientGrid has an adapter; known to disconnect if app is paused for too long
+        if (searchResultsRecycler == null) {
+            startActivity(Intent(this, ActivitySplash::class.java))
+        } else {
+            Values.currentActivity = "Search"
+            touchBlocker.visibility = View.GONE
+        }
     }
 
     override fun onGradientClick(position: Int, view: View) {

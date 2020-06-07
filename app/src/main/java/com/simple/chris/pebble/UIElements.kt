@@ -24,10 +24,7 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -296,6 +293,72 @@ object UIElements {
             }
         }*/
         button.setOnClickListener(listener)
+    }
+
+    fun progressPopupDialog(context: Context, dismissible: Boolean, title: Int, description: Int, buttonText: Int?, blur: BlurLayout, listener: View.OnClickListener?) {
+        blur.visibility = View.VISIBLE
+        blur.startBlur()
+        blur.invalidate()
+
+        val dialog = Dialog(context, R.style.dialogStyle)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dialog_popup)
+
+        val dismiss = dialog.findViewById<ImageView>(R.id.dismiss)
+        val holder = dialog.findViewById<ConstraintLayout>(R.id.holder)
+        val progressCircle = dialog.findViewById<ProgressBar>(R.id.progressCircle)
+        val permissionIcon = dialog.findViewById<ImageView>(R.id.permissionIcon)
+        val permissionTitle = dialog.findViewById<TextView>(R.id.permissionTitle)
+        val permissionDescription = dialog.findViewById<TextView>(R.id.permissionDescription)
+        val button = dialog.findViewById<ConstraintLayout>(R.id.button)
+        val buttonTextView = dialog.findViewById<TextView>(R.id.text)
+
+        progressCircle.visibility = View.VISIBLE
+        permissionIcon.visibility = View.INVISIBLE
+        permissionTitle.setText(title)
+        permissionDescription.setText(description)
+
+        val dialogWindow = dialog.window
+        dialogWindow!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+        dialogWindow.setDimAmount(0f)
+        dialogWindow.setGravity(Gravity.CENTER)
+        dialog.show()
+
+        holder.post {
+            viewObjectAnimator(holder, "scaleX", 1f, 350, 100, OvershootInterpolator())
+            viewObjectAnimator(holder, "scaleY", 1f, 350, 100, OvershootInterpolator())
+            viewObjectAnimator(holder, "alpha", 1f, 100, 100, LinearInterpolator())
+
+            if (buttonText != null) {
+                viewObjectAnimator(button, "scaleX", 1f, 350, 100, OvershootInterpolator())
+                viewObjectAnimator(button, "scaleY", 1f, 350, 100, OvershootInterpolator())
+                viewObjectAnimator(button, "alpha", 1f, 100, 100, LinearInterpolator())
+                buttonTextView.setText(buttonText)
+            }
+
+        }
+
+        if (dismissible) {
+            dismiss.setOnClickListener {
+                viewObjectAnimator(holder, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
+                viewObjectAnimator(holder, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
+                viewObjectAnimator(holder, "alpha", 0f, 200, 200, LinearInterpolator())
+
+                viewObjectAnimator(button, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
+                viewObjectAnimator(button, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
+                viewObjectAnimator(button, "alpha", 0f, 200, 200, LinearInterpolator())
+
+                Handler().postDelayed({
+                    dialog.dismiss()
+                    blur.pauseBlur()
+                    blur.visibility = View.GONE
+                }, 450)
+            }
+        }
+
+        if (listener != null) {
+            button.setOnClickListener(listener)
+        }
     }
 
 }

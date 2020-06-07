@@ -54,6 +54,7 @@ class ActivityGradientDetails : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         UIElements.setTheme(this)
         setContentView(R.layout.activity_gradient_details)
+        Values.currentActivity = "GradientDetailsActivity"
         postponeEnterTransition()
 
         //Sets
