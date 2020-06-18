@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
-import androidx.core.util.Pair
 import androidx.recyclerview.widget.GridLayoutManager
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -25,7 +24,7 @@ import kotlinx.android.synthetic.main.activity_main_menu.*
 
 class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListener {
 
-    var downloading = false
+    private var downloading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +58,7 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
     private fun initialPlacement() {
         pebbleLogo.translationY = Calculations.screenMeasure(this, "height") / 2 - Calculations.convertToDP(this, 90f) - Calculations.convertToDP(this, 32f)
         pebbleText.translationY = Calculations.convertToDP(this, 20f)
-        menuButtonRecycler.translationY = Calculations.convertToDP(this, 120f)
+        menuButtonRecycler.translationY = Calculations.convertToDP(this, 200f)
         UIElements.setWallpaper(this, wallpaperImageViewer)
         inAnimation()
     }
@@ -71,14 +70,14 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
         UIElements.viewObjectAnimator(pebbleLogo, "scaleY", 0.7f, 700, 1000, DecelerateInterpolator(3f))
 
         //Animate pebbleText
-        UIElements.viewObjectAnimator(pebbleText, "translationY", Calculations.convertToDP(this, -12f), 500, 1200, DecelerateInterpolator())
-        UIElements.viewObjectAnimator(pebbleText, "alpha", 1f, 150, 1200, DecelerateInterpolator())
+        UIElements.viewObjectAnimator(pebbleText, "translationY", Calculations.convertToDP(this, -12f), 500, 1200, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(pebbleText, "alpha", 1f, 500, 1200, DecelerateInterpolator())
 
         //Animate wallpaperAlpha
         UIElements.viewObjectAnimator(wallpaperAlpha, "alpha", 0.9f, 300, 1000, DecelerateInterpolator())
 
-        UIElements.viewObjectAnimator(menuButtonRecycler, "translationY", 0f, 700, 1000, DecelerateInterpolator())
-        UIElements.viewObjectAnimator(menuButtonRecycler, "alpha", 1f, 150, 1200, DecelerateInterpolator())
+        UIElements.viewObjectAnimator(menuButtonRecycler, "translationY", 0f, 700, 1000, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(menuButtonRecycler, "alpha", 1f, 700, 1200, DecelerateInterpolator())
     }
 
     private fun setWallpaperBlur() {
@@ -150,7 +149,7 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
 
         //Detects if menuButtonRecycler has an adapter; known to disconnect if app is paused for too long
         if (menuButtonRecycler.adapter == null) {
-            startActivity(Intent(this, ActivitySplash::class.java))
+            startActivity(Intent(this, SplashScreen::class.java))
         } else {
             Values.saveValues(this)
             Values.currentActivity = "MainMenu"
@@ -204,15 +203,21 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
         when (position) {
             0 -> {
                 if (downloading) {
-                    Toast.makeText(this, "Downloading Gradients", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this, "Downloading Gradients", Toast.LENGTH_SHORT).show()
+                    UIElements.progressPopupDialogTimed(this, 2000, R.string.dialog_title_eng_connecting, R.string.dialog_body_eng_connecting, null)
                 } else {
                     val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view.findViewById(R.id.buttonIcon), "buttonIcon")
-                    startActivity(Intent(this, ActivityBrowse::class.java), activityOptions.toBundle())
+                    startActivity(Intent(this, BrowseActivity::class.java), activityOptions.toBundle())
                 }
             }
             1 -> {
-                val createGradientSharedOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, gradientCreatorSharedElementPlaceholder, "gradientCreatorViewer")
-                startActivity(Intent(this, CreateGradientNew::class.java), createGradientSharedOptions.toBundle())
+                if (downloading) {
+                    //Toast.makeText(this, "Downloading Gradients", Toast.LENGTH_SHORT).show()
+                    UIElements.progressPopupDialogTimed(this, 2000, R.string.dialog_title_eng_connecting, R.string.dialog_body_eng_connecting, null)
+                } else {
+                    val createGradientSharedOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, gradientCreatorSharedElementPlaceholder, "gradientCreatorViewer")
+                    startActivity(Intent(this, GradientCreator::class.java), createGradientSharedOptions.toBundle())
+                }
             }
             2 -> {
                 startActivity(Intent(this, Feedback::class.java))

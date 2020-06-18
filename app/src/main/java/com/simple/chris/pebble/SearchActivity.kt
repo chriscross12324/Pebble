@@ -155,7 +155,7 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
         //Detects if gradientGrid has an adapter; known to disconnect if app is paused for too long
         if (searchResultsRecycler == null) {
-            startActivity(Intent(this, ActivitySplash::class.java))
+            startActivity(Intent(this, SplashScreen::class.java))
         } else {
             Values.currentActivity = "Search"
             touchBlocker.visibility = View.GONE

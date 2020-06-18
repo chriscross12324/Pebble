@@ -7,8 +7,11 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
+import android.provider.DocumentsContract
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -29,14 +32,16 @@ import com.simple.chris.pebble.UIElements.viewObjectAnimator
 import com.simple.chris.pebble.UIElements.viewVisibility
 import kotlinx.android.synthetic.main.activity_create_gradient_new.*
 import org.apache.commons.lang3.RandomStringUtils
+import java.io.File
 import java.security.spec.ECField
 import kotlin.collections.HashMap
 
-class CreateGradientNew : AppCompatActivity() {
+class CreateGradientActivity : AppCompatActivity() {
 
     var currentStep = 1
-    var submittedUID = ""
+    var submittedUID: String = ""
     var gradientExists = false
+    var tutorialStep = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,8 +103,8 @@ class CreateGradientNew : AppCompatActivity() {
         gradientCreatorGradientName.setText(Values.gradientCreatorGradientName)
         gradientCreatorGradientDescription.setText(Values.gradientCreatorDescription)
 
-        if (!Values.hintCreateGradientDismissed) {
-            UIElements.oneButtonDialog(this, R.drawable.icon_apps, R.string.dialog_title_eng_gradient_create, R.string.dialog_body_eng_gradient_create, R.string.text_eng_i_understand, dialogCreateGradientListener)
+        if (Values.gcFirstStart) {
+            UIElements.oneButtonDialog(this, R.drawable.icon_apps, R.string.dialog_title_eng_gradient_create, R.string.dialog_body_eng_gradient_create, R.string.text_eng_take_tour, dialogCreateGradientListener)
         }
     }
 
@@ -211,7 +216,7 @@ class CreateGradientNew : AppCompatActivity() {
      */
     private fun submitLogic() {
         try {
-            UIElements.progressPopupDialog(this, false, R.string.text_eng_processing, R.string.dialog_body_eng_processing, null, blurLayout, null)
+            //UIElements.progressPopupDialog(this, false, R.string.text_eng_processing, R.string.dialog_body_eng_processing, null, blurLayout, null)
             for (count in 0 until Values.gradientList.size) {
                 if (Values.gradientList[count]["startColour"].equals(Values.gradientCreatorStartColour)) {
                     Log.e("INFO", "Start: Exists")
@@ -266,41 +271,7 @@ class CreateGradientNew : AppCompatActivity() {
     @SuppressLint("NewApi")
     private fun submitSuccess() {
         Values.justSubmitted = true
-        val successDialog = Dialog(this, R.style.dialogStyle)
-        successDialog.setCancelable(false)
-        successDialog.setContentView(R.layout.dialog_gradient_submitted)
-
-        val leaveButton = successDialog.findViewById<Button>(R.id.leave)
-        leaveButton.setOnClickListener {
-            successDialog.dismiss()
-            stepTwoAnimationsOut(false)
-            onBackPressed()
-        }
-        val uidTextView = successDialog.findViewById<TextView>(R.id.UIDTextView)
-        uidTextView.text = submittedUID
-        uidTextView.setOnLongClickListener {
-            val clipData = ClipData.newPlainText("uniqueID", submittedUID)
-            val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            clipboardManager.setPrimaryClip(clipData)
-            uidTextView.text = "Copied..."
-
-            Handler().postDelayed({
-                uidTextView.text = submittedUID
-            }, 1500)
-
-            Vibration.mediumFeedback(this)
-            false
-        }
-
-        if (Calculations.isAndroidPOrGreater()) {
-            leaveButton.outlineSpotShadowColor = ContextCompat.getColor(this, R.color.pebbleEnd)
-        }
-
-        val window = successDialog.window
-        window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
-        window.setDimAmount(0.5f)
-
-        successDialog.show()
+        UIElements.popupDialogString(this, R.drawable.icon_check, submittedUID, R.string.dialog_body_eng_submitted, R.string.text_eng_exit, blurLayout, dialogGradientSubmitted)
 
         Values.gradientCreatorGradientName = ""
         Values.gradientCreatorDescription = ""
@@ -310,11 +281,19 @@ class CreateGradientNew : AppCompatActivity() {
 
     private val dialogCreateGradientListener = View.OnClickListener {
         Values.hintCreateGradientDismissed = true
+        Values.gcFirstStart = false
         UIElements.oneButtonHider(this)
+        Values.saveValues(this)
     }
 
     private val dialogMissingInfoListener = View.OnClickListener {
         UIElements.oneButtonHider(this)
+    }
+
+    private val dialogGradientSubmitted = View.OnClickListener {
+        UIElements.popupDialogHider(blurLayout)
+        stepTwoAnimationsOut(false)
+        onBackPressed()
     }
 
     override fun onResume() {
@@ -323,6 +302,10 @@ class CreateGradientNew : AppCompatActivity() {
             Values.currentActivity = "CreateGradient"
             refreshGradient()
             stepOneAnimationsIn()
+        }
+
+        if (Values.firstStart) {
+            startActivity(Intent(this, SplashScreen::class.java))
         }
     }
 

@@ -125,7 +125,7 @@ class ColourPicker : AppCompatActivity() {
         }
 
         colourPickerSaveButton.setOnClickListener {
-            if (Values.currentColourPOS == "start") {
+            if (Values.currentColourPOS == "startColour") {
                 Values.gradientCreatorStartColour = hexString
             } else {
                 Values.gradientCreatorEndColour = hexString
@@ -141,7 +141,7 @@ class ColourPicker : AppCompatActivity() {
     }
 
     private fun setInitialValues() {
-        hexValue = if (Values.currentColourPOS == "start") {
+        hexValue = if (Values.currentColourPOS == "startColour") {
             Color.parseColor(Values.gradientCreatorStartColour)
         } else {
             Color.parseColor(Values.gradientCreatorEndColour)

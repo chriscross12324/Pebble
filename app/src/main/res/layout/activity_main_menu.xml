@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainMenu">
+    tools:context=".MainMenu"
+    android:animateLayoutChanges="true">
 
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"
@@ -30,8 +31,6 @@
         android:layout_width="160dp"
         android:layout_height="180dp"
         android:layout_marginTop="32dp"
-        android:scaleX="0.7"
-        android:scaleY="0.7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -68,10 +67,11 @@
         android:layout_marginBottom="24dp"
         android:background="@drawable/details_background"
         android:backgroundTint="?ForegroundColour"
-        android:elevation="8dp"
+        android:elevation="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:animateLayoutChanges="true">
 
         <ProgressBar
             android:id="@+id/connectionProgress"
@@ -128,4 +128,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pebbleText" />
+
+    <io.alterac.blurkit.BlurLayout
+        android:id="@+id/blurLayoutMM"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="11dp"
+        android:visibility="gone"
+        app:blk_blurRadius="10"
+        app:blk_fps="0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

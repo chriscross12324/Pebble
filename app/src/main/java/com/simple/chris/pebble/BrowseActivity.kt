@@ -14,7 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCa
 import kotlinx.android.synthetic.main.activity_browse.*
 
 
-class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener {
+class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener {
 
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
@@ -59,7 +59,8 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
             bottomSheetPeekHeight = (screenHeight * (0.667)).toInt()
 
-            screenTitle.translationY = (((screenHeight * (0.333) - screenTitle.measuredHeight) / 2).toFloat())
+            titleHolder.translationY = (((screenHeight * (0.333) - titleHolder.measuredHeight) / 2).toFloat())
+            resultsText.text = "${Values.gradientList.size} gradients"
             Log.e("INFO", "$bottomSheetPeekHeight")
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse.get_screen_height: ${e.localizedMessage}")
@@ -83,7 +84,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                screenTitle.translationY = ((screenHeight * (-0.333) * slideOffset + screenHeight * (0.333) - (screenTitle.measuredHeight)) / 2).toFloat()
+                titleHolder.translationY = ((screenHeight * (-0.333) * slideOffset + screenHeight * (0.333) - (titleHolder.measuredHeight)) / 2).toFloat()
             }
         })
 
@@ -101,7 +102,7 @@ class ActivityBrowse : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         //Checks to see if the Gradient Grid is still populated (known to depopulate if the app is paused for too long)
         if (browseGrid.adapter == null) {
             Values.loadValues(this)
-            startActivity(Intent(this, ActivitySplash::class.java))
+            startActivity(Intent(this, SplashScreen::class.java))
         } else {
             Values.saveValues(this)
 

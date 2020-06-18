@@ -7,6 +7,7 @@ import android.content.Context
  */
 object Values {
     private const val SAVE = "SavedValues"
+    var valuesLoaded = false
 
     //Vibrations
     val notificationPattern = longArrayOf(0, 5, 5, 5)
@@ -37,6 +38,7 @@ object Values {
     var currentColourInt = 0
     var currentColourHEX = ""
     var justSubmitted = false
+    var gcFirstStart = true
 
     /**
      * Saves all values to a SharedPreferences file - Ran whenever a value might have changed
@@ -51,6 +53,7 @@ object Values {
         editor.putString("theme", theme)
         editor.putBoolean("askMobileData", askMobileData)
         editor.putString("userName", userName)
+        editor.putBoolean("gcFirstStart", gcFirstStart)
         editor.putString("gradientCreatorGradientName", gradientCreatorGradientName)
         editor.putString("gradientCreatorStartColour", gradientCreatorStartColour)
         editor.putString("gradientCreatorEndColour", gradientCreatorEndColour)
@@ -63,6 +66,7 @@ object Values {
      */
     fun loadValues(context: Context) {
         val sharedPrefs = context.getSharedPreferences(SAVE, Context.MODE_PRIVATE)
+        valuesLoaded = true
         firstStart = sharedPrefs.getBoolean("firstStart", true)
         lastVersion = sharedPrefs.getInt("lastVersion", 0)
         hintPushHoldDismissed = sharedPrefs.getBoolean("hintPushHoldDismissed", false)
@@ -70,6 +74,7 @@ object Values {
         theme = sharedPrefs.getString("theme", "dark")!!
         askMobileData = sharedPrefs.getBoolean("askMobileData", true)
         userName = sharedPrefs.getString("userName", "")!!
+        gcFirstStart = sharedPrefs.getBoolean("gcFirstStart", true)
         gradientCreatorGradientName = sharedPrefs.getString("gradientCreatorGradientName", "")!!
         gradientCreatorStartColour = sharedPrefs.getString("gradientCreatorStartColour", "#acd77b")!!
         gradientCreatorEndColour = sharedPrefs.getString("gradientCreatorEndColour", "#74d77b")!!

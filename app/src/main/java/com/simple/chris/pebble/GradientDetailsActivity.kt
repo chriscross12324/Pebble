@@ -24,9 +24,7 @@ import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.EnvironmentCompat
 import com.simple.chris.pebble.Calculations.convertToDP
 import com.simple.chris.pebble.UIElements.constraintLayoutElevationAnimator
 import com.simple.chris.pebble.UIElements.gradientDrawable
@@ -34,10 +32,9 @@ import com.simple.chris.pebble.UIElements.viewObjectAnimator
 import kotlinx.android.synthetic.main.activity_gradient_details.*
 import java.io.File
 import java.io.FileOutputStream
-import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
 
-class ActivityGradientDetails : AppCompatActivity() {
+class GradientDetailsActivity : AppCompatActivity() {
 
     private lateinit var gradientNameString: String
     private lateinit var gradientDescriptionString: String
@@ -389,7 +386,7 @@ class ActivityGradientDetails : AppCompatActivity() {
         Vibration.mediumFeedback(this)
 
         Handler().postDelayed({
-            super@ActivityGradientDetails.onBackPressed()
+            super@GradientDetailsActivity.onBackPressed()
         }, 250)
     }
 }

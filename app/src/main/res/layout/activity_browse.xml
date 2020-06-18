@@ -9,7 +9,8 @@
     <ImageView
         android:id="@+id/wallpaperImageViewer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scaleType="center"/>
 
     <ImageView
         android:layout_width="match_parent"
@@ -32,18 +33,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/screenTitle"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/titleHolder"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/googlesans_bold"
-        android:text="Browse"
-        android:textColor="?PrimaryTextColour"
-        android:textSize="36sp"
-        android:transitionName="buttonTitle"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/screenTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/googlesans_bold"
+            android:text="Browse"
+            android:textColor="?PrimaryTextColour"
+            android:textSize="36sp"
+            android:transitionName="buttonTitle" />
+
+        <TextView
+            android:id="@+id/resultsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/googlesans_medium"
+            android:text="(null) gradients"
+            android:textColor="?SecondaryTextColour"
+            android:textSize="14sp"
+            android:transitionName="buttonTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"

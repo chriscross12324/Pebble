@@ -1,7 +1,6 @@
 package com.simple.chris.pebble
 
 import android.app.Activity
-import android.app.ActivityOptions
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -10,7 +9,6 @@ import android.os.Handler
 import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.view.Window
 import android.view.WindowManager
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
@@ -22,7 +20,6 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.alterac.blurkit.BlurLayout
-import kotlinx.android.synthetic.main.activity_browse.*
 import java.lang.Exception
 
 object RecyclerGrid {
@@ -42,7 +39,7 @@ object RecyclerGrid {
 
     fun gradientGridOnClickListener(context: Activity, gradientJSON: ArrayList<HashMap<String, String>>, view: View, position: Int) {
         try {
-            val details = Intent(context, ActivityGradientDetails::class.java)
+            val details = Intent(context, GradientDetailsActivity::class.java)
             val gradientInfo = gradientJSON[position]
 
             details.putExtra("gradientName", gradientInfo["backgroundName"])

@@ -12,10 +12,12 @@
     <string name="text_eng_open">Open</string>
     <string name="text_eng_processing">Processing</string>
     <string name="text_eng_uploading">Uploading</string>
+    <string name="text_eng_take_tour">Take Tour</string>
+    <string name="text_eng_exit">Exit</string>
 
     <!-- Dialog Strings English -->
     <string name="dialog_title_eng_gradient_create">Create Gradient</string>
-    <string name="dialog_body_eng_gradient_create">It’s time to create your first Gradient! Choose your ‘start’ and ‘end’ colours by tapping one of the circles.\n\nThe developer has full right to remove a gradient.</string>
+    <string name="dialog_body_eng_gradient_create">Welcome to the Gradient Creator, time to create your first gradient! \n\nThe developer has full right to remove gradients if deemed necessary.</string>
     <string name="dialog_title_eng_gradient_create_missing">Missing Info</string>
     <string name="dialog_body_eng_gradient_create_missing">It looks like you’re missing a name for your gradient, add one to submit it…</string>
     <string name="dialog_title_eng_secret">Secret</string>
@@ -26,9 +28,15 @@
     <string name="dialog_title_eng_gradient_saved">Gradient Saved</string>
     <string name="dialog_body_eng_gradient_saved">The gradient was successfully saved!</string>
 
+    <!-- Main Menu Strings-->
+    <string name="dialog_title_eng_connecting">Connecting</string>
+    <string name="dialog_body_eng_connecting">Pebble is connecting to the server, please wait…</string>
+
     <!-- Gradient Creator string -->
-    <string name="dialog_body_eng_processing">Checking gradient before upload</string>
+    <string name="dialog_title_eng_submitting">Submitting</string>
+    <string name="dialog_body_eng_exists">That colour combination already exists, try some different colours…</string>
     <string name="dialog_body_eng_uploading">Uploading gradient to Pebble</string>
+    <string name="dialog_body_eng_submitted">Save the unique code above to request an edit or removal, your gradient is now available!</string>
 
     <string name="create_group_body">Create a new group to store gradients in</string>
     <string name="pebble">Pebble</string>
