@@ -4,22 +4,19 @@ import android.animation.ObjectAnimator
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Dialog
 import android.app.WallpaperManager
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
-import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -28,13 +25,15 @@ import android.view.animation.OvershootInterpolator
 import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.ActivityCompat
-import androidx.core.graphics.drawable.toBitmap
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.simple.chris.pebble.Calculations.convertToDP
 import io.alterac.blurkit.BlurLayout
-import java.io.File
 import kotlin.math.roundToInt
+import eightbitlab.com.blurview.BlurView
+import eightbitlab.com.blurview.RenderScriptBlur
+import kotlinx.android.synthetic.main.dialog_popup.*
 
 object UIElements {
 
@@ -55,7 +54,7 @@ object UIElements {
                 GradientDrawable.Orientation.TL_BR,
                 intArrayOf(startColour, endColour)
         )
-        gradientDrawable.cornerRadius = Calculations.convertToDP(context, cornerRadius)
+        gradientDrawable.cornerRadius = convertToDP(context, cornerRadius)
 
         when (setDrawable) {
             true -> {
@@ -169,17 +168,18 @@ object UIElements {
     }
 
     fun setWallpaper(context: Context, imageView: ImageView) {
-        try {
-            val wallpaper: WallpaperManager = WallpaperManager.getInstance(context)
-            val wallpaperDrawable: Drawable = wallpaper.drawable
-            val bmpDraw = wallpaperDrawable as BitmapDrawable
-            val bmp = bmpDraw.bitmap
-            val wallpaperBMP = Bitmap.createScaledBitmap(bmp, Calculations.screenMeasure(context, "width"), Calculations.screenMeasure(context, "height"), true)
-            imageView.setImageBitmap(wallpaperBMP)
-        } catch (e: Exception) {
-            Log.e("ERR", "pebble.ui_elements.set_wallpaper.from.$context.${e.localizedMessage}")
+        if (Permissions.readStoragePermissionGiven(context)) {
+            try {
+                val wallpaper: WallpaperManager = WallpaperManager.getInstance(context)
+                val wallpaperDrawable: Drawable = wallpaper.drawable
+                val bmpDraw = wallpaperDrawable as BitmapDrawable
+                val bmp = bmpDraw.bitmap
+                val wallpaperBMP = Bitmap.createScaledBitmap(bmp, Calculations.screenMeasure(context, "width"), Calculations.screenMeasure(context, "height"), true)
+                imageView.setImageBitmap(wallpaperBMP)
+            } catch (e: Exception) {
+                Log.e("ERR", "pebble.ui_elements.set_wallpaper.from.$context.${e.localizedMessage}")
+            }
         }
-
     }
 
 
@@ -301,75 +301,111 @@ object UIElements {
         button.setOnClickListener(listener)
     }
 
-    fun popupDialog(context: Context, icon: Int, title: Int, description: Int, buttonText: Int?, blur: BlurLayout, listener: View.OnClickListener?) {
-        blur.visibility = View.VISIBLE
-        blur.startBlur()
-        blur.invalidate()
+    fun popupDialog(context: Context, popupName: String, icon: Int?, title: Int, description: Int, buttonArray: ArrayList<HashMap<String, Int>>?, decorView: View, listener: PopupDialogButtonRecyclerAdapter.OnButtonListener?) {
+        /**
+         * Checks if popupDialog is already visible
+         */
+        try {
+            if (popupDialog.isShowing) {
+                popupDialog.dismiss()
+            }
+        } catch (e: Exception) {
+        }
 
-        val dialog = Dialog(context, R.style.dialogStyle)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.dialog_popup)
+        /** Creates popupDialog **/
+        popupDialog = Dialog(context, R.style.dialogStyle)
+        popupDialog.setCancelable(false)
+        popupDialog.setContentView(R.layout.dialog_popup)
 
-        val dismiss = dialog.findViewById<ImageView>(R.id.dismiss)
-        val holder = dialog.findViewById<ConstraintLayout>(R.id.holder)
-        val permissionIcon = dialog.findViewById<ImageView>(R.id.permissionIcon)
-        val permissionTitle = dialog.findViewById<TextView>(R.id.permissionTitle)
-        val permissionDescription = dialog.findViewById<TextView>(R.id.permissionDescription)
-        val button = dialog.findViewById<ConstraintLayout>(R.id.button)
-        val buttonTextView = dialog.findViewById<TextView>(R.id.text)
+        val holder = popupDialog.findViewById<ConstraintLayout>(R.id.holder)
+        val permissionProgressCircle = popupDialog.progressCircle
+        val permissionIcon = popupDialog.findViewById<ImageView>(R.id.permissionIcon)
+        val permissionTitle = popupDialog.findViewById<TextView>(R.id.permissionTitle)
+        val permissionDescription = popupDialog.findViewById<TextView>(R.id.permissionDescription)
+        val popupButtonRecycler = popupDialog.findViewById<RecyclerView>(R.id.popupButtonRecycler)
 
-        permissionIcon.setImageResource(icon)
-        permissionTitle.setText(title)
+        if (icon != null) {
+            permissionIcon.setImageResource(icon)
+        } else {
+            permissionIcon.visibility = View.INVISIBLE
+            permissionProgressCircle.visibility = View.VISIBLE
+        }
+
+        try {
+            permissionTitle.setText(title)
+        }catch (e: Exception){Log.e("ERR", "pebble.ui_elements.popup_dialog: ${e.localizedMessage}")}
+
         permissionDescription.setText(description)
 
-        val dialogWindow = dialog.window
+        val dialogWindow = popupDialog.window
         dialogWindow!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
-        dialogWindow.setDimAmount(0f)
+        dialogWindow.setDimAmount(0.1f)
         dialogWindow.setGravity(Gravity.CENTER)
-        dialog.show()
+        popupDialog.show()
+
+        /** Set RecyclerView LayoutManager and Adapter **/
+        if (buttonArray != null && listener != null) {
+            try {
+                popupButtonRecycler.setHasFixedSize(true)
+                val buttonLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                val buttonAdapter = PopupDialogButtonRecyclerAdapter(context, popupName, buttonArray, listener)
+
+                popupButtonRecycler.layoutManager = buttonLayoutManager
+                popupButtonRecycler.adapter = buttonAdapter
+            } catch (e: Exception) {Log.e("ERR", "pebble.ui_elements.popup_dialog: ${e.localizedMessage}")}
+        }
+
+
 
         holder.post {
-            viewObjectAnimator(holder, "scaleX", 1f, 350, 100, OvershootInterpolator())
-            viewObjectAnimator(holder, "scaleY", 1f, 350, 100, OvershootInterpolator())
+            viewObjectAnimator(holder, "scaleX", 1f, 350, 100, DecelerateInterpolator(3f))
+            viewObjectAnimator(holder, "scaleY", 1f, 350, 100, DecelerateInterpolator(3f))
             viewObjectAnimator(holder, "alpha", 1f, 100, 100, LinearInterpolator())
 
-            if (buttonText != null) {
-                viewObjectAnimator(button, "scaleX", 1f, 350, 100, OvershootInterpolator())
-                viewObjectAnimator(button, "scaleY", 1f, 350, 100, OvershootInterpolator())
-                viewObjectAnimator(button, "alpha", 1f, 100, 100, LinearInterpolator())
-                buttonTextView.setText(buttonText)
+            if (buttonArray != null) {
+                if (buttonArray.isNotEmpty()) {
+                    viewObjectAnimator(popupButtonRecycler, "scaleX", 1f, 350, 100, DecelerateInterpolator(3f))
+                    viewObjectAnimator(popupButtonRecycler, "scaleY", 1f, 350, 100, DecelerateInterpolator(3f))
+                    viewObjectAnimator(popupButtonRecycler, "alpha", 1f, 100, 100, LinearInterpolator())
+                }
             }
-
         }
 
-        dismiss.setOnClickListener {
-            viewObjectAnimator(holder, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
-            viewObjectAnimator(holder, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
-            viewObjectAnimator(holder, "alpha", 0f, 200, 200, LinearInterpolator())
+        /** Creates blurView **/
+        try {
+            val rootView = decorView.findViewById<ViewGroup>(android.R.id.content)
+            val windowBackground = decorView.background
+            popupDialog.blurView.setupWith(rootView)
+                    .setFrameClearDrawable(windowBackground)
+                    .setBlurAlgorithm(RenderScriptBlur(context))
+                    .setBlurRadius(20f)
+                    .setHasFixedTransformationMatrix(true)
+        } catch (e: Exception) {Log.e("ERR", "pebble.ui_elements.popup_dialog: ${e.localizedMessage}")}
 
-            viewObjectAnimator(button, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
-            viewObjectAnimator(button, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
-            viewObjectAnimator(button, "alpha", 0f, 200, 200, LinearInterpolator())
 
-            Handler().postDelayed({
-                dialog.dismiss()
-                blur.pauseBlur()
-                blur.visibility = View.GONE
-            }, 450)
-        }
+    }
 
-        /*button.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.setDataAndType(Uri.parse(dir), "folder")
+    fun popupDialogHider() {
+        /** Checks if popupDialog is visible **/
+        try {
+            if (popupDialog.isShowing) {
+                val holder = popupDialog.findViewById<ConstraintLayout>(R.id.holder)
+                val popupButtonRecycler = popupDialog.findViewById<RecyclerView>(R.id.popupButtonRecycler)
 
-            if (intent.resolveActivityInfo(context.packageManager, 0) != null) {
-                context.startActivity(intent)
-            } else {
-                Log.e("ERR", "No file explorer")
-                context.startActivity(intent)
+                viewObjectAnimator(holder, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
+                viewObjectAnimator(holder, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
+                viewObjectAnimator(holder, "alpha", 0f, 200, 200, LinearInterpolator())
+
+                viewObjectAnimator(popupButtonRecycler, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
+                viewObjectAnimator(popupButtonRecycler, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
+                viewObjectAnimator(popupButtonRecycler, "alpha", 0f, 200, 200, LinearInterpolator())
+
+                Handler().postDelayed({
+                    popupDialog.dismiss()
+                }, 450)
             }
-        }*/
-        button.setOnClickListener(listener)
+        } catch (e: Exception) {
+        }
     }
 
     fun progressPopupDialog(context: Context, dismissible: Boolean, title: Int, description: Int, buttonText: Int?, blur: BlurLayout?, listener: View.OnClickListener?) {
@@ -555,7 +591,9 @@ object UIElements {
                     popupDialog.dismiss()
                 }, 450)
             }
-        } catch (e:java.lang.Exception){Log.e("ERR", "${e.localizedMessage}")}
+        } catch (e: java.lang.Exception) {
+            Log.e("ERR", "${e.localizedMessage}")
+        }
 
     }
 

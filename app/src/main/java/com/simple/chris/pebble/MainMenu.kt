@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
@@ -22,17 +23,18 @@ import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.activity_main_menu.*
 
 
-class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListener {
-
-    private var downloading = false
+class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListener, PopupDialogButtonRecyclerAdapter.OnButtonListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UIElements.setTheme(this)
         setContentView(R.layout.activity_main_menu)
         initialPlacement()
-        setWallpaperBlur()
-        getGradients()
+        if (Values.gradientList.isEmpty()) {
+            Handler().postDelayed({
+                checkConnection()
+            }, 1700)
+        }
         menuButtons()
 
         pebbleLogo.setOnClickListener {
@@ -63,6 +65,23 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
         inAnimation()
     }
 
+    private fun checkConnection() {
+        if (Connection.isNetworkAvailable(this)) {
+            if (Connection.isNetworkTypeData(this)) {
+                if (Values.askMobileData) {
+                    //showDataWarningDialog()
+                    UIElement.popupDialog(this, "askMobile", R.drawable.icon_warning, R.string.dialog_title_eng_data_warning, null, R.string.dialog_body_eng_data_warning, AppHashMaps.dataWarningArrayList(), window.decorView, this)
+                } else {
+                    getGradients()
+                }
+            } else {
+                getGradients()
+            }
+        } else {
+            UIElement.popupDialog(this, "noConnection", R.drawable.icon_warning, R.string.dialog_title_eng_no_connection, null, R.string.dialog_body_eng_no_connection, AppHashMaps.noConnectionArrayList(), window.decorView, this)
+        }
+    }
+
     private fun inAnimation() {
         //Animate pebbleLogo
         UIElements.viewObjectAnimator(pebbleLogo, "translationY", 0f, 700, 1000, DecelerateInterpolator(3f))
@@ -80,25 +99,15 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
         UIElements.viewObjectAnimator(menuButtonRecycler, "alpha", 1f, 700, 1200, DecelerateInterpolator())
     }
 
-    private fun setWallpaperBlur() {
-        val radius = 20f
-
-        val decorView: View = window.decorView
-        //ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
-        //Set drawable to draw in the beginning of each blurred frame (Optional).
-        //Can be used in case your layout has a lot of transparent space and your content
-        //gets kinda lost after blur is applied.
-        val windowBackground: Drawable = decorView.background
-
-        blurView.setupWith(decorView.findViewById(android.R.id.content))
-                .setFrameClearDrawable(windowBackground)
-                .setBlurAlgorithm(RenderScriptBlur(this))
-                .setBlurRadius(radius)
-                .setHasFixedTransformationMatrix(true)
-    }
-
     private fun getGradients() {
-        downloading = true
+        /** Start connecting animation **/
+        connectionText.text = "Connecting..."
+        connectionProgress.visibility = View.VISIBLE
+        connectionIcon.visibility = View.INVISIBLE
+        UIElements.viewObjectAnimator(connectionHolder, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
+
+        /** Start gradient database download **/
+        Values.downloadingGradients = true
         val mQueue: RequestQueue = Volley.newRequestQueue(this)
         val gradientDatabaseURL = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getGradients"
 
@@ -134,32 +143,47 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
     }
 
     private fun connectionOnline() {
-        downloading = false
+        Values.downloadingGradients = false
         connectionText.text = "Online"
         connectionProgress.visibility = View.INVISIBLE
         connectionIcon.visibility = View.VISIBLE
         connectionIcon.setImageResource(R.drawable.icon_check)
         UIElements.viewObjectAnimator(connectionHolder, "translationY", connectionHolder.height + Calculations.convertToDP(this, 24f), 500, 1000, DecelerateInterpolator(3f))
-        //connectionHolder.backgroundTintList = this.resources.getColorStateList(R.color.connectionOnline)
+    }
+
+    private fun connectionOffline() {
+        Values.downloadingGradients = false
+        connectionText.text = "Offline"
+        connectionProgress.visibility = View.INVISIBLE
+        connectionIcon.visibility = View.VISIBLE
+        connectionIcon.setImageResource(R.drawable.icon_close)
+        UIElements.viewObjectAnimator(connectionHolder, "translationY", connectionHolder.height + Calculations.convertToDP(this, 24f), 500, 1000, DecelerateInterpolator(3f))
     }
 
     override fun onResume() {
         super.onResume()
         UIElements.setWallpaper(this, wallpaperImageViewer)
 
-        //Detects if menuButtonRecycler has an adapter; known to disconnect if app is paused for too long
-        if (menuButtonRecycler.adapter == null) {
+        /**
+         * Check if app settings unloaded during pause
+         */
+        if (!Values.valuesLoaded) {
             startActivity(Intent(this, SplashScreen::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            finish()
         } else {
             Values.saveValues(this)
             Values.currentActivity = "MainMenu"
+
+            /** If gradient submitted, reloads database **/
             if (Values.justSubmitted) {
                 Values.justSubmitted = false
-                getGradients()
                 connectionText.text = "Connecting..."
-                connectionProgress.visibility = View.VISIBLE
                 connectionIcon.visibility = View.INVISIBLE
-                UIElements.viewObjectAnimator(connectionHolder, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
+                connectionProgress.visibility = View.VISIBLE
+                UIElements.viewObjectAnimator(connectionHolder, "translation", 0f, 500, 0, DecelerateInterpolator(3f))
+                //getGradients()
+                checkConnection()
             }
         }
     }
@@ -202,16 +226,18 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
     override fun onButtonClick(position: Int, view: View) {
         when (position) {
             0 -> {
-                if (downloading) {
-                    //Toast.makeText(this, "Downloading Gradients", Toast.LENGTH_SHORT).show()
+                if (Values.downloadingGradients) {
                     UIElements.progressPopupDialogTimed(this, 2000, R.string.dialog_title_eng_connecting, R.string.dialog_body_eng_connecting, null)
                 } else {
-                    val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view.findViewById(R.id.buttonIcon), "buttonIcon")
-                    startActivity(Intent(this, BrowseActivity::class.java), activityOptions.toBundle())
+                    if (Values.gradientList.isEmpty()) {
+                        UIElement.popupDialog(this, "noConnection", R.drawable.icon_no_connection, R.string.dialog_title_eng_offline_mode, null, R.string.dialog_body_eng_offline_mode, AppHashMaps.offlineModeArrayList(), window.decorView, this)
+                    } else {
+                        startActivity(Intent(this, BrowseActivity::class.java))
+                    }
                 }
             }
             1 -> {
-                if (downloading) {
+                if (Values.downloadingGradients) {
                     //Toast.makeText(this, "Downloading Gradients", Toast.LENGTH_SHORT).show()
                     UIElements.progressPopupDialogTimed(this, 2000, R.string.dialog_title_eng_connecting, R.string.dialog_body_eng_connecting, null)
                 } else {
@@ -224,12 +250,7 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
             }
             3 -> Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show()
             4 -> {
-                getGradients()
-                connectionText.text = "Connecting..."
-                connectionProgress.visibility = View.VISIBLE
-                connectionIcon.visibility = View.INVISIBLE
-                UIElements.viewObjectAnimator(connectionHolder, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
-                //connectionHolder.backgroundTintList = this.resources.getColorStateList(R.color.connectionOnline)
+                checkConnection()
             }
         }
     }
@@ -238,4 +259,45 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
         UIElements.oneButtonHider(this)
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
     }
+
+    override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
+        when (popupName) {
+            "askMobile" -> {
+                when (position) {
+                    0 -> {
+                        getGradients()
+                        UIElement.popupDialogHider()
+                    }
+                    1 -> {
+                        Values.askMobileData = false
+                        getGradients()
+                        UIElement.popupDialogHider()
+                    }
+                    2 -> {
+                        UIElement.popupDialogHider()
+                        Handler().postDelayed({
+                            checkConnection()
+                        }, Values.dialogShowAgainTime)
+                    }
+                }
+            }
+
+            "noConnection" -> {
+                when (position) {
+                    0 -> {
+                        UIElement.popupDialogHider()
+                        Handler().postDelayed({
+                            checkConnection()
+                        }, Values.dialogShowAgainTime)
+                    }
+                    1 -> {
+                        UIElement.popupDialogHider()
+                        connectionOffline()
+                    }
+                }
+            }
+        }
+    }
+
+
 }

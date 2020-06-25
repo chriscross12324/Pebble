@@ -1,6 +1,8 @@
 package com.simple.chris.pebble
 
 import android.content.Context
+import android.util.Log
+import java.lang.Exception
 
 /**
  * Stores all essential values, can be referenced and changed from Activities
@@ -21,7 +23,10 @@ object Values {
     var hintPushHoldDismissed = false
     var hintCreateGradientDismissed = false
     var currentActivity: String = ""
-    lateinit var gradientList: ArrayList<HashMap<String, String>>
+    var gradientList: ArrayList<HashMap<String, String>> = ArrayList()
+    var filteredGradients: ArrayList<HashMap<String, String>> = ArrayList()
+    var dialogShowAgainTime: Long = 450
+    var downloadingGradients = false
 
     //Settings
     var vibrationEnabled: Boolean = true
@@ -39,6 +44,7 @@ object Values {
     var currentColourHEX = ""
     var justSubmitted = false
     var gcFirstStart = true
+
 
     /**
      * Saves all values to a SharedPreferences file - Ran whenever a value might have changed
@@ -81,4 +87,23 @@ object Values {
         gradientCreatorDescription = sharedPrefs.getString("gradientCreatorDescription", "")!!
     }
 
+    /*fun filterBrokenGradients() {
+        try {
+            for (count in 0 until gradientList.size) {
+                if (gradientList[count]["backgroundName"]?.isNotEmpty()!! ){
+                    val filtered = HashMap<String, String>()
+
+                    filtered["backgroundName"] = gradientList[count]["backgroundName"] as String
+                    filtered["startColour"] = gradientList[count]["startColour"] as String
+                    filtered["endColour"] = gradientList[count]["endColour"] as String
+                    filtered["description"] = gradientList[count]["description"] as String
+
+                    filteredGradients.add(filtered)
+                }
+            }
+            downloadingGradients = false
+        } catch (e: Exception) {
+            Log.e("ERR", "pebble.values.filter_broken_gradients: ${e.localizedMessage}")
+        }
+    }*/
 }

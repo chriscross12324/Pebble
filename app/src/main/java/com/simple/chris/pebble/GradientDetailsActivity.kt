@@ -1,5 +1,6 @@
 package com.simple.chris.pebble
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.app.WallpaperManager
@@ -7,6 +8,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -25,6 +27,8 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.simple.chris.pebble.Calculations.convertToDP
 import com.simple.chris.pebble.UIElements.constraintLayoutElevationAnimator
 import com.simple.chris.pebble.UIElements.gradientDrawable
@@ -34,7 +38,7 @@ import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.roundToInt
 
-class GradientDetailsActivity : AppCompatActivity() {
+class GradientDetailsActivity : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.OnButtonListener {
 
     private lateinit var gradientNameString: String
     private lateinit var gradientDescriptionString: String
@@ -191,39 +195,16 @@ class GradientDetailsActivity : AppCompatActivity() {
         }
 
         saveGradientButton.setOnClickListener {
-            //createBitmap(saveGradientDrawable, Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height"))
-            Log.e("INFO", "Here")
-
-            if (Permissions.readWritePermission(this, this, blurLayout)) {
-                //Make the directory to save gradients
-                val savePath = getExternalFilesDir(null)!!.absolutePath
-                val saveDir = File(savePath + File.separator + "Pebble" + File.separator)
-                saveDir.mkdirs()
-
-                try {
-                    //Makes the file to populate
-                    val file = File(saveDir, "$gradientNameString.png".replace(" ", "_").toLowerCase())
-                    val fileOutputStream = FileOutputStream(file)
-
-                    //Creates the gradient Bitmap to populate the file above
-                    createBitmap(gradientDrawable(this, false, null, startColourInt, endColourInt, 0f) as Drawable,
-                            Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height")).compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
-
-                    fileOutputStream.flush()
-                    fileOutputStream.close()
-
-                    Log.e("INFO", "Successfully Saved to $saveDir")
-                    UIElements.popupDialog(this, R.drawable.icon_save, R.string.dialog_title_eng_gradient_saved, R.string.dialog_body_eng_gradient_saved, R.string.text_eng_open, blurLayout, codeCopyListener)
-
-                } catch (e: java.lang.Exception) {
-                    Log.e("INFO", "Failed to save due to: ${e.localizedMessage}")
-                }
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                UIElement.popupDialog(this, "readWritePermission", R.drawable.icon_storage, R.string.dialog_title_eng_permission_storage, null, R.string.dialog_body_eng_permission_storage, AppHashMaps.readWritePermissionArrayList(), window.decorView, this)
+            } else {
+                UIElement.popupDialog(this, "saveGradient", R.drawable.icon_save, R.string.dialog_title_eng_save_gradient, null, R.string.dialog_body_eng_save_gradient,
+                        AppHashMaps.saveGradientArrayList(), window.decorView, this)
             }
-
         }
 
         setWallpaperButton.setOnClickListener {
-            showSetWallpaperDialog()
+            UIElement.popupDialog(this, "setWallpaper", R.drawable.icon_wallpaper, R.string.dialog_title_eng_set_wallpaper, null, R.string.dialog_body_eng_set_wallpaper, AppHashMaps.setWallpaperArrayList(), window.decorView, this)
         }
     }
 
@@ -300,72 +281,6 @@ class GradientDetailsActivity : AppCompatActivity() {
         startActivity(Intent.createChooser(intent, "Open folder"))
     }
 
-    private fun showSetWallpaperDialog() {
-        val dialog = Dialog(this, R.style.dialogStyle)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.dialog_set_wallpaper)
-
-        val buttonYes: LinearLayout = dialog.findViewById(R.id.yes)
-        buttonYes.setOnClickListener {
-            val wallpaperManager = WallpaperManager.getInstance(this)
-
-            try {
-                wallpaperManager.setBitmap(createBitmap(gradientDrawable(this, false, null, startColourInt, endColourInt, 0f) as Drawable,
-                        Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height")))
-            } catch (e: Exception) {
-                Log.e("ERR", "pebble.activity_gradient_details.buttons.setWallpaper: ${e.localizedMessage}")
-                showWallpaperFailedDialog()
-            }
-            dialog.dismiss()
-        }
-        val buttonNo: LinearLayout = dialog.findViewById(R.id.no)
-        buttonNo.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        val window = dialog.window
-        window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
-        window.setDimAmount(0.5f)
-
-        dialog.show()
-    }
-
-    private fun showWallpaperFailedDialog() {
-        val dialog = Dialog(this, R.style.dialogStyle)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.dialog_set_wallpaper_failed)
-
-        val dismissPopup: LinearLayout = dialog.findViewById(R.id.dismissPopup)
-        dismissPopup.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        val window = dialog.window
-        window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
-        window.setDimAmount(0.5f)
-
-        dialog.show()
-    }
-
-    private fun showStoragePermissionDialog() {
-        val dialog = Dialog(this, R.style.dialogStyle)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.dialog_storage_access)
-
-        val dismissPopup: LinearLayout = dialog.findViewById(R.id.dismissPopup)
-        dismissPopup.setOnClickListener {
-            dialog.dismiss()
-
-            //ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 1)
-        }
-
-        val window = dialog.window
-        window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
-        window.setDimAmount(0.5f)
-
-        dialog.show()
-    }
-
     override fun onBackPressed() {
         viewObjectAnimator(detailsHolder, "translationY",
                 (90 * resources.displayMetrics.density + detailsHolder.height).roundToInt().toFloat(), 250,
@@ -388,5 +303,70 @@ class GradientDetailsActivity : AppCompatActivity() {
         Handler().postDelayed({
             super@GradientDetailsActivity.onBackPressed()
         }, 250)
+    }
+
+    override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
+        when (popupName) {
+            "setWallpaper" -> {
+                when (position) {
+                    0 -> {
+                        val wallpaperManager = WallpaperManager.getInstance(this)
+
+                        try {
+                            wallpaperManager.setBitmap(createBitmap(gradientDrawable(this, false, null, startColourInt, endColourInt, 0f) as Drawable,
+                                    Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height")))
+                        } catch (e: Exception) {
+                            Log.e("ERR", "pebble.activity_gradient_details.buttons.setWallpaper: ${e.localizedMessage}")
+                        }
+                    }
+                    1 -> {
+
+                    }
+                    2 -> {
+                        UIElement.popupDialogHider()
+                    }
+                }
+            }
+            "readWritePermission" -> {
+                UIElement.popupDialogHider()
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+            }
+            "saveGradient" -> {
+                when (position) {
+                    0 -> {
+                        /**
+                         * Makes directory if doesn't exist
+                         */
+                        val savePath = getExternalFilesDir(null)!!.absolutePath
+                        val saveDir = File(savePath + File.separator + "Pebble" + File.separator)
+                        saveDir.mkdirs()
+
+                        try {
+                            /** Makes the file to populate **/
+                            val file = File(saveDir, "$gradientNameString.png".replace(" ", "_").toLowerCase())
+                            val fileOutputStream = FileOutputStream(file)
+
+                            /** Creates the gradient Bitmap to populate the file above **/
+                            createBitmap(gradientDrawable(this, false, null, startColourInt, endColourInt, 0f) as Drawable,
+                                    Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height")).compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+
+                            fileOutputStream.flush()
+                            fileOutputStream.close()
+
+                            Log.e("INFO", "Successfully Saved to $saveDir")
+                            UIElement.popupDialog(this, "gradientSaved", R.drawable.icon_check, R.string.dialog_title_eng_gradient_saved, null,
+                                    R.string.dialog_body_eng_gradient_saved, AppHashMaps.gradientSavedArrayList(), window.decorView, this)
+
+                        } catch (e: java.lang.Exception) {
+                            Log.e("INFO", "Failed to save due to: ${e.localizedMessage}")
+                        }
+                    }
+                    1 -> UIElement.popupDialogHider()
+                }
+            }
+            "gradientSaved" -> {
+                UIElement.popupDialogHider()
+            }
+        }
     }
 }

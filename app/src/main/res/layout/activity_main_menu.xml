@@ -4,20 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainMenu"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    tools:context=".MainMenu">
 
-    <eightbitlab.com.blurview.BlurView
-        android:id="@+id/blurView"
+
+    <ImageView
+        android:id="@+id/wallpaperImageViewer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/wallpaperImageViewer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </eightbitlab.com.blurview.BlurView>
+        android:layout_height="match_parent" />
 
     <ImageView
         android:id="@+id/wallpaperAlpha"
@@ -34,7 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon_pebble_sunshine" />
+        android:src="@drawable/icon_pebble_sunshine"/>
 
     <View
         android:id="@+id/gradientCreatorSharedElementPlaceholder"
@@ -65,13 +59,14 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
+        android:animateLayoutChanges="true"
         android:background="@drawable/details_background"
         android:backgroundTint="?ForegroundColour"
         android:elevation="16dp"
+        android:translationY="73dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:animateLayoutChanges="true">
+        app:layout_constraintStart_toStartOf="parent">
 
         <ProgressBar
             android:id="@+id/connectionProgress"

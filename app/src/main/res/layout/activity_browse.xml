@@ -22,7 +22,7 @@
         android:id="@+id/buttonIcon"
         android:layout_width="400dp"
         android:layout_height="400dp"
-        android:alpha="0.1"
+        android:alpha="0"
         android:src="@drawable/icon_browse"
         android:tint="?SecondaryTextColour"
         android:transitionName="buttonIcon"

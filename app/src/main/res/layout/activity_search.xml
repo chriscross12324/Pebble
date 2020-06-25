@@ -113,6 +113,19 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchColourRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_marginBottom="16dp"
+        android:clipToPadding="false"
+        android:elevation="10dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/searchFieldHolder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <LinearLayout
         android:id="@+id/backButton"
         android:layout_width="50dp"

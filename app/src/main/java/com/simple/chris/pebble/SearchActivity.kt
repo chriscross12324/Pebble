@@ -4,20 +4,27 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
+import android.widget.HorizontalScrollView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import kotlinx.android.synthetic.main.activity_search.*
 import java.lang.Exception
 
-class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener {
+class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener, SearchColourRecyclerViewAdapter.OnButtonListener {
 
     //Array lists that store the gradient data
     private val allItems: ArrayList<HashMap<String, String>> = Values.gradientList
@@ -26,6 +33,7 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     var fieldChange = false
     var screenHeight = 0
     var bottomSheetPeekHeight = 0
+    var colourPickerAnimating = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +46,7 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         coordinatorLayout.post {
             getHeights()
             bottomSheet()
+            searchColourButtons()
         }
 
         //Initiate searchResultsRecycler
@@ -72,6 +81,78 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             override fun onStateChanged(bottomSheet: View, newState: Int) {
             }
         })
+
+        searchResultsRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (!colourPickerAnimating) {
+                    colourPickerAnimating = true
+                    if (dy > 60) {
+                        UIElements.viewObjectAnimator(searchColourRecycler, "translationY", 80f, 300, 0, DecelerateInterpolator(3f))
+                        UIElements.viewObjectAnimator(searchColourRecycler, "alpha", 0f, 150, 0, LinearInterpolator())
+                    } else if (dy < -80) {
+                        UIElements.viewObjectAnimator(searchColourRecycler, "translationY", 0f, 300, 0, DecelerateInterpolator(3f))
+                        UIElements.viewObjectAnimator(searchColourRecycler, "alpha", 1f, 150, 0, LinearInterpolator())
+                    }
+                    Handler().postDelayed({
+                        colourPickerAnimating = false
+                    }, 250)
+                }
+            }
+        })
+    }
+
+    private fun searchColourButtons() {
+        /**
+         * Creates recycler for searchByColour
+         */
+
+        val colourArray = ArrayList<HashMap<String, String>>()
+
+        val redHash = HashMap<String, String>()
+        redHash["buttonColour"] = "#F44336"
+        colourArray.add(redHash)
+
+        val orangeHash = HashMap<String, String>()
+        orangeHash["buttonColour"] = "#FF9800"
+        colourArray.add(orangeHash)
+
+        val yellowHash = HashMap<String, String>()
+        yellowHash["buttonColour"] = "#FFEB3B"
+        colourArray.add(yellowHash)
+
+        val greenHash = HashMap<String, String>()
+        greenHash["buttonColour"] = "#4CAF50"
+        colourArray.add(greenHash)
+
+        val blueHash = HashMap<String, String>()
+        blueHash["buttonColour"] = "#2196F3"
+        colourArray.add(blueHash)
+
+        val purpleHash = HashMap<String, String>()
+        purpleHash["buttonColour"] = "#9C27B0"
+        colourArray.add(purpleHash)
+
+        val brownHash = HashMap<String, String>()
+        brownHash["buttonColour"] = "#5D4037"
+        colourArray.add(brownHash)
+
+        val blackHash = HashMap<String, String>()
+        blackHash["buttonColour"] = "#1c1c1c"
+        colourArray.add(blackHash)
+
+        val whiteHash = HashMap<String, String>()
+        whiteHash["buttonColour"] = "#f5f5f5"
+        colourArray.add(whiteHash)
+
+        searchColourRecycler.setHasFixedSize(true)
+        val buttonLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        val buttonAdapter = SearchColourRecyclerViewAdapter(this, colourArray, this)
+
+        searchColourRecycler.layoutManager = buttonLayoutManager
+        searchColourRecycler.adapter = buttonAdapter
+
+        //red, orange, yellow, green, blue, purple, brown, black, white
     }
 
     /**
@@ -170,6 +251,10 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
     override fun onGradientLongClick(position: Int, view: View) {
         //Long Click functionality
+    }
+
+    override fun onButtonClick(position: Int, view: View) {
+        searchField.setText("")
     }
 
 }

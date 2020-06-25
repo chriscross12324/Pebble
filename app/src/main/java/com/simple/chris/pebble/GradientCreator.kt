@@ -1,6 +1,8 @@
 package com.simple.chris.pebble
 
 import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -29,9 +31,11 @@ import com.simple.chris.pebble.Calculations.convertToDP
 import com.simple.chris.pebble.UIElements.viewObjectAnimator
 import io.alterac.blurkit.BlurLayout
 import kotlinx.android.synthetic.main.activity_create_gradient_new.*
+import kotlinx.android.synthetic.main.activity_create_gradient_new.blurLayout
+import kotlinx.android.synthetic.main.activity_gradient_details.*
 import org.apache.commons.lang3.RandomStringUtils
 
-class GradientCreator : AppCompatActivity() {
+class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.OnButtonListener {
 
     lateinit var dialog: Dialog
 
@@ -63,8 +67,11 @@ class GradientCreator : AppCompatActivity() {
                 Handler().postDelayed({
                     lastStepEnterAnim()
                 }, 800)
+                Toast.makeText(this, "False", Toast.LENGTH_SHORT).show()
             } else {
+                gradientExists = false
                 submitLogic()
+                Toast.makeText(this, "True", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -244,7 +251,8 @@ class GradientCreator : AppCompatActivity() {
                         /** Checks endColour */
                         if (Values.gradientList[count]["endColour"].equals(Values.gradientCreatorEndColour)) {
                             //Gradient already exists
-                            popupDialog(R.drawable.icon_attention, "Gradient Exists", R.string.dialog_body_eng_exists, R.string.text_eng_ok, dialogExistsListener)
+                            //popupDialog(R.drawable.icon_attention, "Gradient Exists", R.string.dialog_body_eng_exists, R.string.text_eng_ok, dialogExistsListener)
+                            UIElement.popupDialog(this, "gradientExists", R.drawable.icon_attention, R.string.dialog_title_eng_gradient_exists, null, R.string.dialog_body_eng_gradient_exists, AppHashMaps.gradientExistsArrayList(), window.decorView, this)
                             gradientExists = true
                             break
                         }
@@ -252,7 +260,8 @@ class GradientCreator : AppCompatActivity() {
 
                     /** Submits gradient if it doesn't already exist */
                     if (count + 1 == Values.gradientList.size && !gradientExists) {
-                        progressPopupDialog(R.string.dialog_title_eng_submitting, R.string.dialog_body_eng_uploading, null, null)
+                        //progressPopupDialog(R.string.dialog_title_eng_submitting, R.string.dialog_body_eng_uploading, null, null)
+                        UIElement.popupDialog(this, "submittingGradient", null, R.string.dialog_title_eng_submitting, null, R.string.dialog_body_eng_uploading, null, window.decorView, null)
                         gradientPush()
                     }
                 }
@@ -260,7 +269,8 @@ class GradientCreator : AppCompatActivity() {
                 Log.e("ERR", "pebble.simple.gradient_creator.submit_logic: ${e.localizedMessage}")
             }
         } else {
-            popupDialog(R.drawable.icon_question, "Missing Info", R.string.dialog_body_eng_gradient_create_missing, R.string.text_eng_ok, dialogMissingListener)
+            //popupDialog(R.drawable.icon_question, "Missing Info", R.string.dialog_body_eng_gradient_create_missing, R.string.text_eng_ok, dialogMissingListener)
+            UIElement.popupDialog(this, "missingInfo", R.drawable.icon_question, R.string.dialog_title_eng_gradient_create_missing, null, R.string.dialog_body_eng_gradient_create_missing, AppHashMaps.missingInfoArrayList(), window.decorView, this)
         }
     }
 
@@ -298,7 +308,8 @@ class GradientCreator : AppCompatActivity() {
         Values.gradientCreatorDescription = ""
         Values.saveValues(this)
 
-        popupDialog(R.drawable.icon_check, gradientUID, R.string.dialog_body_eng_submitted, R.string.text_eng_exit, dialogCompleteListener)
+        //popupDialog(R.drawable.icon_check, gradientUID, R.string.dialog_body_eng_submitted, R.string.text_eng_exit, dialogCompleteListener)
+        UIElement.popupDialog(this, "gradientSubmitted", R.drawable.icon_check, null, gradientUID ,R.string.dialog_body_eng_submitted, AppHashMaps.gradientSubmittedArrayList(), window.decorView, this)
     }
 
     override fun onResume() {
@@ -314,7 +325,7 @@ class GradientCreator : AppCompatActivity() {
         }
 
         /**
-         * Checks if app settings has reset during pause
+         * Checks if app settings unloaded during pause
          */
         if (!Values.valuesLoaded) {
             startActivity(Intent(this, SplashScreen::class.java))
@@ -323,57 +334,7 @@ class GradientCreator : AppCompatActivity() {
         }
     }
 
-    private fun popupDialog(icon: Int, title: String, description: Int, buttonText: Int?, listener: View.OnClickListener?) {
-        /*blurLayout.visibility = View.VISIBLE
-        blurLayout.startBlur()
-        blurLayout.invalidate()*/
-
-        try {
-            if (dialog.isShowing) {
-                dialog.dismiss()
-            }
-        } catch (e: Exception) {
-        }
-
-        dialog = Dialog(this, R.style.dialogStyle)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.dialog_popup)
-
-        val holder = dialog.findViewById<ConstraintLayout>(R.id.holder)
-        val permissionIcon = dialog.findViewById<ImageView>(R.id.permissionIcon)
-        val permissionTitle = dialog.findViewById<TextView>(R.id.permissionTitle)
-        val permissionDescription = dialog.findViewById<TextView>(R.id.permissionDescription)
-        val button = dialog.findViewById<ConstraintLayout>(R.id.button)
-        val buttonTextView = dialog.findViewById<TextView>(R.id.text)
-
-        permissionIcon.setImageResource(icon)
-        permissionTitle.text = title
-        permissionDescription.setText(description)
-
-        val dialogWindow = dialog.window
-        dialogWindow!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
-        dialogWindow.setDimAmount(0f)
-        dialogWindow.setGravity(Gravity.CENTER)
-        dialog.show()
-
-        holder.post {
-            viewObjectAnimator(holder, "scaleX", 1f, 350, 100, OvershootInterpolator())
-            viewObjectAnimator(holder, "scaleY", 1f, 350, 100, OvershootInterpolator())
-            viewObjectAnimator(holder, "alpha", 1f, 100, 100, LinearInterpolator())
-
-            if (buttonText != null) {
-                viewObjectAnimator(button, "scaleX", 1f, 350, 100, OvershootInterpolator())
-                viewObjectAnimator(button, "scaleY", 1f, 350, 100, OvershootInterpolator())
-                viewObjectAnimator(button, "alpha", 1f, 100, 100, LinearInterpolator())
-                buttonTextView.setText(buttonText)
-            }
-
-        }
-
-        button.setOnClickListener(listener)
-    }
-
-    fun progressPopupDialog(title: Int, description: Int, buttonText: Int?, listener: View.OnClickListener?) {
+    /*fun progressPopupDialog(title: Int, description: Int, buttonText: Int?, listener: View.OnClickListener?) {
 
         dialog = Dialog(this, R.style.dialogStyle)
 
@@ -416,7 +377,7 @@ class GradientCreator : AppCompatActivity() {
         if (listener != null) {
             button.setOnClickListener(listener)
         }
-    }
+    }*/
 
     private val dialogFirstOpenListener = View.OnClickListener {
         UIElements.oneButtonHider(this)
@@ -448,25 +409,6 @@ class GradientCreator : AppCompatActivity() {
         }, 450)
     }
 
-    private val dialogMissingListener = View.OnClickListener {
-        val holder = dialog.findViewById<ConstraintLayout>(R.id.holder)
-        val button = dialog.findViewById<ConstraintLayout>(R.id.button)
-
-        viewObjectAnimator(holder, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
-        viewObjectAnimator(holder, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
-        viewObjectAnimator(holder, "alpha", 0f, 200, 200, LinearInterpolator())
-
-        viewObjectAnimator(button, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
-        viewObjectAnimator(button, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
-        viewObjectAnimator(button, "alpha", 0f, 200, 200, LinearInterpolator())
-
-        Handler().postDelayed({
-            dialog.dismiss()
-            blurLayout.pauseBlur()
-            blurLayout.visibility = View.GONE
-        }, 450)
-    }
-
     private val dialogCompleteListener = View.OnClickListener {
         val holder = dialog.findViewById<ConstraintLayout>(R.id.holder)
         val button = dialog.findViewById<ConstraintLayout>(R.id.button)
@@ -488,5 +430,42 @@ class GradientCreator : AppCompatActivity() {
                 onBackPressed()
             }, 850)
         }, 450)
+    }
+
+    override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
+        when (popupName) {
+            "missingInfo" -> {
+                UIElement.popupDialogHider()
+            }
+            "gradientExists" -> {
+                UIElement.popupDialogHider()
+                Handler().postDelayed({
+                    lastStepExitAnim(false)
+                    Handler().postDelayed({
+                        firstStepEnterAnim()
+                        submitStep = false
+                    }, 950)
+                }, 450)
+            }
+            "gradientSubmitted" -> {
+                when (position) {
+                    0 -> {
+                        val clipboardManager: ClipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val clipData = ClipData.newPlainText("Unique ID", gradientUID)
+                        clipboardManager.setPrimaryClip(clipData)
+                    }
+                    1 -> {
+                        UIElement.popupDialogHider()
+                        Handler().postDelayed({
+                            lastStepExitAnim(true)
+                            Handler().postDelayed({
+                                onBackPressed()
+                            }, 850)
+                        }, Values.dialogShowAgainTime)
+
+                    }
+                }
+            }
+        }
     }
 }

@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00008577</color>
-    <color name="colorPrimaryDark">#0000574B</color>
-    <color name="colorAccent">#50FFFFFF</color>
-
-    <color name="logoColourTopLeft">#F58A33</color>
-    <color name="logoColourBottomRight">#D53593</color>
-
-    <color name="BackgroundTint">#32121212</color>
 
     <color name="lightForeground">#f2f2f2</color>
     <color name="lightBackground">#ffffff</color>
@@ -31,10 +23,6 @@
 
     <color name="pebbleStart">#f6d365</color>
     <color name="pebbleEnd">#fda085</color>
-
-    <color name="connectionOnline">#10A317</color>
-    <color name="connectionWarning">#C15711</color>
-    <color name="connectionError">#AE1106</color>
 
 </resources>
 

@@ -6,22 +6,45 @@
     <string name="text_eng_next">Next</string>
     <string name="text_eng_back">Back</string>
     <string name="text_eng_cancel">Cancel</string>
-    <string name="text_eng_options">Options</string>
     <string name="text_eng_submit">Submit</string>
     <string name="text_eng_i_understand">I Understand</string>
-    <string name="text_eng_open">Open</string>
-    <string name="text_eng_processing">Processing</string>
     <string name="text_eng_uploading">Uploading</string>
     <string name="text_eng_take_tour">Take Tour</string>
     <string name="text_eng_exit">Exit</string>
+    <string name="text_eng_close">Close</string>
+    <string name="text_eng_copy">Copy</string>
+    <string name="text_eng_copy_code">Copy Code</string>
+
+    <!-- English Connections -->
+    <string name="dialog_title_eng_data_warning">Trying to use Mobile Data</string>
+    <string name="dialog_body_eng_data_warning">Would you like to use Mobile Data? Overage fees may apply…</string>
+    <string name="dialog_button_eng_use_data">Use Data</string>
+    <string name="dialog_button_eng_use_forever">Use forever</string>
+    <string name="dialog_button_eng_try_wifi">Try Wi-Fi</string>
+
+    <string name="dialog_title_eng_no_connection">No Connection</string>
+    <string name="dialog_body_eng_no_connection">Pebble needs an internet connection, can\'t connect</string>
+    <string name="dialog_button_eng_retry">Retry</string>
+
+    <string name="dialog_title_eng_offline_mode">Offline</string>
+    <string name="dialog_body_eng_offline_mode">Pebble is currently in offline mode, want to go online?</string>
+    <string name="dialog_button_eng_go_online">Go Online</string>
+
+
+    <!-- English Gradient Details Screen -->
+    <string name="dialog_title_eng_set_wallpaper">Set Wallpaper</string>
+    <string name="dialog_body_eng_set_wallpaper">Where do you want to apply this gradient?</string>
+    <string name="dialog_button_eng_home_screen">Home Screen</string>
+    <string name="dialog_button_eng_lock_screen">Lock Screen</string>
+    <string name="dialog_title_eng_save_gradient">Save Gradient</string>
+    <string name="dialog_body_eng_save_gradient">Would you like to save this gradient to your device?</string>
+    <string name="text_eng_open_gradient">Open</string>
 
     <!-- Dialog Strings English -->
     <string name="dialog_title_eng_gradient_create">Create Gradient</string>
     <string name="dialog_body_eng_gradient_create">Welcome to the Gradient Creator, time to create your first gradient! \n\nThe developer has full right to remove gradients if deemed necessary.</string>
     <string name="dialog_title_eng_gradient_create_missing">Missing Info</string>
     <string name="dialog_body_eng_gradient_create_missing">It looks like you’re missing a name for your gradient, add one to submit it…</string>
-    <string name="dialog_title_eng_secret">Secret</string>
-    <string name="dialog_body_eng_secret">You found the secret! Pebble is really unstable and jenga like, Settings still isn’t added and I don’t know what design to go with for it.</string>
     <string name="dialog_title_eng_permission_storage">Storage</string>
     <string name="dialog_body_eng_permission_storage">Pebble needs access to your storage in order to save the gradient…\n\nAfter giving access click the ‘Save’ button again</string>
     <string name="dialog_body_eng_permission_storage_read">Pebble needs read permissions in order to make the app look better. No files are collected and everything stays local.</string>
@@ -31,76 +54,26 @@
     <!-- Main Menu Strings-->
     <string name="dialog_title_eng_connecting">Connecting</string>
     <string name="dialog_body_eng_connecting">Pebble is connecting to the server, please wait…</string>
+    <string name="eng_refresh">Refresh</string>
+    <string name="eng_make_another">Make Another</string>
 
     <!-- Gradient Creator string -->
+    <string name="dialog_title_eng_gradient_exists">Gradient Exists</string>
+    <string name="dialog_body_eng_gradient_exists">That colour combination already exists, try some different colours…</string>
     <string name="dialog_title_eng_submitting">Submitting</string>
-    <string name="dialog_body_eng_exists">That colour combination already exists, try some different colours…</string>
     <string name="dialog_body_eng_uploading">Uploading gradient to Pebble</string>
     <string name="dialog_body_eng_submitted">Save the unique code above to request an edit or removal, your gradient is now available!</string>
 
-    <string name="create_group_body">Create a new group to store gradients in</string>
     <string name="pebble">Pebble</string>
-    <string name="title_activity_gradient_grid_test">gradient_grid_test</string>
-    <string name="noConnectionBody">This device is not connected to the internet, please connect to use Pebble</string>
-    <string name="dataWarningBody">You are trying to use cellular data, this can result in overage fees</string>
-    <string name="internetBody">We need an active internet connection in order to connect to the server</string>
-    <string name="dataBody">Using cellular data may result in overage fees, you will be warned before using data</string>
-    <string name="descriptionDecoration">Decoration</string>
-    <string name="descriptionTitleGradients">Title</string>
-    <string name="descriptionAnimation">Animation</string>
-    <string name="connectingDialogBody">This shouldn\'t take long</string>
-    <string name="connectingDialogTitle">Connecting</string>
-    <string name="descriptionBackground">background</string>
 
-    <string name="noWifi">Not connected to Wi-Fi</string>
-    <string name="noNetwork">No network connection</string>
     <string name="pushHoldTitle">Push &amp; Hold</string>
     <string name="PushHoldGradient">Touch the gradient to hide its details and expand the gradient fullscreen. Release to show its details again.</string>
-    <string name="EdgeSlide">Tap and Slide down along the edge of the screen to hide the grid of Gradients.</string>
     <string name="search_field_hint">Search…</string>
-    <string name="description_button_back">Back Button</string>
-    <string name="description_button_search">Search Button</string>
-    <string name="description_edittext_search">Search Field</string>
     <string name="status_downloading">Status: Downloading Gradients</string>
-    <string name="status_connecting">Status: Connecting</string>
-    <string name="greeting_morning">Good\nMorning</string>
-    <string name="greeting_afternoon">Good\nAfternoon</string>
-    <string name="greeting_evening">Good\nEvening</string>
     <string name="dialog_text_eng_missing_info">Missing Info</string>
     <string name="dialog_text_eng_missing_info_body">It looks like you\'re missing some required information, please make sure you filled out your name and included some feedback.</string>
     <string name="dialog_text_eng_email">Email</string>
     <string name="dialog_text_eng_email_body">Providing an email is not required, it just helps us get in contact with you if we need anymore information.</string>
     <string name="text_eng_yes">Yes</string>
-    <string name="text_eng_no">No</string>
-    <string name="dialog_set_wallpaper_body">Do you want to set this gradient as your wallpaper?</string>
 
-    <string-array name="connecting_array">
-        <item>This shouldn\'t take long</item>
-        <item>Hold on tight</item>
-        <item>Get ready for some inspiration!</item>
-        <item>Preparing the colours…</item>
-        <item>This is my favourite part</item>
-        <item>Don\'t forget to have a nice day!</item>
-        <item>Getting the party started!</item>
-        <item>Try tapping a gradient to see more info</item>
-        <item>Dark theme is pretty cool</item>
-        <item>Beware the dark gradients…</item>
-        <item>Sharing is caring!</item>
-        <item>Visit \‘Settings\’ to make Pebble the way you like!</item>
-        <item>Nice to see you!</item>
-        <item>Pebble at your service to brighten up your day!</item>
-        <item>Report anything that goes wr0n*!g&amp;\n*</item>
-    </string-array>
-
-    <string-array name="filter_array">
-        <item>Newest First</item>
-        <item>Oldest First</item>
-    </string-array>
-
-    <string-array name="feedback_type_array">
-        <item>App Crashes/Restarts</item>
-        <item>Optimization Issue</item>
-        <item>Visual Issue</item>
-        <item>Suggestion</item>
-    </string-array>
 </resources>

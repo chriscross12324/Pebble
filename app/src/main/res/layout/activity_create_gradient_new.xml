@@ -226,45 +226,6 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/topColourPicker"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="16dp"
-        android:background="@drawable/rounded_square"
-        android:backgroundTint="?BackgroundColour"
-        android:rotation="45"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/startColourPicker"
-        app:layout_constraintStart_toEndOf="@+id/startColourPicker"
-        app:layout_constraintTop_toTopOf="@+id/startColourPicker" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:background="@drawable/rounded_square"
-        android:backgroundTint="?BackgroundColour"
-        android:orientation="vertical"
-        android:translationX="-12dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/topColourPicker"
-        app:layout_constraintStart_toEndOf="@+id/topColourPicker"
-        app:layout_constraintTop_toTopOf="@+id/topColourPicker">
-
-        <TextView
-            android:id="@+id/textView14"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/googlesans_bold"
-            android:gravity="center"
-            android:text="Tap this..."
-            android:textColor="?PrimaryTextColour"
-            android:textSize="14sp" />
-    </LinearLayout>
-
-
     <LinearLayout
         android:id="@+id/startColourPicker"
         android:layout_width="50dp"

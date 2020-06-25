@@ -51,7 +51,7 @@ class ColourPicker : AppCompatActivity() {
 
         val saturationDrawable = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
-                intArrayOf(Color.parseColor("#EAEAEA"), Color.parseColor("#f00000"))
+                intArrayOf(Color.parseColor("#EAEAEA"), Color.HSVToColor(hue))
         )
         saturationDrawable.cornerRadius = Calculations.convertToDP(this, 20f)
         saturation.background = saturationDrawable

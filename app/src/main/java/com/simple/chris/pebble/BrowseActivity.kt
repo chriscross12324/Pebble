@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
@@ -29,7 +30,7 @@ class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         UIElements.setTheme(this)
         setContentView(R.layout.activity_browse)
         Values.currentActivity = "Browse"
-        animateButtonIcon(1f, 0.1f)
+        animateButtonIcon(0f, 0.1f)
 
         UIElements.setWallpaper(this, wallpaperImageViewer)
 
@@ -98,36 +99,35 @@ class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
     override fun onResume() {
         super.onResume()
-
-        //Checks to see if the Gradient Grid is still populated (known to depopulate if the app is paused for too long)
-        if (browseGrid.adapter == null) {
-            Values.loadValues(this)
+        /**
+         * Checks if app settings unloaded during pause
+         */
+        if (!Values.valuesLoaded) {
             startActivity(Intent(this, SplashScreen::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            finish()
         } else {
-            Values.saveValues(this)
-
             when (Values.currentActivity) {
-                "GradientDetails" -> {
-                    Values.currentActivity = "Browse"
-                    touchBlocker.visibility = View.GONE
-                }
-                "SearchGradient" -> {
+                else -> {
                     Values.currentActivity = "Browse"
                     touchBlocker.visibility = View.GONE
                 }
             }
+            Values.saveValues(this)
         }
     }
 
     private fun animateButtonIcon(start: Float, end: Float) {
-        val valueAnimator = ValueAnimator.ofFloat(start, end)
-        valueAnimator.duration = 250
+        Handler().postDelayed({
+            val valueAnimator = ValueAnimator.ofFloat(start, end)
+            valueAnimator.duration = 250
 
-        valueAnimator.addUpdateListener {
-            val animatedValue = valueAnimator.animatedValue as Float
-            buttonIcon.alpha = animatedValue
-        }
-        valueAnimator.start()
+            valueAnimator.addUpdateListener {
+                val animatedValue = valueAnimator.animatedValue as Float
+                buttonIcon.alpha = animatedValue
+            }
+            valueAnimator.start()
+        }, 500)
     }
 
     override fun onGradientClick(position: Int, view: View) {

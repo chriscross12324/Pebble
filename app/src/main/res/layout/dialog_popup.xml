@@ -15,110 +15,148 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/holder"
-        android:layout_width="190dp"
-        android:layout_height="wrap_content"
-        android:alpha="1"
-        android:background="@drawable/details_background"
-        android:backgroundTint="?ForegroundColour"
-        android:scaleX="0.8"
-        android:scaleY="0.8"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
 
-        <ProgressBar
-            android:id="@+id/progressCircle"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="30dp"
-            android:indeterminateTint="?PrimaryTextColour"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="invisible"/>
 
-        <ImageView
-            android:id="@+id/permissionIcon"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="30dp"
-            android:src="@drawable/icon_save"
-            android:tint="?PrimaryTextColour"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/blurView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/permissionTitle"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
-            android:fontFamily="@font/googlesans_bold"
-            android:gravity="center"
-            android:text="Success"
-            android:textAlignment="center"
-            android:textColor="?PrimaryTextColour"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/permissionIcon" />
+            android:layout_height="match_parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:elevation="1dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:clipChildren="false">
 
-        <TextView
-            android:id="@+id/permissionDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="@font/googlesans_medium"
-            android:text="The gradient has been successfully saved."
-            android:textAlignment="center"
-            android:textColor="?SecondaryTextColour"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/permissionTitle" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/holder"
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:alpha="0"
+                    android:background="@drawable/details_background"
+                    android:backgroundTint="?BackgroundColour"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/popupButtonRecycler">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <ProgressBar
+                        android:id="@+id/progressCircle"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="30dp"
+                        android:indeterminateTint="?PrimaryTextColour"
+                        android:visibility="invisible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/button"
-        android:layout_width="190dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="8dp"
-        android:alpha="0"
-        android:background="@drawable/details_background"
-        android:backgroundTint="?ForegroundColour"
-        android:clickable="true"
-        android:focusable="true"
-        android:scaleX="0.8"
-        android:scaleY="0.8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/holder">
+                    <ImageView
+                        android:id="@+id/permissionIcon"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="30dp"
+                        android:src="@drawable/icon_save"
+                        android:tint="?PrimaryTextColour"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/googlesans_bold"
-            android:gravity="center"
-            android:text="Open"
-            android:textAlignment="center"
-            android:textColor="?PrimaryTextColour"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/permissionTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:fontFamily="@font/googlesans_bold"
+                        android:gravity="center"
+                        android:text="Success"
+                        android:textAlignment="center"
+                        android:textColor="?PrimaryTextColour"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/permissionIcon" />
+
+                    <TextView
+                        android:id="@+id/permissionDescription"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginEnd="24dp"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/googlesans_medium"
+                        android:text="The gradient has been successfully saved."
+                        android:textAlignment="center"
+                        android:textColor="?SecondaryTextColour"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/permissionTitle" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/popupButtonRecycler"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:alpha="0"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"
+                    app:layout_constraintEnd_toEndOf="@+id/holder"
+                    app:layout_constraintStart_toStartOf="@+id/holder"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/button"
+                android:layout_width="190dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:alpha="0"
+                android:background="@drawable/details_background"
+                android:backgroundTint="?ForegroundColour"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/holder">
+
+                <TextView
+                    android:id="@+id/text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/googlesans_bold"
+                    android:gravity="center"
+                    android:text="Open"
+                    android:textAlignment="center"
+                    android:textColor="?PrimaryTextColour"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </eightbitlab.com.blurview.BlurView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
