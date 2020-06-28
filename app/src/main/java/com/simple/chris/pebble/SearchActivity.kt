@@ -1,5 +1,6 @@
 package com.simple.chris.pebble
 
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +22,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
+import kotlinx.android.synthetic.main.activity_browse.*
 import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.android.synthetic.main.activity_search.backButton
+import kotlinx.android.synthetic.main.activity_search.bottomSheet
+import kotlinx.android.synthetic.main.activity_search.coordinatorLayout
+import kotlinx.android.synthetic.main.activity_search.resultsText
+import kotlinx.android.synthetic.main.activity_search.titleHolder
+import kotlinx.android.synthetic.main.activity_search.touchBlocker
+import kotlinx.android.synthetic.main.activity_search.wallpaperImageViewer
 import java.lang.Exception
 
 class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener, SearchColourRecyclerViewAdapter.OnButtonListener {
@@ -204,10 +213,10 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         if (stringForCode != "") {
             try {
                 for (count in 0 until allItems.size) {
-                    if (allItems[count]["backgroundName"]!!.replace(" ", "").toLowerCase().contains(stringForCode)) {
+                    if (allItems[count]["gradientName"]!!.replace(" ", "").toLowerCase().contains(stringForCode)) {
                         val found = HashMap<String, String>()
 
-                        found["backgroundName"] = allItems[count]["backgroundName"] as String
+                        found["gradientName"] = allItems[count]["gradientName"] as String
                         found["startColour"] = allItems[count]["startColour"] as String
                         found["endColour"] = allItems[count]["endColour"] as String
                         found["description"] = allItems[count]["description"] as String
@@ -251,10 +260,46 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
     override fun onGradientLongClick(position: Int, view: View) {
         //Long Click functionality
+        Vibration.lowFeedback(this)
+        val gradientScaleX = ObjectAnimator.ofFloat(view, "scaleX", 0.9f)
+        val gradientScaleY = ObjectAnimator.ofFloat(view, "scaleY", 0.9f)
+        gradientScaleX.duration = 125
+        gradientScaleY.duration = 125
+        gradientScaleX.interpolator = DecelerateInterpolator()
+        gradientScaleY.interpolator = DecelerateInterpolator()
+        gradientScaleX.start()
+        gradientScaleY.start()
+
+        Handler().postDelayed({
+            gradientScaleX.reverse()
+            gradientScaleY.reverse()
+
+            RecyclerGrid.gradientGridOnLongClickListener(this, searchResults, position, window.decorView)
+
+            Handler().postDelayed({
+                Vibration.mediumFeedback(this)
+            }, 150)
+        }, 150)
     }
 
     override fun onButtonClick(position: Int, view: View) {
         searchField.setText("")
     }
+
+    /*override fun onGradientTouch(position: Int, view: View, event: MotionEvent) {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            Values.gradientIsTouched = true
+            currentTouchedGradient = view
+            currentTouchedGradientInt = position
+            gradientTouchHandler.postDelayed(gradientTouchRunnable, 500)
+        }
+
+        if (event.action == MotionEvent.ACTION_UP) {
+            if (Values.gradientIsTouched) {
+                gradientTouchHandler.removeCallbacks(gradientTouchRunnable)
+                RecyclerGrid.gradientGridOnClickListener(this, Values.gradientList, view, position)
+            }
+        }
+    }*/
 
 }

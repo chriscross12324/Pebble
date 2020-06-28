@@ -4,12 +4,15 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.module_browse_normal.view.*
+import android.os.Handler
+import android.widget.Toast
 
 /**
  * Creates a gradient modules for each gradient
@@ -48,7 +51,7 @@ class GradientRecyclerViewAdapter internal constructor(var context: Context, pri
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
             val details: HashMap<String, String> = gradients[position]
-            holder.gradientName.text = details["backgroundName"]
+            holder.gradientName.text = details["gradientName"]
             val startColour = Color.parseColor(details["startColour"])
             val endColour = Color.parseColor(details["endColour"])
             UIElements.gradientDrawable(context, true, holder.gradientView, startColour, endColour, 20f)
@@ -61,9 +64,12 @@ class GradientRecyclerViewAdapter internal constructor(var context: Context, pri
     /**
      * Referenced to get the views from the module layout
      */
-    inner class ViewHolder internal constructor(view: View, onGradientListener: OnGradientListener, onGradientLongClickListener: OnGradientLongClickListener) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener {
+    inner class ViewHolder internal constructor(view: View, onGradientListener: OnGradientListener, onGradientLongClickListener: OnGradientLongClickListener) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener/*, View.OnTouchListener*/ {
         var gradientName: TextView = view.gradientName
         var gradientView: ImageView = view.gradient
+        /*init {
+            view.setOnTouchListener(this)
+        }*/
         private val myOnGradientListener = onGradientListener
         private val myOnGradientLongClickListener = onGradientLongClickListener
 
@@ -80,6 +86,30 @@ class GradientRecyclerViewAdapter internal constructor(var context: Context, pri
             myOnGradientLongClickListener.onGradientLongClick(adapterPosition, v as View)
             return true
         }
+
+        /*override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+            val handler = Handler()
+            val runnable = Runnable {
+                Toast.makeText(context, "Long", Toast.LENGTH_SHORT).show()
+                Vibration.strongFeedback(context)
+            }
+            if (event != null) {
+                var isButtonPressed: Boolean
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    isButtonPressed = true
+                    handler.postDelayed(runnable, 2000)
+                } else if (event.action == MotionEvent.ACTION_UP) {
+                    if (isButtonPressed) {
+                        isButtonPressed = false
+                        Toast.makeText(context, "Short", Toast.LENGTH_SHORT).show()
+                        Vibration.lowFeedback(context)
+                        handler.removeCallbacksAndMessages(runnable)
+                    }
+
+                }
+            }
+            return true
+        }*/
 
     }
 

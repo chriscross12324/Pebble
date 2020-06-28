@@ -3,6 +3,7 @@ package com.simple.chris.pebble
 import android.content.Context
 import android.os.Build
 import android.util.TypedValue
+import kotlin.math.abs
 
 object Calculations {
 
@@ -23,6 +24,12 @@ object Calculations {
             return true
         }
         return false
+    }
+
+    fun approximatelyEqual(desiredValue: Float, actualValue: Float, tolerancePercentage: Float) : Boolean {
+        val diff = abs(desiredValue - actualValue)
+        val tolerance = tolerancePercentage / 100 * desiredValue
+        return  diff < tolerance
     }
 
 }

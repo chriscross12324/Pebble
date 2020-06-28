@@ -122,7 +122,7 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
                             val downloadedItem = gradientArray.getJSONObject(i)
 
                             val item = HashMap<String, String>()
-                            item["backgroundName"] = downloadedItem.getString("gradientName")
+                            item["gradientName"] = downloadedItem.getString("gradientName")
                             item["startColour"] = downloadedItem.getString("startColour")
                             item["endColour"] = downloadedItem.getString("endColour")
                             item["description"] = downloadedItem.getString("description")
@@ -227,7 +227,10 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
         when (position) {
             0 -> {
                 if (Values.downloadingGradients) {
-                    UIElements.progressPopupDialogTimed(this, 2000, R.string.dialog_title_eng_connecting, R.string.dialog_body_eng_connecting, null)
+                    UIElement.popupDialog(this, "null", null, R.string.dialog_title_eng_connecting, null, R.string.dialog_body_eng_connecting, null, window.decorView, null)
+                    Handler().postDelayed({
+                        UIElement.popupDialogHider()
+                    }, 1500)
                 } else {
                     if (Values.gradientList.isEmpty()) {
                         UIElement.popupDialog(this, "noConnection", R.drawable.icon_no_connection, R.string.dialog_title_eng_offline_mode, null, R.string.dialog_body_eng_offline_mode, AppHashMaps.offlineModeArrayList(), window.decorView, this)
@@ -238,8 +241,10 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
             }
             1 -> {
                 if (Values.downloadingGradients) {
-                    //Toast.makeText(this, "Downloading Gradients", Toast.LENGTH_SHORT).show()
-                    UIElements.progressPopupDialogTimed(this, 2000, R.string.dialog_title_eng_connecting, R.string.dialog_body_eng_connecting, null)
+                    UIElement.popupDialog(this, "null", null, R.string.dialog_title_eng_connecting, null, R.string.dialog_body_eng_connecting, null, window.decorView, null)
+                    Handler().postDelayed({
+                        UIElement.popupDialogHider()
+                    }, 1500)
                 } else {
                     val createGradientSharedOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, gradientCreatorSharedElementPlaceholder, "gradientCreatorViewer")
                     startActivity(Intent(this, GradientCreator::class.java), createGradientSharedOptions.toBundle())

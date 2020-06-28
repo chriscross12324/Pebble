@@ -41,8 +41,6 @@
     <string name="text_eng_open_gradient">Open</string>
 
     <!-- Dialog Strings English -->
-    <string name="dialog_title_eng_gradient_create">Create Gradient</string>
-    <string name="dialog_body_eng_gradient_create">Welcome to the Gradient Creator, time to create your first gradient! \n\nThe developer has full right to remove gradients if deemed necessary.</string>
     <string name="dialog_title_eng_gradient_create_missing">Missing Info</string>
     <string name="dialog_body_eng_gradient_create_missing">It looks like you’re missing a name for your gradient, add one to submit it…</string>
     <string name="dialog_title_eng_permission_storage">Storage</string>
@@ -62,7 +60,9 @@
     <string name="dialog_body_eng_gradient_exists">That colour combination already exists, try some different colours…</string>
     <string name="dialog_title_eng_submitting">Submitting</string>
     <string name="dialog_body_eng_uploading">Uploading gradient to Pebble</string>
-    <string name="dialog_body_eng_submitted">Save the unique code above to request an edit or removal, your gradient is now available!</string>
+    <string name="dialog_body_eng_submitted">Copy the unique code above to request an edit or removal, your gradient is now available!</string>
+    <string name="dialog_title_eng_gradient_create">Create Gradient</string>
+    <string name="dialog_body_eng_gradient_create">Welcome to the Gradient Creator, time to create your first gradient! \n\nBy creating a gradient you agree to the rules and understand that the developer can remove any gradient if necessary.</string>
 
     <string name="pebble">Pebble</string>
 

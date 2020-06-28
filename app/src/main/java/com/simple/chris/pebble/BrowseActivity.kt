@@ -1,13 +1,17 @@
 package com.simple.chris.pebble
 
+import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.animation.DecelerateInterpolator
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -15,7 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCa
 import kotlinx.android.synthetic.main.activity_browse.*
 
 
-class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener {
+class BrowseActivity : AppCompatActivity(), /*GradientRecyclerViewAdapter.OnGradientTouchListener*/ GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener {
 
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
@@ -137,7 +141,54 @@ class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     }
 
     override fun onGradientLongClick(position: Int, view: View) {
-        Vibration.strongFeedback(this)
-        RecyclerGrid.gradientGridOnLongClickListener(this, Values.gradientList, position, blurLayout)
+        Vibration.lowFeedback(this)
+        val gradientScaleX = ObjectAnimator.ofFloat(view, "scaleX", 0.9f)
+        val gradientScaleY = ObjectAnimator.ofFloat(view, "scaleY", 0.9f)
+        gradientScaleX.duration = 125
+        gradientScaleY.duration = 125
+        gradientScaleX.interpolator = DecelerateInterpolator()
+        gradientScaleY.interpolator = DecelerateInterpolator()
+        gradientScaleX.start()
+        gradientScaleY.start()
+
+        Handler().postDelayed({
+            gradientScaleX.reverse()
+            gradientScaleY.reverse()
+
+            RecyclerGrid.gradientGridOnLongClickListener(this, Values.gradientList, position, window.decorView)
+
+            Handler().postDelayed({
+                Vibration.mediumFeedback(this)
+            }, 150)
+        }, 150)
     }
+
+    /*override fun onGradientTouch(position: Int, view: View, event: MotionEvent) {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            Values.gradientIsTouched = true
+            currentTouchedGradient = view
+            currentTouchedGradientInt = position
+            gradientTouchHandler.postDelayed(gradientTouchRunnable, 500)
+            Toast.makeText(this, "Down", Toast.LENGTH_SHORT).show()
+            xPoint = event.x
+            yPoint = event.y
+        }
+
+        if (event.action == MotionEvent.ACTION_UP) {
+            if (Values.gradientIsTouched) {
+                if (!Calculations.approximatelyEqual(xPoint, event.x, 10f) || !Calculations.approximatelyEqual(yPoint, event.y, 10f)) {
+                    //Input Scroll
+                    Values.gradientIsTouched = false
+                    gradientTouchHandler.removeCallbacks(gradientTouchRunnable)
+                    Toast.makeText(this, "Scroll", Toast.LENGTH_SHORT).show()
+                } else {
+                    //Input Tap
+                    Values.gradientIsTouched = false
+                    gradientTouchHandler.removeCallbacks(gradientTouchRunnable)
+                    RecyclerGrid.gradientGridOnClickListener(this, Values.gradientList, view, position)
+                    Toast.makeText(this, "Up", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }*/
 }

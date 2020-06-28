@@ -28,6 +28,9 @@ object Values {
     var dialogShowAgainTime: Long = 450
     var downloadingGradients = false
 
+    //Changing Values
+    var gradientIsTouched = false
+
     //Settings
     var vibrationEnabled: Boolean = true
     var theme: String = "dark"

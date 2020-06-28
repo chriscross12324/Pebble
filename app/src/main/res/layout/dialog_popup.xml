@@ -5,18 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/dismiss"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="#50000000"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"
         android:layout_width="match_parent"
@@ -25,16 +13,17 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:clipChildren="false"
                 android:elevation="1dp"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:clipChildren="false">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/holder"
@@ -46,10 +35,10 @@
                     android:backgroundTint="?BackgroundColour"
                     android:scaleX="0.8"
                     android:scaleY="0.8"
+                    app:layout_constraintBottom_toTopOf="@id/popupButtonRecycler"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/popupButtonRecycler">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ProgressBar
                         android:id="@+id/progressCircle"
@@ -117,45 +106,11 @@
                     android:alpha="0"
                     android:scaleX="0.8"
                     android:scaleY="0.8"
-                    app:layout_constraintEnd_toEndOf="@+id/holder"
-                    app:layout_constraintStart_toStartOf="@+id/holder"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/button"
-                android:layout_width="190dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:alpha="0"
-                android:background="@drawable/details_background"
-                android:backgroundTint="?ForegroundColour"
-                android:clickable="true"
-                android:focusable="true"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/holder">
-
-                <TextView
-                    android:id="@+id/text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/googlesans_bold"
-                    android:gravity="center"
-                    android:text="Open"
-                    android:textAlignment="center"
-                    android:textColor="?PrimaryTextColour"
-                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintEnd_toEndOf="@+id/holder"
+                    app:layout_constraintStart_toStartOf="@+id/holder" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </eightbitlab.com.blurview.BlurView>
 
 

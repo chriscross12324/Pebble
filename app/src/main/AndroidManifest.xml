@@ -23,7 +23,6 @@
         <activity android:name=".Settings" />
         <activity android:name=".Feedback" />
         <activity android:name=".ColourPicker" />
-        <activity android:name=".CreateGradientActivity" />
         <activity android:name=".GradientCreator"/>
         <activity
             android:name=".GradientDetailsActivity"

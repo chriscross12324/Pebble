@@ -7,9 +7,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Handler
 import android.util.Log
-import android.view.Gravity
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
@@ -19,10 +17,15 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
+import eightbitlab.com.blurview.RenderScriptBlur
 import io.alterac.blurkit.BlurLayout
-import java.lang.Exception
+import kotlinx.android.synthetic.main.dialog_long_press_gradients.*
+import kotlin.Exception
 
 object RecyclerGrid {
+
+    lateinit var gradientPopup: Dialog
 
     fun gradientGrid(context: Context, view: RecyclerView, gradientJSON: ArrayList<HashMap<String, String>>, onGradientListener: GradientRecyclerViewAdapter.OnGradientListener, onGradientLongClickListener: GradientRecyclerViewAdapter.OnGradientLongClickListener) {
         try {
@@ -42,12 +45,12 @@ object RecyclerGrid {
             val details = Intent(context, GradientDetailsActivity::class.java)
             val gradientInfo = gradientJSON[position]
 
-            details.putExtra("gradientName", gradientInfo["backgroundName"])
+            details.putExtra("gradientName", gradientInfo["gradientName"])
             details.putExtra("startColour", gradientInfo["startColour"])
             details.putExtra("endColour", gradientInfo["endColour"])
             details.putExtra("description", gradientInfo["description"])
 
-            val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(context, view.findViewById(R.id.gradient), gradientInfo["backgroundName"] as String)
+            val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(context, view.findViewById(R.id.gradient), gradientInfo["gradientName"] as String)
             context.startActivity(details, activityOptions.toBundle())
         } catch (e: Exception) {
             Log.e("ERR", "pebble.recycler_grid.gradient_grid_on_click_listener: ${e.localizedMessage}")
@@ -55,54 +58,72 @@ object RecyclerGrid {
         }
     }
 
-    fun gradientGridOnLongClickListener(context: Activity, gradientJSON: ArrayList<HashMap<String, String>>, position: Int, blur: BlurLayout) {
-        try {
-            blur.visibility = View.VISIBLE
-            blur.startBlur()
-            blur.invalidate()
-
-            val dialog = Dialog(context, R.style.dialogStyle)
-            dialog.setCancelable(false)
-            dialog.setContentView(R.layout.dialog_long_press_gradients)
-
-            val dismissDialog = dialog.findViewById<ImageView>(R.id.dismissDialog)
-            val holder = dialog.findViewById<ConstraintLayout>(R.id.holder)
-            val gradientView = dialog.findViewById<ImageView>(R.id.gradientPreview)
-            val gradientName = dialog.findViewById<TextView>(R.id.gradientDialogGradientName)
-            val gradientDescription = dialog.findViewById<TextView>(R.id.gradientDialogGradientDescription)
-
-            val gradientInfo = gradientJSON[position]
-            UIElements.gradientDrawable(context, true, gradientView, Color.parseColor(gradientInfo["startColour"]), Color.parseColor(gradientInfo["endColour"]), 15f)
-            gradientName.text = gradientInfo["backgroundName"]
-            gradientDescription.text = gradientInfo["description"]
-
-            val dialogWindow = dialog.window
-            dialogWindow!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
-            dialogWindow.setDimAmount(0f)
-            dialogWindow.setGravity(Gravity.CENTER)
-            dialog.show()
-
-            holder.post {
-                UIElements.viewObjectAnimator(holder, "scaleX", 1f, 350, 100, OvershootInterpolator())
-                UIElements.viewObjectAnimator(holder, "scaleY", 1f, 350, 100, OvershootInterpolator())
-                UIElements.viewObjectAnimator(holder, "alpha", 1f, 100, 100, LinearInterpolator())
+    fun gradientGridOnLongClickListener(context: Activity, gradientJSON: ArrayList<HashMap<String, String>>, position: Int, decorView: View?) {
+        /**
+         * Checks if gradientPopup is visible; hides if it is
+         */
+        /*try {
+            if (gradientPopup.isShowing) {
+                gradientPopup.dismiss()
             }
+        } catch (e: Exception) {
+            Log.e("ERR", "pebble.recycler_grid.gradient_grid_on_long_click_listener: ${e.localizedMessage}")
+        }*/
 
-            dismissDialog.setOnClickListener {
-                UIElements.viewObjectAnimator(holder, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(holder, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(holder, "alpha", 0f, 200, 200, LinearInterpolator())
+        /** Creates gradientPopup **/
+        gradientPopup = Dialog(context, R.style.dialogStyle)
+        gradientPopup.setCancelable(false)
+        gradientPopup.setContentView(R.layout.dialog_long_press_gradients)
 
-                Handler().postDelayed({
-                    dialog.dismiss()
-                    blur.pauseBlur()
-                    blur.visibility = View.GONE
-                }, 450)
+        val dialogWindow: Window = gradientPopup.window!!
+        dialogWindow.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+        dialogWindow.setDimAmount(0.1f)
+        dialogWindow.setGravity(Gravity.CENTER)
+
+        /** Set gradientPopup layout **/
+        val dialogMain = gradientPopup.holder as ConstraintLayout
+        val gradientView = gradientPopup.gradientPreview as ImageView
+        val gradientName = gradientPopup.gradientDialogGradientName as TextView
+        val gradientDescription = gradientPopup.gradientDialogGradientDescription as TextView
+
+        val gradientInfo = gradientJSON[position]
+        UIElements.gradientDrawable(context, true, gradientView, Color.parseColor(gradientInfo["startColour"]), Color.parseColor(gradientInfo["endColour"]), 15f)
+        gradientName.text = gradientInfo["gradientName"]
+        gradientDescription.text = gradientInfo["description"]
+
+        gradientPopup.show()
+
+        /** Animate gradientPopup in **/
+        dialogMain.post {
+            UIElements.viewObjectAnimator(dialogMain, "scaleX", 1f, 350, 100, OvershootInterpolator())
+            UIElements.viewObjectAnimator(dialogMain, "scaleY", 1f, 350, 100, OvershootInterpolator())
+            UIElements.viewObjectAnimator(dialogMain, "alpha", 1f, 100, 100, LinearInterpolator())
+        }
+
+        /** Create blurView **/
+        if (decorView != null) {
+            try {
+                val rootView = decorView.findViewById<ViewGroup>(android.R.id.content)
+                val windowBackground = decorView.background
+
+                gradientPopup.blurView.setupWith(rootView)
+                        .setFrameClearDrawable(windowBackground)
+                        .setBlurAlgorithm(RenderScriptBlur(context))
+                        .setBlurRadius(20f)
+                        .setHasFixedTransformationMatrix(true)
+            } catch (e: Exception) {
+                Log.e("ERR", "pebble.recycler_grid.gradient_grid_on_long_click_listener: ${e.localizedMessage}")
             }
+        }
 
-        } catch (e: Exception){
-            Log.e("ERR", "pebble.recycler_grid.gradient.grid.long.click.listener: ${e.localizedMessage}")
+        gradientPopup.blurView.setOnClickListener {
+            UIElements.viewObjectAnimator(dialogMain, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(dialogMain, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(dialogMain, "alpha", 0f, 200, 200, LinearInterpolator())
+
+            Handler().postDelayed({
+                gradientPopup.dismiss()
+            }, 450)
         }
     }
-
 }

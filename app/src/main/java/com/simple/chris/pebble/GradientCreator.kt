@@ -9,19 +9,10 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.Gravity
 import android.view.View
-import android.view.WindowManager
-import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.view.animation.OvershootInterpolator
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Response
@@ -29,10 +20,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.simple.chris.pebble.Calculations.convertToDP
 import com.simple.chris.pebble.UIElements.viewObjectAnimator
-import io.alterac.blurkit.BlurLayout
 import kotlinx.android.synthetic.main.activity_create_gradient_new.*
-import kotlinx.android.synthetic.main.activity_create_gradient_new.blurLayout
-import kotlinx.android.synthetic.main.activity_gradient_details.*
 import org.apache.commons.lang3.RandomStringUtils
 
 class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.OnButtonListener {
@@ -67,11 +55,9 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
                 Handler().postDelayed({
                     lastStepEnterAnim()
                 }, 800)
-                Toast.makeText(this, "False", Toast.LENGTH_SHORT).show()
             } else {
                 gradientExists = false
                 submitLogic()
-                Toast.makeText(this, "True", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -166,7 +152,10 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
          * Checks if Gradient Creator has been opened before
          */
         if (!Values.hintCreateGradientDismissed) {
-            UIElements.oneButtonDialog(this, R.drawable.icon_apps, R.string.dialog_title_eng_gradient_create, R.string.dialog_body_eng_gradient_create, R.string.text_eng_take_tour, dialogFirstOpenListener)
+            Handler().postDelayed({
+                UIElement.popupDialog(this, "gradientCreator", R.drawable.icon_apps, R.string.dialog_title_eng_gradient_create, null, R.string.dialog_body_eng_gradient_create,
+                        AppHashMaps.createGradientArrayList(), window.decorView, this)
+            }, 1000)
         }
     }
 
@@ -309,7 +298,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
         Values.saveValues(this)
 
         //popupDialog(R.drawable.icon_check, gradientUID, R.string.dialog_body_eng_submitted, R.string.text_eng_exit, dialogCompleteListener)
-        UIElement.popupDialog(this, "gradientSubmitted", R.drawable.icon_check, null, gradientUID ,R.string.dialog_body_eng_submitted, AppHashMaps.gradientSubmittedArrayList(), window.decorView, this)
+        UIElement.popupDialog(this, "gradientSubmitted", R.drawable.icon_check, null, gradientUID, R.string.dialog_body_eng_submitted, AppHashMaps.gradientSubmittedArrayList(), window.decorView, this)
     }
 
     override fun onResume() {
@@ -334,106 +323,26 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
         }
     }
 
-    /*fun progressPopupDialog(title: Int, description: Int, buttonText: Int?, listener: View.OnClickListener?) {
-
-        dialog = Dialog(this, R.style.dialogStyle)
-
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.dialog_popup)
-
-        val holder = dialog.findViewById<ConstraintLayout>(R.id.holder)
-        val progressCircle = dialog.findViewById<ProgressBar>(R.id.progressCircle)
-        val permissionIcon = dialog.findViewById<ImageView>(R.id.permissionIcon)
-        val permissionTitle = dialog.findViewById<TextView>(R.id.permissionTitle)
-        val permissionDescription = dialog.findViewById<TextView>(R.id.permissionDescription)
-        val button = dialog.findViewById<ConstraintLayout>(R.id.button)
-        val buttonTextView = dialog.findViewById<TextView>(R.id.text)
-
-        progressCircle.visibility = View.VISIBLE
-        permissionIcon.visibility = View.INVISIBLE
-        permissionTitle.setText(title)
-        permissionDescription.setText(description)
-
-        val dialogWindow = dialog.window
-        dialogWindow!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
-        dialogWindow.setDimAmount(0f)
-        dialogWindow.setGravity(Gravity.CENTER)
-        dialog.show()
-
-        holder.post {
-            viewObjectAnimator(holder, "scaleX", 1f, 350, 100, OvershootInterpolator())
-            viewObjectAnimator(holder, "scaleY", 1f, 350, 100, OvershootInterpolator())
-            viewObjectAnimator(holder, "alpha", 1f, 100, 100, LinearInterpolator())
-
-            if (buttonText != null) {
-                viewObjectAnimator(button, "scaleX", 1f, 350, 100, OvershootInterpolator())
-                viewObjectAnimator(button, "scaleY", 1f, 350, 100, OvershootInterpolator())
-                viewObjectAnimator(button, "alpha", 1f, 100, 100, LinearInterpolator())
-                buttonTextView.setText(buttonText)
-            }
-
-        }
-
-        if (listener != null) {
-            button.setOnClickListener(listener)
-        }
-    }*/
-
-    private val dialogFirstOpenListener = View.OnClickListener {
-        UIElements.oneButtonHider(this)
-        Values.hintCreateGradientDismissed = true
-        Values.saveValues(this)
-    }
-
-    private val dialogExistsListener = View.OnClickListener {
-        val holder = dialog.findViewById<ConstraintLayout>(R.id.holder)
-        val button = dialog.findViewById<ConstraintLayout>(R.id.button)
-
-        viewObjectAnimator(holder, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
-        viewObjectAnimator(holder, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
-        viewObjectAnimator(holder, "alpha", 0f, 200, 200, LinearInterpolator())
-
-        viewObjectAnimator(button, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
-        viewObjectAnimator(button, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
-        viewObjectAnimator(button, "alpha", 0f, 200, 200, LinearInterpolator())
-
-        Handler().postDelayed({
-            dialog.dismiss()
-            blurLayout.pauseBlur()
-            blurLayout.visibility = View.GONE
-            lastStepExitAnim(false)
-            Handler().postDelayed({
-                firstStepEnterAnim()
-                submitStep = false
-            }, 950)
-        }, 450)
-    }
-
-    private val dialogCompleteListener = View.OnClickListener {
-        val holder = dialog.findViewById<ConstraintLayout>(R.id.holder)
-        val button = dialog.findViewById<ConstraintLayout>(R.id.button)
-
-        viewObjectAnimator(holder, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
-        viewObjectAnimator(holder, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
-        viewObjectAnimator(holder, "alpha", 0f, 200, 200, LinearInterpolator())
-
-        viewObjectAnimator(button, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
-        viewObjectAnimator(button, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
-        viewObjectAnimator(button, "alpha", 0f, 200, 200, LinearInterpolator())
-
-        Handler().postDelayed({
-            dialog.dismiss()
-            blurLayout.pauseBlur()
-            blurLayout.visibility = View.GONE
-            lastStepExitAnim(true)
-            Handler().postDelayed({
-                onBackPressed()
-            }, 850)
-        }, 450)
-    }
-
     override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
         when (popupName) {
+            "gradientCreator" -> {
+                when (position) {
+                    0 -> {
+                        UIElement.popupDialogHider()
+                        Values.hintCreateGradientDismissed = true
+                        Values.saveValues(this)
+                    }
+                    1 -> {
+                        UIElement.popupDialogHider()
+                        Handler().postDelayed({
+                            firstStepExitAnim(true)
+                            Handler().postDelayed({
+                                onBackPressed()
+                            }, 850)
+                        }, Values.dialogShowAgainTime)
+                    }
+                }
+            }
             "missingInfo" -> {
                 UIElement.popupDialogHider()
             }

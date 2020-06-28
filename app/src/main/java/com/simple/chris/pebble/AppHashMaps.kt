@@ -84,6 +84,21 @@ object AppHashMaps {
         return setWallpaperArray
     }
 
+    fun createGradientArrayList() : ArrayList<HashMap<String, Int>> {
+        val missingInfoArray = ArrayList<HashMap<String, Int>>()
+        val makeAnotherHash = HashMap<String, Int>()
+        makeAnotherHash["buttonTitle"] = R.string.text_eng_i_understand
+        makeAnotherHash["buttonIcon"] = R.drawable.icon_check
+        missingInfoArray.add(makeAnotherHash)
+
+        val backHash = HashMap<String, Int>()
+        backHash["buttonTitle"] = R.string.text_eng_cancel
+        backHash["buttonIcon"] = R.drawable.icon_close
+        missingInfoArray.add(backHash)
+
+        return missingInfoArray
+    }
+
     fun missingInfoArrayList() : ArrayList<HashMap<String, Int>> {
         val missingInfoArray = ArrayList<HashMap<String, Int>>()
         val backHash = HashMap<String, Int>()
