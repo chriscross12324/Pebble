@@ -58,6 +58,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
             } else {
                 gradientExists = false
                 submitLogic()
+                nextStepButton.isEnabled = false
             }
         }
 
@@ -345,6 +346,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
             }
             "missingInfo" -> {
                 UIElement.popupDialogHider()
+                nextStepButton.isEnabled = true
             }
             "gradientExists" -> {
                 UIElement.popupDialogHider()
@@ -353,6 +355,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
                     Handler().postDelayed({
                         firstStepEnterAnim()
                         submitStep = false
+                        nextStepButton.isEnabled = true
                     }, 950)
                 }, 450)
             }

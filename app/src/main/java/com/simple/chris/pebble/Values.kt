@@ -67,6 +67,7 @@ object Values {
         editor.putString("gradientCreatorStartColour", gradientCreatorStartColour)
         editor.putString("gradientCreatorEndColour", gradientCreatorEndColour)
         editor.putString("gradientCreatorDescription", gradientCreatorDescription)
+        editor.putBoolean("hintCreateGradientDismissed", hintCreateGradientDismissed)
         editor.apply()
     }
 
@@ -88,6 +89,7 @@ object Values {
         gradientCreatorStartColour = sharedPrefs.getString("gradientCreatorStartColour", "#acd77b")!!
         gradientCreatorEndColour = sharedPrefs.getString("gradientCreatorEndColour", "#74d77b")!!
         gradientCreatorDescription = sharedPrefs.getString("gradientCreatorDescription", "")!!
+        hintCreateGradientDismissed = sharedPrefs.getBoolean("hintCreateGradientDismissed", false)
     }
 
     /*fun filterBrokenGradients() {
