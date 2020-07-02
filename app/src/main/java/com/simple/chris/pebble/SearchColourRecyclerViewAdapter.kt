@@ -50,12 +50,12 @@ class SearchColourRecyclerViewAdapter internal constructor(var context: Context,
         }
 
         override fun onClick(v: View?) {
-            myOnButtonListener.onButtonClick(adapterPosition, v as View)
+            myOnButtonListener.onButtonClick(adapterPosition, v as View, buttons[adapterPosition]["buttonColour"] as String)
         }
     }
 
     interface OnButtonListener {
-        fun onButtonClick(position: Int, view: View)
+        fun onButtonClick(position: Int, view: View, buttonColour: String)
     }
 
 }

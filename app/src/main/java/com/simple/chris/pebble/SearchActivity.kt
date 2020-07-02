@@ -14,7 +14,6 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
-import android.widget.HorizontalScrollView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
-import kotlinx.android.synthetic.main.activity_browse.*
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.activity_search.backButton
 import kotlinx.android.synthetic.main.activity_search.bottomSheet
@@ -31,7 +29,9 @@ import kotlinx.android.synthetic.main.activity_search.resultsText
 import kotlinx.android.synthetic.main.activity_search.titleHolder
 import kotlinx.android.synthetic.main.activity_search.touchBlocker
 import kotlinx.android.synthetic.main.activity_search.wallpaperImageViewer
-import java.lang.Exception
+import kotlin.Exception
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener, SearchColourRecyclerViewAdapter.OnButtonListener {
 
@@ -282,24 +282,138 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         }, 150)
     }
 
-    override fun onButtonClick(position: Int, view: View) {
+    override fun onButtonClick(position: Int, view: View, buttonColour: String) {
         searchField.setText("")
+        Toast.makeText(this, buttonColour, Toast.LENGTH_SHORT).show()
+        searchByColour(buttonColour)
     }
 
-    /*override fun onGradientTouch(position: Int, view: View, event: MotionEvent) {
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            Values.gradientIsTouched = true
-            currentTouchedGradient = view
-            currentTouchedGradientInt = position
-            gradientTouchHandler.postDelayed(gradientTouchRunnable, 500)
-        }
+    /**
+     * searchByColour System
+     */
+    private fun searchByColour(baseColour: String) {
+        //Search prerequisites
+        searchResults.clear()
+        var foundGradients = 0
 
-        if (event.action == MotionEvent.ACTION_UP) {
-            if (Values.gradientIsTouched) {
-                gradientTouchHandler.removeCallbacks(gradientTouchRunnable)
-                RecyclerGrid.gradientGridOnClickListener(this, Values.gradientList, view, position)
+        try {
+            for (count in 0 until allItems.size) {
+                if (searchByColourSystem(baseColour, allItems[count]["startColour"] as String, allItems[count]["endColour"] as String)) {
+                    val found = HashMap<String, String>()
+
+                    found["gradientName"] = allItems[count]["gradientName"] as String
+                    found["startColour"] = allItems[count]["startColour"] as String
+                    found["endColour"] = allItems[count]["endColour"] as String
+                    found["description"] = allItems[count]["description"] as String
+
+                    searchResults.add(found)
+                    foundGradients++
+                }
             }
+
+            //After search, set the view
+            RecyclerGrid.gradientGrid(this, searchResultsRecycler, searchResults, this, this)
+            resultsText.text = "$foundGradients results found"
+            //Toast.makeText(this, searchByColourSystem(baseColour, "#ffffff"), Toast.LENGTH_SHORT).show()
+            /*searchByColourSystem(baseColour, "#eb6134")*/
+
+        } catch (e: Exception) {
+            Log.e("ERR", "pebble.search_activity.search_system: ${e.localizedMessage}")
         }
+    }
+
+    /*private fun searchByColourSystem(baseHex: String, colourGiven: String) : Boolean{
+        try {
+            //Remove # from hex
+            val base = baseHex.replace("#", "")
+            val given = colourGiven.replace("#", "")
+
+            //Get RGB in values of baseHex
+            val baseR = Integer.valueOf(base.substring(0, 2), 16)
+            val baseG = Integer.valueOf(base.substring(2, 4), 16)
+            val baseB = Integer.valueOf(base.substring(4, 6), 16)
+
+            //Get RGB in values of colourGiven
+            val givenR = Integer.valueOf(given.substring(0, 2), 16)
+            val givenG = Integer.valueOf(given.substring(2, 4), 16)
+            val givenB = Integer.valueOf(given.substring(4, 6), 16)
+
+            //Calculate different between base & given
+            var diffR: Double = 255 - abs(baseR - givenR).toDouble()
+            var diffG: Double = 255 - abs(baseG - givenG).toDouble()
+            var diffB: Double = 255 - abs(baseB - givenB).toDouble()
+
+            //Limit RGB values between 0 & 1
+            diffR /= 255
+            diffG /= 255
+            diffB /= 255
+
+            Log.e("baseR", "$baseR")
+            Log.e("baseG", "$baseG")
+            Log.e("baseB", "$baseB")
+
+            Log.e("givenR", "$givenR")
+            Log.e("givenG", "$givenG")
+            Log.e("givenB", "$givenB")
+
+            Log.e("diffR", "$diffR")
+            Log.e("diffG", "$diffG")
+            Log.e("diffB", "$diffB")
+
+            //Log.e("INFO", "${((diffR + diffG + diffB) / 3).roundToInt()}")
+            return ((diffR + diffG + diffB) / 3) > 0.7
+        } catch (e: Exception) {
+            Log.e("ERR", e.localizedMessage)
+        }
+        return false
     }*/
 
+    private fun searchByColourSystem(baseHex: String, startColour: String, endColour: String) : Boolean{
+        try {
+            //Remove # from hex
+            val base = baseHex.replace("#", "")
+            val start = startColour.replace("#", "")
+            val end = endColour.replace("#", "")
+
+            //Get average of two colours
+            val startR = Integer.valueOf(start.substring(0, 2), 16)
+            val startG = Integer.valueOf(start.substring(2, 4), 16)
+            val startB = Integer.valueOf(start.substring(4, 6), 16)
+
+            val endR = Integer.valueOf(end.substring(0, 2), 16)
+            val endG = Integer.valueOf(end.substring(2, 4), 16)
+            val endB = Integer.valueOf(end.substring(4, 6), 16)
+
+            val avgR = (startR + (endR - startR) * 0.5).roundToInt().toString(16).padStart(2, '0')
+            val avgG = (startG + (endG - startG) * 0.5).roundToInt().toString(16).padStart(2, '0')
+            val avgB = (startB + (endB - startB) * 0.5).roundToInt().toString(16).padStart(2, '0')
+
+            val given = avgR + avgG + avgB
+
+            //Get RGB in values of baseHex
+            val baseR = Integer.valueOf(base.substring(0, 2), 16)
+            val baseG = Integer.valueOf(base.substring(2, 4), 16)
+            val baseB = Integer.valueOf(base.substring(4, 6), 16)
+
+            //Get RGB in values of colourGiven
+            val givenR = Integer.valueOf(given.substring(0, 2), 16)
+            val givenG = Integer.valueOf(given.substring(2, 4), 16)
+            val givenB = Integer.valueOf(given.substring(4, 6), 16)
+
+            //Calculate different between base & given
+            var diffR: Double = 255 - abs(baseR - givenR).toDouble()
+            var diffG: Double = 255 - abs(baseG - givenG).toDouble()
+            var diffB: Double = 255 - abs(baseB - givenB).toDouble()
+
+            //Limit RGB values between 0 & 1
+            diffR /= 255
+            diffG /= 255
+            diffB /= 255
+
+            return ((diffR + diffG + diffB) / 3) > 0.8
+        } catch (e: Exception) {
+            Log.e("ERR", e.localizedMessage)
+        }
+        return false
+    }
 }
