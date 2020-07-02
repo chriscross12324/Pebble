@@ -7,11 +7,8 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
-import android.view.ViewConfiguration
 import android.view.animation.DecelerateInterpolator
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -19,7 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCa
 import kotlinx.android.synthetic.main.activity_browse.*
 
 
-class BrowseActivity : AppCompatActivity(), /*GradientRecyclerViewAdapter.OnGradientTouchListener*/ GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener {
+class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener {
 
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
@@ -84,7 +81,7 @@ class BrowseActivity : AppCompatActivity(), /*GradientRecyclerViewAdapter.OnGrad
         }
         UIElements.bottomSheetPeekHeightAnim(bottomSheetBehavior, bottomSheetPeekHeight, 300, 0, DecelerateInterpolator(3f))
 
-        bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetCallback() {
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
             }
 
@@ -162,33 +159,4 @@ class BrowseActivity : AppCompatActivity(), /*GradientRecyclerViewAdapter.OnGrad
             }, 150)
         }, 150)
     }
-
-    /*override fun onGradientTouch(position: Int, view: View, event: MotionEvent) {
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            Values.gradientIsTouched = true
-            currentTouchedGradient = view
-            currentTouchedGradientInt = position
-            gradientTouchHandler.postDelayed(gradientTouchRunnable, 500)
-            Toast.makeText(this, "Down", Toast.LENGTH_SHORT).show()
-            xPoint = event.x
-            yPoint = event.y
-        }
-
-        if (event.action == MotionEvent.ACTION_UP) {
-            if (Values.gradientIsTouched) {
-                if (!Calculations.approximatelyEqual(xPoint, event.x, 10f) || !Calculations.approximatelyEqual(yPoint, event.y, 10f)) {
-                    //Input Scroll
-                    Values.gradientIsTouched = false
-                    gradientTouchHandler.removeCallbacks(gradientTouchRunnable)
-                    Toast.makeText(this, "Scroll", Toast.LENGTH_SHORT).show()
-                } else {
-                    //Input Tap
-                    Values.gradientIsTouched = false
-                    gradientTouchHandler.removeCallbacks(gradientTouchRunnable)
-                    RecyclerGrid.gradientGridOnClickListener(this, Values.gradientList, view, position)
-                    Toast.makeText(this, "Up", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }*/
 }

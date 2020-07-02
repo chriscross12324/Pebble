@@ -16,24 +16,16 @@ import android.os.Handler
 import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
-import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
-import android.view.animation.LinearInterpolator
-import android.view.animation.OvershootInterpolator
-import android.widget.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.simple.chris.pebble.Calculations.convertToDP
-import io.alterac.blurkit.BlurLayout
 import kotlin.math.roundToInt
-import eightbitlab.com.blurview.BlurView
-import eightbitlab.com.blurview.RenderScriptBlur
-import kotlinx.android.synthetic.main.dialog_popup.*
 
 object UIElements {
 
@@ -60,7 +52,7 @@ object UIElements {
             true -> {
                 view!!.background = gradientDrawable
                 if (Calculations.isAndroidPOrGreater()) {
-                    view!!.outlineSpotShadowColor = endColour
+                    view.outlineSpotShadowColor = endColour
                 }
             }
             false -> {

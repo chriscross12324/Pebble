@@ -383,13 +383,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <io.alterac.blurkit.BlurLayout
-        android:id="@+id/blurLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="15dp"
-        app:blk_blurRadius="10"
-        android:visibility="gone"
-        app:blk_fps="0"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

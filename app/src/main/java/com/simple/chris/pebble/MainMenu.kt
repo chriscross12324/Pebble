@@ -66,19 +66,22 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
     }
 
     private fun checkConnection() {
-        if (Connection.isNetworkAvailable(this)) {
-            if (Connection.isNetworkTypeData(this)) {
+        when (Connection.getConnectionType(this)) {
+            0 -> {
+                UIElement.popupDialog(this, "noConnection", R.drawable.icon_warning, R.string.dialog_title_eng_no_connection, null,
+                        R.string.dialog_body_eng_no_connection, AppHashMaps.noConnectionArrayList(), window.decorView, this)
+            }
+            1 -> {
+                getGradients()
+            }
+            2 -> {
                 if (Values.askMobileData) {
-                    //showDataWarningDialog()
-                    UIElement.popupDialog(this, "askMobile", R.drawable.icon_warning, R.string.dialog_title_eng_data_warning, null, R.string.dialog_body_eng_data_warning, AppHashMaps.dataWarningArrayList(), window.decorView, this)
+                    UIElement.popupDialog(this, "askMobile", R.drawable.icon_warning, R.string.dialog_title_eng_data_warning, null,
+                            R.string.dialog_body_eng_data_warning, AppHashMaps.dataWarningArrayList(), window.decorView, this)
                 } else {
                     getGradients()
                 }
-            } else {
-                getGradients()
             }
-        } else {
-            UIElement.popupDialog(this, "noConnection", R.drawable.icon_warning, R.string.dialog_title_eng_no_connection, null, R.string.dialog_body_eng_no_connection, AppHashMaps.noConnectionArrayList(), window.decorView, this)
         }
     }
 

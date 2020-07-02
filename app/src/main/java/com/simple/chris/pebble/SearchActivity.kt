@@ -82,7 +82,7 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     private fun bottomSheet() {
         val bottomSheetBehavior: BottomSheetBehavior<CardView> = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.peekHeight = bottomSheetPeekHeight
-        bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetCallback() {
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 titleHolder.translationY = ((screenHeight * -0.333 * slideOffset + screenHeight * 0.333 - (titleHolder.measuredHeight)) / 2).toFloat()
             }

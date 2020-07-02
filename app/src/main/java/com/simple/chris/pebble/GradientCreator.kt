@@ -21,6 +21,7 @@ import com.android.volley.toolbox.Volley
 import com.simple.chris.pebble.Calculations.convertToDP
 import com.simple.chris.pebble.UIElements.viewObjectAnimator
 import kotlinx.android.synthetic.main.activity_create_gradient_new.*
+import kotlinx.android.synthetic.main.activity_feedback.*
 import org.apache.commons.lang3.RandomStringUtils
 
 class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.OnButtonListener {
@@ -57,7 +58,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
                 }, 800)
             } else {
                 gradientExists = false
-                submitLogic()
+                checkConnection()
                 nextStepButton.isEnabled = false
             }
         }
@@ -302,6 +303,23 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
         UIElement.popupDialog(this, "gradientSubmitted", R.drawable.icon_check, null, gradientUID, R.string.dialog_body_eng_submitted, AppHashMaps.gradientSubmittedArrayList(), window.decorView, this)
     }
 
+    private fun checkConnection() {
+        when (Connection.getConnectionType(this)) {
+            0 -> {
+                UIElement.popupDialog(this, "noConnection", R.drawable.icon_warning, R.string.dialog_title_eng_no_connection, null,
+                        R.string.dialog_body_eng_no_connection, AppHashMaps.noConnectionArrayList(), window.decorView, this)
+            }
+            1,2 -> {
+                if (Values.gradientList.isEmpty()) {
+                    UIElement.popupDialog(this, "gradientsNotDownloaded", R.drawable.icon_warning, R.string.dialog_title_eng_gradient_list_empty, null,
+                            R.string.dialog_body_eng_gradient_list_empty, AppHashMaps.gradientArrayNotUpdated(), window.decorView, this)
+                } else {
+                    submitLogic()
+                }
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
 
@@ -324,6 +342,9 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
         }
     }
 
+    /**
+     * Button listeners for popupDialog
+     */
     override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
         when (popupName) {
             "gradientCreator" -> {
@@ -374,7 +395,38 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
                                 onBackPressed()
                             }, 850)
                         }, Values.dialogShowAgainTime)
-
+                    }
+                }
+            }
+            "noConnection" -> {
+                when (position) {
+                    0 -> {
+                        UIElement.popupDialogHider()
+                        Handler().postDelayed({
+                            checkConnection()
+                        }, Values.dialogShowAgainTime)
+                    }
+                    1 -> {
+                        UIElement.popupDialogHider()
+                        nextStepButton.isEnabled = true
+                    }
+                }
+            }
+            "gradientsNotDownloaded" -> {
+                when (position) {
+                    0 -> {
+                        UIElement.popupDialogHider()
+                        Values.justSubmitted = true
+                        Handler().postDelayed({
+                            lastStepExitAnim(true)
+                            Handler().postDelayed({
+                                onBackPressed()
+                            }, 850)
+                        }, Values.dialogShowAgainTime)
+                    }
+                    1 -> {
+                        UIElement.popupDialogHider()
+                        submitButton.isEnabled = true
                     }
                 }
             }

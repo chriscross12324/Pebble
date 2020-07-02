@@ -270,13 +270,4 @@
         android:elevation="21dp"
         android:focusable="true"
         android:visibility="gone" />
-
-    <io.alterac.blurkit.BlurLayout
-        android:id="@+id/blurLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="14dp"
-        android:visibility="gone"
-        app:blk_blurRadius="10"
-        app:blk_fps="0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

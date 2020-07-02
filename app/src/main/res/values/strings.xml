@@ -63,6 +63,8 @@
     <string name="dialog_body_eng_submitted">Copy the unique code above to request an edit or removal, your gradient is now available!</string>
     <string name="dialog_title_eng_gradient_create">Create Gradient</string>
     <string name="dialog_body_eng_gradient_create">Welcome to the Gradient Creator, time to create your first gradient! \n\nBy creating a gradient you agree to the rules and understand that the developer can remove any gradient if necessary.</string>
+    <string name="dialog_title_eng_gradient_list_empty">Offline Mode</string>
+    <string name="dialog_body_eng_gradient_list_empty">Pebble just left Offline Mode and needs to download all the gradients; this is to make sure a gradient doesn\'t already exist.</string>
 
     <string name="pebble">Pebble</string>
 

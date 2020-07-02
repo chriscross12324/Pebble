@@ -17,9 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
 import eightbitlab.com.blurview.RenderScriptBlur
-import io.alterac.blurkit.BlurLayout
 import kotlinx.android.synthetic.main.dialog_long_press_gradients.*
 import kotlin.Exception
 

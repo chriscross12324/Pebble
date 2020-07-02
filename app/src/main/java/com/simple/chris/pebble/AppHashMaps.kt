@@ -173,4 +173,19 @@ object AppHashMaps {
 
         return gradientSavedArray
     }
+
+    fun gradientArrayNotUpdated() : ArrayList<HashMap<String, Int>> {
+        val gradientSavedArray = ArrayList<HashMap<String, Int>>()
+        val openLocationHash = HashMap<String, Int>()
+        openLocationHash["buttonTitle"] = R.string.dialog_button_eng_go_online
+        openLocationHash["buttonIcon"] = R.drawable.icon_reload
+        gradientSavedArray.add(openLocationHash)
+
+        val closePopupHash = HashMap<String, Int>()
+        closePopupHash["buttonTitle"] = R.string.text_eng_cancel
+        closePopupHash["buttonIcon"] = R.drawable.icon_close
+        gradientSavedArray.add(closePopupHash)
+
+        return gradientSavedArray
+    }
 }
