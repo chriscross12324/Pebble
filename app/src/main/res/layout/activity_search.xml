@@ -32,6 +32,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:elevation="20dp"
+        android:src="@drawable/icon_wifi_green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/titleHolder"
         android:layout_width="match_parent"
@@ -104,6 +116,7 @@
                     android:paddingBottom="98dp"
                     android:requiresFadingEdge="none"
                     android:visibility="visible"
+                    android:layoutAnimation="@anim/recycler_animation"
                     app:layout_anchor="@+id/bottomSheet"
                     app:layout_anchorGravity="center" />
 
@@ -112,20 +125,6 @@
         </androidx.cardview.widget.CardView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchColourRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="43dp"
-        android:layout_marginBottom="16dp"
-        android:clipToPadding="false"
-        android:elevation="10dp"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/searchFieldHolder"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/backButton"
@@ -155,15 +154,25 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/details_background"
         android:backgroundTint="?ForegroundColour"
         android:elevation="10dp"
         android:transitionName="searchBackground"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/searchByColourButton"
         app:layout_constraintStart_toEndOf="@+id/backButton">
+
+        <ImageView
+            android:id="@+id/iconText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:src="@drawable/icon_text"
+            android:tint="?SecondaryTextColour"
+            android:visibility="gone"
+            android:alpha="0"/>
 
         <EditText
             android:id="@+id/searchField"
@@ -183,6 +192,50 @@
             android:textColorHint="?SecondaryTextColour"
             android:transitionName="searchText" />
     </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/searchByColourButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
+        android:clickable="true"
+        app:cardElevation="10dp"
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="?ForegroundColour"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/searchByColourCircle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="12dp"
+                android:src="@drawable/icon_colour_wheel"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchColourRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0"
+                android:clipToPadding="false"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
 
     <View
         android:id="@+id/touchBlocker"

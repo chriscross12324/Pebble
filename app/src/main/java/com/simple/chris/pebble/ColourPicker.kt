@@ -1,6 +1,7 @@
 package com.simple.chris.pebble
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
+import android.view.View
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
@@ -16,6 +18,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_browse.*
 import kotlinx.android.synthetic.main.layout_colour_picker.*
 import java.lang.Exception
 import java.nio.file.WatchEvent
@@ -252,5 +255,24 @@ class ColourPicker : AppCompatActivity() {
             finish()
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }, 950)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        /**
+         * Checks if app settings unloaded during pause
+         */
+        if (!Values.valuesLoaded) {
+            startActivity(Intent(this, SplashScreen::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            finish()
+        } else {
+            when (Values.currentActivity) {
+                else -> {
+                    Values.currentActivity = "ColourPicker"
+                }
+            }
+            Values.saveValues(this)
+        }
     }
 }

@@ -92,6 +92,21 @@ object UIElements {
         }, delay)
     }
 
+    fun viewWidthAnimator(layout: View, startValue: Float, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
+        Handler().postDelayed({
+            val valueAnimator = ValueAnimator.ofInt(startValue.roundToInt(), endValue.roundToInt())
+            valueAnimator.addUpdateListener {
+                val value = it.animatedValue as Int
+                val layoutParams = layout.layoutParams
+                layoutParams.width = value
+                layout.layoutParams = layoutParams
+            }
+            valueAnimator.interpolator = interpolator
+            valueAnimator.duration = duration
+            valueAnimator.start()
+        }, delay)
+    }
+
     fun constraintLayoutElevationAnimator(layout: ConstraintLayout, startElevation: Float, endElevation: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
         Handler().postDelayed({
             val valueAnimator = ValueAnimator.ofFloat(startElevation, endElevation)

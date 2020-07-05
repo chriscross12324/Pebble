@@ -63,6 +63,7 @@ class ActivityPermissions : AppCompatActivity() {
                 Values.firstStart = false
                 startActivity(Intent(this, MainMenu::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                networkDialog.dismiss()
                 finish()
             }
         }

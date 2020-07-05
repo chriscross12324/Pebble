@@ -3,7 +3,7 @@ package com.simple.chris.pebble
 import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -11,27 +11,20 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import kotlinx.android.synthetic.main.activity_search.*
-import kotlinx.android.synthetic.main.activity_search.backButton
-import kotlinx.android.synthetic.main.activity_search.bottomSheet
-import kotlinx.android.synthetic.main.activity_search.coordinatorLayout
-import kotlinx.android.synthetic.main.activity_search.resultsText
-import kotlinx.android.synthetic.main.activity_search.titleHolder
-import kotlinx.android.synthetic.main.activity_search.touchBlocker
-import kotlinx.android.synthetic.main.activity_search.wallpaperImageViewer
-import kotlin.Exception
 import kotlin.math.abs
-import kotlin.math.roundToInt
 
 class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener, SearchColourRecyclerViewAdapter.OnButtonListener {
 
@@ -43,6 +36,7 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     var screenHeight = 0
     var bottomSheetPeekHeight = 0
     var colourPickerAnimating = false
+    var colourPickerExpanded = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +50,13 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             getHeights()
             bottomSheet()
             searchColourButtons()
+            /*val gradientStrokeShader = SweepGradient((searchByColourCircle.width/2).toFloat(), (searchByColourCircle.height/ 2).toFloat(), intArrayOf(Color.parseColor("#f00000"), Color.parseColor("#ffff00"), Color.parseColor("#00ff00"), Color.parseColor("#00ffff"), Color.parseColor("#0000ff"), Color.parseColor("#ff00ff"), Color.parseColor("#f00000")), null)
+            val bitmap = Bitmap.createBitmap((searchByColourCircle.width/2), (searchByColourCircle.height/ 2), Bitmap.Config.ARGB_8888) as Bitmap
+            val paint = Paint()
+            paint.shader = gradientStrokeShader
+            val canvas = Canvas(bitmap)
+            canvas.drawCircle((searchByColourCircle.width/2).toFloat(), (searchByColourCircle.height/2).toFloat(), Calculations.convertToDP(this, 5f), paint)
+            searchByColourCircle.setImageBitmap(bitmap)*/
         }
 
         //Initiate searchResultsRecycler
@@ -67,6 +68,50 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             touchBlocker.visibility = View.VISIBLE
             onBackPressed()
         }
+
+        /*searchByColourCircle.post {
+            val gradientStrokeShader = SweepGradient((searchByColourCircle.width/2).toFloat(), (searchByColourCircle.height/2).toFloat(), intArrayOf(Color.parseColor("#F44336"), Color.parseColor("#FF9800"), Color.parseColor("#FFEB3B"), Color.parseColor("#4CAF50"), Color.parseColor("#2196F3")), null)
+            val rainbowCircle = Bitmap.createBitmap(searchByColourCircle.width, searchByColourCircle.height, Bitmap.Config.ARGB_8888)
+            val rainbowCanvas = Canvas(rainbowCircle)
+            val rainbowPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+            rainbowPaint.shader = gradientStrokeShader
+            rainbowCanvas.drawCircle((searchByColourCircle.width/2).toFloat(), (searchByColourCircle.width/2).toFloat(), Calculations.convertToDP(this, 15f), rainbowPaint)
+            searchByColourCircle.setImageBitmap(rainbowCircle)
+        }*/
+
+        searchByColourButton.setOnClickListener {
+            if (!colourPickerExpanded) {
+                colourPickerExpanded = true
+                val colourPickerButtonExpandedSize = (Calculations.screenMeasure(this, "width") - Calculations.convertToDP(this, 180f))
+                UIElements.viewWidthAnimator(searchByColourButton, searchByColourButton.width.toFloat(), colourPickerButtonExpandedSize, 500, 100, DecelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(searchField, "alpha", 0f, 150, 0, LinearInterpolator())
+                UIElements.viewVisibility(searchField, View.GONE, 150)
+                UIElements.viewObjectAnimator(iconText, "alpha", 1f, 150, 50, LinearInterpolator())
+                UIElements.viewVisibility(iconText, View.VISIBLE, 150)
+
+                UIElements.viewObjectAnimator(searchByColourCircle, "alpha", 0f, 150, 0, LinearInterpolator())
+                UIElements.viewVisibility(searchByColourCircle, View.GONE, 150)
+                UIElements.viewObjectAnimator(searchColourRecycler, "alpha", 1f, 150, 100, LinearInterpolator())
+                UIElements.viewVisibility(searchColourRecycler, View.VISIBLE, 150)
+            }
+        }
+
+        searchFieldHolder.setOnClickListener {
+            if (colourPickerExpanded) {
+                colourPickerExpanded = false
+                UIElements.viewWidthAnimator(searchByColourButton, searchByColourButton.width.toFloat(), Calculations.convertToDP(this, 50f), 500, 100, DecelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(searchField, "alpha", 1f, 150, 50, LinearInterpolator())
+                UIElements.viewVisibility(searchField, View.VISIBLE, 150)
+                UIElements.viewObjectAnimator(iconText, "alpha", 0f, 150, 0, LinearInterpolator())
+                UIElements.viewVisibility(iconText, View.GONE, 150)
+
+                UIElements.viewObjectAnimator(searchByColourCircle, "alpha", 1f, 150, 100, LinearInterpolator())
+                UIElements.viewVisibility(searchByColourCircle, View.VISIBLE, 150)
+                UIElements.viewObjectAnimator(searchColourRecycler, "alpha", 0f, 150, 0, LinearInterpolator())
+                UIElements.viewVisibility(searchColourRecycler, View.GONE, 150)
+            }
+        }
+
     }
 
     private fun getHeights() {
@@ -91,7 +136,7 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             }
         })
 
-        searchResultsRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        /*searchResultsRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!colourPickerAnimating) {
@@ -108,7 +153,7 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
                     }, 250)
                 }
             }
-        })
+        })*/
     }
 
     private fun searchColourButtons() {
@@ -142,9 +187,9 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         purpleHash["buttonColour"] = "#9C27B0"
         colourArray.add(purpleHash)
 
-        val brownHash = HashMap<String, String>()
+        /*val brownHash = HashMap<String, String>()
         brownHash["buttonColour"] = "#5D4037"
-        colourArray.add(brownHash)
+        colourArray.add(brownHash)*/
 
         val blackHash = HashMap<String, String>()
         blackHash["buttonColour"] = "#1c1c1c"
@@ -226,9 +271,21 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
                     }
                 }
 
+                UIElements.viewObjectAnimator(searchResultsRecycler, "scaleX", 0.6f, 350, 0, AccelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 0f, 150, 200, LinearInterpolator())
+
+                Handler().postDelayed({
+                    UIElements.viewObjectAnimator(searchResultsRecycler, "scaleX", 1f, 0, 0, LinearInterpolator())
+                    UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 1f, 0, 0, LinearInterpolator())
+                    UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 1f, 0, 0, LinearInterpolator())
+                    RecyclerGrid.gradientGrid(this, searchResultsRecycler, searchResults, this, this)
+                    resultsText.text = "$foundGradients results found"
+                    searchResultsRecycler.scheduleLayoutAnimation()
+                }, 400)
+
                 //After search, set the view
-                RecyclerGrid.gradientGrid(this, searchResultsRecycler, searchResults, this, this)
-                resultsText.text = "$foundGradients results found"
+
 
             } catch (e: Exception) {
                 Log.e("ERR", "pebble.search_activity.search_system: ${e.localizedMessage}")
@@ -242,13 +299,21 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
     override fun onResume() {
         super.onResume()
-
-        //Detects if gradientGrid has an adapter; known to disconnect if app is paused for too long
-        if (searchResultsRecycler == null) {
+        /**
+         * Checks if app settings unloaded during pause
+         */
+        if (!Values.valuesLoaded) {
             startActivity(Intent(this, SplashScreen::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            finish()
         } else {
-            Values.currentActivity = "Search"
-            touchBlocker.visibility = View.GONE
+            when (Values.currentActivity) {
+                else -> {
+                    Values.currentActivity = "Browse"
+                    touchBlocker.visibility = View.GONE
+                }
+            }
+            Values.saveValues(this)
         }
     }
 
@@ -284,8 +349,18 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
     override fun onButtonClick(position: Int, view: View, buttonColour: String) {
         searchField.setText("")
-        Toast.makeText(this, buttonColour, Toast.LENGTH_SHORT).show()
-        searchByColour(buttonColour)
+        //Toast.makeText(this, buttonColour, Toast.LENGTH_SHORT).show()
+        UIElements.viewObjectAnimator(searchResultsRecycler, "scaleX", 0.6f, 350, 0, AccelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 0f, 150, 200, LinearInterpolator())
+
+        Handler().postDelayed({
+            UIElements.viewObjectAnimator(searchResultsRecycler, "scaleX", 1f, 0, 0, LinearInterpolator())
+            UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 1f, 0, 0, LinearInterpolator())
+            UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 1f, 0, 0, LinearInterpolator())
+            searchByColour(buttonColour)
+            searchResultsRecycler.scheduleLayoutAnimation()
+        }, 400)
     }
 
     /**
@@ -368,27 +443,12 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         return false
     }*/
 
-    private fun searchByColourSystem(baseHex: String, startColour: String, endColour: String) : Boolean{
+    private fun searchByColourSystem(baseHex: String, startColour: String, endColour: String): Boolean {
         try {
             //Remove # from hex
             val base = baseHex.replace("#", "")
-            val start = startColour.replace("#", "")
-            val end = endColour.replace("#", "")
 
-            //Get average of two colours
-            val startR = Integer.valueOf(start.substring(0, 2), 16)
-            val startG = Integer.valueOf(start.substring(2, 4), 16)
-            val startB = Integer.valueOf(start.substring(4, 6), 16)
-
-            val endR = Integer.valueOf(end.substring(0, 2), 16)
-            val endG = Integer.valueOf(end.substring(2, 4), 16)
-            val endB = Integer.valueOf(end.substring(4, 6), 16)
-
-            val avgR = (startR + (endR - startR) * 0.5).roundToInt().toString(16).padStart(2, '0')
-            val avgG = (startG + (endG - startG) * 0.5).roundToInt().toString(16).padStart(2, '0')
-            val avgB = (startB + (endB - startB) * 0.5).roundToInt().toString(16).padStart(2, '0')
-
-            val given = avgR + avgG + avgB
+            val averageColour = Calculations.averageColour(startColour, endColour) as String
 
             //Get RGB in values of baseHex
             val baseR = Integer.valueOf(base.substring(0, 2), 16)
@@ -396,9 +456,9 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             val baseB = Integer.valueOf(base.substring(4, 6), 16)
 
             //Get RGB in values of colourGiven
-            val givenR = Integer.valueOf(given.substring(0, 2), 16)
-            val givenG = Integer.valueOf(given.substring(2, 4), 16)
-            val givenB = Integer.valueOf(given.substring(4, 6), 16)
+            val givenR = Integer.valueOf(averageColour.substring(0, 2), 16)
+            val givenG = Integer.valueOf(averageColour.substring(2, 4), 16)
+            val givenB = Integer.valueOf(averageColour.substring(4, 6), 16)
 
             //Calculate different between base & given
             var diffR: Double = 255 - abs(baseR - givenR).toDouble()
@@ -412,8 +472,46 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
             return ((diffR + diffG + diffB) / 3) > 0.8
         } catch (e: Exception) {
-            Log.e("ERR", e.localizedMessage)
+            Log.e("ERR", e.localizedMessage as String)
         }
         return false
     }
+
+    private fun searchColourByHueAlgorithm(baseColour: String, startColour: String, endColour: String): Boolean {
+        try {
+            val baseRem = baseColour.replace("#", "")
+            val averageColour = "#" + Calculations.averageColour(startColour, endColour)
+
+            /** Gets HSV values of baseColour **/
+            val baseHSV = floatArrayOf(0f, 1f, 1f)
+            Color.colorToHSV(Color.parseColor(baseColour), baseHSV)
+
+            /** Gets HSV values of averageColour **/
+            val averageHSV = floatArrayOf(0f, 1f, 1f)
+            Color.colorToHSV(Color.parseColor(averageColour), averageHSV)
+
+            var hueDiff: Double = 360 - abs(baseHSV[0] - averageHSV[0]).toDouble()
+            var saturationDiff: Double = 100 - abs(baseHSV[1] - averageHSV[1]).toDouble()
+            var valueDiff: Double = 100 - abs(baseHSV[2] - averageHSV[2]).toDouble()
+
+            hueDiff /= 360
+            saturationDiff /= 100
+            valueDiff /= 100
+
+            Log.e("INFO", "$hueDiff $saturationDiff $valueDiff")
+
+            if (baseColour != "#f5f5f5" || baseColour != "#1c1c1c") {
+                return (((hueDiff) > 0.7) && ((saturationDiff) > 0.2) && ((valueDiff) > 0.3))
+            } else if (baseColour == "#f5f5f5") {
+                return (((saturationDiff) > 0.6) && ((valueDiff) > 0.3))
+            } else if (baseColour == "#1c1c1c") {
+                return ((valueDiff) > 0.5)
+            }
+
+        } catch (e: Exception) {
+            Log.e("ERR", "pebble.search_activity.search_colour_by_hue_algorithm: ${e.localizedMessage}")
+        }
+        return false
+    }
+
 }
