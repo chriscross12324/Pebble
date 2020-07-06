@@ -1,5 +1,7 @@
 package com.simple.chris.pebble
 
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -104,6 +106,22 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }, 500)
         }
+
+        /** Animate colourPickerButtons **/
+        val startColourPickerAnim = ObjectAnimator.ofPropertyValuesHolder(startColourPicker,
+                PropertyValuesHolder.ofFloat("scaleX", 1.5f),
+                PropertyValuesHolder.ofFloat("scaleY", 1.5f))
+        startColourPickerAnim.duration = 700
+        startColourPickerAnim.repeatCount = ObjectAnimator.INFINITE
+        startColourPickerAnim.repeatMode = ObjectAnimator.REVERSE
+        startColourPickerAnim.start()
+        val endColourPickerAnim = ObjectAnimator.ofPropertyValuesHolder(endColourPicker,
+                PropertyValuesHolder.ofFloat("scaleX", 1.5f),
+                PropertyValuesHolder.ofFloat("scaleY", 1.5f))
+        endColourPickerAnim.duration = 700
+        endColourPickerAnim.repeatCount = ObjectAnimator.INFINITE
+        endColourPickerAnim.repeatMode = ObjectAnimator.REVERSE
+        endColourPickerAnim.start()
     }
 
     private fun refreshGradientDrawable() {
@@ -309,7 +327,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
                 UIElement.popupDialog(this, "noConnection", R.drawable.icon_warning, R.string.dialog_title_eng_no_connection, null,
                         R.string.dialog_body_eng_no_connection, AppHashMaps.noConnectionArrayList(), window.decorView, this)
             }
-            1,2 -> {
+            1, 2 -> {
                 if (Values.gradientList.isEmpty()) {
                     UIElement.popupDialog(this, "gradientsNotDownloaded", R.drawable.icon_warning, R.string.dialog_title_eng_gradient_list_empty, null,
                             R.string.dialog_body_eng_gradient_list_empty, AppHashMaps.gradientArrayNotUpdated(), window.decorView, this)

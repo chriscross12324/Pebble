@@ -239,8 +239,8 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             app:srcCompat="@drawable/circle" />
     </LinearLayout>
 
@@ -257,8 +257,8 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             app:srcCompat="@drawable/circle" />
     </LinearLayout>
 
