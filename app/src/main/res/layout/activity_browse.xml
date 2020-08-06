@@ -6,17 +6,17 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true">
 
-    <ImageView
+    <com.jgabrielfreitas.core.BlurImageView
         android:id="@+id/wallpaperImageViewer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="center"/>
+        android:layout_height="match_parent" />
 
     <ImageView
+        android:id="@+id/wallpaperImageAlpha"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0.9"
-        android:background="?BackgroundColour" />
+        android:alpha="0.5"
+        android:background="?ForegroundColour" />
 
     <ImageView
         android:id="@+id/buttonIcon"

@@ -10,7 +10,7 @@ import android.os.Vibrator
 object Vibration {
 
     fun notification(context: Context) {
-        if (Values.vibrationEnabled) {
+        if (Values.settingVibrations) {
             val v = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 v.vibrate(VibrationEffect.createWaveform(Values.notificationPattern, VibrationEffect.DEFAULT_AMPLITUDE))
@@ -21,21 +21,21 @@ object Vibration {
     }
 
     fun strongFeedback(context: Context) {
-        if (Values.vibrationEnabled) {
+        if (Values.settingVibrations) {
             val v = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             v.vibrate(Values.strongVibration, -1)
         }
     }
 
     fun mediumFeedback(context: Context) {
-        if (Values.vibrationEnabled) {
+        if (Values.settingVibrations) {
             val v = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             v.vibrate(Values.mediumVibration, -1)
         }
     }
 
     fun lowFeedback(context: Context) {
-        if (Values.vibrationEnabled) {
+        if (Values.settingVibrations) {
             val v = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             v.vibrate(Values.weakVibration, -1)
         }

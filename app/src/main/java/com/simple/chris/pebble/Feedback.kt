@@ -1,29 +1,18 @@
 package com.simple.chris.pebble
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.LinearGradient
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
-import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
-import android.widget.Button
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.activity_browse.*
 import kotlinx.android.synthetic.main.activity_feedback.*
-import kotlinx.android.synthetic.main.activity_feedback.wallpaperImageViewer
 import java.util.*
 
-class Feedback : AppCompatActivity() {
+class Feedback : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.OnButtonListener {
 
     private val timeOutConnection = 15000
     private var emailDialogShown = false
@@ -37,7 +26,7 @@ class Feedback : AppCompatActivity() {
         setContentView(R.layout.activity_feedback)
         Values.currentActivity = "Feedback"
 
-        UIElements.setWallpaper(this, wallpaperImageViewer)
+        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
 
         usersEmailField.setOnFocusChangeListener { _, b ->
             if (b) {
@@ -88,6 +77,8 @@ class Feedback : AppCompatActivity() {
     }
 
     private fun submitFeedback() {
+        UIElement.popupDialog(this, "null", null, R.string.dialog_title_eng_submitting, null, R.string.feedback_submitting_body,
+                null, window.decorView, null)
         submitButton.isEnabled = false
         val feedbackDatabaseURL = "https://script.google.com/macros/s/AKfycbwQliBYeXxeQFNXixg-SpcoyVB_7mbkCGT0d0iLNo6cy6DxstI/exec"
 
@@ -95,19 +86,19 @@ class Feedback : AppCompatActivity() {
                 /*
                 Do this once Feedback Submitted
                  */
-                Response.Listener { showDialogs(R.layout.dialog_feedback_submitted) },
+                Response.Listener {
+                    //showDialogs(R.layout.dialog_feedback_submitted)
+                    UIElement.popupDialog(this, "feedbackSubmitted", R.drawable.icon_love, R.string.feedback_submitted, null, R.string.feedback_submitted_body,
+                            AppHashMaps.BAClose(), window.decorView, this)
+                },
 
                 /*
                 Do this if Feedback fails to submit
                  */
                 Response.ErrorListener {
                     submitButton.isEnabled = true
-                    if (Connection.isNetworkAvailable(this)) {
-                        showDialogs(R.layout.dialog_feedback_failed)
-                    } else {
-                        showDialogs(R.layout.dialog_feedback_connection)
-                    }
-
+                    UIElement.popupDialog(this, "feedbackFailed", R.drawable.icon_wifi_red, R.string.feedback_failed, null, R.string.feedback_failed_body,
+                            AppHashMaps.BABackCancel(), window.decorView, this)
                 }) {
 
             /*
@@ -135,41 +126,6 @@ class Feedback : AppCompatActivity() {
         emailDialogShown = true
         UIElements.oneButtonHider(this)
     }
-    private fun showDialogs(view: Int) {
-        val dialog = Dialog(this, R.style.dialogStyle)
-        dialog.setCancelable(false)
-        dialog.setContentView(view)
-
-        try {
-            val dismissButton: LinearLayout = dialog.findViewById(R.id.dismissPopup)
-            dismissButton.setOnClickListener {
-                dialog.dismiss()
-                Log.e("ERR", "Clicked")
-            }
-        } catch (e: Exception) {
-            Log.e("ERR", "Failed: ${e.localizedMessage}")
-        }
-
-        try {
-            val dismissButton: Button = dialog.findViewById(R.id.dismissPopup)
-            dismissButton.setOnClickListener {
-                dialog.dismiss()
-                Log.e("ERR", "Clicked button")
-                if (dismissButton.text.toString().trim() == "Continue") {
-                    onBackPressed()
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("ERR", "Failed button: ${e.localizedMessage}")
-        }
-
-
-        val window = dialog.window
-        window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
-        window.setDimAmount(0.5f)
-
-        dialog.show()
-    }
 
     private val missingInfoListener = View.OnClickListener {
         UIElements.oneButtonHider(this)
@@ -180,6 +136,28 @@ class Feedback : AppCompatActivity() {
         Handler().postDelayed({
             finish()
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }, 900)
+        }, 550)
+    }
+
+    override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
+        when (popupName) {
+            "feedbackSubmitted" -> {
+                UIElement.popupDialogHider()
+                onBackPressed()
+            }
+
+            "feedbackFailed" -> {
+                when (position) {
+                    0 -> {
+                        UIElement.popupDialogHider()
+                    }
+
+                    1 -> {
+                        UIElement.popupDialogHider()
+                        onBackPressed()
+                    }
+                }
+            }
+        }
     }
 }

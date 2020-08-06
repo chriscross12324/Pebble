@@ -5,6 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/backgroundDimmer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?ForegroundColour"/>
+
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"
         android:layout_width="match_parent"

@@ -24,18 +24,21 @@ object Values {
     var hintCreateGradientDismissed = false
     var currentActivity: String = ""
     var gradientList: ArrayList<HashMap<String, String>> = ArrayList()
-    var filteredGradients: ArrayList<HashMap<String, String>> = ArrayList()
     var dialogShowAgainTime: Long = 450
     var downloadingGradients = false
+    var refreshTheme = false
+    var gradientCornerRadius = 25f
 
     //Changing Values
     var gradientIsTouched = false
 
     //Settings
-    var vibrationEnabled: Boolean = true
-    var theme: String = "dark"
     var askMobileData: Boolean = true
-    var userName: String = "User"
+
+    var settingThemes = "dark"
+    var settingVibrations = true
+    var settingsSpecialEffects = true
+    var settingsForegroundOpacity = true
 
     //Gradient Creator
     var gradientCreatorGradientName = ""
@@ -58,10 +61,10 @@ object Values {
         editor.putBoolean("firstStart", firstStart)
         editor.putInt("lastVersion", lastVersion)
         editor.putBoolean("hintPushHoldDismissed", hintPushHoldDismissed)
-        editor.putBoolean("vibrationEnabled", vibrationEnabled)
-        editor.putString("theme", theme)
+        editor.putBoolean("settingVibrations", settingVibrations)
+        editor.putString("settingThemes", settingThemes)
         editor.putBoolean("askMobileData", askMobileData)
-        editor.putString("userName", userName)
+        editor.putBoolean("settingsSpecialEffects", settingsSpecialEffects)
         editor.putBoolean("gcFirstStart", gcFirstStart)
         editor.putString("gradientCreatorGradientName", gradientCreatorGradientName)
         editor.putString("gradientCreatorStartColour", gradientCreatorStartColour)
@@ -80,10 +83,10 @@ object Values {
         firstStart = sharedPrefs.getBoolean("firstStart", true)
         lastVersion = sharedPrefs.getInt("lastVersion", 0)
         hintPushHoldDismissed = sharedPrefs.getBoolean("hintPushHoldDismissed", false)
-        vibrationEnabled = sharedPrefs.getBoolean("vibrationEnabled", true)
-        theme = sharedPrefs.getString("theme", "dark")!!
+        settingVibrations = sharedPrefs.getBoolean("settingVibrations", true)
+        settingThemes = sharedPrefs.getString("settingThemes", "dark")!!
         askMobileData = sharedPrefs.getBoolean("askMobileData", true)
-        userName = sharedPrefs.getString("userName", "")!!
+        settingsSpecialEffects = sharedPrefs.getBoolean("settingsSpecialEffects", true)!!
         gcFirstStart = sharedPrefs.getBoolean("gcFirstStart", true)
         gradientCreatorGradientName = sharedPrefs.getString("gradientCreatorGradientName", "")!!
         gradientCreatorStartColour = sharedPrefs.getString("gradientCreatorStartColour", "#acd77b")!!
@@ -91,24 +94,4 @@ object Values {
         gradientCreatorDescription = sharedPrefs.getString("gradientCreatorDescription", "")!!
         hintCreateGradientDismissed = sharedPrefs.getBoolean("hintCreateGradientDismissed", false)
     }
-
-    /*fun filterBrokenGradients() {
-        try {
-            for (count in 0 until gradientList.size) {
-                if (gradientList[count]["backgroundName"]?.isNotEmpty()!! ){
-                    val filtered = HashMap<String, String>()
-
-                    filtered["backgroundName"] = gradientList[count]["backgroundName"] as String
-                    filtered["startColour"] = gradientList[count]["startColour"] as String
-                    filtered["endColour"] = gradientList[count]["endColour"] as String
-                    filtered["description"] = gradientList[count]["description"] as String
-
-                    filteredGradients.add(filtered)
-                }
-            }
-            downloadingGradients = false
-        } catch (e: Exception) {
-            Log.e("ERR", "pebble.values.filter_broken_gradients: ${e.localizedMessage}")
-        }
-    }*/
 }

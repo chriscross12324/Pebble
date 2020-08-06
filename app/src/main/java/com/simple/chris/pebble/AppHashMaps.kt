@@ -188,4 +188,31 @@ object AppHashMaps {
 
         return gradientSavedArray
     }
+
+    fun BAClose() : ArrayList<HashMap<String, Int>> {
+        val array = ArrayList<HashMap<String, Int>>()
+
+        val closePopupHash = HashMap<String, Int>()
+        closePopupHash["buttonTitle"] = R.string.text_eng_close
+        closePopupHash["buttonIcon"] = R.drawable.icon_close
+        array.add(closePopupHash)
+
+        return array
+    }
+
+    fun BABackCancel() : ArrayList<HashMap<String, Int>> {
+        val array = ArrayList<HashMap<String, Int>>()
+
+        val one = HashMap<String, Int>()
+        one["buttonTitle"] = R.string.text_eng_back
+        one["buttonIcon"] = R.drawable.icon_back
+        array.add(one)
+
+        val two = HashMap<String, Int>()
+        two["buttonTitle"] = R.string.text_eng_cancel
+        two["buttonIcon"] = R.drawable.icon_close
+        array.add(two)
+
+        return array
+    }
 }

@@ -54,7 +54,7 @@ class GradientRecyclerViewAdapter internal constructor(var context: Context, pri
             holder.gradientName.text = details["gradientName"]
             val startColour = Color.parseColor(details["startColour"])
             val endColour = Color.parseColor(details["endColour"])
-            UIElements.gradientDrawable(context, true, holder.gradientView, startColour, endColour, 20f)
+            UIElement.gradientDrawable(context, holder.gradientView, startColour, endColour, Values.gradientCornerRadius)
         } catch (e: Exception) {
             holder.gradientView.setBackgroundColor(context.resources.getColor(R.color.pebbleEnd))
             holder.gradientName.text = "[Broken Data]"

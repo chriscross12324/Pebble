@@ -2,13 +2,11 @@ package com.simple.chris.pebble
 
 import android.Manifest
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
@@ -19,7 +17,6 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.activity_main_menu.*
 
 
@@ -29,24 +26,19 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
         super.onCreate(savedInstanceState)
         UIElements.setTheme(this)
         setContentView(R.layout.activity_main_menu)
-        initialPlacement()
-        if (Values.gradientList.isEmpty()) {
-            Handler().postDelayed({
-                checkConnection()
-            }, 1700)
-        }
+        if (!Values.refreshTheme) {
+            initialPlacement()
+            if (Values.gradientList.isEmpty()) {
+                Handler().postDelayed({
+                    checkConnection()
+                }, 1700)
+            }
+        } else {Values.refreshTheme = false; inAnimation()}
         menuButtons()
 
-        pebbleLogo.setOnClickListener {
-            when (Values.theme) {
-                "light" -> Values.theme = "dark"
-                "dark" -> Values.theme = "black"
-                "black" -> Values.theme = "light"
-            }
-
-            startActivity(Intent(this, MainMenu::class.java))
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            finish()
+        pebbleLogo.setOnLongClickListener {
+            startActivity(Intent(this, MainMenuTest::class.java))
+            true
         }
 
         if (!Permissions.readStoragePermissionGiven(this)) {
@@ -57,11 +49,17 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
         }
     }
 
+    private fun refreshTheme() {
+        startActivity(Intent(this, MainMenu::class.java))
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        finish()
+    }
+
     private fun initialPlacement() {
         pebbleLogo.translationY = Calculations.screenMeasure(this, "height") / 2 - Calculations.convertToDP(this, 90f) - Calculations.convertToDP(this, 32f)
         pebbleText.translationY = Calculations.convertToDP(this, 20f)
         menuButtonRecycler.translationY = Calculations.convertToDP(this, 200f)
-        UIElements.setWallpaper(this, wallpaperImageViewer)
+        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
         inAnimation()
     }
 
@@ -96,7 +94,7 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
         UIElements.viewObjectAnimator(pebbleText, "alpha", 1f, 500, 1200, DecelerateInterpolator())
 
         //Animate wallpaperAlpha
-        UIElements.viewObjectAnimator(wallpaperAlpha, "alpha", 0.9f, 300, 1000, DecelerateInterpolator())
+        UIElements.viewObjectAnimator(wallpaperImageAlpha, "alpha", 0.5f, 300, 1000, DecelerateInterpolator())
 
         UIElements.viewObjectAnimator(menuButtonRecycler, "translationY", 0f, 700, 1000, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(menuButtonRecycler, "alpha", 1f, 700, 1200, DecelerateInterpolator())
@@ -117,7 +115,6 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
         val request = JsonObjectRequest(Request.Method.GET, gradientDatabaseURL, null,
                 Response.Listener { response ->
                     try {
-                        connectionText.text = getString(R.string.status_downloading)
                         val gradientArray = response.getJSONArray("items")
                         val gradientList = ArrayList<HashMap<String, String>>()
 
@@ -165,7 +162,9 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
 
     override fun onResume() {
         super.onResume()
-        UIElements.setWallpaper(this, wallpaperImageViewer)
+        if (Values.currentActivity != "GradientCreator") {
+            UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
+        }
 
         /**
          * Check if app settings unloaded during pause
@@ -188,6 +187,12 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
                 //getGradients()
                 checkConnection()
             }
+        }
+
+        if (Values.refreshTheme) {
+            startActivity(Intent(this, SplashScreen::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            finish()
         }
     }
 
@@ -239,6 +244,7 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
                         UIElement.popupDialog(this, "noConnection", R.drawable.icon_no_connection, R.string.dialog_title_eng_offline_mode, null, R.string.dialog_body_eng_offline_mode, AppHashMaps.offlineModeArrayList(), window.decorView, this)
                     } else {
                         startActivity(Intent(this, BrowseActivity::class.java))
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                     }
                 }
             }
@@ -255,8 +261,12 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
             }
             2 -> {
                 startActivity(Intent(this, Feedback::class.java))
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }
-            3 -> Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show()
+            3 -> {
+                startActivity(Intent(this, Settings::class.java))
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
             4 -> {
                 checkConnection()
             }

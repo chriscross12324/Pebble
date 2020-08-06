@@ -8,6 +8,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -24,7 +25,9 @@ import com.simple.chris.pebble.Calculations.convertToDP
 import com.simple.chris.pebble.UIElements.viewObjectAnimator
 import kotlinx.android.synthetic.main.activity_create_gradient_new.*
 import kotlinx.android.synthetic.main.activity_feedback.*
+import kotlinx.android.synthetic.main.activity_gradient_details.*
 import org.apache.commons.lang3.RandomStringUtils
+import kotlin.math.roundToInt
 
 class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.OnButtonListener {
 
@@ -90,6 +93,15 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
             firstStepExitAnim(false)
             Handler().postDelayed({
                 Values.currentColourPOS = "startColour"
+                startActivity(Intent(this, ColourP::class.java))
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }, 500)
+        }
+
+        startColourPicker.setOnLongClickListener {
+            firstStepExitAnim(false)
+            Handler().postDelayed({
+                Values.currentColourPOS = "startColour"
                 startActivity(Intent(this, ColourPicker::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }, 500)
@@ -102,26 +114,10 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
             firstStepExitAnim(false)
             Handler().postDelayed({
                 Values.currentColourPOS = "endColour"
-                startActivity(Intent(this, ColourPicker::class.java))
+                startActivity(Intent(this, ColourP::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }, 500)
         }
-
-        /** Animate colourPickerButtons **/
-        val startColourPickerAnim = ObjectAnimator.ofPropertyValuesHolder(startColourPicker,
-                PropertyValuesHolder.ofFloat("scaleX", 1.5f),
-                PropertyValuesHolder.ofFloat("scaleY", 1.5f))
-        startColourPickerAnim.duration = 700
-        startColourPickerAnim.repeatCount = ObjectAnimator.INFINITE
-        startColourPickerAnim.repeatMode = ObjectAnimator.REVERSE
-        startColourPickerAnim.start()
-        val endColourPickerAnim = ObjectAnimator.ofPropertyValuesHolder(endColourPicker,
-                PropertyValuesHolder.ofFloat("scaleX", 1.5f),
-                PropertyValuesHolder.ofFloat("scaleY", 1.5f))
-        endColourPickerAnim.duration = 700
-        endColourPickerAnim.repeatCount = ObjectAnimator.INFINITE
-        endColourPickerAnim.repeatMode = ObjectAnimator.REVERSE
-        endColourPickerAnim.start()
     }
 
     private fun refreshGradientDrawable() {
@@ -130,7 +126,16 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
          */
         val startColour = Color.parseColor(Values.gradientCreatorStartColour)
         val endColour = Color.parseColor(Values.gradientCreatorEndColour)
-        UIElements.gradientDrawable(this, true, gradientCreatorGradientViewer, startColour, endColour, 0f)
+        UIElement.gradientDrawable(this, gradientCreatorGradientViewer, startColour, endColour, 0f)
+
+        val gradientDrawableStartCircle = GradientDrawable()
+        gradientDrawableStartCircle.shape = GradientDrawable.OVAL
+        gradientDrawableStartCircle.setStroke(convertToDP(this, 5f).roundToInt(), startColour)
+        val gradientDrawableEndCircle = GradientDrawable()
+        gradientDrawableEndCircle.shape = GradientDrawable.OVAL
+        gradientDrawableEndCircle.setStroke(convertToDP(this, 5f).roundToInt(), endColour)
+        startColourPreview.background = gradientDrawableStartCircle
+        endColourPreview.background = gradientDrawableEndCircle
     }
 
     private fun sharedElementGradientTransition() {
@@ -139,7 +144,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
          */
         val sharedStartColour = ContextCompat.getColor(this, R.color.pebbleStart)
         val sharedEndColour = ContextCompat.getColor(this, R.color.pebbleEnd)
-        UIElements.gradientDrawable(this, true, sharedElementsTransitionView, sharedStartColour, sharedEndColour, 20f)
+        UIElement.gradientDrawable(this, sharedElementsTransitionView, sharedStartColour, sharedEndColour, 20f)
 
         /**
          * Creates gradient based on user choice

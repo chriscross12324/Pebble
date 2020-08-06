@@ -19,7 +19,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.dialog_long_press_gradients.*
+import kotlinx.android.synthetic.main.dialog_popup.*
 import kotlin.Exception
+import kotlinx.android.synthetic.main.dialog_long_press_gradients.blurView as blurView1
+import kotlinx.android.synthetic.main.dialog_long_press_gradients.holder as holder1
+import kotlinx.android.synthetic.main.dialog_popup.backgroundDimmer as backgroundDimmer1
 
 object RecyclerGrid {
 
@@ -85,7 +89,7 @@ object RecyclerGrid {
         val gradientDescription = gradientPopup.gradientDialogGradientDescription as TextView
 
         val gradientInfo = gradientJSON[position]
-        UIElements.gradientDrawable(context, true, gradientView, Color.parseColor(gradientInfo["startColour"]), Color.parseColor(gradientInfo["endColour"]), 15f)
+        UIElement.gradientDrawable(context, gradientView, Color.parseColor(gradientInfo["startColour"]), Color.parseColor(gradientInfo["endColour"]), Values.gradientCornerRadius - 5f)
         gradientName.text = gradientInfo["gradientName"]
         gradientDescription.text = gradientInfo["description"]
 
@@ -99,7 +103,7 @@ object RecyclerGrid {
         }
 
         /** Create blurView **/
-        if (decorView != null) {
+        if (decorView != null && Values.settingsSpecialEffects) {
             try {
                 val rootView = decorView.findViewById<ViewGroup>(android.R.id.content)
                 val windowBackground = decorView.background
@@ -112,6 +116,9 @@ object RecyclerGrid {
             } catch (e: Exception) {
                 Log.e("ERR", "pebble.recycler_grid.gradient_grid_on_long_click_listener: ${e.localizedMessage}")
             }
+        } else {
+            val backgroundDimmer = gradientPopup.backgroundDimmer
+            backgroundDimmer.alpha = 0.75f
         }
 
         gradientPopup.blurView.setOnClickListener {

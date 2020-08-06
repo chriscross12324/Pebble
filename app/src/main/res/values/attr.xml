@@ -5,8 +5,6 @@
     <attr name="ForegroundColour" format="reference|color"/>
     <attr name="PrimaryTextColour" format="reference|color"/>
     <attr name="SecondaryTextColour" format="reference|color"/>
-    <attr name="SpecialBackground" format="reference|color"/>
-    <attr name="BTTBBackground" format="reference|color"/>
 
     <declare-styleable name="GradientView">
         <attr name="startColour" format="color"/>

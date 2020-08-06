@@ -17,8 +17,11 @@ import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import kotlinx.android.synthetic.main.activity_browse.*
+import kotlinx.android.synthetic.main.activity_gradient_details.*
 import kotlinx.android.synthetic.main.layout_colour_picker.*
 import java.lang.Exception
 import java.nio.file.WatchEvent
@@ -50,22 +53,41 @@ class ColourPicker : AppCompatActivity() {
                 intArrayOf(Color.parseColor("#f00000"), Color.parseColor("#ffff00"), Color.parseColor("#00ff00"), Color.parseColor("#00ffff"), Color.parseColor("#0000ff"), Color.parseColor("#ff00ff"), Color.parseColor("#f00000"))
         )
         gradientDrawable.cornerRadius = Calculations.convertToDP(this, 20f)
-        multiGradient.background = gradientDrawable
+        hueBackground.background = gradientDrawable
 
         val saturationDrawable = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
                 intArrayOf(Color.parseColor("#EAEAEA"), Color.HSVToColor(hue))
         )
         saturationDrawable.cornerRadius = Calculations.convertToDP(this, 20f)
-        saturation.background = saturationDrawable
+        satBackground.background = saturationDrawable
 
         val valueDrawable = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
                 intArrayOf(Color.parseColor("#000000"), Color.parseColor("#EAEAEA"))
         )
         valueDrawable.cornerRadius = Calculations.convertToDP(this, 20f)
-        value.background = valueDrawable
+        valBackground.background = valueDrawable
 
+        hexValueEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s!!.length == 6) {
+                    Color.colorToHSV(Color.parseColor("#$s"), hsv)
+                    updateView()
+                    Log.e("ERR", "6")
+                } else {
+                    Log.e("INFO", "${s.length}")
+                }
+
+            }
+
+        })
 
         hueSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progressValue: Int, fromUser: Boolean) {
@@ -128,13 +150,17 @@ class ColourPicker : AppCompatActivity() {
         }
 
         colourPickerSaveButton.setOnClickListener {
-            if (Values.currentColourPOS == "startColour") {
-                Values.gradientCreatorStartColour = hexString
-            } else {
-                Values.gradientCreatorEndColour = hexString
-            }
+            try {
+                val colour = Color.parseColor("#$hexString")
+                if (Values.currentColourPOS == "startColour") {
+                    Values.gradientCreatorStartColour = "#$hexString"
+                } else {
+                    Values.gradientCreatorEndColour = "#$hexString"
+                }
 
-            animationOut()
+                animationOut()
+            } catch (e: Exception) {
+            }
         }
 
         colourPickerBackButton.setOnClickListener {
@@ -163,13 +189,11 @@ class ColourPicker : AppCompatActivity() {
         satUpdate()
         valUpdate()
 
-        hexValueTextView.setOnKeyListener { _, _, keyEvent ->
+        hexValueEditText.setOnKeyListener { _, _, keyEvent ->
             if (keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
-                hexValue = Color.parseColor(hexValueTextView.text.toString())
-                updateView()
-                hexValueTextView.clearFocus()
+                hexValueEditText.clearFocus()
                 val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(hexValueTextView.windowToken, 0)
+                imm.hideSoftInputFromWindow(hexValueEditText.windowToken, 0)
             }
             false
         }
@@ -186,7 +210,7 @@ class ColourPicker : AppCompatActivity() {
                 intArrayOf(Color.parseColor("#EAEAEA"), Color.HSVToColor(hue))
         )
         saturationDrawable.cornerRadius = Calculations.convertToDP(this, 20f)
-        saturation.background = saturationDrawable
+        satBackground.background = saturationDrawable
     }
 
     private fun satUpdate() {
@@ -202,16 +226,18 @@ class ColourPicker : AppCompatActivity() {
     }
 
     private fun updateView() {
-        hexString = "#" + Integer.toHexString(Color.HSVToColor(hsv)).substring(2)
+        hexString = "" + Integer.toHexString(Color.HSVToColor(hsv)).substring(2)
         hexValue = Color.HSVToColor(hsv)
         colourPickerColourViewer.setBackgroundColor(hexValue)
-        hexValueTextView.setText(hexString)
+        if (hexString != hexValueEditText.text.toString()) {
+            hexValueEditText.setText(hexString)
+        }
 
         HEXToRGB(hexString)
     }
 
     private fun HEXToRGB(hex: String) {
-        val color = Color.parseColor(hex)
+        val color = Color.parseColor("#$hex")
         val r = Color.red(color)
         val g = Color.green(color)
         val b = Color.blue(color)
@@ -224,13 +250,16 @@ class ColourPicker : AppCompatActivity() {
 
         if (luminance > 0.5) {
             hexValueTextView.setTextColor(Color.parseColor("#000000"))
+            hexValueEditText.setTextColor(Color.parseColor("#000000"))
         } else {
             hexValueTextView.setTextColor(Color.parseColor("#ffffff"))
+            hexValueEditText.setTextColor(Color.parseColor("#ffffff"))
         }
     }
 
     private fun setViewPositions() {
         colourPickerSliders.translationY = Calculations.convertToDP(this, colourPickerSliders.height + 94.toFloat())
+        invalidColourNotification.translationY = (-60 * resources.displayMetrics.density)
 
         colourPickerColourViewer.post {
             animationIn()
@@ -241,15 +270,15 @@ class ColourPicker : AppCompatActivity() {
         UIElements.viewObjectAnimator(colourPickerBackButton, "translationY", 0f, 700, 250, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(colourPickerSaveButton, "translationY", 0f, 700, 250, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(colourPickerSliders, "translationY", 0f, 700, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(hexValueTextView, "alpha", 1f, 700, 500, LinearInterpolator())
+        UIElements.viewObjectAnimator(colourCodeHolder, "alpha", 1f, 700, 500, LinearInterpolator())
     }
 
     private fun animationOut() {
         UIElements.viewObjectAnimator(colourPickerBackButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(colourPickerSaveButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(colourPickerSliders, "translationY", colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f), 850, 100, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(hexValueTextView, "translationY", (colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f)) / 2, 850, 100, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(hexValueTextView, "alpha", 0f, 500, 450, LinearInterpolator())
+        UIElements.viewObjectAnimator(colourCodeHolder, "translationY", (colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f)) / 2, 850, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(colourCodeHolder, "alpha", 0f, 500, 450, LinearInterpolator())
 
         Handler().postDelayed({
             finish()

@@ -14,15 +14,6 @@ import androidx.cardview.widget.CardView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import kotlinx.android.synthetic.main.activity_browse.*
-import kotlinx.android.synthetic.main.activity_browse.backButton
-import kotlinx.android.synthetic.main.activity_browse.bottomSheet
-import kotlinx.android.synthetic.main.activity_browse.buttonIcon
-import kotlinx.android.synthetic.main.activity_browse.coordinatorLayout
-import kotlinx.android.synthetic.main.activity_browse.resultsText
-import kotlinx.android.synthetic.main.activity_browse.titleHolder
-import kotlinx.android.synthetic.main.activity_browse.touchBlocker
-import kotlinx.android.synthetic.main.activity_browse.wallpaperImageViewer
-import kotlinx.android.synthetic.main.activity_search.*
 
 
 class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener {
@@ -42,7 +33,7 @@ class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         Values.currentActivity = "Browse"
         animateButtonIcon(0f, 0.1f)
 
-        UIElements.setWallpaper(this, wallpaperImageViewer)
+        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
 
         coordinatorLayout.post {
             getHeights()

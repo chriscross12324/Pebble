@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateGradientActivity">
+    tools:context=".GradientCreator">
 
     <ImageView
         android:id="@+id/gradientCreatorGradientViewer"
@@ -78,6 +78,7 @@
         android:background="@drawable/details_background"
         android:backgroundTint="?BackgroundColour"
         android:elevation="8dp"
+        android:alpha="1"
         app:layout_constraintBottom_toTopOf="@id/nextStepButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -230,18 +231,20 @@
         android:id="@+id/startColourPicker"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
         android:alpha="0"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@drawable/details_background"
+        android:backgroundTint="?BackgroundColour"
+        app:layout_constraintBottom_toTopOf="@+id/endColourPicker"
+        app:layout_constraintEnd_toEndOf="@+id/endColourPicker"
+        app:layout_constraintStart_toStartOf="@+id/endColourPicker">
 
         <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            app:srcCompat="@drawable/circle" />
+            android:id="@+id/startColourPreview"
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -253,13 +256,15 @@
         android:alpha="0"
         android:gravity="center"
         android:orientation="horizontal"
+        android:background="@drawable/details_background"
+        android:backgroundTint="?BackgroundColour"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            app:srcCompat="@drawable/circle" />
+            android:id="@+id/endColourPreview"
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
     </LinearLayout>
 
     <View

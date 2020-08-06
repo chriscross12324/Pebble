@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/colourPickerColourViewer"
@@ -14,23 +14,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/hexValueTextView"
+    <LinearLayout
+        android:id="@+id/colourCodeHolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/googlesans_bold"
-        android:text="#3a76f0"
-        android:textColor="#ffffff"
-        android:textSize="36sp"
-        android:alpha="1"
-        android:inputType="text"
-        android:maxLength="7"
-        android:maxLines="1"
-        android:background="@android:color/transparent"
+        android:orientation="horizontal"
+        android:alpha="0"
         app:layout_constraintBottom_toTopOf="@+id/colourPickerSliders"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/hexValueTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="#"
+            android:textColor="#ffffff"
+            android:textSize="36sp"
+            android:fontFamily="@font/googlesans_bold"/>
+
+        <EditText
+            android:id="@+id/hexValueEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="50dp"
+            android:background="@android:color/transparent"
+            android:digits="0123456789abcdef"
+            android:fontFamily="@font/googlesans_bold"
+            android:inputType="text"
+            android:maxLength="6"
+            android:maxLines="1"
+            android:text="3a76f0"
+            android:textColor="#ffffff"
+            android:textSize="36sp" />
+    </LinearLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/colourPickerSliders"
@@ -58,7 +77,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/selectText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/googlesans_bold"
@@ -78,7 +97,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/multiGradient"
+            android:id="@+id/hueBackground"
             android:layout_width="0dp"
             android:layout_height="15dp"
             android:layout_marginStart="8dp"
@@ -90,7 +109,7 @@
             app:layout_constraintTop_toTopOf="@+id/linearLayout2" />
 
         <ImageView
-            android:id="@+id/saturation"
+            android:id="@+id/satBackground"
             android:layout_width="0dp"
             android:layout_height="15dp"
             android:layout_marginStart="8dp"
@@ -102,7 +121,7 @@
             app:layout_constraintTop_toTopOf="@+id/linearLayout3" />
 
         <ImageView
-            android:id="@+id/value"
+            android:id="@+id/valBackground"
             android:layout_width="0dp"
             android:layout_height="15dp"
             android:layout_marginStart="8dp"
@@ -162,7 +181,7 @@
                 android:fontFamily="@font/googlesans_medium"
                 android:gravity="end"
                 android:text="%"
-                android:textColor="?BTTBBackground"
+                android:textColor="?SecondaryTextColour"
                 android:textSize="18sp" />
 
             <EditText
@@ -205,7 +224,7 @@
                 android:fontFamily="@font/googlesans_medium"
                 android:gravity="end"
                 android:text="%"
-                android:textColor="?BTTBBackground"
+                android:textColor="?SecondaryTextColour"
                 android:textSize="18sp" />
 
             <EditText
@@ -237,10 +256,10 @@
             android:progressDrawable="@drawable/empty_shape"
             android:splitTrack="false"
             android:thumb="@drawable/colour_picker_thumb"
-            app:layout_constraintBottom_toBottomOf="@+id/multiGradient"
-            app:layout_constraintEnd_toEndOf="@+id/multiGradient"
-            app:layout_constraintStart_toStartOf="@+id/multiGradient"
-            app:layout_constraintTop_toTopOf="@+id/multiGradient" />
+            app:layout_constraintBottom_toBottomOf="@+id/hueBackground"
+            app:layout_constraintEnd_toEndOf="@+id/hueBackground"
+            app:layout_constraintStart_toStartOf="@+id/hueBackground"
+            app:layout_constraintTop_toTopOf="@+id/hueBackground" />
 
         <SeekBar
             android:id="@+id/saturationSeekBar"
@@ -253,10 +272,10 @@
             android:progressDrawable="@drawable/empty_shape"
             android:splitTrack="false"
             android:thumb="@drawable/colour_picker_thumb"
-            app:layout_constraintBottom_toBottomOf="@+id/saturation"
-            app:layout_constraintEnd_toEndOf="@+id/saturation"
-            app:layout_constraintStart_toStartOf="@+id/saturation"
-            app:layout_constraintTop_toTopOf="@+id/saturation" />
+            app:layout_constraintBottom_toBottomOf="@+id/satBackground"
+            app:layout_constraintEnd_toEndOf="@+id/satBackground"
+            app:layout_constraintStart_toStartOf="@+id/satBackground"
+            app:layout_constraintTop_toTopOf="@+id/satBackground" />
 
         <SeekBar
             android:id="@+id/valueSeekBar"
@@ -269,10 +288,10 @@
             android:progressDrawable="@drawable/empty_shape"
             android:splitTrack="false"
             android:thumb="@drawable/colour_picker_thumb"
-            app:layout_constraintBottom_toBottomOf="@+id/value"
-            app:layout_constraintEnd_toEndOf="@+id/value"
-            app:layout_constraintStart_toStartOf="@+id/value"
-            app:layout_constraintTop_toTopOf="@+id/value" />
+            app:layout_constraintBottom_toBottomOf="@+id/valBackground"
+            app:layout_constraintEnd_toEndOf="@+id/valBackground"
+            app:layout_constraintStart_toStartOf="@+id/valBackground"
+            app:layout_constraintTop_toTopOf="@+id/valBackground" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -282,9 +301,9 @@
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="24dp"
-        android:translationY="74dp"
         android:background="@drawable/details_background"
         android:elevation="12dp"
+        android:translationY="74dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -306,9 +325,9 @@
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginBottom="24dp"
-        android:translationY="74dp"
         android:background="@drawable/details_background"
         android:elevation="12dp"
+        android:translationY="74dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -326,6 +345,49 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/invalidColourNotification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/details_background"
+        android:elevation="12dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/copiedText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="2dp"
+            android:fontFamily="@font/googlesans_medium"
+            android:gravity="center"
+            android:text="Invalid Colour"
+            android:textColor="?SecondaryTextColour"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/copiedIcon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/copiedIcon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:tint="?SecondaryTextColour"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icon_warning" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

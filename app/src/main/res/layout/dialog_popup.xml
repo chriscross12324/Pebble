@@ -5,6 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/backgroundDimmer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?ForegroundColour"/>
+
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"
         android:layout_width="match_parent"
@@ -106,6 +112,7 @@
                     android:alpha="0"
                     android:scaleX="0.8"
                     android:scaleY="0.8"
+                    android:layoutAnimation="@anim/recycler_animation"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/holder"
                     app:layout_constraintStart_toStartOf="@+id/holder" />

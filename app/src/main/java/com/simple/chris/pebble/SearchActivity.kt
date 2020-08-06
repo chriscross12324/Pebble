@@ -43,7 +43,7 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         UIElements.setTheme(this)
         setContentView(R.layout.activity_search)
         Values.currentActivity = "SearchActivity"
-        UIElements.setWallpaper(this, wallpaperImageViewer)
+        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
         searchLogic()
 
         coordinatorLayout.post {

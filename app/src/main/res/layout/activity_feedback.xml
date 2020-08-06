@@ -6,15 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".Feedback">
 
-    <ImageView
+    <com.jgabrielfreitas.core.BlurImageView
         android:id="@+id/wallpaperImageViewer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <ImageView
+        android:id="@+id/wallpaperImageAlpha"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0.9"
+        android:alpha="0.5"
         android:background="?BackgroundColour" />
 
     <ImageView

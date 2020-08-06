@@ -1,6 +1,6 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- Base application theme -->
     <style name="Main" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">false</item>
@@ -17,8 +17,6 @@
         <item name="ForegroundColour">@color/lightForeground</item>
         <item name="PrimaryTextColour">@color/lightTextPrimary</item>
         <item name="SecondaryTextColour">@color/lightTextSecondary</item>
-        <item name="SpecialBackground">@color/lightSpecialBackground</item>
-        <item name="BTTBBackground">@color/lightBTTBBackground</item>
     </style>
 
     <style name="ThemeDark" parent="Main">
@@ -26,8 +24,6 @@
         <item name="ForegroundColour">@color/darkForeground</item>
         <item name="PrimaryTextColour">@color/darkTextPrimary</item>
         <item name="SecondaryTextColour">@color/darkTextSecondary</item>
-        <item name="SpecialBackground">@color/darkSpecialBackground</item>
-        <item name="BTTBBackground">@color/darkBTTBBackground</item>
     </style>
 
     <style name="ThemeBlack" parent="Main">
@@ -35,8 +31,6 @@
         <item name="ForegroundColour">@color/blackForeground</item>
         <item name="PrimaryTextColour">@color/blackTextPrimary</item>
         <item name="SecondaryTextColour">@color/blackTextSecondary</item>
-        <item name="SpecialBackground">@color/blackSpecialBackground</item>
-        <item name="BTTBBackground">@color/darkBTTBBackground</item>
     </style>
 
     <style name="splashTheme" parent="Main">

@@ -1,7 +1,10 @@
 package com.simple.chris.pebble
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Handler
 import android.util.Log
 import android.view.*
@@ -15,6 +18,35 @@ import kotlinx.android.synthetic.main.dialog_popup.*
 object UIElement {
 
     lateinit var popupDialog: Dialog
+
+    fun setTheme(context: Context) {
+        when (Values.settingThemes) {
+            "light" -> context.setTheme(R.style.ThemeLight)
+            "dark" -> context.setTheme(R.style.ThemeDark)
+            "black" -> context.setTheme(R.style.ThemeBlack)
+        }
+    }
+
+    @SuppressLint("NewApi")
+    fun gradientDrawable(context: Context, view: View?, startColour: Int, endColour: Int, cornerRadius: Float): Drawable? {
+        /** Create Gradient Drawable**/
+        val gradientDrawable = GradientDrawable(
+                GradientDrawable.Orientation.TL_BR,
+                intArrayOf(startColour, endColour)
+        )
+        gradientDrawable.cornerRadius = Calculations.convertToDP(context, cornerRadius)
+
+        /** Set or return gradientDrawable **/
+        if (view != null) {
+            view.background = gradientDrawable
+            if (Calculations.isAndroidPOrGreater()) {
+                view.outlineSpotShadowColor = endColour
+            }
+        } else {
+            return gradientDrawable
+        }
+        return null
+    }
 
     fun popupDialog(context: Context, popupName: String, icon: Int?, title: Int?, titleString: String?, description: Int,
                     buttonArrayList: ArrayList<HashMap<String, Int>>?, decorView: View?, listener: PopupDialogButtonRecyclerAdapter.OnButtonListener?) {
@@ -91,7 +123,7 @@ object UIElement {
         }
 
         /** Create blurView **/
-        if (decorView != null) {
+        if (decorView != null && Values.settingsSpecialEffects) {
             try {
                 val rootView = decorView.findViewById<ViewGroup>(android.R.id.content)
                 val windowBackground = decorView.background
@@ -104,6 +136,9 @@ object UIElement {
             } catch (e: Exception) {
                 Log.e("ERR", "pebble.ui_elements.popup_dialog: ${e.localizedMessage}")
             }
+        } else {
+            val backgroundDimmer = popupDialog.backgroundDimmer
+            backgroundDimmer.alpha = 0.75f
         }
     }
 

@@ -64,7 +64,7 @@ class GradientDetailsActivity : AppCompatActivity(), PopupDialogButtonRecyclerAd
         startColourInt = Color.parseColor(intent.getStringExtra("startColour"))
         endColourInt = Color.parseColor(intent.getStringExtra("endColour"))
 
-        gradientDrawable(this, true, gradientViewStatic, startColourInt, endColourInt, 20f)
+        gradientDrawable(this, true, gradientViewStatic, startColourInt, endColourInt, Values.gradientCornerRadius)
         gradientViewStatic.transitionName = gradientNameString
 
         if (gradientDescriptionString == "") {

@@ -7,14 +7,13 @@
     android:animateLayoutChanges="true"
     tools:context=".MainMenu">
 
-
-    <ImageView
+    <com.jgabrielfreitas.core.BlurImageView
         android:id="@+id/wallpaperImageViewer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <ImageView
-        android:id="@+id/wallpaperAlpha"
+        android:id="@+id/wallpaperImageAlpha"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="1"

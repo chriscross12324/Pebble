@@ -18,12 +18,14 @@
         android:supportsRtl="true"
         android:theme="@style/Main"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <activity android:name=".MainMenuTest"></activity>
         <activity android:name=".SearchActivity" />
         <activity android:name=".MainMenu" />
         <activity android:name=".Settings" />
         <activity android:name=".Feedback" />
+        <activity android:name=".ColourP" />
         <activity android:name=".ColourPicker" />
-        <activity android:name=".GradientCreator"/>
+        <activity android:name=".GradientCreator" />
         <activity
             android:name=".GradientDetailsActivity"
             tools:ignore="LockedOrientationActivity" />

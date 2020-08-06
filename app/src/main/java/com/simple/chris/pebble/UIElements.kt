@@ -13,17 +13,20 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Handler
+import android.renderscript.*
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.jgabrielfreitas.core.BlurImageView
 import com.simple.chris.pebble.Calculations.convertToDP
 import kotlin.math.roundToInt
 
@@ -33,7 +36,7 @@ object UIElements {
     lateinit var popupDialog: Dialog
 
     fun setTheme(context: Context) {
-        when (Values.theme) {
+        when (Values.settingThemes) {
             "light" -> context.setTheme(R.style.ThemeLight)
             "dark" -> context.setTheme(R.style.ThemeDark)
             "black" -> context.setTheme(R.style.ThemeBlack)
@@ -174,19 +177,44 @@ object UIElements {
         }, delay)
     }
 
-    fun setWallpaper(context: Context, imageView: ImageView) {
+    fun setWallpaper(context: Context, imageView: BlurImageView, alphaLayer: ImageView) {
         if (Permissions.readStoragePermissionGiven(context)) {
-            try {
-                val wallpaper: WallpaperManager = WallpaperManager.getInstance(context)
-                val wallpaperDrawable: Drawable = wallpaper.drawable
-                val bmpDraw = wallpaperDrawable as BitmapDrawable
-                val bmp = bmpDraw.bitmap
-                val wallpaperBMP = Bitmap.createScaledBitmap(bmp, Calculations.screenMeasure(context, "width"), Calculations.screenMeasure(context, "height"), true)
-                imageView.setImageBitmap(wallpaperBMP)
-            } catch (e: Exception) {
-                Log.e("ERR", "pebble.ui_elements.set_wallpaper.from.$context.${e.localizedMessage}")
+            if (Values.settingsSpecialEffects) {
+                try {
+                    val wallpaper: WallpaperManager = WallpaperManager.getInstance(context)
+                    val wallpaperDrawable: Drawable = wallpaper.drawable
+                    val bmpDraw = wallpaperDrawable as BitmapDrawable
+                    val bmp = bmpDraw.bitmap
+                    val wallpaperBMP = Bitmap.createScaledBitmap(bmp, Calculations.screenMeasure(context, "width"), Calculations.screenMeasure(context, "height"), true)
+                    imageView.setImageBitmap(wallpaperBMP)
+                    imageView.setBlur(15)
+                    viewObjectAnimator(alphaLayer, "alpha", 0.5f, 150, 0, LinearInterpolator())
+                } catch (e: Exception) {
+                    Log.e("ERR", "pebble.ui_elements.set_wallpaper.from.$context.${e.localizedMessage}")
+                }
+            } else {
+                viewObjectAnimator(alphaLayer, "alpha", 1f, 150, 0, LinearInterpolator())
             }
         }
+    }
+
+    private fun blurRenderScript(context: Context, bitmap: Bitmap, radius: Float): Bitmap {
+
+        val renderScript = RenderScript.create(context)
+
+        val normalBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        val blurInput = Allocation.createFromBitmap(renderScript, bitmap)
+        val blurOutput = Allocation.createFromBitmap(renderScript, normalBitmap)
+
+        val blur = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript))
+        blur.setInput(blurInput)
+        blur.setRadius(radius)
+        blur.forEach(blurOutput)
+
+        blurOutput.copyTo(normalBitmap)
+        renderScript.destroy()
+
+        return normalBitmap
     }
 
 
