@@ -13,6 +13,20 @@ object Calculations {
         when(value) {
             "height" -> return context.resources.displayMetrics.heightPixels
             "width" -> return context.resources.displayMetrics.widthPixels
+            "largest" -> {
+                return if (screenMeasure(context, "height") > screenMeasure(context, "width")) {
+                    screenMeasure(context, "height")
+                } else {
+                    screenMeasure(context, "width")
+                }
+            }
+            "smallest" -> {
+                return if (screenMeasure(context, "height") < screenMeasure(context, "width")) {
+                    screenMeasure(context, "height")
+                } else {
+                    screenMeasure(context, "width")
+                }
+            }
         }
         return 0
     }

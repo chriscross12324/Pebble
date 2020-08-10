@@ -215,4 +215,20 @@ object AppHashMaps {
 
         return array
     }
+
+    fun arrayYesCancel() : ArrayList<HashMap<String, Int>> {
+        val array = ArrayList<HashMap<String, Int>>()
+
+        val one = HashMap<String, Int>()
+        one["buttonTitle"] = R.string.text_eng_yes
+        one["buttonIcon"] = R.drawable.icon_check
+        array.add(one)
+
+        val two = HashMap<String, Int>()
+        two["buttonTitle"] = R.string.text_eng_cancel
+        two["buttonIcon"] = R.drawable.icon_close
+        array.add(two)
+
+        return array
+    }
 }

@@ -37,8 +37,12 @@
     <string name="dialog_button_eng_home_screen">Home Screen</string>
     <string name="dialog_button_eng_lock_screen">Lock Screen</string>
     <string name="dialog_title_eng_save_gradient">Save Gradient</string>
+    <string name="dialog_title_eng_wallpaper_set">Wallpaper Set</string>
+    <string name="dialog_body_eng_wallpaper_set">Enjoy your new wallpaper!</string>
     <string name="dialog_body_eng_save_gradient">Would you like to save this gradient to your device?</string>
     <string name="text_eng_open_gradient">Open</string>
+    <string name="dialog_title_eng_outdated_android">Outdated Android</string>
+    <string name="dialog_body_eng_outdated_android">Your Android version is outdated and isn’t fully supported, set both Home &amp; Lock screen?</string>
 
     <!-- Dialog Strings English -->
     <string name="dialog_title_eng_gradient_create_missing">Missing Info</string>

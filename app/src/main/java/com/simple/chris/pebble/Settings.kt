@@ -10,7 +10,6 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import kotlinx.android.synthetic.main.activity_browse.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.activity_settings.bottomSheet
 import kotlinx.android.synthetic.main.activity_settings.buttonIcon
@@ -85,6 +84,10 @@ class Settings : AppCompatActivity() {
             setButtonBackgroundAlpha()
             UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
         }
+
+        backButton.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun calculateHeights() {
@@ -94,10 +97,10 @@ class Settings : AppCompatActivity() {
             bottomSheetPeekHeight = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 screenHeight
             } else {
-                (screenHeight * (0.667)).toInt()
+                ((screenHeight * (0.667)) + Calculations.convertToDP(this, 16f)).toInt()
             }
 
-            titleHolder.translationY = (((screenHeight * (0.333) - titleHolder.measuredHeight) / 2).toFloat())
+            titleHolder.translationY = ((((screenHeight * (0.333) - titleHolder.measuredHeight) / 2) /*+ Calculations.convertToDP(this, 16f)*/).toFloat())
             screenDescription.text = "Customize Pebble"
         } catch (e: Exception) {
             Log.e("ERR", "pebble.settings.calculate_height: ${e.localizedMessage}")
@@ -111,7 +114,7 @@ class Settings : AppCompatActivity() {
 
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                titleHolder.translationY = ((screenHeight * (-0.333) * slideOffset + screenHeight * (0.333) - (titleHolder.measuredHeight)) / 2).toFloat()
+                titleHolder.translationY = (((screenHeight * (-0.333) * slideOffset + screenHeight * (0.333) - (titleHolder.measuredHeight)) / 2) /*+ Calculations.convertToDP(this@Settings, 16f)*/).toFloat()
                 //Log.e("ERR", "$slideOffset")
                 if (slideOffset > 0) {
                     titleHolder.alpha = ((slideOffset * -1) + 1)
@@ -129,9 +132,9 @@ class Settings : AppCompatActivity() {
     }
 
     private fun initiateOptionsBackgrounds() {
-        themeOptions.background.alpha = (85 * 2.55).roundToInt()
-        vibrationOptions.background.alpha = (85 * 2.55).roundToInt()
-        specialOptions.background.alpha = (85 * 2.55).roundToInt()
+        themeOptions.background.alpha = (75 * 2.55).roundToInt()
+        vibrationOptions.background.alpha = (75 * 2.55).roundToInt()
+        specialOptions.background.alpha = (75 * 2.55).roundToInt()
     }
 
     private fun setButtonBackgroundAlpha() {

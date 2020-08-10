@@ -241,7 +241,7 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
                     }, 1500)
                 } else {
                     if (Values.gradientList.isEmpty()) {
-                        UIElement.popupDialog(this, "noConnection", R.drawable.icon_no_connection, R.string.dialog_title_eng_offline_mode, null, R.string.dialog_body_eng_offline_mode, AppHashMaps.offlineModeArrayList(), window.decorView, this)
+                        UIElement.popupDialog(this, "noConnection", R.drawable.icon_wifi_red, R.string.dialog_title_eng_offline_mode, null, R.string.dialog_body_eng_offline_mode, AppHashMaps.offlineModeArrayList(), window.decorView, this)
                     } else {
                         startActivity(Intent(this, BrowseActivity::class.java))
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)

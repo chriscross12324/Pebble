@@ -90,7 +90,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp">
 
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
@@ -99,13 +101,15 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:paddingBottom="98dp">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/themeOptions"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
+                            android:layout_marginTop="16dp"
                             android:background="@drawable/foreground_background"
                             android:backgroundTint="?ForegroundColour">
 
@@ -380,6 +384,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:layout_marginTop="8dp"
+                            android:layout_marginBottom="16dp"
                             android:background="@drawable/foreground_background"
                             android:backgroundTint="?ForegroundColour">
 
@@ -502,5 +507,28 @@
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:id="@+id/backButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/details_background"
+        android:backgroundTint="?ForegroundColour"
+        android:clickable="true"
+        android:elevation="10dp"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:rotation="180"
+            android:src="@drawable/icon_arrow"
+            android:tint="?PrimaryTextColour" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -88,6 +88,9 @@ class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 titleHolder.translationY = ((screenHeight * (-0.333) * slideOffset + screenHeight * (0.333) - (titleHolder.measuredHeight)) / 2).toFloat()
+                val cornerRadius = ((slideOffset * -1) + 1) * Calculations.convertToDP(this@BrowseActivity, 20f)
+                val bottomShe = findViewById<CardView>(R.id.bottomSheet)
+                bottomShe.radius = cornerRadius
             }
         })
 
