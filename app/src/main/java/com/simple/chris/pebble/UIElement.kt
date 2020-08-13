@@ -2,6 +2,7 @@ package com.simple.chris.pebble
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.app.WallpaperManager
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
@@ -11,7 +12,9 @@ import android.view.*
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jgabrielfreitas.core.BlurImageView
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.dialog_popup.*
 
@@ -24,6 +27,20 @@ object UIElement {
             "light" -> context.setTheme(R.style.ThemeLight)
             "dark" -> context.setTheme(R.style.ThemeDark)
             "black" -> context.setTheme(R.style.ThemeBlack)
+        }
+    }
+
+    fun setWallpaper(context: Context, imageView: BlurImageView, alphaLayer: ImageView) {
+        if (Permissions.readStoragePermissionGiven(context)) {
+            if (Values.settingsSpecialEffects) {
+                try {
+                    val wallpaperManager = WallpaperManager.getInstance(context)
+                    val wallpaperDrawable = wallpaperManager.drawable
+
+                } catch (e: Exception) {
+
+                }
+            }
         }
     }
 

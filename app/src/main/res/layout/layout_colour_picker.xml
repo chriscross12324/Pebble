@@ -313,11 +313,11 @@
             android:layout_height="0dp"
             android:layout_margin="12dp"
             android:src="@drawable/icon_back"
-            android:tint="?SecondaryTextColour"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?SecondaryTextColour" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -346,6 +346,28 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/randomGradientButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
+        android:alpha="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:background="@drawable/details_background"
+        android:backgroundTint="?BackgroundColour"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/randomGradientIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/icon_shuffle"
+            app:tint="?SecondaryTextColour" />
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/invalidColourNotification"
@@ -383,11 +405,11 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:tint="?SecondaryTextColour"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/icon_warning" />
+            app:srcCompat="@drawable/icon_warning"
+            app:tint="?SecondaryTextColour" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

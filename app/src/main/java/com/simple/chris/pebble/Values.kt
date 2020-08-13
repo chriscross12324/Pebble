@@ -42,8 +42,8 @@ object Values {
 
     //Gradient Creator
     var gradientCreatorGradientName = ""
-    var gradientCreatorStartColour = "#acd77b"
-    var gradientCreatorEndColour = "#74d77b"
+    var gradientCreatorStartColour = ""
+    var gradientCreatorEndColour = ""
     var gradientCreatorDescription = ""
     var currentColourPOS = ""
     var currentColourInt = 0
@@ -89,8 +89,8 @@ object Values {
         settingsSpecialEffects = sharedPrefs.getBoolean("settingsSpecialEffects", true)!!
         gcFirstStart = sharedPrefs.getBoolean("gcFirstStart", true)
         gradientCreatorGradientName = sharedPrefs.getString("gradientCreatorGradientName", "")!!
-        gradientCreatorStartColour = sharedPrefs.getString("gradientCreatorStartColour", "#acd77b")!!
-        gradientCreatorEndColour = sharedPrefs.getString("gradientCreatorEndColour", "#74d77b")!!
+        gradientCreatorStartColour = sharedPrefs.getString("gradientCreatorStartColour", "")!!
+        gradientCreatorEndColour = sharedPrefs.getString("gradientCreatorEndColour", "")!!
         gradientCreatorDescription = sharedPrefs.getString("gradientCreatorDescription", "")!!
         hintCreateGradientDismissed = sharedPrefs.getBoolean("hintCreateGradientDismissed", false)
     }

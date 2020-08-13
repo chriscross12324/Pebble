@@ -139,7 +139,7 @@
             android:fontFamily="@font/googlesans_medium"
             android:gravity="center"
             android:text="@string/text_eng_next"
-            android:textColor="?SecondaryTextColour"
+            android:textColor="?PrimaryTextColour"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -166,11 +166,11 @@
             android:layout_height="0dp"
             android:layout_margin="10dp"
             android:src="@drawable/icon_close"
-            android:tint="?SecondaryTextColour"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?SecondaryTextColour" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -251,9 +251,29 @@
         android:id="@+id/endColourPicker"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
         android:alpha="0"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:background="@drawable/details_background"
+        android:backgroundTint="?BackgroundColour"
+        app:layout_constraintBottom_toTopOf="@id/randomGradientButton"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/endColourPreview"
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/randomGradientButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
+        android:alpha="1"
         android:gravity="center"
         android:orientation="horizontal"
         android:background="@drawable/details_background"
@@ -262,9 +282,11 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:id="@+id/endColourPreview"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
+            android:id="@+id/randomGradientIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/icon_shuffle"
+            app:tint="?SecondaryTextColour" />
     </LinearLayout>
 
     <View

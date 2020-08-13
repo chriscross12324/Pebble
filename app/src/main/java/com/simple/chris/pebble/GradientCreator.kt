@@ -28,11 +28,14 @@ import kotlinx.android.synthetic.main.activity_feedback.*
 import kotlinx.android.synthetic.main.activity_gradient_details.*
 import org.apache.commons.lang3.RandomStringUtils
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.OnButtonListener {
 
     lateinit var dialog: Dialog
 
+    private var startColour = 0
+    private var endColour = 0
     private var submitStep = false
     private var gradientExists = false
     var gradientUID = ""
@@ -124,8 +127,16 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
         /**
          * Re-draws gradient after start/end colour change
          */
-        val startColour = Color.parseColor(Values.gradientCreatorStartColour)
-        val endColour = Color.parseColor(Values.gradientCreatorEndColour)
+        if (Values.gradientCreatorStartColour == "") {
+            val startRNDM = Random
+            startColour = Color.rgb(startRNDM.nextInt(256), startRNDM.nextInt(256), startRNDM.nextInt(256))
+            endColour = Color.rgb(startRNDM.nextInt(256), startRNDM.nextInt(256), startRNDM.nextInt(256))
+            Values.gradientCreatorStartColour = "#" + Integer.toHexString(startColour).substring(2)
+            Values.gradientCreatorEndColour = "#" + Integer.toHexString(endColour).substring(2)
+        } else {
+            startColour = Color.parseColor(Values.gradientCreatorStartColour)
+            endColour = Color.parseColor(Values.gradientCreatorEndColour)
+        }
         UIElement.gradientDrawable(this, gradientCreatorGradientViewer, startColour, endColour, 0f)
 
         val gradientDrawableStartCircle = GradientDrawable()
@@ -192,8 +203,10 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
         viewObjectAnimator(lastStepButton, "translationY", 0f, 700, 550, DecelerateInterpolator(3f))
         viewObjectAnimator(startColourPicker, "alpha", 1f, 700, 250, LinearInterpolator())
         viewObjectAnimator(endColourPicker, "alpha", 1f, 700, 250, LinearInterpolator())
+        viewObjectAnimator(randomGradientButton, "alpha", 1f, 700, 250, LinearInterpolator())
         UIElements.viewVisibility(startColourPicker, View.VISIBLE, 0)
         UIElements.viewVisibility(endColourPicker, View.VISIBLE, 0)
+        UIElements.viewVisibility(randomGradientButton, View.VISIBLE, 0)
 
         /**
          * Sets icon/text for firstStep
@@ -210,6 +223,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
         viewObjectAnimator(lastStepButton, "translationY", convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
         viewObjectAnimator(startColourPicker, "alpha", 0f, 250, 0, LinearInterpolator())
         viewObjectAnimator(endColourPicker, "alpha", 0f, 250, 0, LinearInterpolator())
+        viewObjectAnimator(randomGradientButton, "alpha", 0f, 250, 0, LinearInterpolator())
 
         if (mainMenu) {
             viewObjectAnimator(sharedElementsTransitionView, "alpha", 1f, 150, 0, LinearInterpolator())
@@ -227,6 +241,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
         viewObjectAnimator(gradientNameHolder, "translationY", 0f, 700, 400, DecelerateInterpolator(3f))
         UIElements.viewVisibility(startColourPicker, View.GONE, 0)
         UIElements.viewVisibility(endColourPicker, View.GONE, 0)
+        UIElements.viewVisibility(randomGradientButton, View.GONE, 0)
 
         /**
          * Sets icon/text for lastStep
@@ -319,6 +334,8 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
     private fun gradientPushComplete() {
         Values.justSubmitted = true
         Values.gradientCreatorGradientName = ""
+        Values.gradientCreatorStartColour = ""
+        Values.gradientCreatorEndColour = ""
         Values.gradientCreatorDescription = ""
         Values.saveValues(this)
 
