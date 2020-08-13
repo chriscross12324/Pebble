@@ -175,6 +175,9 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
          */
         nextStepButton.translationY = convertToDP(this, 74f)
         lastStepButton.translationY = convertToDP(this, 74f)
+        startColourPicker.translationY = convertToDP(this, 190f)
+        endColourPicker.translationY = convertToDP(this, 132f)
+        randomGradientButton.translationY = convertToDP(this, 74f)
         gradientDescriptionHolder.translationY = convertToDP(this, 90f) + gradientDescriptionHolder.height
         gradientNameHolder.translationY = convertToDP(this, 106f) + gradientDescriptionHolder.height + gradientNameHolder.height
 
@@ -201,9 +204,9 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
          */
         viewObjectAnimator(nextStepButton, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
         viewObjectAnimator(lastStepButton, "translationY", 0f, 700, 550, DecelerateInterpolator(3f))
-        viewObjectAnimator(startColourPicker, "alpha", 1f, 700, 250, LinearInterpolator())
-        viewObjectAnimator(endColourPicker, "alpha", 1f, 700, 250, LinearInterpolator())
-        viewObjectAnimator(randomGradientButton, "alpha", 1f, 700, 250, LinearInterpolator())
+        viewObjectAnimator(startColourPicker, "translationY", 0f, 700, 550, DecelerateInterpolator(3f))
+        viewObjectAnimator(endColourPicker, "translationY", 0f, 700, 550, DecelerateInterpolator(3f))
+        viewObjectAnimator(randomGradientButton, "translationY", 0f, 700, 550, DecelerateInterpolator(3f))
         UIElements.viewVisibility(startColourPicker, View.VISIBLE, 0)
         UIElements.viewVisibility(endColourPicker, View.VISIBLE, 0)
         UIElements.viewVisibility(randomGradientButton, View.VISIBLE, 0)
@@ -221,9 +224,9 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
          */
         viewObjectAnimator(nextStepButton, "translationY", convertToDP(this, 74f), 700, 100, DecelerateInterpolator(3f))
         viewObjectAnimator(lastStepButton, "translationY", convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
-        viewObjectAnimator(startColourPicker, "alpha", 0f, 250, 0, LinearInterpolator())
-        viewObjectAnimator(endColourPicker, "alpha", 0f, 250, 0, LinearInterpolator())
-        viewObjectAnimator(randomGradientButton, "alpha", 0f, 250, 0, LinearInterpolator())
+        viewObjectAnimator(startColourPicker, "translationY", convertToDP(this, 190f), 700, 0, DecelerateInterpolator(3f))
+        viewObjectAnimator(endColourPicker, "translationY", convertToDP(this, 132f), 700, 0, DecelerateInterpolator(3f))
+        viewObjectAnimator(randomGradientButton, "translationY", convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
 
         if (mainMenu) {
             viewObjectAnimator(sharedElementsTransitionView, "alpha", 1f, 150, 0, LinearInterpolator())

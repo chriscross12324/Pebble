@@ -1,5 +1,6 @@
 package com.simple.chris.pebble
 
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -11,11 +12,13 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.layout_colour_picker.*
 import java.lang.Exception
+import kotlin.random.Random
 
 class ColourP : AppCompatActivity() {
 
@@ -42,17 +45,29 @@ class ColourP : AppCompatActivity() {
         colourPickerSaveButton.setOnClickListener {
             try {
                 val colour = Color.parseColor("#$hexString")
-                when(Values.currentColourPOS) {
+                when (Values.currentColourPOS) {
                     "startColour" -> Values.gradientCreatorStartColour = "#$hexString"
                     "endColour" -> Values.gradientCreatorEndColour = "#$hexString"
                 }
 
                 animationOut()
-            } catch (e: Exception) {}
+            } catch (e: Exception) {
+            }
         }
 
         colourPickerBackButton.setOnClickListener {
-                animationOut()
+            animationOut()
+        }
+
+        randomColourButton.setOnClickListener {
+            val rgbRNDM = Random
+            val generatedColour = Color.rgb(rgbRNDM.nextInt(256), rgbRNDM.nextInt(256), rgbRNDM.nextInt(256))
+            Color.colorToHSV(generatedColour, hsv)
+
+            hueValue = hsv[0].toInt()
+            satValue = (hsv[1] * 100).toInt()
+            valValue = (hsv[2] * 100).toInt()
+            updateValues(true)
         }
     }
 
@@ -71,10 +86,10 @@ class ColourP : AppCompatActivity() {
         satValue = (hsv[1] * 100).toInt()
         valValue = (hsv[2] * 100).toInt()
 
-        updateValues()
+        updateValues(true)
     }
 
-    fun updateValues() {
+    fun updateValues(updateView: Boolean) {
         hsv[0] = 360f * hueValue / 360
         hue[0] = 360f * hueValue / 360
         hsv[1] = satValue / 100f
@@ -83,23 +98,26 @@ class ColourP : AppCompatActivity() {
         hexString = "" + Integer.toHexString(Color.HSVToColor(hsv)).substring(2)
         hexValue = Color.HSVToColor(hsv)
 
-        updateView()
+        updateView(updateView)
+
     }
 
-    private fun updateView() {
+    private fun updateView(updateView: Boolean) {
         colourPickerColourViewer.setBackgroundColor(hexValue)
         //hexValueEditText.setText(hexString)
         setHEXTextColour()
 
-        hueText.setText("$hueValue")
+        /*hueText.setText("$hueValue")
         satText.setText("$satValue")
-        valText.setText("$valValue")
+        valText.setText("$valValue")*/
 
-        if (!hueSeekBar.isFocused || !saturationSeekBar.isFocused || !valueSeekBar.isFocused) {
-            hueSeekBar.progress = hueValue
-            saturationSeekBar.progress = satValue
-            valueSeekBar.progress = valValue
-            //Toast.makeText(this, "#$valValue", Toast.LENGTH_SHORT).show()
+        if (updateView) {
+            if (!hueSeekBar.isFocused || !saturationSeekBar.isFocused || !valueSeekBar.isFocused) {
+                seekBarAnimator(hueSeekBar, hueText, hueValue.toFloat())
+                seekBarAnimator(saturationSeekBar, satText, satValue.toFloat())
+                seekBarAnimator(valueSeekBar, valText, valValue.toFloat())
+                //Toast.makeText(this, "#$valValue", Toast.LENGTH_SHORT).show()
+            }
         }
 
         if (!hexValueEditText.isFocused && hexValueEditText.text.toString() != "#$hexString") {
@@ -144,6 +162,7 @@ class ColourP : AppCompatActivity() {
         UIElements.viewObjectAnimator(colourPickerSliders, "translationY", 0f, 700, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(colourPickerSaveButton, "translationY", 0f, 700, 250, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(colourPickerBackButton, "translationY", 0f, 700, 300, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(randomColourButton, "translationY", 0f, 700, 300, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(colourCodeHolder, "alpha", 1f, 700, 250, LinearInterpolator())
     }
 
@@ -151,6 +170,7 @@ class ColourP : AppCompatActivity() {
         UIElements.viewObjectAnimator(colourPickerSliders, "translationY", colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f), 700, 100, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(colourPickerSaveButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(colourPickerBackButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(randomColourButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(colourCodeHolder, "translationY", (colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f)) / 2, 700, 100, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(colourCodeHolder, "alpha", 0f, 500, 450, LinearInterpolator())
 
@@ -182,8 +202,10 @@ class ColourP : AppCompatActivity() {
         /** Slider listeners **/
         hueSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                hueValue = progress
-                updateValues()
+                if (fromUser) {
+                    hueValue = progress
+                    updateValues(true)
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -193,8 +215,10 @@ class ColourP : AppCompatActivity() {
 
         saturationSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                satValue = progress
-                updateValues()
+                if (fromUser) {
+                    satValue = progress
+                    updateValues(true)
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -204,8 +228,10 @@ class ColourP : AppCompatActivity() {
 
         valueSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                valValue = progress
-                updateValues()
+                if (fromUser) {
+                    valValue = progress
+                    updateValues(true)
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -231,7 +257,7 @@ class ColourP : AppCompatActivity() {
         hueText.setOnKeyListener { _, _, event ->
             if (event.keyCode == KeyEvent.KEYCODE_ENTER) {
                 hueValue = hueText.text.toString().toInt()
-                updateValues()
+                updateValues(true)
             }
             false
         }
@@ -239,7 +265,7 @@ class ColourP : AppCompatActivity() {
         satText.setOnKeyListener { _, _, event ->
             if (event.keyCode == KeyEvent.KEYCODE_ENTER) {
                 satValue = satText.text.toString().toInt()
-                updateValues()
+                updateValues(true)
             }
             false
         }
@@ -247,11 +273,41 @@ class ColourP : AppCompatActivity() {
         valText.setOnKeyListener { _, _, event ->
             if (event.keyCode == KeyEvent.KEYCODE_ENTER) {
                 valValue = valText.text.toString().toInt()
-                updateValues()
+                updateValues(true)
             }
             false
         }
 
+    }
+
+    private fun seekBarAnimator(view: SeekBar, editText: EditText, endValue: Float) {
+        val valueAnimator = ValueAnimator.ofFloat(view.progress.toFloat(), endValue)
+        valueAnimator.addUpdateListener {
+            val value = it.animatedValue as Float
+            view.progress = value.toInt()
+            editText.setText("${value.toInt()}")
+            when (view.tag) {
+                "hue" -> {
+                    hueValue = value.toInt()
+                    updateValues(false)
+                }
+                "sat" -> {
+                    satValue = value.toInt()
+                    updateValues(false)
+                }
+                "val" -> {
+                    valValue = value.toInt()
+                    updateValues(false)
+                }
+            }
+        }
+        valueAnimator.interpolator = DecelerateInterpolator(2f)
+        if (Values.settingsSpecialEffects) {
+            valueAnimator.duration = 500
+        } else {
+            valueAnimator.duration = 0
+        }
+        valueAnimator.start()
     }
 
     override fun onResume() {

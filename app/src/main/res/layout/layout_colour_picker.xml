@@ -18,8 +18,8 @@
         android:id="@+id/colourCodeHolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:alpha="0"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/colourPickerSliders"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,22 +29,22 @@
             android:id="@+id/hexValueTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/googlesans_bold"
             android:text="#"
             android:textColor="#ffffff"
-            android:textSize="36sp"
-            android:fontFamily="@font/googlesans_bold"/>
+            android:textSize="36sp" />
 
         <EditText
             android:id="@+id/hexValueEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="50dp"
             android:background="@android:color/transparent"
             android:digits="0123456789abcdef"
             android:fontFamily="@font/googlesans_bold"
             android:inputType="text"
             android:maxLength="6"
             android:maxLines="1"
+            android:minWidth="50dp"
             android:text="3a76f0"
             android:textColor="#ffffff"
             android:textSize="36sp" />
@@ -255,6 +255,7 @@
             android:progress="214"
             android:progressDrawable="@drawable/empty_shape"
             android:splitTrack="false"
+            android:tag="hue"
             android:thumb="@drawable/colour_picker_thumb"
             app:layout_constraintBottom_toBottomOf="@+id/hueBackground"
             app:layout_constraintEnd_toEndOf="@+id/hueBackground"
@@ -271,6 +272,7 @@
             android:progress="85"
             android:progressDrawable="@drawable/empty_shape"
             android:splitTrack="false"
+            android:tag="sat"
             android:thumb="@drawable/colour_picker_thumb"
             app:layout_constraintBottom_toBottomOf="@+id/satBackground"
             app:layout_constraintEnd_toEndOf="@+id/satBackground"
@@ -287,6 +289,7 @@
             android:progress="94"
             android:progressDrawable="@drawable/empty_shape"
             android:splitTrack="false"
+            android:tag="val"
             android:thumb="@drawable/colour_picker_thumb"
             app:layout_constraintBottom_toBottomOf="@+id/valBackground"
             app:layout_constraintEnd_toEndOf="@+id/valBackground"
@@ -348,16 +351,18 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:id="@+id/randomGradientButton"
+        android:id="@+id/randomColourButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="24dp"
         android:alpha="1"
-        android:gravity="center"
-        android:orientation="horizontal"
         android:background="@drawable/details_background"
         android:backgroundTint="?BackgroundColour"
+        android:elevation="12dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:translationY="74dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
