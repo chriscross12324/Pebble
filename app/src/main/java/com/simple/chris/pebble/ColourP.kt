@@ -89,7 +89,7 @@ class ColourP : AppCompatActivity() {
         updateValues(true)
     }
 
-    fun updateValues(updateView: Boolean) {
+    fun updateValues(animateSeekBars: Boolean) {
         hsv[0] = 360f * hueValue / 360
         hue[0] = 360f * hueValue / 360
         hsv[1] = satValue / 100f
@@ -98,26 +98,32 @@ class ColourP : AppCompatActivity() {
         hexString = "" + Integer.toHexString(Color.HSVToColor(hsv)).substring(2)
         hexValue = Color.HSVToColor(hsv)
 
-        updateView(updateView)
+        updateView(animateSeekBars)
 
     }
 
-    private fun updateView(updateView: Boolean) {
+    private fun updateView(animateSeekBars: Boolean) {
         colourPickerColourViewer.setBackgroundColor(hexValue)
         //hexValueEditText.setText(hexString)
         setHEXTextColour()
+        hexValueEditText.clearFocus()
+        hueText.clearFocus()
+        satText.clearFocus()
+        valText.clearFocus()
 
         /*hueText.setText("$hueValue")
         satText.setText("$satValue")
         valText.setText("$valValue")*/
 
-        if (updateView) {
-            if (!hueSeekBar.isFocused || !saturationSeekBar.isFocused || !valueSeekBar.isFocused) {
-                seekBarAnimator(hueSeekBar, hueText, hueValue.toFloat())
-                seekBarAnimator(saturationSeekBar, satText, satValue.toFloat())
-                seekBarAnimator(valueSeekBar, valText, valValue.toFloat())
-                //Toast.makeText(this, "#$valValue", Toast.LENGTH_SHORT).show()
-            }
+        if (animateSeekBars) {
+            seekBarAnimator(hueSeekBar, hueText, hueValue.toFloat())
+            seekBarAnimator(saturationSeekBar, satText, satValue.toFloat())
+            seekBarAnimator(valueSeekBar, valText, valValue.toFloat())
+            //Toast.makeText(this, "#$valValue", Toast.LENGTH_SHORT).show()
+        } else {
+            hueText.setText("$hueValue")
+            satText.setText("$satValue")
+            valText.setText("$valValue")
         }
 
         if (!hexValueEditText.isFocused && hexValueEditText.text.toString() != "#$hexString") {
@@ -204,7 +210,7 @@ class ColourP : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     hueValue = progress
-                    updateValues(true)
+                    updateValues(false)
                 }
             }
 
@@ -217,7 +223,7 @@ class ColourP : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     satValue = progress
-                    updateValues(true)
+                    updateValues(false)
                 }
             }
 
@@ -230,7 +236,7 @@ class ColourP : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     valValue = progress
-                    updateValues(true)
+                    updateValues(false)
                 }
             }
 

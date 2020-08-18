@@ -1,6 +1,7 @@
 package com.simple.chris.pebble
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Dialog
 import android.app.WallpaperManager
 import android.content.Context
@@ -12,7 +13,9 @@ import android.view.*
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jgabrielfreitas.core.BlurImageView
 import eightbitlab.com.blurview.RenderScriptBlur
@@ -183,6 +186,12 @@ object UIElement {
         } catch (e: Exception) {
             Log.e("ERR", "pebble.ui_elements.popup_dialog_hider: ${e.localizedMessage}")
         }
+    }
+
+    fun hideSoftKeyboard(activity: Activity) {
+        val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val view = activity.currentFocus as View
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
 }

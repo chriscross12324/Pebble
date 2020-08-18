@@ -12,9 +12,11 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.android.volley.DefaultRetryPolicy
@@ -101,15 +103,6 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
             }, 500)
         }
 
-        startColourPicker.setOnLongClickListener {
-            firstStepExitAnim(false)
-            Handler().postDelayed({
-                Values.currentColourPOS = "startColour"
-                startActivity(Intent(this, ColourPicker::class.java))
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            }, 500)
-        }
-
         /**
          * Opens colourPicker for endColour
          */
@@ -120,6 +113,42 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
                 startActivity(Intent(this, ColourP::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }, 500)
+        }
+
+        /**
+         * Randomly generates gradient
+         */
+        randomGradientButton.setOnClickListener {
+            UIElements.viewVisibility(touchBlocker, View.VISIBLE, 0)
+            viewObjectAnimator(backgroundFadeOut, "alpha", 1f, 450, 0, LinearInterpolator())
+            viewObjectAnimator(endColourPicker, "translationY", convertToDP(this, 58f), 450, 0, DecelerateInterpolator(3f))
+            viewObjectAnimator(startColourPicker, "translationY", convertToDP(this, 116f), 450, 0, DecelerateInterpolator(3f))
+            UIElements.viewVisibility(touchBlocker, View.GONE, 700)
+            viewObjectAnimator(backgroundFadeOut, "alpha", 0f, 450, 550, LinearInterpolator())
+            viewObjectAnimator(endColourPicker, "translationY", 0f, 450, 550, DecelerateInterpolator(3f))
+            viewObjectAnimator(startColourPicker, "translationY", 0f, 450, 550, DecelerateInterpolator(3f))
+            Values.gradientCreatorStartColour = ""
+            Handler().postDelayed({
+                refreshGradientDrawable()
+            }, 450)
+        }
+
+        gradientCreatorGradientName.setOnKeyListener { v, _, event ->
+            if (event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                UIElement.hideSoftKeyboard(this)
+                gradientCreatorGradientName.clearFocus()
+                Toast.makeText(this, "Name Hidden", Toast.LENGTH_SHORT).show()
+            }
+            false
+        }
+
+        gradientCreatorGradientDescription.setOnKeyListener { v, _, event ->
+            if (event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                UIElement.hideSoftKeyboard(this)
+                gradientCreatorGradientDescription.clearFocus()
+                Toast.makeText(this, "Description Hidden", Toast.LENGTH_SHORT).show()
+            }
+            false
         }
     }
 
