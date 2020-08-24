@@ -35,36 +35,6 @@ object UIElements {
     lateinit var dialogOneButton: Dialog
     lateinit var popupDialog: Dialog
 
-    fun setTheme(context: Context) {
-        when (Values.settingThemes) {
-            "light" -> context.setTheme(R.style.ThemeLight)
-            "dark" -> context.setTheme(R.style.ThemeDark)
-            "black" -> context.setTheme(R.style.ThemeBlack)
-        }
-    }
-
-    @SuppressLint("NewApi")
-    fun gradientDrawable(context: Context, setDrawable: Boolean, view: View?, startColour: Int, endColour: Int, cornerRadius: Float): Drawable? {
-        val gradientDrawable = GradientDrawable(
-                GradientDrawable.Orientation.TL_BR,
-                intArrayOf(startColour, endColour)
-        )
-        gradientDrawable.cornerRadius = convertToDP(context, cornerRadius)
-
-        when (setDrawable) {
-            true -> {
-                view!!.background = gradientDrawable
-                if (Calculations.isAndroidPOrGreater()) {
-                    view.outlineSpotShadowColor = endColour
-                }
-            }
-            false -> {
-                return gradientDrawable
-            }
-        }
-        return null
-    }
-
     fun viewVisibility(view: View, visibility: Int, delay: Long) {
         Handler().postDelayed({
             view.visibility = visibility

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true">
+    android:layout_height="match_parent">
 
     <com.jgabrielfreitas.core.BlurImageView
         android:id="@+id/wallpaperImageViewer"
@@ -22,7 +21,7 @@
         android:id="@+id/buttonIcon"
         android:layout_width="400dp"
         android:layout_height="400dp"
-        android:alpha="0"
+        android:alpha="0.1"
         android:src="@drawable/icon_browse"
         android:transitionName="buttonIcon"
         android:translationX="50dp"
@@ -101,6 +100,7 @@
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
                     android:fadingEdge="none"
+                    android:paddingTop="16dp"
                     android:paddingBottom="98dp"
                     android:requiresFadingEdge="none"
                     android:visibility="visible"
@@ -114,7 +114,7 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <LinearLayout
-        android:id="@+id/backButton"
+        android:id="@+id/menuButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
@@ -132,8 +132,43 @@
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:rotation="180"
-            android:src="@drawable/icon_arrow"
+            android:src="@drawable/icon_menu"
             app:tint="?PrimaryTextColour" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/createButton"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:background="@drawable/details_background"
+        android:backgroundTint="?BackgroundColour"
+        android:clickable="true"
+        android:elevation="10dp"
+        android:focusable="true"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/searchButton"
+        app:layout_constraintEnd_toStartOf="@+id/searchButton"
+        app:layout_constraintStart_toEndOf="@+id/menuButton"
+        app:layout_constraintTop_toTopOf="@+id/searchButton">
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:src="@drawable/icon_add"
+            app:tint="?PrimaryTextColour" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="18dp"
+            android:fontFamily="@font/googlesans_medium"
+            android:gravity="center"
+            android:text="Create"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="?PrimaryTextColour"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -166,5 +201,189 @@
         android:elevation="21dp"
         android:focusable="true"
         android:visibility="gone" />
+
+    <View
+        android:id="@+id/touchBlockerDark"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:clickable="true"
+        android:elevation="21dp"
+        android:focusable="true"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/menuArrow"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/details_background_less"
+        android:elevation="21dp"
+        android:rotation="45"
+        android:visibility="visible"
+        android:translationY="-25dp"
+        app:layout_constraintBottom_toTopOf="@+id/menuButton"
+        app:layout_constraintEnd_toEndOf="@+id/menuButton"
+        app:layout_constraintStart_toStartOf="@+id/menuButton" />
+
+    <LinearLayout
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/details_background"
+        android:backgroundTint="?BackgroundColour"
+        android:orientation="vertical"
+        android:elevation="21dp"
+        android:padding="5dp"
+        android:translationY="25dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/menuArrow"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:src="@drawable/icon_apps"
+                app:tint="?PrimaryTextColour" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/googlesans_medium"
+                android:gravity="center"
+                android:text="My Gradients"
+                android:textColor="?PrimaryTextColour"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/details_background"
+            app:tint="?ForegroundColour" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:src="@drawable/icon_feedback"
+                app:tint="?PrimaryTextColour" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/googlesans_medium"
+                android:gravity="center"
+                android:text="Feedback"
+                android:textColor="?PrimaryTextColour"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/details_background"
+            app:tint="?ForegroundColour" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:src="@drawable/icon_settings"
+                app:tint="?PrimaryTextColour" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/googlesans_medium"
+                android:gravity="center"
+                android:text="Settings"
+                android:textColor="?PrimaryTextColour"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/details_background"
+            app:tint="?ForegroundColour" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:src="@drawable/icon_reload"
+                app:tint="?PrimaryTextColour" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/googlesans_medium"
+                android:gravity="center"
+                android:text="Refresh"
+                android:textColor="?PrimaryTextColour"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

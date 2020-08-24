@@ -41,7 +41,7 @@ class ColourPicker : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        UIElements.setTheme(this)
+        UIElement.setTheme(this)
         setContentView(R.layout.layout_colour_picker)
         Values.currentActivity = "ColourPicker"
 

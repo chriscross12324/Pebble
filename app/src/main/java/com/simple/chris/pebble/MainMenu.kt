@@ -24,7 +24,7 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        UIElements.setTheme(this)
+        UIElement.setTheme(this)
         setContentView(R.layout.activity_main_menu)
         if (!Values.refreshTheme) {
             initialPlacement()
@@ -113,7 +113,7 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
         val gradientDatabaseURL = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getGradients"
 
         val request = JsonObjectRequest(Request.Method.GET, gradientDatabaseURL, null,
-                Response.Listener { response ->
+                { response ->
                     try {
                         val gradientArray = response.getJSONArray("items")
                         val gradientList = ArrayList<HashMap<String, String>>()
@@ -135,7 +135,7 @@ class MainMenu : AppCompatActivity(), MainMenuRecyclerViewAdapter.OnButtonListen
                         Log.e("ERR", "pebble.main_menu.get_gradients: ${e.localizedMessage}")
                     }
                 },
-                Response.ErrorListener {
+                {
                     Log.e("ERR", "pebble.main_menu.get_gradients.request.error_listener: ${it.networkResponse}")
                 })
         mQueue.add(request)

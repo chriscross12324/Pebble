@@ -1,13 +1,14 @@
 package com.simple.chris.pebble
 
 import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -22,32 +23,60 @@ class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
     private var screenHeight = 0
     private var bottomSheetPeekHeight = 0
+    private var createButtonExpanded = true
+    private var createButtonExpandedWidth = 0
+    private var menuHeight = 0
+    private var menuWidth = 0
 
     /**
      * Browse Activity - Handles gradient RecyclerView, Gradient Creator Banner & Click events
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        UIElements.setTheme(this)
+        UIElement.setTheme(this)
         setContentView(R.layout.activity_browse)
         Values.currentActivity = "Browse"
-        animateButtonIcon(0f, 0.1f)
 
         UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
+        Connection.getGradients(this, window.decorView)
 
         coordinatorLayout.post {
             getHeights()
             bottomSheet()
+            connectionChecker()
         }
-        RecyclerGrid.gradientGrid(this, browseGrid, Values.gradientList, this, this)
 
-        backButton.setOnClickListener {
-            animateButtonIcon(0.1f, 1f)
-            onBackPressed()
+        menuButton.setOnClickListener {
+            touchBlockerDark.visibility = View.VISIBLE
+            menuArrow.visibility = View.INVISIBLE
+            menu.visibility = View.VISIBLE
+            UIElements.viewObjectAnimator(menuArrow, "translationY", Calculations.convertToDP(this, 0f), 250, 500, DecelerateInterpolator())
+            UIElements.viewVisibility(menuArrow, View.VISIBLE, 500)
+        }
+        menuButton.setOnLongClickListener {
+            startActivity(Intent(this, Settings::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            true
+        }
+
+        touchBlockerDark.setOnClickListener {
+            UIElements.viewObjectAnimator(menuArrow, "translationY", Calculations.convertToDP(this, -25f), 250, 0, DecelerateInterpolator())
+            UIElements.viewVisibility(menuArrow, View.INVISIBLE, 250)
+            Handler().postDelayed({
+                touchBlockerDark.visibility = View.GONE
+                menuArrow.visibility = View.GONE
+                menu.visibility = View.GONE
+            }, 350)
+
         }
 
         searchButton.setOnClickListener {
             startActivity(Intent(this, SearchActivity::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
+
+        createButton.setOnClickListener {
+            startActivity(Intent(this, GradientCreator::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
 
@@ -63,7 +92,10 @@ class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             bottomSheetPeekHeight = (screenHeight * (0.667)).toInt()
 
             titleHolder.translationY = (((screenHeight * (0.333) - titleHolder.measuredHeight) / 2).toFloat())
-            resultsText.text = "${Values.gradientList.size} gradients"
+            createButtonExpandedWidth = createButton.measuredWidth
+
+            menuHeight = menu.measuredHeight
+            menuWidth = menu.measuredWidth
             Log.e("INFO", "$bottomSheetPeekHeight")
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse.get_screen_height: ${e.localizedMessage}")
@@ -75,12 +107,11 @@ class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
      */
     private fun bottomSheet() {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        bottomSheetBehavior.peekHeight = 0
+
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             bottomSheetPeekHeight = Calculations.screenMeasure(this, "height")
-        } else {
-            bottomSheetBehavior.peekHeight = bottomSheetPeekHeight
         }
-        UIElements.bottomSheetPeekHeightAnim(bottomSheetBehavior, bottomSheetPeekHeight, 300, 0, DecelerateInterpolator(3f))
 
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -91,6 +122,23 @@ class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
                 val cornerRadius = ((slideOffset * -1) + 1) * Calculations.convertToDP(this@BrowseActivity, 20f)
                 val bottomShe = findViewById<CardView>(R.id.bottomSheet)
                 bottomShe.radius = cornerRadius
+
+                /*if (slideOffset >= 0.4f) {
+                    if (createButtonExpanded) {
+                        Log.e("INFO", "Don't Expand")
+                        UIElement.animateViewWidth("height", createButton, Calculations.convertToDP(this@BrowseActivity, 50f).toInt(), 0)
+                        UIElement.animateViewWidth("width", createButton, Calculations.convertToDP(this@BrowseActivity, 50f).toInt(), 0)
+                        createButtonExpanded = false
+                    }
+                } else {
+                    if (!createButtonExpanded) {
+                        Log.e("Info", "Expand")
+                        UIElement.animateViewWidth("height", createButton, Calculations.convertToDP(this@BrowseActivity, 60f).toInt(), 0)
+                        UIElement.animateViewWidth("width", createButton, createButtonExpandedWidth, 0)
+                        createButtonExpanded = true
+                    }
+
+                }*/
             }
         })
 
@@ -122,17 +170,28 @@ class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         }
     }
 
-    private fun animateButtonIcon(start: Float, end: Float) {
-        Handler().postDelayed({
-            val valueAnimator = ValueAnimator.ofFloat(start, end)
-            valueAnimator.duration = 250
-
-            valueAnimator.addUpdateListener {
-                val animatedValue = valueAnimator.animatedValue as Float
-                buttonIcon.alpha = animatedValue
+    private fun connectionChecker() {
+        val handler = Handler()
+        handler.postDelayed(object : Runnable {
+            @SuppressLint("SyntheticAccessor")
+            override fun run() {
+                if (Values.gradientList.isNotEmpty()) {
+                    gradientsDownloaded()
+                } else {
+                    connectionChecker()
+                }
             }
-            valueAnimator.start()
         }, 500)
+    }
+
+    private fun gradientsDownloaded() {
+        if (Values.gradientList.isNotEmpty()) {
+            RecyclerGrid.gradientGrid(this, browseGrid, Values.gradientList, this, this)
+            UIElements.bottomSheetPeekHeightAnim(bottomSheetBehavior, bottomSheetPeekHeight, 750, 0, DecelerateInterpolator(3f))
+            resultsText.text = "${Values.gradientList.size} gradients"
+        } else {
+            //Coming from different activity
+        }
     }
 
     override fun onGradientClick(position: Int, view: View) {

@@ -1,5 +1,6 @@
 package com.simple.chris.pebble
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
@@ -66,6 +67,32 @@ object UIElement {
             return gradientDrawable
         }
         return null
+    }
+
+    fun animateViewWidth(axis: String, view: View, newValue: Int, delay: Long) {
+        /**
+         * Determines if animating height or width
+         */
+        Handler().postDelayed({
+            val valueAnimator: ValueAnimator = if (axis == "height") {
+                ValueAnimator.ofInt(view.width, newValue)
+            } else {
+                ValueAnimator.ofInt(view.width, newValue)
+            }
+            valueAnimator.addUpdateListener {
+                val value = it.animatedValue as Int
+                val layoutParams = view.layoutParams
+                if (axis == "height") {
+                    layoutParams.height = value
+                } else if (axis == "width") {
+                    layoutParams.width = value
+                }
+                view.layoutParams = layoutParams
+            }
+            valueAnimator.interpolator = DecelerateInterpolator(3f)
+            valueAnimator.duration = 350
+            valueAnimator.start()
+        }, delay)
     }
 
     fun popupDialog(context: Context, popupName: String, icon: Int?, title: Int?, titleString: String?, description: Int,

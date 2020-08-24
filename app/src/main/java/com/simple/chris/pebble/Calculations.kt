@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import android.util.TypedValue
+import android.view.View
+import android.view.ViewGroup
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -27,6 +29,15 @@ object Calculations {
                     screenMeasure(context, "width")
                 }
             }
+        }
+        return 0
+    }
+
+    fun viewWrapContent(view: View, value: String): Int {
+        view.measure(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        when (value) {
+            "height" -> return view.measuredHeight
+            "width" -> return view.measuredWidth
         }
         return 0
     }

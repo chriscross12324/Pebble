@@ -28,7 +28,7 @@ class Settings : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        UIElements.setTheme(this)
+        UIElement.setTheme(this)
         setContentView(R.layout.activity_settings)
         UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
         Values.currentActivity = "Settings"
@@ -184,5 +184,18 @@ class Settings : AppCompatActivity() {
         startActivity(Intent(this, Settings::class.java))
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         finish()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        /**
+         * Checks if app settings unloaded during pause
+         */
+        if (!Values.valuesLoaded) {
+            startActivity(Intent(this, SplashScreen::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            finish()
+        }
     }
 }

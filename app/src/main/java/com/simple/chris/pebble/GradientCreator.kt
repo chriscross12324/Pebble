@@ -11,11 +11,13 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.text.InputType
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -44,7 +46,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        UIElements.setTheme(this)
+        UIElement.setTheme(this)
         setContentView(R.layout.activity_create_gradient_new)
         postponeEnterTransition()
         Values.currentActivity = "CreateGradient"
@@ -133,23 +135,17 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
             }, 450)
         }
 
-        gradientCreatorGradientName.setOnKeyListener { v, _, event ->
+        gradientCreatorGradientName.setOnKeyListener { _, _, event ->
             if (event.keyCode == KeyEvent.KEYCODE_ENTER) {
                 UIElement.hideSoftKeyboard(this)
                 gradientCreatorGradientName.clearFocus()
-                Toast.makeText(this, "Name Hidden", Toast.LENGTH_SHORT).show()
             }
             false
         }
 
-        gradientCreatorGradientDescription.setOnKeyListener { v, _, event ->
-            if (event.keyCode == KeyEvent.KEYCODE_ENTER) {
-                UIElement.hideSoftKeyboard(this)
-                gradientCreatorGradientDescription.clearFocus()
-                Toast.makeText(this, "Description Hidden", Toast.LENGTH_SHORT).show()
-            }
-            false
-        }
+        gradientCreatorGradientDescription.imeOptions = EditorInfo.IME_ACTION_DONE
+        gradientCreatorGradientDescription.setRawInputType(InputType.TYPE_CLASS_TEXT)
+
     }
 
     private fun refreshGradientDrawable() {

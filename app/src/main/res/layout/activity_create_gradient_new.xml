@@ -116,11 +116,11 @@
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/googlesans_medium"
                 android:hint="Gradient Description"
-                android:inputType="textMultiLine|textCapSentences"
+                android:inputType="text|textMultiLine|textCapSentences"
+                android:imeOptions="actionDone"
                 android:maxHeight="160dp"
                 android:maxLength="200"
                 android:textAlignment="center"
-                android:singleLine="true"
                 android:textColor="?SecondaryTextColour"
                 android:textColorHint="?SecondaryTextColour"
                 android:textSize="14sp" />
@@ -292,8 +292,8 @@
 
         <ImageView
             android:id="@+id/randomGradientIcon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@drawable/icon_shuffle"
             app:tint="?SecondaryTextColour" />
     </LinearLayout>

@@ -40,7 +40,7 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        UIElements.setTheme(this)
+        UIElement.setTheme(this)
         setContentView(R.layout.activity_search)
         Values.currentActivity = "SearchActivity"
         UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)

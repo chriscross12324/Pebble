@@ -22,7 +22,7 @@ class Feedback : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.OnButtonL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        UIElements.setTheme(this)
+        UIElement.setTheme(this)
         setContentView(R.layout.activity_feedback)
         Values.currentActivity = "Feedback"
 
