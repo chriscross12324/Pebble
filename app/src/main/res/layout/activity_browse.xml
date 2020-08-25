@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/googlesans_medium"
-            android:text="(null) gradients"
+            android:text="Getting gradients"
             android:textColor="?SecondaryTextColour"
             android:textSize="14sp"
             android:transitionName="buttonTitle"
@@ -105,7 +105,8 @@
                     android:requiresFadingEdge="none"
                     android:visibility="visible"
                     app:layout_anchor="@+id/bottomSheet"
-                    app:layout_anchorGravity="center" />
+                    app:layout_anchorGravity="center"
+                    android:layoutAnimation="@anim/recycler_animation"/>
 
             </LinearLayout>
 
@@ -154,7 +155,10 @@
         <ImageView
             android:layout_width="35dp"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
+            android:layout_marginTop="7.5dp"
+            android:layout_marginStart="7.5dp"
+            android:layout_marginBottom="7.5dp"
+            android:layout_marginEnd="3dp"
             android:src="@drawable/icon_add"
             app:tint="?PrimaryTextColour" />
 
@@ -165,8 +169,8 @@
             android:fontFamily="@font/googlesans_medium"
             android:gravity="center"
             android:text="Create"
-            android:maxLines="1"
             android:singleLine="true"
+            android:ellipsize="none"
             android:textColor="?PrimaryTextColour"
             android:textSize="18sp" />
     </LinearLayout>
@@ -210,7 +214,8 @@
         android:clickable="true"
         android:elevation="21dp"
         android:focusable="true"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:alpha="0"/>
 
     <ImageView
         android:id="@+id/menuArrow"
@@ -220,7 +225,7 @@
         android:background="@drawable/details_background_less"
         android:elevation="21dp"
         android:rotation="45"
-        android:visibility="visible"
+        android:visibility="gone"
         android:translationY="-25dp"
         app:layout_constraintBottom_toTopOf="@+id/menuButton"
         app:layout_constraintEnd_toEndOf="@+id/menuButton"
@@ -235,155 +240,21 @@
         android:backgroundTint="?BackgroundColour"
         android:orientation="vertical"
         android:elevation="21dp"
-        android:padding="5dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
         android:translationY="25dp"
-        android:visibility="visible"
+        android:visibility="gone"
+        android:alpha="0"
         app:layout_constraintBottom_toTopOf="@+id/menuArrow"
         app:layout_constraintStart_toStartOf="parent">
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/browseMenu"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content"/>
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:src="@drawable/icon_apps"
-                app:tint="?PrimaryTextColour" />
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/googlesans_medium"
-                android:gravity="center"
-                android:text="My Gradients"
-                android:textColor="?PrimaryTextColour"
-                android:textSize="18sp" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:src="@drawable/details_background"
-            app:tint="?ForegroundColour" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:src="@drawable/icon_feedback"
-                app:tint="?PrimaryTextColour" />
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/googlesans_medium"
-                android:gravity="center"
-                android:text="Feedback"
-                android:textColor="?PrimaryTextColour"
-                android:textSize="18sp" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:src="@drawable/details_background"
-            app:tint="?ForegroundColour" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:src="@drawable/icon_settings"
-                app:tint="?PrimaryTextColour" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/googlesans_medium"
-                android:gravity="center"
-                android:text="Settings"
-                android:textColor="?PrimaryTextColour"
-                android:textSize="18sp" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:src="@drawable/details_background"
-            app:tint="?ForegroundColour" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:src="@drawable/icon_reload"
-                app:tint="?PrimaryTextColour" />
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/googlesans_medium"
-                android:gravity="center"
-                android:text="Refresh"
-                android:textColor="?PrimaryTextColour"
-                android:textSize="18sp" />
-        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

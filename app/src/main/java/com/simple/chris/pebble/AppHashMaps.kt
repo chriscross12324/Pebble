@@ -3,6 +3,34 @@ package com.simple.chris.pebble
 object AppHashMaps {
 
     /**
+     * Browse Menu
+     */
+    fun browseMenuArray() : ArrayList<HashMap<String, Int>> {
+        val menuArray = ArrayList<HashMap<String, Int>>()
+        val myGradients = HashMap<String, Int>()
+        myGradients["buttonIcon"] = R.drawable.icon_apps
+        myGradients["buttonText"] = R.string.myGradientsTitle
+        menuArray.add(myGradients)
+
+        val feedback = HashMap<String, Int>()
+        feedback["buttonIcon"] = R.drawable.icon_feedback
+        feedback["buttonText"] = R.string.feedbackTitle
+        menuArray.add(feedback)
+
+        val settings = HashMap<String, Int>()
+        settings["buttonIcon"] = R.drawable.icon_settings
+        settings["buttonText"] = R.string.settingsTitle
+        menuArray.add(settings)
+
+        val refresh = HashMap<String, Int>()
+        refresh["buttonIcon"] = R.drawable.icon_reload
+        refresh["buttonText"] = R.string.refreshTitle
+        menuArray.add(refresh)
+
+        return menuArray
+    }
+
+    /**
      * Data Warning
      */
     fun dataWarningArrayList() : ArrayList<HashMap<String, Int>> {

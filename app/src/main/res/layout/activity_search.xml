@@ -24,14 +24,14 @@
         android:layout_height="400dp"
         android:alpha="0.1"
         android:src="@drawable/icon_search"
-        android:tint="?SecondaryTextColour"
         android:transitionName="buttonIcon"
         android:translationX="50dp"
         android:translationY="50dp"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?SecondaryTextColour" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -147,7 +147,7 @@
             android:layout_margin="10dp"
             android:rotation="180"
             android:src="@drawable/icon_arrow"
-            android:tint="?PrimaryTextColour" />
+            app:tint="?PrimaryTextColour" />
     </LinearLayout>
 
     <LinearLayout
@@ -171,9 +171,9 @@
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:src="@drawable/icon_text"
-            android:tint="?SecondaryTextColour"
             android:visibility="gone"
-            android:alpha="0"/>
+            android:alpha="0"
+            app:tint="?SecondaryTextColour" />
 
         <EditText
             android:id="@+id/searchField"

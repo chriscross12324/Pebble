@@ -61,7 +61,7 @@ class ActivityPermissions : AppCompatActivity() {
                 networkUnderstandText.setText(R.string.text_eng_i_understand)
             } else {
                 Values.firstStart = false
-                startActivity(Intent(this, MainMenu::class.java))
+                startActivity(Intent(this, BrowseActivity::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 networkDialog.dismiss()
                 finish()

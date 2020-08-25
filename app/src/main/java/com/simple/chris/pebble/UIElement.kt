@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.app.WallpaperManager
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Handler
@@ -69,13 +70,13 @@ object UIElement {
         return null
     }
 
-    fun animateViewWidth(axis: String, view: View, newValue: Int, delay: Long) {
+    fun animateViewWidth(axis: String, view: View, newValue: Int, delay: Long, duration: Long) {
         /**
          * Determines if animating height or width
          */
         Handler().postDelayed({
             val valueAnimator: ValueAnimator = if (axis == "height") {
-                ValueAnimator.ofInt(view.width, newValue)
+                ValueAnimator.ofInt(view.height, newValue)
             } else {
                 ValueAnimator.ofInt(view.width, newValue)
             }
@@ -90,7 +91,7 @@ object UIElement {
                 view.layoutParams = layoutParams
             }
             valueAnimator.interpolator = DecelerateInterpolator(3f)
-            valueAnimator.duration = 350
+            valueAnimator.duration = duration
             valueAnimator.start()
         }, delay)
     }
@@ -219,6 +220,13 @@ object UIElement {
         val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         val view = activity.currentFocus as View
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    fun startActivityFade(context: Context, activity: Activity, delay: Long) {
+        Handler().postDelayed({
+            context.startActivity(Intent(context, activity::class.java))
+            activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }, delay)
     }
 
 }

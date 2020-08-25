@@ -58,6 +58,8 @@
     <string name="dialog_body_eng_connecting">Pebble is connecting to the server, please wait…</string>
     <string name="eng_refresh">Refresh</string>
     <string name="eng_make_another">Make Another</string>
+    <string name="dialog_title_eng_leave">Leave?</string>
+    <string name="dialog_body_eng_leave">Would you like to leave Pebble?</string>
 
     <!-- Gradient Creator string -->
     <string name="dialog_title_eng_gradient_exists">Gradient Exists</string>
@@ -85,5 +87,11 @@
     <string name="feedback_failed_body">The server took to long to respond, try submitting again.</string>
     <string name="feedback_failed">Failed</string>
     <string name="feedback_submitting_body">Sending your feedback over the radio waves!</string>
+
+    <!-- Browse Menu Strings -->
+    <string name="myGradientsTitle">My Gradients</string>
+    <string name="feedbackTitle">Feedback</string>
+    <string name="settingsTitle">Settings</string>
+    <string name="refreshTitle">Refresh</string>
 
 </resources>
