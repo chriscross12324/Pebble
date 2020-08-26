@@ -1,22 +1,18 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.adapters
 
 import android.content.Context
-import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.simple.chris.pebble.R
+import com.simple.chris.pebble.functions.UIElement
 import kotlinx.android.synthetic.main.button_search_colour.view.*
-import kotlinx.android.synthetic.main.main_menu_buttons.view.*
 
-class SearchColourRecyclerViewAdapter internal constructor(var context: Context, private val buttons: ArrayList<HashMap<String, String>>, onButtonListener: OnButtonListener): RecyclerView.Adapter<SearchColourRecyclerViewAdapter.ViewHolder>() {
+class SearchColourRecyclerView internal constructor(var context: Context, private val buttons: ArrayList<HashMap<String, String>>, onButtonListener: OnButtonListener): RecyclerView.Adapter<SearchColourRecyclerView.ViewHolder>() {
     private var mOnButtonListener = onButtonListener
     private var layoutInflater = LayoutInflater.from(context)
 

@@ -1,7 +1,5 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.activities
 
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
 import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -18,23 +16,24 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.simple.chris.pebble.Calculations.convertToDP
-import com.simple.chris.pebble.UIElements.viewObjectAnimator
+import com.simple.chris.pebble.*
+import com.simple.chris.pebble.functions.Calculations.convertToDP
+import com.simple.chris.pebble.functions.UIElements.viewObjectAnimator
+import com.simple.chris.pebble.adapters.PopupDialogButtonRecycler
+import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.activity_create_gradient_new.*
 import kotlinx.android.synthetic.main.activity_feedback.*
-import kotlinx.android.synthetic.main.activity_gradient_details.*
 import org.apache.commons.lang3.RandomStringUtils
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.OnButtonListener {
+class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener {
 
     lateinit var dialog: Dialog
 
@@ -62,6 +61,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
          * Performs tasks when nextStepButton is pressed
          */
         nextStepButton.setOnClickListener {
+            Vibration.mediumFeedback(this)
             if (!submitStep) {
                 firstStepExitAnim(false)
                 submitStep = true
@@ -79,6 +79,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
          * Performs tasks when lastStepButton is pressed
          */
         lastStepButton.setOnClickListener {
+            Vibration.lowFeedback(this)
             if (!submitStep) {
                 firstStepExitAnim(true)
                 Handler().postDelayed({
@@ -97,10 +98,11 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
          * Opens colourPicker for startColour
          */
         startColourPicker.setOnClickListener {
+            Vibration.lowFeedback(this)
             firstStepExitAnim(false)
             Handler().postDelayed({
                 Values.currentColourPOS = "startColour"
-                startActivity(Intent(this, ColourP::class.java))
+                startActivity(Intent(this, ColourPicker::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }, 500)
         }
@@ -109,10 +111,11 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
          * Opens colourPicker for endColour
          */
         endColourPicker.setOnClickListener {
+            Vibration.lowFeedback(this)
             firstStepExitAnim(false)
             Handler().postDelayed({
                 Values.currentColourPOS = "endColour"
-                startActivity(Intent(this, ColourP::class.java))
+                startActivity(Intent(this, ColourPicker::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }, 500)
         }
@@ -121,6 +124,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
          * Randomly generates gradient
          */
         randomGradientButton.setOnClickListener {
+            Vibration.lowFeedback(this)
             UIElements.viewVisibility(touchBlocker, View.VISIBLE, 0)
             viewObjectAnimator(backgroundFadeOut, "alpha", 1f, 450, 0, LinearInterpolator())
             viewObjectAnimator(endColourPicker, "translationY", convertToDP(this, 58f), 450, 0, DecelerateInterpolator(3f))
@@ -218,7 +222,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
         if (!Values.hintCreateGradientDismissed) {
             Handler().postDelayed({
                 UIElement.popupDialog(this, "gradientCreator", R.drawable.icon_apps, R.string.dialog_title_eng_gradient_create, null, R.string.dialog_body_eng_gradient_create,
-                        AppHashMaps.createGradientArrayList(), window.decorView, this)
+                        HashMaps.createGradientArrayList(), window.decorView, this)
             }, 1000)
         }
     }
@@ -309,7 +313,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
                         if (Values.gradientList[count]["endColour"].equals(Values.gradientCreatorEndColour)) {
                             //Gradient already exists
                             //popupDialog(R.drawable.icon_attention, "Gradient Exists", R.string.dialog_body_eng_exists, R.string.text_eng_ok, dialogExistsListener)
-                            UIElement.popupDialog(this, "gradientExists", R.drawable.icon_attention, R.string.dialog_title_eng_gradient_exists, null, R.string.dialog_body_eng_gradient_exists, AppHashMaps.gradientExistsArrayList(), window.decorView, this)
+                            UIElement.popupDialog(this, "gradientExists", R.drawable.icon_attention, R.string.dialog_title_eng_gradient_exists, null, R.string.dialog_body_eng_gradient_exists, HashMaps.gradientExistsArrayList(), window.decorView, this)
                             gradientExists = true
                             break
                         }
@@ -327,7 +331,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
             }
         } else {
             //popupDialog(R.drawable.icon_question, "Missing Info", R.string.dialog_body_eng_gradient_create_missing, R.string.text_eng_ok, dialogMissingListener)
-            UIElement.popupDialog(this, "missingInfo", R.drawable.icon_question, R.string.dialog_title_eng_gradient_create_missing, null, R.string.dialog_body_eng_gradient_create_missing, AppHashMaps.missingInfoArrayList(), window.decorView, this)
+            UIElement.popupDialog(this, "missingInfo", R.drawable.icon_question, R.string.dialog_title_eng_gradient_create_missing, null, R.string.dialog_body_eng_gradient_create_missing, HashMaps.missingInfoArrayList(), window.decorView, this)
         }
     }
 
@@ -368,19 +372,19 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.On
         Values.saveValues(this)
 
         //popupDialog(R.drawable.icon_check, gradientUID, R.string.dialog_body_eng_submitted, R.string.text_eng_exit, dialogCompleteListener)
-        UIElement.popupDialog(this, "gradientSubmitted", R.drawable.icon_check, null, gradientUID, R.string.dialog_body_eng_submitted, AppHashMaps.gradientSubmittedArrayList(), window.decorView, this)
+        UIElement.popupDialog(this, "gradientSubmitted", R.drawable.icon_check, null, gradientUID, R.string.dialog_body_eng_submitted, HashMaps.gradientSubmittedArrayList(), window.decorView, this)
     }
 
     private fun checkConnection() {
         when (Connection.getConnectionType(this)) {
             0 -> {
                 UIElement.popupDialog(this, "noConnection", R.drawable.icon_warning, R.string.dialog_title_eng_no_connection, null,
-                        R.string.dialog_body_eng_no_connection, AppHashMaps.noConnectionArrayList(), window.decorView, this)
+                        R.string.dialog_body_eng_no_connection, HashMaps.noConnectionArrayList(), window.decorView, this)
             }
             1, 2 -> {
                 if (Values.gradientList.isEmpty()) {
                     UIElement.popupDialog(this, "gradientsNotDownloaded", R.drawable.icon_warning, R.string.dialog_title_eng_gradient_list_empty, null,
-                            R.string.dialog_body_eng_gradient_list_empty, AppHashMaps.gradientArrayNotUpdated(), window.decorView, this)
+                            R.string.dialog_body_eng_gradient_list_empty, HashMaps.gradientArrayNotUpdated(), window.decorView, this)
                 } else {
                     submitLogic()
                 }

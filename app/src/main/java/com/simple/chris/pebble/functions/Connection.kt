@@ -1,4 +1,4 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.functions
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -7,13 +7,12 @@ import android.net.NetworkInfo
 import android.os.Build
 import android.util.Log
 import android.view.View
-import android.view.animation.DecelerateInterpolator
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.activity_main_menu.*
+import com.simple.chris.pebble.R
 import java.util.*
 
 object Connection {

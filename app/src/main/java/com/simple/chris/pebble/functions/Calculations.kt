@@ -1,4 +1,4 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.functions
 
 import android.content.Context
 import android.os.Build

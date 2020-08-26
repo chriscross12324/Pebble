@@ -1,18 +1,18 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.module_browse_normal.view.*
-import android.os.Handler
-import android.widget.Toast
+import com.simple.chris.pebble.R
+import com.simple.chris.pebble.functions.UIElement
+import com.simple.chris.pebble.functions.Values
 
 /**
  * Creates a gradient modules for each gradient
@@ -23,7 +23,7 @@ import android.widget.Toast
  * @param onGradientLongClickListener Actions to perform when module is long pressed
  *
  */
-class GradientRecyclerViewAdapter internal constructor(var context: Context, private val gradients: ArrayList<HashMap<String, String>>, onGradientListener: OnGradientListener, onGradientLongClickListener: OnGradientLongClickListener) : RecyclerView.Adapter<GradientRecyclerViewAdapter.ViewHolder>() {
+class GradientRecyclerView internal constructor(var context: Context, private val gradients: ArrayList<HashMap<String, String>>, onGradientListener: OnGradientListener, onGradientLongClickListener: OnGradientLongClickListener) : RecyclerView.Adapter<GradientRecyclerView.ViewHolder>() {
     private var mOnGradientListener: OnGradientListener = onGradientListener
     private var mOnGradientLongClickListener: OnGradientLongClickListener = onGradientLongClickListener
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)

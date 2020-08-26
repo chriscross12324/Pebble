@@ -1,4 +1,4 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.activities
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
@@ -8,31 +8,24 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
+import com.simple.chris.pebble.*
+import com.simple.chris.pebble.adapters.BrowseMenuRecyclerView
+import com.simple.chris.pebble.adapters.GradientRecyclerView
+import com.simple.chris.pebble.adapters.PopupDialogButtonRecycler
+import com.simple.chris.pebble.functions.*
+import com.simple.chris.pebble.functions.Permissions
 import kotlinx.android.synthetic.main.activity_browse.*
-import com.simple.chris.pebble.UIElement.startActivityFade
-import kotlinx.android.synthetic.main.activity_browse.bottomSheet
-import kotlinx.android.synthetic.main.activity_browse.buttonIcon
-import kotlinx.android.synthetic.main.activity_browse.coordinatorLayout
-import kotlinx.android.synthetic.main.activity_browse.resultsText
-import kotlinx.android.synthetic.main.activity_browse.titleHolder
-import kotlinx.android.synthetic.main.activity_browse.touchBlocker
-import kotlinx.android.synthetic.main.activity_browse.wallpaperImageAlpha
-import kotlinx.android.synthetic.main.activity_browse.wallpaperImageViewer
-import kotlinx.android.synthetic.main.activity_main_menu.*
-import kotlinx.android.synthetic.main.activity_search.*
 
 
-class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener, BrowseMenuRecyclerViewAdapter.OnButtonListener, PopupDialogButtonRecyclerAdapter.OnButtonListener {
+class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, GradientRecyclerView.OnGradientLongClickListener, BrowseMenuRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
 
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
@@ -88,7 +81,7 @@ class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         }
 
         searchButton.setOnClickListener {
-            startActivity(Intent(this, SearchActivity::class.java))
+            startActivity(Intent(this, Search::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             Vibration.mediumFeedback(this)
         }
@@ -140,22 +133,22 @@ class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 titleHolder.translationY = ((screenHeight * (-0.333) * slideOffset + screenHeight * (0.333) - (titleHolder.measuredHeight)) / 2).toFloat()
                 buttonIcon.translationY = ((screenHeight * (-0.333) * slideOffset + screenHeight * (0.333) - (titleHolder.measuredHeight)) / 8).toFloat()
-                val cornerRadius = ((slideOffset * -1) + 1) * Calculations.convertToDP(this@BrowseActivity, 20f)
+                val cornerRadius = ((slideOffset * -1) + 1) * Calculations.convertToDP(this@Browse, 20f)
                 val bottomShe = findViewById<CardView>(R.id.bottomSheet)
                 bottomShe.radius = cornerRadius
 
                 if (slideOffset >= 0.4f) {
                     if (createButtonExpanded) {
                         Log.e("INFO", "Don't Expand")
-                        UIElement.animateViewWidth("height", createButton, Calculations.convertToDP(this@BrowseActivity, 35f).toInt(), 0, 250)
-                        UIElement.animateViewWidth("width", createButton, Calculations.convertToDP(this@BrowseActivity, 50f).toInt(), 0, 250)
+                        UIElement.animateViewWidth("height", createButton, Calculations.convertToDP(this@Browse, 35f).toInt(), 0, 250)
+                        UIElement.animateViewWidth("width", createButton, Calculations.convertToDP(this@Browse, 50f).toInt(), 0, 250)
                         createButtonExpanded = false
                     }
                 } else {
                     if (!createButtonExpanded) {
                         Log.e("Info", "Expand")
-                        UIElement.animateViewWidth("height", createButton, Calculations.convertToDP(this@BrowseActivity, 60f).toInt(), 0, 250)
-                        UIElement.animateViewWidth("width", createButton, Calculations.viewWrapContent(createButton, "width") + Calculations.convertToDP(this@BrowseActivity, 11f).toInt(), 0, 250)
+                        UIElement.animateViewWidth("height", createButton, Calculations.convertToDP(this@Browse, 60f).toInt(), 0, 250)
+                        UIElement.animateViewWidth("width", createButton, Calculations.viewWrapContent(createButton, "width") + Calculations.convertToDP(this@Browse, 11f).toInt(), 0, 250)
                         createButtonExpanded = true
                     }
 
@@ -254,7 +247,7 @@ class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     private fun browseMenuButtons() {
         browseMenu.setHasFixedSize(true)
         val buttonLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        val buttonAdapter = BrowseMenuRecyclerViewAdapter(this, AppHashMaps.browseMenuArray(), this)
+        val buttonAdapter = BrowseMenuRecyclerView(this, HashMaps.browseMenuArray(), this)
 
         browseMenu.layoutManager = buttonLayoutManager
         browseMenu.adapter = buttonAdapter
@@ -306,11 +299,18 @@ class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             2 -> {
                 hideMenu()
                 Handler().postDelayed({
-                    startActivity(Intent(this, Settings::class.java))
+                    startActivity(Intent(this, Support::class.java))
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }, 400)
             }
             3 -> {
+                hideMenu()
+                Handler().postDelayed({
+                    startActivity(Intent(this, Settings::class.java))
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                }, 400)
+            }
+            4 -> {
                 hideMenu()
                 Handler().postDelayed({
                     Values.gradientList.clear()
@@ -322,7 +322,7 @@ class BrowseActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
     }
 
     override fun onBackPressed() {
-        UIElement.popupDialog(this, "leave", R.drawable.icon_door, R.string.dialog_title_eng_leave, null, R.string.dialog_body_eng_leave, AppHashMaps.arrayYesCancel(), window.decorView, this)
+        UIElement.popupDialog(this, "leave", R.drawable.icon_door, R.string.dialog_title_eng_leave, null, R.string.dialog_body_eng_leave, HashMaps.arrayYesCancel(), window.decorView, this)
     }
 
     override fun onButtonClickPopup(popupName: String, position: Int, view: View) {

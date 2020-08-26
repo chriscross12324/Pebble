@@ -1,4 +1,4 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.activities
 
 import android.content.Intent
 import android.content.res.Configuration
@@ -6,10 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.animation.DecelerateInterpolator
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.simple.chris.pebble.*
+import com.simple.chris.pebble.functions.Calculations
+import com.simple.chris.pebble.functions.UIElement
+import com.simple.chris.pebble.functions.UIElements
+import com.simple.chris.pebble.functions.Values
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.activity_settings.bottomSheet
 import kotlinx.android.synthetic.main.activity_settings.buttonIcon

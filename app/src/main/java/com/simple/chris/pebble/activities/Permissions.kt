@@ -1,26 +1,24 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.activities
 
 import android.app.Dialog
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.simple.chris.pebble.*
 import kotlinx.android.synthetic.main.activity_permissions.*
-import com.simple.chris.pebble.Calculations.convertToDP
-import com.simple.chris.pebble.UIElements.viewObjectAnimator
+import com.simple.chris.pebble.functions.Calculations.convertToDP
+import com.simple.chris.pebble.functions.UIElements.viewObjectAnimator
+import com.simple.chris.pebble.functions.UIElement
+import com.simple.chris.pebble.functions.UIElements
+import com.simple.chris.pebble.functions.Values
 
-class ActivityPermissions : AppCompatActivity() {
+class Permissions : AppCompatActivity() {
 
     private var noticeShown = false
 
@@ -61,7 +59,7 @@ class ActivityPermissions : AppCompatActivity() {
                 networkUnderstandText.setText(R.string.text_eng_i_understand)
             } else {
                 Values.firstStart = false
-                startActivity(Intent(this, BrowseActivity::class.java))
+                startActivity(Intent(this, Browse::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 networkDialog.dismiss()
                 finish()

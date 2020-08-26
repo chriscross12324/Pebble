@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Settings">
+    tools:context=".activities.Settings">
 
     <com.jgabrielfreitas.core.BlurImageView
         android:id="@+id/wallpaperImageViewer"
@@ -25,14 +25,14 @@
         android:layout_height="400dp"
         android:alpha="0.1"
         android:src="@drawable/icon_settings"
-        android:tint="?SecondaryTextColour"
         android:transitionName="buttonIcon"
         android:translationX="50dp"
         android:translationY="50dp"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?SecondaryTextColour" />
 
     <LinearLayout
         android:id="@+id/titleHolder"
@@ -171,7 +171,7 @@
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent"
                                         android:alpha="0.75"
-                                        android:tint="?PrimaryTextColour"/>
+                                        app:tint="?PrimaryTextColour" />
 
                                     <TextView
                                         android:id="@+id/lightThemeText"
@@ -207,7 +207,7 @@
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent"
                                         android:alpha="0.75"
-                                        android:tint="?PrimaryTextColour"/>
+                                        app:tint="?PrimaryTextColour" />
 
                                     <TextView
                                         android:id="@+id/darkThemeText"
@@ -242,7 +242,7 @@
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent"
                                         android:alpha="0.75"
-                                        android:tint="?PrimaryTextColour"/>
+                                        app:tint="?PrimaryTextColour" />
 
                                     <TextView
                                         android:id="@+id/blackThemeText"
@@ -326,7 +326,7 @@
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent"
                                         android:alpha="0.75"
-                                        android:tint="?PrimaryTextColour"/>
+                                        app:tint="?PrimaryTextColour" />
 
                                     <TextView
                                         android:id="@+id/onVibrationText"
@@ -361,7 +361,7 @@
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent"
                                         android:alpha="0.75"
-                                        android:tint="?PrimaryTextColour"/>
+                                        app:tint="?PrimaryTextColour" />
 
                                     <TextView
                                         android:id="@+id/offVibrationText"
@@ -446,7 +446,7 @@
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent"
                                         android:alpha="0.75"
-                                        android:tint="?PrimaryTextColour"/>
+                                        app:tint="?PrimaryTextColour" />
 
                                     <TextView
                                         android:id="@+id/onSpecialText"
@@ -481,7 +481,7 @@
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent"
                                         android:alpha="0.75"
-                                        android:tint="?PrimaryTextColour"/>
+                                        app:tint="?PrimaryTextColour" />
 
                                     <TextView
                                         android:id="@+id/offSpecialText"
@@ -528,7 +528,7 @@
             android:layout_margin="10dp"
             android:rotation="180"
             android:src="@drawable/icon_arrow"
-            android:tint="?PrimaryTextColour" />
+            app:tint="?PrimaryTextColour" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

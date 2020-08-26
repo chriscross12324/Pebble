@@ -1,16 +1,14 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.functions
 
 import android.animation.ObjectAnimator
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.app.WallpaperManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Handler
 import android.renderscript.*
@@ -27,7 +25,8 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.jgabrielfreitas.core.BlurImageView
-import com.simple.chris.pebble.Calculations.convertToDP
+import com.simple.chris.pebble.R
+import com.simple.chris.pebble.functions.Calculations.convertToDP
 import kotlin.math.roundToInt
 
 object UIElements {

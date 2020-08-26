@@ -1,11 +1,12 @@
 @file:Suppress("DEPRECATION")
 
-package com.simple.chris.pebble
+package com.simple.chris.pebble.functions
 
 import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import com.simple.chris.pebble.functions.Values
 
 object Vibration {
 

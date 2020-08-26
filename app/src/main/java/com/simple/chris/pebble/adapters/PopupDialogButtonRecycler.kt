@@ -1,7 +1,6 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.adapters
 
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +8,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.simple.chris.pebble.R
+import com.simple.chris.pebble.functions.Vibration
 import kotlinx.android.synthetic.main.main_menu_buttons.view.*
 
-class MainMenuRecyclerViewAdapter internal constructor(var context: Context, private val buttons: ArrayList<HashMap<String, String>>, onButtonListener: OnButtonListener): RecyclerView.Adapter<MainMenuRecyclerViewAdapter.ViewHolder>() {
+class PopupDialogButtonRecycler internal constructor(var context: Context, var popupName: String, private val buttons: ArrayList<HashMap<String, Int>>, onButtonListener: OnButtonListener): RecyclerView.Adapter<PopupDialogButtonRecycler.ViewHolder>() {
     private var mOnButtonListener = onButtonListener
     private var layoutInflater = LayoutInflater.from(context)
 
@@ -19,7 +20,7 @@ class MainMenuRecyclerViewAdapter internal constructor(var context: Context, pri
      * @return Populated module to display in RecyclerView
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(layoutInflater.inflate(R.layout.main_menu_buttons, parent, false), mOnButtonListener)
+        return ViewHolder(layoutInflater.inflate(R.layout.popup_dialog_buttons, parent, false), mOnButtonListener)
     }
 
     override fun getItemCount(): Int {
@@ -28,8 +29,8 @@ class MainMenuRecyclerViewAdapter internal constructor(var context: Context, pri
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
-            val details: HashMap<String, String> = buttons[position]
-            holder.buttonTitle.text = details["buttonTitle"]
+            val details: HashMap<String, Int> = buttons[position]
+            holder.buttonTitle.text = context.getString(details["buttonTitle"] as Int)
             holder.buttonIcon.setImageResource(details["buttonIcon"]!!.toInt())
         } catch (e: Exception) {
             //context.startActivity(Intent(context, Feedback::class.java))
@@ -47,12 +48,13 @@ class MainMenuRecyclerViewAdapter internal constructor(var context: Context, pri
         }
 
         override fun onClick(v: View?) {
-            myOnButtonListener.onButtonClick(adapterPosition, v as View)
+            myOnButtonListener.onButtonClickPopup(popupName, adapterPosition, v as View)
+            Vibration.lowFeedback(context)
         }
     }
 
     interface OnButtonListener {
-        fun onButtonClick(position: Int, view: View)
+        fun onButtonClickPopup(popupName: String, position: Int, view: View)
     }
 
 }

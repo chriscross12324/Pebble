@@ -83,7 +83,7 @@
     <string name="dialog_text_eng_email_body">Providing an email is not required, it just helps us get in contact with you if we need anymore information.</string>
     <string name="text_eng_yes">Yes</string>
     <string name="feedback_submitted">Feedback Submitted</string>
-    <string name="feedback_submitted_body">Your feedback has been recieved, we\'ll try to review it shortly.</string>
+    <string name="feedback_submitted_body">Your feedback has been received, we\'ll try to review it shortly.</string>
     <string name="feedback_failed_body">The server took to long to respond, try submitting again.</string>
     <string name="feedback_failed">Failed</string>
     <string name="feedback_submitting_body">Sending your feedback over the radio waves!</string>
@@ -91,7 +91,10 @@
     <!-- Browse Menu Strings -->
     <string name="myGradientsTitle">My Gradients</string>
     <string name="feedbackTitle">Feedback</string>
+    <string name="changelogTitle">Changelog</string>
     <string name="settingsTitle">Settings</string>
     <string name="refreshTitle">Refresh</string>
+    <string name="supportTitle">Support</string>
+    <string name="google_tax">The Google Play Store takes a 30% cut out of all purchases made through it, including any purchases made to support me. If you choose to support me with $1, Google will receive $0.30 of the purchase.</string>
 
 </resources>

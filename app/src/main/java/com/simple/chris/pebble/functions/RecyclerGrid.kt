@@ -1,4 +1,4 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.functions
 
 import android.app.Activity
 import android.app.Dialog
@@ -17,22 +17,21 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.simple.chris.pebble.R
+import com.simple.chris.pebble.activities.GradientDetailsActivity
+import com.simple.chris.pebble.adapters.GradientRecyclerView
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.dialog_long_press_gradients.*
-import kotlinx.android.synthetic.main.dialog_popup.*
 import kotlin.Exception
-import kotlinx.android.synthetic.main.dialog_long_press_gradients.blurView as blurView1
-import kotlinx.android.synthetic.main.dialog_long_press_gradients.holder as holder1
-import kotlinx.android.synthetic.main.dialog_popup.backgroundDimmer as backgroundDimmer1
 
 object RecyclerGrid {
 
     lateinit var gradientPopup: Dialog
 
-    fun gradientGrid(context: Context, view: RecyclerView, gradientJSON: ArrayList<HashMap<String, String>>, onGradientListener: GradientRecyclerViewAdapter.OnGradientListener, onGradientLongClickListener: GradientRecyclerViewAdapter.OnGradientLongClickListener) {
+    fun gradientGrid(context: Context, view: RecyclerView, gradientJSON: ArrayList<HashMap<String, String>>, onGradientListener: GradientRecyclerView.OnGradientListener, onGradientLongClickListener: GradientRecyclerView.OnGradientLongClickListener) {
         try {
             val gridLayoutManager = GridLayoutManager(context, 2)
-            val gridLayoutAdapter = GradientRecyclerViewAdapter(context, gradientJSON, onGradientListener, onGradientLongClickListener)
+            val gridLayoutAdapter = GradientRecyclerView(context, gradientJSON, onGradientListener, onGradientLongClickListener)
             view.setHasFixedSize(true)
             view.layoutManager = gridLayoutManager
             view.adapter = gridLayoutAdapter

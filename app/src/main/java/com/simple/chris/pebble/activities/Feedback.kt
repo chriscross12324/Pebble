@@ -1,4 +1,4 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.activities
 
 import android.os.Bundle
 import android.os.Handler
@@ -9,10 +9,13 @@ import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.simple.chris.pebble.*
+import com.simple.chris.pebble.adapters.PopupDialogButtonRecycler
+import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.activity_feedback.*
 import java.util.*
 
-class Feedback : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.OnButtonListener {
+class Feedback : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener {
 
     private val timeOutConnection = 15000
     private var emailDialogShown = false
@@ -89,7 +92,7 @@ class Feedback : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.OnButtonL
                 Response.Listener {
                     //showDialogs(R.layout.dialog_feedback_submitted)
                     UIElement.popupDialog(this, "feedbackSubmitted", R.drawable.icon_love, R.string.feedback_submitted, null, R.string.feedback_submitted_body,
-                            AppHashMaps.BAClose(), window.decorView, this)
+                            HashMaps.BAClose(), window.decorView, this)
                 },
 
                 /*
@@ -98,7 +101,7 @@ class Feedback : AppCompatActivity(), PopupDialogButtonRecyclerAdapter.OnButtonL
                 Response.ErrorListener {
                     submitButton.isEnabled = true
                     UIElement.popupDialog(this, "feedbackFailed", R.drawable.icon_wifi_red, R.string.feedback_failed, null, R.string.feedback_failed_body,
-                            AppHashMaps.BABackCancel(), window.decorView, this)
+                            HashMaps.BABackCancel(), window.decorView, this)
                 }) {
 
             /*

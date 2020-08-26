@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchActivity">
+    tools:context=".activities.Search">
 
     <com.jgabrielfreitas.core.BlurImageView
         android:id="@+id/wallpaperImageViewer"
@@ -163,7 +163,8 @@
         android:transitionName="searchBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/searchByColourButton"
-        app:layout_constraintStart_toEndOf="@+id/backButton">
+        app:layout_constraintStart_toEndOf="@+id/backButton"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/iconText"

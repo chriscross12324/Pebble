@@ -1,4 +1,4 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.activities
 
 import android.animation.ValueAnimator
 import android.content.Intent
@@ -6,21 +6,19 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.EditText
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.simple.chris.pebble.*
+import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.layout_colour_picker.*
 import java.lang.Exception
 import kotlin.random.Random
 
-class ColourP : AppCompatActivity() {
+class ColourPicker : AppCompatActivity() {
 
     private var hexValue = 0
     private var hexString = ""
@@ -44,6 +42,7 @@ class ColourP : AppCompatActivity() {
 
         colourPickerSaveButton.setOnClickListener {
             try {
+                Vibration.mediumFeedback(this)
                 val colour = Color.parseColor("#$hexString")
                 when (Values.currentColourPOS) {
                     "startColour" -> Values.gradientCreatorStartColour = "#$hexString"
@@ -57,9 +56,11 @@ class ColourP : AppCompatActivity() {
 
         colourPickerBackButton.setOnClickListener {
             animationOut()
+            Vibration.lowFeedback(this)
         }
 
         randomColourButton.setOnClickListener {
+            Vibration.lowFeedback(this)
             val rgbRNDM = Random
             val generatedColour = Color.rgb(rgbRNDM.nextInt(256), rgbRNDM.nextInt(256), rgbRNDM.nextInt(256))
             Color.colorToHSV(generatedColour, hsv)

@@ -1,6 +1,8 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.functions
 
-object AppHashMaps {
+import com.simple.chris.pebble.R
+
+object HashMaps {
 
     /**
      * Browse Menu
@@ -16,6 +18,11 @@ object AppHashMaps {
         feedback["buttonIcon"] = R.drawable.icon_feedback
         feedback["buttonText"] = R.string.feedbackTitle
         menuArray.add(feedback)
+
+        val support = HashMap<String, Int>()
+        support["buttonIcon"] = R.drawable.icon_money
+        support["buttonText"] = R.string.supportTitle
+        menuArray.add(support)
 
         val settings = HashMap<String, Int>()
         settings["buttonIcon"] = R.drawable.icon_settings

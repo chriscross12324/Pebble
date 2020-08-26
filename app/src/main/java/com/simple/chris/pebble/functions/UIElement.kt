@@ -1,4 +1,4 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.functions
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
@@ -17,9 +17,10 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jgabrielfreitas.core.BlurImageView
+import com.simple.chris.pebble.R
+import com.simple.chris.pebble.adapters.PopupDialogButtonRecycler
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.dialog_popup.*
 
@@ -97,7 +98,7 @@ object UIElement {
     }
 
     fun popupDialog(context: Context, popupName: String, icon: Int?, title: Int?, titleString: String?, description: Int,
-                    buttonArrayList: ArrayList<HashMap<String, Int>>?, decorView: View?, listener: PopupDialogButtonRecyclerAdapter.OnButtonListener?) {
+                    buttonArrayList: ArrayList<HashMap<String, Int>>?, decorView: View?, listener: PopupDialogButtonRecycler.OnButtonListener?) {
         /**
          * Checks if popUpDialog is visible; hides it if it does
          */
@@ -146,7 +147,7 @@ object UIElement {
             try {
                 dialogRecycler.setHasFixedSize(true)
                 val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                val adapter = PopupDialogButtonRecyclerAdapter(context, popupName, buttonArrayList, listener)
+                val adapter = PopupDialogButtonRecycler(context, popupName, buttonArrayList, listener)
 
                 dialogRecycler.layoutManager = layoutManager
                 dialogRecycler.adapter = adapter
@@ -195,7 +196,7 @@ object UIElement {
          * Checks if popupDialog is visible
          */
         try {
-            if (popupDialog.isShowing) {
+            if (popupDialog.isShowing && popupDialog != null) {
                 val dialogMain = popupDialog.holder
                 val dialogRecycler = popupDialog.popupButtonRecycler
 

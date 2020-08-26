@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    tools:context=".ActivityPermissions"
+    tools:context=".activities.Permissions"
     android:background="?BackgroundColour">
 
     <ImageView
@@ -49,10 +49,10 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:tint="?PrimaryTextColour"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/icon_warning" />
+            app:srcCompat="@drawable/icon_warning"
+            app:tint="?PrimaryTextColour" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

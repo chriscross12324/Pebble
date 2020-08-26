@@ -1,4 +1,4 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.activities
 
 import android.animation.ObjectAnimator
 import android.app.Activity
@@ -17,16 +17,26 @@ import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
+import com.simple.chris.pebble.*
+import com.simple.chris.pebble.adapters.GradientRecyclerView
+import com.simple.chris.pebble.adapters.SearchColourRecyclerView
+import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.android.synthetic.main.activity_search.bottomSheet
+import kotlinx.android.synthetic.main.activity_search.buttonIcon
+import kotlinx.android.synthetic.main.activity_search.coordinatorLayout
+import kotlinx.android.synthetic.main.activity_search.resultsText
+import kotlinx.android.synthetic.main.activity_search.titleHolder
+import kotlinx.android.synthetic.main.activity_search.touchBlocker
+import kotlinx.android.synthetic.main.activity_search.wallpaperImageAlpha
+import kotlinx.android.synthetic.main.activity_search.wallpaperImageViewer
 import kotlin.math.abs
 
-class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradientListener, GradientRecyclerViewAdapter.OnGradientLongClickListener, SearchColourRecyclerViewAdapter.OnButtonListener {
+class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, GradientRecyclerView.OnGradientLongClickListener, SearchColourRecyclerView.OnButtonListener {
 
     //Array lists that store the gradient data
     private val allItems: ArrayList<HashMap<String, String>> = Values.gradientList
@@ -65,6 +75,7 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
         //Logic - backButton
         backButton.setOnClickListener {
+            Vibration.lowFeedback(this)
             touchBlocker.visibility = View.VISIBLE
             onBackPressed()
         }
@@ -81,6 +92,7 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
         searchByColourButton.setOnClickListener {
             if (!colourPickerExpanded) {
+                Vibration.lowFeedback(this)
                 colourPickerExpanded = true
                 val colourPickerButtonExpandedSize = (Calculations.screenMeasure(this, "width") - Calculations.convertToDP(this, 180f))
                 UIElements.viewWidthAnimator(searchByColourButton, searchByColourButton.width.toFloat(), colourPickerButtonExpandedSize, 500, 100, DecelerateInterpolator(3f))
@@ -98,6 +110,7 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
         searchFieldHolder.setOnClickListener {
             if (colourPickerExpanded) {
+                Vibration.lowFeedback(this)
                 colourPickerExpanded = false
                 UIElements.viewWidthAnimator(searchByColourButton, searchByColourButton.width.toFloat(), Calculations.convertToDP(this, 50f), 500, 100, DecelerateInterpolator(3f))
                 UIElements.viewObjectAnimator(searchField, "alpha", 1f, 150, 50, LinearInterpolator())
@@ -119,6 +132,7 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
             screenHeight = Calculations.screenMeasure(this, "height")
             bottomSheetPeekHeight = (screenHeight * 0.667).toInt()
             titleHolder.translationY = (((screenHeight * 0.333) - titleHolder.measuredHeight) / 2).toFloat()
+            buttonIcon.translationY = (((screenHeight * 0.333) - titleHolder.measuredHeight) / 8).toFloat()
         } catch (e: Exception) {
             Log.e("ERR", "pebble.search_activity.get_heights: ${e.localizedMessage}")
         }
@@ -130,7 +144,8 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 titleHolder.translationY = ((screenHeight * -0.333 * slideOffset + screenHeight * 0.333 - (titleHolder.measuredHeight)) / 2).toFloat()
-                val cornerRadius = ((slideOffset * -1) + 1) * Calculations.convertToDP(this@SearchActivity, 20f)
+                buttonIcon.translationY = ((screenHeight * (-0.333) * slideOffset + screenHeight * (0.333) - (titleHolder.measuredHeight)) / 8).toFloat()
+                val cornerRadius = ((slideOffset * -1) + 1) * Calculations.convertToDP(this@Search, 20f)
                 val bottomShe = findViewById<CardView>(R.id.bottomSheet)
                 bottomShe.radius = cornerRadius
             }
@@ -204,7 +219,7 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
 
         searchColourRecycler.setHasFixedSize(true)
         val buttonLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        val buttonAdapter = SearchColourRecyclerViewAdapter(this, colourArray, this)
+        val buttonAdapter = SearchColourRecyclerView(this, colourArray, this)
 
         searchColourRecycler.layoutManager = buttonLayoutManager
         searchColourRecycler.adapter = buttonAdapter
@@ -231,11 +246,13 @@ class SearchActivity : AppCompatActivity(), GradientRecyclerViewAdapter.OnGradie
         })
 
         //Detects 'Enter' key press and begins search
-        searchField.setOnKeyListener { _, keyCode, _ ->
+        searchField.setOnKeyListener { v, keyCode, _ ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 if (fieldChange) {
                     fieldChange = false
                     searchSystem()
+                    UIElement.hideSoftKeyboard(this)
+                    v.clearFocus()
                 }
             }
             false

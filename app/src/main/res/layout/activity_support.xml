@@ -22,7 +22,7 @@
         android:layout_width="400dp"
         android:layout_height="400dp"
         android:alpha="0.1"
-        android:src="@drawable/icon_browse"
+        android:src="@drawable/icon_money"
         android:transitionName="buttonIcon"
         android:translationX="50dp"
         android:translationY="50dp"
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/googlesans_bold"
-            android:text="Browse"
+            android:text="Support"
             android:textColor="?PrimaryTextColour"
             android:textSize="36sp"
             android:transitionName="buttonTitle" />
@@ -57,9 +57,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/googlesans_medium"
-            android:text="Getting gradients"
+            android:text="Help support me develop\nPebble and future projects"
             android:textColor="?SecondaryTextColour"
             android:textSize="14sp"
+            android:gravity="center"
             android:transitionName="buttonTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -94,6 +95,37 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/details_background"
+                    android:backgroundTint="?SupportBackground"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/icon_percentage"
+                        android:adjustViewBounds="true"
+                        android:alpha="0.8"
+                        app:tint="?PrimaryTextColour"
+                        android:layout_marginStart="16dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/google_tax"
+                        android:textColor="?SecondaryTextColour"
+                        android:fontFamily="@font/googlesans_regular"
+                        android:gravity="center_vertical"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"/>
+
+                </LinearLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/browseGrid"
                     android:layout_width="match_parent"
@@ -105,8 +137,7 @@
                     android:requiresFadingEdge="none"
                     android:visibility="visible"
                     app:layout_anchor="@+id/bottomSheet"
-                    app:layout_anchorGravity="center"
-                    android:layoutAnimation="@anim/recycler_animation"/>
+                    app:layout_anchorGravity="center" />
 
             </LinearLayout>
 
@@ -115,7 +146,7 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <LinearLayout
-        android:id="@+id/menuButton"
+        android:id="@+id/backButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
@@ -133,129 +164,8 @@
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:rotation="180"
-            android:src="@drawable/icon_menu"
+            android:src="@drawable/icon_arrow"
             app:tint="?PrimaryTextColour" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/createButton"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:background="@drawable/details_background"
-        android:backgroundTint="?BackgroundColour"
-        android:clickable="true"
-        android:elevation="10dp"
-        android:focusable="true"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@+id/searchButton"
-        app:layout_constraintEnd_toStartOf="@+id/searchButton"
-        app:layout_constraintStart_toEndOf="@+id/menuButton"
-        app:layout_constraintTop_toTopOf="@+id/searchButton">
-
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="7.5dp"
-            android:layout_marginStart="7.5dp"
-            android:layout_marginBottom="7.5dp"
-            android:layout_marginEnd="3dp"
-            android:src="@drawable/icon_add"
-            app:tint="?PrimaryTextColour" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="18dp"
-            android:fontFamily="@font/googlesans_medium"
-            android:gravity="center"
-            android:text="Create"
-            android:singleLine="true"
-            android:ellipsize="none"
-            android:textColor="?PrimaryTextColour"
-            android:textSize="18sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/searchButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/details_background"
-        android:backgroundTint="?ForegroundColour"
-        android:clickable="true"
-        android:elevation="10dp"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:src="@drawable/icon_search"
-            app:tint="?PrimaryTextColour" />
-    </LinearLayout>
-
-    <View
-        android:id="@+id/touchBlocker"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:elevation="21dp"
-        android:focusable="true"
-        android:visibility="gone" />
-
-    <View
-        android:id="@+id/touchBlockerDark"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#80000000"
-        android:clickable="true"
-        android:elevation="21dp"
-        android:focusable="true"
-        android:visibility="gone"
-        android:alpha="0"/>
-
-    <ImageView
-        android:id="@+id/menuArrow"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/details_background_less"
-        android:backgroundTint="?ForegroundColour"
-        android:elevation="21dp"
-        android:rotation="45"
-        android:visibility="gone"
-        android:translationY="-25dp"
-        app:layout_constraintBottom_toTopOf="@+id/menuButton"
-        app:layout_constraintEnd_toEndOf="@+id/menuButton"
-        app:layout_constraintStart_toStartOf="@+id/menuButton" />
-
-    <LinearLayout
-        android:id="@+id/menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:background="@drawable/details_background"
-        android:backgroundTint="?BackgroundColour"
-        android:orientation="vertical"
-        android:elevation="21dp"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp"
-        android:translationY="25dp"
-        android:visibility="gone"
-        android:alpha="0"
-        app:layout_constraintBottom_toTopOf="@+id/menuArrow"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/browseMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

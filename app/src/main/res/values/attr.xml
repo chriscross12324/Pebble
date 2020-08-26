@@ -5,6 +5,7 @@
     <attr name="ForegroundColour" format="reference|color"/>
     <attr name="PrimaryTextColour" format="reference|color"/>
     <attr name="SecondaryTextColour" format="reference|color"/>
+    <attr name="SupportBackground" format="reference|color"/>
 
     <declare-styleable name="GradientView">
         <attr name="startColour" format="color"/>

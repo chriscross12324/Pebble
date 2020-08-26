@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context=".GradientDetailsActivity">
+    tools:context=".activities.GradientDetailsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -106,11 +106,11 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="24dp"
                 android:src="@drawable/details_background"
-                android:tint="?ForegroundColour"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/gradientDescription" />
+                app:layout_constraintTop_toBottomOf="@+id/gradientDescription"
+                app:tint="?ForegroundColour" />
 
             <LinearLayout
                 android:id="@+id/hexHolder"
@@ -231,11 +231,11 @@
                 android:layout_height="0dp"
                 android:layout_margin="12dp"
                 android:src="@drawable/icon_save"
-                android:tint="?PrimaryTextColour"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?PrimaryTextColour" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -286,12 +286,12 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:src="@drawable/details_background"
-                android:tint="?ForegroundColour"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?ForegroundColour" />
 
             <LinearLayout
                 android:id="@+id/hideButton"
@@ -374,11 +374,11 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:tint="?SecondaryTextColour"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/icon_copy" />
+                app:srcCompat="@drawable/icon_copy"
+                app:tint="?SecondaryTextColour" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

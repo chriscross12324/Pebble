@@ -1,8 +1,6 @@
-package com.simple.chris.pebble
+package com.simple.chris.pebble.functions
 
 import android.content.Context
-import android.util.Log
-import java.lang.Exception
 
 /**
  * Stores all essential values, can be referenced and changed from Activities

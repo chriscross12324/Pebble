@@ -22,7 +22,7 @@
         android:layout_width="400dp"
         android:layout_height="400dp"
         android:alpha="0.1"
-        android:src="@drawable/icon_browse"
+        android:src="@drawable/icon_notification"
         android:transitionName="buttonIcon"
         android:translationX="50dp"
         android:translationY="50dp"
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/googlesans_bold"
-            android:text="Browse"
+            android:text="Changelog"
             android:textColor="?PrimaryTextColour"
             android:textSize="36sp"
             android:transitionName="buttonTitle" />
@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/googlesans_medium"
-            android:text="Getting gradients"
+            android:text="See what's changed in v1.0"
             android:textColor="?SecondaryTextColour"
             android:textSize="14sp"
             android:transitionName="buttonTitle"
@@ -100,13 +100,13 @@
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
                     android:fadingEdge="none"
+                    android:layoutAnimation="@anim/recycler_animation"
                     android:paddingTop="16dp"
                     android:paddingBottom="98dp"
                     android:requiresFadingEdge="none"
                     android:visibility="visible"
                     app:layout_anchor="@+id/bottomSheet"
-                    app:layout_anchorGravity="center"
-                    android:layoutAnimation="@anim/recycler_animation"/>
+                    app:layout_anchorGravity="center" />
 
             </LinearLayout>
 
