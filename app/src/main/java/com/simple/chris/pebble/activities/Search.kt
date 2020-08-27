@@ -1,7 +1,6 @@
 package com.simple.chris.pebble.activities
 
 import android.animation.ObjectAnimator
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -14,7 +13,6 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,8 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.simple.chris.pebble.*
-import com.simple.chris.pebble.adapters.GradientRecyclerView
-import com.simple.chris.pebble.adapters.SearchColourRecyclerView
+import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
+import com.simple.chris.pebble.adapters_helpers.SearchColourRecyclerView
 import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.activity_search.bottomSheet
@@ -250,9 +248,9 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 if (fieldChange) {
                     fieldChange = false
-                    searchSystem()
                     UIElement.hideSoftKeyboard(this)
                     v.clearFocus()
+                    searchSystem()
                 }
             }
             false
@@ -263,12 +261,6 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
      * Searches for gradients with name from searchField
      */
     private fun searchSystem() {
-
-        //Hides Keyboard
-        searchField.clearFocus()
-        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(searchField.windowToken, 0)
-
         //Search prerequisites
         searchResults.clear()
         var foundGradients = 0

@@ -5,17 +5,33 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityOptionsCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.simple.chris.pebble.*
+import com.simple.chris.pebble.adapters_helpers.MyGradientsRecyclerView
+import com.simple.chris.pebble.adapters_helpers.SQLiteHelper
 import com.simple.chris.pebble.adapters_helpers.SupportRecyclerView
 import com.simple.chris.pebble.functions.*
+import kotlinx.android.synthetic.main.activity_my_gradients.*
 import kotlinx.android.synthetic.main.activity_support.*
+import kotlinx.android.synthetic.main.activity_support.backButton
+import kotlinx.android.synthetic.main.activity_support.bottomSheet
+import kotlinx.android.synthetic.main.activity_support.buttonIcon
+import kotlinx.android.synthetic.main.activity_support.coordinatorLayout
+import kotlinx.android.synthetic.main.activity_support.titleHolder
+import kotlinx.android.synthetic.main.activity_support.wallpaperImageAlpha
+import kotlinx.android.synthetic.main.activity_support.wallpaperImageViewer
+import kotlinx.android.synthetic.main.module_my_gradients.view.*
 
-class Support : AppCompatActivity(), SupportRecyclerView.OnClickListener {
+class MyGradients : AppCompatActivity(), MyGradientsRecyclerView.OnGradientListener {
 
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
@@ -23,12 +39,12 @@ class Support : AppCompatActivity(), SupportRecyclerView.OnClickListener {
     private var bottomSheetPeekHeight = 0
 
     /**
-     * Browse Activity - Handles gradient RecyclerView, Gradient Creator Banner & Click events
+     * MyGradients Activity - Shows users their gradients, allows them to view or submit takedown
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UIElement.setTheme(this)
-        setContentView(R.layout.activity_support)
+        setContentView(R.layout.activity_my_gradients)
         UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
 
         coordinatorLayout.post {
@@ -78,7 +94,7 @@ class Support : AppCompatActivity(), SupportRecyclerView.OnClickListener {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 titleHolder.translationY = ((screenHeight * (-0.333) * slideOffset + screenHeight * (0.333) - (titleHolder.measuredHeight)) / 2).toFloat()
                 buttonIcon.translationY = ((screenHeight * (-0.333) * slideOffset + screenHeight * (0.333) - (titleHolder.measuredHeight)) / 8).toFloat()
-                val cornerRadius = ((slideOffset * -1) + 1) * Calculations.convertToDP(this@Support, 20f)
+                val cornerRadius = ((slideOffset * -1) + 1) * Calculations.convertToDP(this@MyGradients, 20f)
                 val bottomShe = findViewById<CardView>(R.id.bottomSheet)
                 bottomShe.radius = cornerRadius
             }
@@ -87,12 +103,12 @@ class Support : AppCompatActivity(), SupportRecyclerView.OnClickListener {
     }
 
     private fun recycler() {
-        supportGrid.setHasFixedSize(true)
-        val buttonLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        val buttonAdapter = SupportRecyclerView(this, HashMaps.supportHashMaps(), this)
+        myGradientsGrid.setHasFixedSize(true)
+        val buttonLayoutManager = GridLayoutManager(this, 2)
+        val buttonAdapter = MyGradientsRecyclerView(this, SQLiteHelper(this).readGradients(), this)
 
-        supportGrid.layoutManager = buttonLayoutManager
-        supportGrid.adapter = buttonAdapter
+        myGradientsGrid.layoutManager = buttonLayoutManager
+        myGradientsGrid.adapter = buttonAdapter
     }
 
     //Called when Activity Pauses and Finishes
@@ -115,41 +131,42 @@ class Support : AppCompatActivity(), SupportRecyclerView.OnClickListener {
         }
     }
 
-    override fun onButtonClick(position: Int, view: View) {
-        when (position) {
-            0 -> {
-
+    override fun onGradientClick(position: Int, view: View) {
+        when (view.id) {
+            R.id.removeText -> {
+                Vibration.strongFeedback(this)
+                Toast.makeText(this, "Remove Gradient", Toast.LENGTH_SHORT).show()
             }
-            1 -> {
+            R.id.viewText -> {
+                Vibration.mediumFeedback(this)
+                try {
+                    val details = Intent(this, GradientDetailsActivity::class.java)
+                    val gradientInfo = SQLiteHelper(this).readGradients()[position]
 
-            }
-            2 -> {
+                    details.putExtra("gradientName", gradientInfo["gradientName"])
+                    details.putExtra("startColour", gradientInfo["startColour"])
+                    details.putExtra("endColour", gradientInfo["endColour"])
+                    details.putExtra("description", gradientInfo["description"])
 
-            }
-            3 -> {
-
-            }
-            4 -> {
-
-            }
-            5 -> {
-
-            }
-            6 -> {
-
-            }
-            7 -> {
-
-            }
-            8 -> {
-
-            }
-            9 -> {
-
-            }
-            10 -> {
-
+                    /**
+                     * View Hierarchy
+                     * root
+                     *    -> (holder)
+                     *       -> removeText
+                     *       -> viewText
+                     *    -> gradient
+                     *
+                     *    Call .parent twice to get 'gradient' inside 'root'
+                     */
+                    val parent = view.parent.parent as ViewGroup
+                    val gradientView: ImageView = parent.findViewById(R.id.gradient)
+                    val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, gradientView, gradientInfo["gradientName"] as String)
+                    startActivity(details, activityOptions.toBundle())
+                } catch (e: Exception) {
+                    Log.e("ERR", "pebble.my_gradients.on_gradient_click: ${e.localizedMessage}")
+                }
             }
         }
     }
+
 }

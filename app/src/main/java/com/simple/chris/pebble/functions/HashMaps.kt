@@ -266,4 +266,101 @@ object HashMaps {
 
         return array
     }
+
+    fun arrayContinueOfflineRetry() : ArrayList<HashMap<String, Int>> {
+        val array = ArrayList<HashMap<String, Int>>()
+
+        val one = HashMap<String, Int>()
+        one["buttonTitle"] = R.string.dialog_option_eng_continue
+        one["buttonIcon"] = R.drawable.icon_arrow
+        array.add(one)
+
+        val two = HashMap<String, Int>()
+        two["buttonTitle"] = R.string.dialog_button_eng_go_offline
+        two["buttonIcon"] = R.drawable.icon_wifi_red
+        array.add(two)
+
+        val three = HashMap<String, Int>()
+        three["buttonTitle"] = R.string.dialog_button_eng_retry
+        three["buttonIcon"] = R.drawable.icon_reload
+        array.add(three)
+
+        return array
+    }
+
+
+    /**
+     * Support HashMap
+     */
+    fun supportHashMaps() : ArrayList<HashMap<String, String>> {
+        val array = ArrayList<HashMap<String, String>>()
+
+        val one = HashMap<String, String>()
+        one["buttonTitle"] = "Buy me a dollar"
+        one["buttonBody"] = "I'll cherish that dollar forever"
+        one["buttonAmount"] = "$1"
+        array.add(one)
+
+        val two = HashMap<String, String>()
+        two["buttonTitle"] = "Buy me two dollars"
+        two["buttonBody"] = "Double the cherishing than the option to the left"
+        two["buttonAmount"] = "$2"
+        array.add(two)
+
+        val three = HashMap<String, String>()
+        three["buttonTitle"] = "Buy me some chocolate"
+        three["buttonBody"] = "I might get something else, don't want to eat too much!"
+        three["buttonAmount"] = "$3"
+        array.add(three)
+
+        val four = HashMap<String, String>()
+        four["buttonTitle"] = "Buy me a mouse-pad"
+        four["buttonBody"] = "They go for about $4 at the dollar store"
+        four["buttonAmount"] = "$4"
+        array.add(four)
+
+        val five = HashMap<String, String>()
+        five["buttonTitle"] = "Buy me a coffee"
+        five["buttonBody"] = "Or something else, I don't drink coffee"
+        five["buttonAmount"] = "$5"
+        array.add(five)
+
+        val ten = HashMap<String, String>()
+        ten["buttonTitle"] = "Buy me motivation"
+        ten["buttonBody"] = "And I'll give you a cool feature!"
+        ten["buttonAmount"] = "$10"
+        array.add(ten)
+
+        val fifteen = HashMap<String, String>()
+        fifteen["buttonTitle"] = "Drop some money"
+        fifteen["buttonBody"] = "Sweet, just found $15 on the ground!"
+        fifteen["buttonAmount"] = "$15"
+        array.add(fifteen)
+
+        val twenty = HashMap<String, String>()
+        twenty["buttonTitle"] = "You're too kind"
+        twenty["buttonBody"] = "Now that's a kind donation"
+        twenty["buttonAmount"] = "$20"
+        array.add(twenty)
+
+        val twentyfive = HashMap<String, String>()
+        twentyfive["buttonTitle"] = "Buy me a starbucks coffee"
+        twentyfive["buttonBody"] = "Or are they $30? Either way I don't drink coffee, so I'll go for the smoothie instead..."
+        twentyfive["buttonAmount"] = "$25"
+        array.add(twentyfive)
+
+        val fifty = HashMap<String, String>()
+        fifty["buttonTitle"] = "Mis-click?"
+        fifty["buttonBody"] = "Did you accidentally consider this amount?"
+        fifty["buttonAmount"] = "$50"
+        array.add(fifty)
+
+        val onehundred = HashMap<String, String>()
+        onehundred["buttonTitle"] = "WOW!"
+        onehundred["buttonBody"] = "Imma cap it here, if you do give this amount... I am VERY grateful"
+        onehundred["buttonAmount"] = "$100"
+        array.add(onehundred)
+
+        return array
+    }
 }

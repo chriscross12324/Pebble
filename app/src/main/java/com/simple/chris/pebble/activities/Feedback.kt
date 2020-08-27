@@ -10,7 +10,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.simple.chris.pebble.*
-import com.simple.chris.pebble.adapters.PopupDialogButtonRecycler
+import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.activity_feedback.*
 import java.util.*

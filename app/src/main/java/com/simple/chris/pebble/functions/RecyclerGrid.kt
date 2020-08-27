@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.activities.GradientDetailsActivity
-import com.simple.chris.pebble.adapters.GradientRecyclerView
+import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.dialog_long_press_gradients.*
 import kotlin.Exception

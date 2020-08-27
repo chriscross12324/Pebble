@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.5"
-        android:background="?ForegroundColour" />
+        android:background="?BackgroundColour" />
 
     <ImageView
         android:id="@+id/buttonIcon"
@@ -82,7 +82,7 @@
             android:layout_height="match_parent"
             android:background="?BackgroundColour"
             android:transitionName="cardView"
-            app:cardBackgroundColor="?BackgroundColour"
+            app:cardBackgroundColor="?ForegroundColour"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
@@ -150,15 +150,15 @@
         app:layout_constraintBottom_toBottomOf="@+id/searchButton"
         app:layout_constraintEnd_toStartOf="@+id/searchButton"
         app:layout_constraintStart_toEndOf="@+id/menuButton"
-        app:layout_constraintTop_toTopOf="@+id/searchButton">
+        app:layout_constraintTop_toTopOf="@+id/menuButton">
 
         <ImageView
             android:layout_width="35dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="7.5dp"
             android:layout_marginStart="7.5dp"
-            android:layout_marginBottom="7.5dp"
+            android:layout_marginTop="7.5dp"
             android:layout_marginEnd="3dp"
+            android:layout_marginBottom="7.5dp"
             android:src="@drawable/icon_add"
             app:tint="?PrimaryTextColour" />
 
@@ -166,11 +166,11 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginEnd="18dp"
+            android:ellipsize="none"
             android:fontFamily="@font/googlesans_medium"
             android:gravity="center"
-            android:text="Create"
             android:singleLine="true"
-            android:ellipsize="none"
+            android:text="Create"
             android:textColor="?PrimaryTextColour"
             android:textSize="18sp" />
     </LinearLayout>
@@ -237,17 +237,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:alpha="0"
         android:background="@drawable/details_background"
         android:backgroundTint="?BackgroundColour"
-        android:orientation="vertical"
         android:elevation="21dp"
+        android:orientation="vertical"
         android:paddingStart="5dp"
-        android:paddingEnd="5dp"
         android:paddingTop="3dp"
+        android:paddingEnd="5dp"
         android:paddingBottom="3dp"
         android:translationY="25dp"
         android:visibility="gone"
-        android:alpha="0"
         app:layout_constraintBottom_toTopOf="@+id/menuArrow"
         app:layout_constraintStart_toStartOf="parent">
 

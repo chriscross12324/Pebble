@@ -33,7 +33,7 @@ import com.simple.chris.pebble.functions.Calculations.convertToDP
 import com.simple.chris.pebble.functions.UIElement.gradientDrawable
 import com.simple.chris.pebble.functions.UIElements.constraintLayoutElevationAnimator
 import com.simple.chris.pebble.functions.UIElements.viewObjectAnimator
-import com.simple.chris.pebble.adapters.PopupDialogButtonRecycler
+import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.activity_gradient_details.*
 import java.io.File

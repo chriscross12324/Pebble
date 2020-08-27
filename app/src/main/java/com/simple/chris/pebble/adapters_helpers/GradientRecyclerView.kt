@@ -1,4 +1,4 @@
-package com.simple.chris.pebble.adapters
+package com.simple.chris.pebble.adapters_helpers
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -86,31 +86,6 @@ class GradientRecyclerView internal constructor(var context: Context, private va
             myOnGradientLongClickListener.onGradientLongClick(adapterPosition, v as View)
             return true
         }
-
-        /*override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-            val handler = Handler()
-            val runnable = Runnable {
-                Toast.makeText(context, "Long", Toast.LENGTH_SHORT).show()
-                Vibration.strongFeedback(context)
-            }
-            if (event != null) {
-                var isButtonPressed: Boolean
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    isButtonPressed = true
-                    handler.postDelayed(runnable, 2000)
-                } else if (event.action == MotionEvent.ACTION_UP) {
-                    if (isButtonPressed) {
-                        isButtonPressed = false
-                        Toast.makeText(context, "Short", Toast.LENGTH_SHORT).show()
-                        Vibration.lowFeedback(context)
-                        handler.removeCallbacksAndMessages(runnable)
-                    }
-
-                }
-            }
-            return true
-        }*/
-
     }
 
     interface OnGradientListener {

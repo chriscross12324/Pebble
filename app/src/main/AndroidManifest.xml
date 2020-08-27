@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
         android:allowBackup="true"
@@ -24,6 +25,7 @@
         <activity android:name=".activities.Feedback" />
         <activity android:name=".activities.ColourPicker" />
         <activity android:name=".activities.GradientCreator" />
+        <activity android:name=".activities.MyGradients"/>
         <activity
             android:name=".activities.GradientDetailsActivity"
             tools:ignore="LockedOrientationActivity" />

@@ -43,11 +43,11 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:tint="?PrimaryTextColour"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/warningText"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/icon_warning" />
+            app:srcCompat="@drawable/icon_warning"
+            app:tint="?PrimaryTextColour" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

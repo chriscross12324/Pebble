@@ -15,6 +15,9 @@
     <string name="text_eng_copy">Copy</string>
     <string name="text_eng_copy_code">Copy Code</string>
 
+    <!-- Screen Titles -->
+    <string name="screen_title_browse">Browse</string>
+
     <!-- English Connections -->
     <string name="dialog_title_eng_data_warning">Trying to use Mobile Data</string>
     <string name="dialog_body_eng_data_warning">Would you like to use Mobile Data? Overage fees may apply…</string>
@@ -28,7 +31,9 @@
 
     <string name="dialog_title_eng_offline_mode">Offline</string>
     <string name="dialog_body_eng_offline_mode">Pebble is currently in offline mode, want to go online?</string>
+    <string name="dialog_body_eng_offline_mode_desc">Go online to see gradients</string>
     <string name="dialog_button_eng_go_online">Go Online</string>
+    <string name="dialog_button_eng_go_offline">Offline Mode</string>
 
 
     <!-- English Gradient Details Screen -->
@@ -96,5 +101,9 @@
     <string name="refreshTitle">Refresh</string>
     <string name="supportTitle">Support</string>
     <string name="google_tax">The Google Play Store takes a 30% cut out of all purchases made through it, including any purchases made to support me. If you choose to support me with $1, Google will receive $0.30 of the purchase.</string>
+
+    <string name="dialog_title_eng_still_connecting">Still connecting</string>
+    <string name="dialog_body_eng_still_connecting">Pebble is taking a while to connect, what would you like to do?</string>
+    <string name="dialog_option_eng_continue">Continue</string>
 
 </resources>

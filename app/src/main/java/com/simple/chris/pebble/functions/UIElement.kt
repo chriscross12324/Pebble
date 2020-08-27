@@ -20,7 +20,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jgabrielfreitas.core.BlurImageView
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.adapters.PopupDialogButtonRecycler
+import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.dialog_popup.*
 
@@ -218,9 +218,14 @@ object UIElement {
     }
 
     fun hideSoftKeyboard(activity: Activity) {
-        val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        val view = activity.currentFocus as View
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
+        try {
+            val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            val view = activity.currentFocus as View
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        } catch (e: Exception) {
+            Log.e("ERR", "pebble.ui_element.hide_soft_keyboard: ${e.localizedMessage}")
+        }
+
     }
 
     fun startActivityFade(context: Context, activity: Activity, delay: Long) {

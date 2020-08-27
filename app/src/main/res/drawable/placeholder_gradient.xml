@@ -7,6 +7,7 @@
                 android:startColor="@color/pebbleStart"
                 android:endColor="@color/pebbleEnd"
                 android:angle="315"/>
+            <corners android:radius="25dp"/>
         </shape>
     </item>
 </selector>

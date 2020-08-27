@@ -17,10 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.simple.chris.pebble.*
-import com.simple.chris.pebble.adapters.BrowseMenuRecyclerView
-import com.simple.chris.pebble.adapters.GradientRecyclerView
-import com.simple.chris.pebble.adapters.PopupDialogButtonRecycler
+import com.simple.chris.pebble.adapters_helpers.BrowseMenuRecyclerView
+import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
+import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.functions.*
+import com.simple.chris.pebble.functions.Connection.checkConnection
+import com.simple.chris.pebble.functions.Connection.connectionOffline
+import com.simple.chris.pebble.functions.Connection.getGradients
 import com.simple.chris.pebble.functions.Permissions
 import kotlinx.android.synthetic.main.activity_browse.*
 
@@ -45,7 +48,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         setContentView(R.layout.activity_browse)
         if (!Values.refreshTheme) {
             if (Values.gradientList.isEmpty()) {
-                Connection.getGradients(this, window.decorView)
+                checkConnection(this, window.decorView, this)
                 if (!Permissions.readStoragePermissionGiven(this)) {
                     //UIElements.oneButtonDialog(this, R.drawable.icon_storage, R.string.dialog_title_eng_permission_storage, R.string.dialog_body_eng_permission_storage_read, R.string.text_eng_ok, storageDialogListener)
                 }
@@ -208,6 +211,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
     private fun gradientsDownloaded() {
         Handler().postDelayed({
             if (Values.gradientList.isNotEmpty()) {
+                screenTitle.setText(R.string.screen_title_browse)
                 if (bottomSheetBehavior.peekHeight != 0) {
                     UIElements.viewObjectAnimator(browseGrid, "scaleX", 0.6f, 350, 0, AccelerateInterpolator(3f))
                     UIElements.viewObjectAnimator(browseGrid, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
@@ -286,8 +290,11 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
     override fun onButtonClick(position: Int, view: View) {
         when (position) {
             0 -> {
-                /*startActivity(Intent(this, Feedback::class.java))
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)*/
+                hideMenu()
+                Handler().postDelayed({
+                    startActivity(Intent(this, MyGradients::class.java))
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                }, 400)
             }
             1 -> {
                 hideMenu()
@@ -314,7 +321,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                 hideMenu()
                 Handler().postDelayed({
                     Values.gradientList.clear()
-                    Connection.getGradients(this, window.decorView)
+                    checkConnection(this, window.decorView, this)
                     connectionChecker()
                 }, 400)
             }
@@ -333,6 +340,56 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                         finish()
                     }
                     1 -> UIElement.popupDialogHider()
+                }
+            }
+            "stillConnecting" -> {
+                when (position) {
+                    0 -> {
+                        UIElement.popupDialog(this, "connecting", null, R.string.dialog_title_eng_connecting, null, R.string.dialog_body_eng_connecting, null, window.decorView, null)
+                        Connection.checkDownload(this, window.decorView, this)
+                    }
+                    1 -> {
+                        Connection.cancelConnection()
+                        connectionOffline(this)
+                    }
+                    2 -> {
+                        Connection.cancelConnection()
+                        checkConnection(this, window.decorView, this)
+                    }
+                }
+            }
+            "askMobile" -> {
+                when (position) {
+                    0 -> {
+                        getGradients(this, window.decorView, this)
+                        UIElement.popupDialogHider()
+                    }
+                    1 -> {
+                        Values.askMobileData = false
+                        getGradients(this, window.decorView, this)
+                        UIElement.popupDialogHider()
+                    }
+                    2 -> {
+                        UIElement.popupDialogHider()
+                        Handler().postDelayed({
+                            checkConnection(this, window.decorView, this)
+                        }, Values.dialogShowAgainTime)
+                    }
+                }
+            }
+
+            "noConnection" -> {
+                when (position) {
+                    0 -> {
+                        UIElement.popupDialogHider()
+                        Handler().postDelayed({
+                            checkConnection(this, window.decorView, this)
+                        }, Values.dialogShowAgainTime)
+                    }
+                    1 -> {
+                        UIElement.popupDialogHider()
+                        connectionOffline(this)
+                    }
                 }
             }
         }

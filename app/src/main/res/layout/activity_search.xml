@@ -33,18 +33,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?SecondaryTextColour" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:elevation="20dp"
-        android:src="@drawable/icon_wifi_green"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
         android:id="@+id/titleHolder"
         android:layout_width="match_parent"
@@ -96,7 +84,7 @@
             android:layout_height="match_parent"
             android:background="?BackgroundColour"
             android:transitionName="cardView"
-            app:cardBackgroundColor="?BackgroundColour"
+            app:cardBackgroundColor="?ForegroundColour"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
@@ -114,6 +102,7 @@
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
                     android:fadingEdge="none"
+                    android:paddingTop="16dp"
                     android:paddingBottom="98dp"
                     android:requiresFadingEdge="none"
                     android:visibility="visible"

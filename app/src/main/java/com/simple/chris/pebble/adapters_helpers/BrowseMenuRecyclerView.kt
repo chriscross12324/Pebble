@@ -1,4 +1,4 @@
-package com.simple.chris.pebble.adapters
+package com.simple.chris.pebble.adapters_helpers
 
 import android.content.Context
 import android.util.Log

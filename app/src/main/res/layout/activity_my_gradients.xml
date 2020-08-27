@@ -15,14 +15,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.5"
-        android:background="?ForegroundColour" />
+        android:background="?BackgroundColour" />
 
     <ImageView
         android:id="@+id/buttonIcon"
         android:layout_width="400dp"
         android:layout_height="400dp"
         android:alpha="0.1"
-        android:src="@drawable/icon_money"
+        android:src="@drawable/icon_apps"
         android:transitionName="buttonIcon"
         android:translationX="50dp"
         android:translationY="50dp"
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/googlesans_bold"
-            android:text="Support"
+            android:text="Submitted"
             android:textColor="?PrimaryTextColour"
             android:textSize="36sp"
             android:transitionName="buttonTitle" />
@@ -57,10 +57,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/googlesans_medium"
-            android:text="Help support me develop\nPebble and future projects"
+            android:text="Your gradients"
             android:textColor="?SecondaryTextColour"
             android:textSize="14sp"
-            android:gravity="center"
             android:transitionName="buttonTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +82,7 @@
             android:layout_height="match_parent"
             android:background="?BackgroundColour"
             android:transitionName="cardView"
-            app:cardBackgroundColor="?BackgroundColour"
+            app:cardBackgroundColor="?ForegroundColour"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
@@ -95,43 +94,12 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/details_background"
-                    android:backgroundTint="?SupportBackground"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/icon_percentage"
-                        android:adjustViewBounds="true"
-                        android:alpha="0.8"
-                        app:tint="?PrimaryTextColour"
-                        android:layout_marginStart="16dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="@string/google_tax"
-                        android:textColor="?SecondaryTextColour"
-                        android:fontFamily="@font/googlesans_regular"
-                        android:gravity="center_vertical"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"/>
-
-                </LinearLayout>
-
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/supportGrid"
+                    android:id="@+id/myGradientsGrid"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
-                    android:fadingEdge="vertical"
+                    android:fadingEdge="none"
                     android:paddingTop="16dp"
                     android:paddingBottom="98dp"
                     android:requiresFadingEdge="none"
@@ -167,5 +135,14 @@
             android:src="@drawable/icon_arrow"
             app:tint="?PrimaryTextColour" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/touchBlocker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:elevation="21dp"
+        android:focusable="true"
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

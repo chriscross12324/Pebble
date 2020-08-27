@@ -25,9 +25,10 @@ import com.android.volley.toolbox.Volley
 import com.simple.chris.pebble.*
 import com.simple.chris.pebble.functions.Calculations.convertToDP
 import com.simple.chris.pebble.functions.UIElements.viewObjectAnimator
-import com.simple.chris.pebble.adapters.PopupDialogButtonRecycler
+import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
+import com.simple.chris.pebble.adapters_helpers.SQLiteHelper
 import com.simple.chris.pebble.functions.*
-import kotlinx.android.synthetic.main.activity_create_gradient_new.*
+import kotlinx.android.synthetic.main.activity_gradient_creator.*
 import kotlinx.android.synthetic.main.activity_feedback.*
 import org.apache.commons.lang3.RandomStringUtils
 import kotlin.math.roundToInt
@@ -46,7 +47,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UIElement.setTheme(this)
-        setContentView(R.layout.activity_create_gradient_new)
+        setContentView(R.layout.activity_gradient_creator)
         postponeEnterTransition()
         Values.currentActivity = "CreateGradient"
 
@@ -364,6 +365,10 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
     }
 
     private fun gradientPushComplete() {
+        /** Insert Gradient into "My Gradients" database **/
+        val db = SQLiteHelper(this)
+        db.insertGradient(gradientCreatorGradientName.text.toString(), Values.gradientCreatorStartColour, Values.gradientCreatorEndColour, gradientCreatorGradientDescription.text.toString(), gradientUID)
+
         Values.justSubmitted = true
         Values.gradientCreatorGradientName = ""
         Values.gradientCreatorStartColour = ""
