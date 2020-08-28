@@ -288,6 +288,27 @@ object HashMaps {
         return array
     }
 
+    fun arraySureNotThisTimeDontAsk() : ArrayList<HashMap<String, Int>> {
+        val array = ArrayList<HashMap<String, Int>>()
+
+        val one = HashMap<String, Int>()
+        one["buttonTitle"] = R.string.optionSure
+        one["buttonIcon"] = R.drawable.icon_check
+        array.add(one)
+
+        val two = HashMap<String, Int>()
+        two["buttonTitle"] = R.string.optionNo
+        two["buttonIcon"] = R.drawable.icon_close
+        array.add(two)
+
+        val three = HashMap<String, Int>()
+        three["buttonTitle"] = R.string.optionDontAsk
+        three["buttonIcon"] = R.drawable.icon_close
+        array.add(three)
+
+        return array
+    }
+
 
     /**
      * Support HashMap

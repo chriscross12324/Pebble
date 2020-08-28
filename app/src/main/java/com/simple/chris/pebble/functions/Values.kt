@@ -26,6 +26,7 @@ object Values {
     var downloadingGradients = false
     var refreshTheme = false
     var gradientCornerRadius = 25f
+    var dontAskStorage = false
 
     //Changing Values
     var gradientIsTouched = false
@@ -69,6 +70,7 @@ object Values {
         editor.putString("gradientCreatorEndColour", gradientCreatorEndColour)
         editor.putString("gradientCreatorDescription", gradientCreatorDescription)
         editor.putBoolean("hintCreateGradientDismissed", hintCreateGradientDismissed)
+        editor.putBoolean("dontAskStorage", dontAskStorage)
         editor.apply()
     }
 
@@ -91,5 +93,6 @@ object Values {
         gradientCreatorEndColour = sharedPrefs.getString("gradientCreatorEndColour", "")!!
         gradientCreatorDescription = sharedPrefs.getString("gradientCreatorDescription", "")!!
         hintCreateGradientDismissed = sharedPrefs.getBoolean("hintCreateGradientDismissed", false)
+        dontAskStorage = sharedPrefs.getBoolean("dontAskStorage", false)
     }
 }

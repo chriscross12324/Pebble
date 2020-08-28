@@ -1,5 +1,6 @@
 package com.simple.chris.pebble.activities
 
+import android.Manifest
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -13,6 +14,7 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
@@ -55,6 +57,11 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             }
         } else {
             Values.refreshTheme = false
+        }
+
+        if (!Permissions.readStoragePermissionGiven(this) && !Values.dontAskStorage) {
+            UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.dialog_title_eng_permission_storage, null, R.string.dialog_body_eng_permission_storage_read, HashMaps.arraySureNotThisTimeDontAsk(),
+            window.decorView, this)
         }
 
         UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
@@ -389,6 +396,23 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                     1 -> {
                         UIElement.popupDialogHider()
                         connectionOffline(this)
+                    }
+                }
+            }
+
+            "storagePermission" -> {
+                when (position) {
+                    0 -> {
+                        UIElement.popupDialogHider()
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                    }
+                    1 -> {
+                        UIElement.popupDialogHider()
+                    }
+                    2 -> {
+                        UIElement.popupDialogHider()
+                        Values.dontAskStorage = true
+                        Values.saveValues(this)
                     }
                 }
             }

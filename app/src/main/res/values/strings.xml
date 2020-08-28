@@ -106,4 +106,8 @@
     <string name="dialog_body_eng_still_connecting">Pebble is taking a while to connect, what would you like to do?</string>
     <string name="dialog_option_eng_continue">Continue</string>
 
+    <string name="optionSure">Sure</string>
+    <string name="optionNo">Not now</string>
+    <string name="optionDontAsk">Don\'t ask again</string>
+
 </resources>
