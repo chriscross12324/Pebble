@@ -5,7 +5,9 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.util.Log
 import android.view.View
@@ -28,6 +30,7 @@ import com.simple.chris.pebble.functions.Connection.connectionOffline
 import com.simple.chris.pebble.functions.Connection.getGradients
 import com.simple.chris.pebble.functions.Permissions
 import kotlinx.android.synthetic.main.activity_browse.*
+import java.io.File
 
 
 class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, GradientRecyclerView.OnGradientLongClickListener, BrowseMenuRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
@@ -94,6 +97,20 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             startActivity(Intent(this, Search::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             Vibration.mediumFeedback(this)
+        }
+
+        searchButton.setOnLongClickListener {
+            UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.dialog_title_eng_permission_storage, null, R.string.dialog_body_eng_permission_storage_read, HashMaps.arraySureNotThisTimeDontAsk(),
+                    window.decorView, this)
+            UIElement.popupDialog(this, "gradientSaved", R.drawable.icon_check, R.string.dialog_title_eng_gradient_saved, null,
+                    R.string.dialog_body_eng_gradient_saved, HashMaps.gradientSavedArrayList(), window.decorView, this)
+            UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.dialog_title_eng_permission_storage, null, R.string.dialog_body_eng_permission_storage_read, HashMaps.arraySureNotThisTimeDontAsk(),
+                    window.decorView, this)
+            UIElement.popupDialog(this, "gradientSaved", R.drawable.icon_check, R.string.dialog_title_eng_gradient_saved, null,
+                    R.string.dialog_body_eng_gradient_saved, HashMaps.gradientSavedArrayList(), window.decorView, this)
+            UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.dialog_title_eng_permission_storage, null, R.string.dialog_body_eng_permission_storage_read, HashMaps.arraySureNotThisTimeDontAsk(),
+                    window.decorView, this)
+            true
         }
 
         createButton.setOnClickListener {
@@ -381,6 +398,16 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                         Handler().postDelayed({
                             checkConnection(this, window.decorView, this)
                         }, Values.dialogShowAgainTime)
+                    }
+                }
+            }
+            "gradientSaved" -> {
+                when (position) {
+                    0 -> {
+                        UIElement.popupDialogHider()
+                    }
+                    1 -> {
+                        UIElement.popupDialogHider()
                     }
                 }
             }

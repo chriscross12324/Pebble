@@ -17,16 +17,23 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jgabrielfreitas.core.BlurImageView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import eightbitlab.com.blurview.RenderScriptBlur
+import kotlinx.android.synthetic.main.dialog_one_button.*
 import kotlinx.android.synthetic.main.dialog_popup.*
+import java.util.concurrent.LinkedBlockingDeque
 
 object UIElement {
 
     lateinit var popupDialog: Dialog
+    var currentDecorView: View? = null
+    var currentPopupCanBeOverwritten = true
+    var dialogList = ArrayList<Dialog>()
+    var dialogsToShow = LinkedBlockingDeque<Dialog>()
 
     fun setTheme(context: Context) {
         when (Values.settingThemes) {
@@ -99,16 +106,21 @@ object UIElement {
 
     fun popupDialog(context: Context, popupName: String, icon: Int?, title: Int?, titleString: String?, description: Int,
                     buttonArrayList: ArrayList<HashMap<String, Int>>?, decorView: View?, listener: PopupDialogButtonRecycler.OnButtonListener?) {
+
+        currentPopupCanBeOverwritten = true
+        Log.e("INFO", popupName)
         /**
          * Checks if popUpDialog is visible; hides it if it does
          */
-        try {
-            if (popupDialog.isShowing) {
-                popupDialog.dismiss()
-            }
-        } catch (e: Exception) {
-            Log.e("ERR", "pebble.ui_element.popup_dialog: ${e.localizedMessage}")
-        }
+//        try {
+//            if (popupDialog.isShowing) {
+//                if (popupDialog.popupButtonRecycler.adapter == null) {
+//                    popupDialog.dismiss()
+//                }
+//            }
+//        } catch (e: Exception) {
+//            Log.e("ERR", "pebble.ui_element.popup_dialog: ${e.localizedMessage}")
+//        }
 
         /** Creates popupDialog **/
         popupDialog = Dialog(context, R.style.dialogStyle)
@@ -156,7 +168,8 @@ object UIElement {
             }
         }
 
-        popupDialog.show()
+        dialogList.add(popupDialog)
+        showPopupQueueManager(popupDialog)
 
         /** Animate popupLayout in **/
         dialogMain.post {
@@ -191,12 +204,68 @@ object UIElement {
         }
     }
 
+    fun popupDialogReformat(context: Context, popupName: String, icon: Int?, title: Int?, titleString: String?, description: Int,
+                    buttonArrayList: ArrayList<HashMap<String, Int>>?, decorView: View?, listener: PopupDialogButtonRecycler.OnButtonListener?) {
+
+        /** Creates popupDialog **/
+        popupDialog = Dialog(context, R.style.dialogStyle)
+        popupDialog.setCancelable(false)
+        popupDialog.setContentView(R.layout.dialog_popup)
+
+        currentDecorView = decorView
+
+        val dialogWindow: Window = popupDialog.window!!
+        dialogWindow.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+        dialogWindow.setDimAmount(0.1f)
+        dialogWindow.setGravity(Gravity.CENTER)
+
+        /** Set popupDialog layout **/
+        val dialogMain = popupDialog.holder
+        val progressCircle = popupDialog.progressCircle
+        val dialogIcon = popupDialog.permissionIcon
+        val dialogTitle = popupDialog.permissionTitle
+        val dialogDescription = popupDialog.permissionDescription
+        val dialogRecycler = popupDialog.popupButtonRecycler
+
+        if (icon != null) {
+            dialogIcon.setImageResource(icon)
+        } else {
+            dialogIcon.visibility = View.INVISIBLE
+            progressCircle.visibility = View.VISIBLE
+        }
+
+        if (title != null) {
+            dialogTitle.setText(title)
+        } else {
+            dialogTitle.text = titleString
+        }
+        dialogDescription.setText(description)
+
+        /** Set popupLayout recycler **/
+        if (buttonArrayList != null && listener != null) {
+            try {
+                dialogRecycler.setHasFixedSize(true)
+                val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                val adapter = PopupDialogButtonRecycler(context, popupName, buttonArrayList, listener)
+
+                dialogRecycler.layoutManager = layoutManager
+                dialogRecycler.adapter = adapter
+            } catch (e: Exception) {
+                Log.e("ERR", "pebble.ui_elements.popup_dialog: ${e.localizedMessage}")
+            }
+        }
+
+        dialogList.add(popupDialog)
+        showPopupQueueManager(dialogList[0])
+    }
+
     fun popupDialogHider() {
         /**
          * Checks if popupDialog is visible
          */
+        Log.e("ERR", "Called hider")
         try {
-            if (popupDialog.isShowing && popupDialog != null) {
+            if (dialogList[0].isShowing) {
                 val dialogMain = popupDialog.holder
                 val dialogRecycler = popupDialog.popupButtonRecycler
 
@@ -209,11 +278,69 @@ object UIElement {
                 UIElements.viewObjectAnimator(dialogRecycler, "alpha", 0f, 150, 200, LinearInterpolator())
 
                 Handler().postDelayed({
-                      popupDialog.dismiss()
+                    hidePopupQueueManager(dialogList[0])
+                    Log.e("INFO", "Waited")
                 }, 450)
+            } else {
+                hidePopupQueueManager(popupDialog)
+                Log.e("INFO", "Going")
             }
         } catch (e: Exception) {
             Log.e("ERR", "pebble.ui_elements.popup_dialog_hider: ${e.localizedMessage}")
+        }
+    }
+
+    fun showPopupQueueManager(dialog: Dialog) {
+        if (dialogsToShow.isEmpty()) {
+            dialog.show()
+            showDialog(dialog)
+        }
+        dialogsToShow.offer(dialog)
+        Log.e("ERR", "Added")
+    }
+
+    fun hidePopupQueueManager(dialog: Dialog) {
+        dialogsToShow.remove(dialog)
+        dialogList.removeAt(0)
+        dialog.dismiss()
+        if (dialogsToShow.isNotEmpty()) {
+            dialogsToShow.peek().show()
+            showDialog(dialog)
+        }
+    }
+
+    fun showDialog(dialog: Dialog) {
+
+        /** Animate popupLayout in **/
+        /*dialogMain.post {
+            UIElements.viewObjectAnimator(dialogMain, "scaleX", 1f, 350, 100, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(dialogMain, "scaleY", 1f, 350, 100, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(dialogRecycler, "alpha", 1f, 150, 100, LinearInterpolator())
+
+            if (dialogRecycler.adapter != null) {
+                UIElements.viewObjectAnimator(dialogRecycler, "scaleX", 1f, 350, 100, DecelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(dialogRecycler, "scaleY", 1f, 350, 100, DecelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(dialogRecycler, "alpha", 1f, 150, 100, LinearInterpolator())
+            }
+        }*/
+
+        /** Create blurView **/
+        if (currentDecorView != null && Values.settingsSpecialEffects && 1 == 2) {
+            try {
+                //val rootView = currentDecorView.findViewById<ViewGroup>(android.R.id.content)
+                val windowBackground = currentDecorView!!.background
+
+//                popupDialog.blurView.setupWith(rootView)
+//                        .setFrameClearDrawable(windowBackground)
+//                        .setBlurAlgorithm(RenderScriptBlur(context))
+//                        .setBlurRadius(20f)
+//                        .setHasFixedTransformationMatrix(true)
+            } catch (e: Exception) {
+                Log.e("ERR", "pebble.ui_elements.popup_dialog: ${e.localizedMessage}")
+            }
+        } else {
+            val backgroundDimmer = popupDialog.backgroundDimmer
+            backgroundDimmer.alpha = 0.75f
         }
     }
 
