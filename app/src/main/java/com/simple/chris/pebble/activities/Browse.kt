@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.simple.chris.pebble.activities
 
 import android.Manifest
@@ -5,9 +7,7 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.util.Log
 import android.view.View
@@ -30,7 +30,6 @@ import com.simple.chris.pebble.functions.Connection.connectionOffline
 import com.simple.chris.pebble.functions.Connection.getGradients
 import com.simple.chris.pebble.functions.Permissions
 import kotlinx.android.synthetic.main.activity_browse.*
-import java.io.File
 
 
 class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, GradientRecyclerView.OnGradientLongClickListener, BrowseMenuRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
@@ -55,7 +54,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             if (Values.gradientList.isEmpty()) {
                 checkConnection(this, window.decorView, this)
                 if (!Permissions.readStoragePermissionGiven(this)) {
-                    //UIElements.oneButtonDialog(this, R.drawable.icon_storage, R.string.dialog_title_eng_permission_storage, R.string.dialog_body_eng_permission_storage_read, R.string.text_eng_ok, storageDialogListener)
+                    //UIElements.oneButtonDialog(this, R.drawable.icon_storage, R.string.dialog_title_eng_permission_storage, R.string.sentence_needs_storage_permission, R.string.text_eng_ok, storageDialogListener)
                 }
             }
         } else {
@@ -63,7 +62,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         }
 
         if (!Permissions.readStoragePermissionGiven(this) && !Values.dontAskStorage) {
-            UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.dialog_title_eng_permission_storage, null, R.string.dialog_body_eng_permission_storage_read, HashMaps.arraySureNotThisTimeDontAsk(),
+            UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.word_storage, null, R.string.sentence_needs_storage_permission, HashMaps.arraySureNotThisTimeDontAsk(),
             window.decorView, this)
         }
 
@@ -100,25 +99,30 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         }
 
         searchButton.setOnLongClickListener {
-            UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.dialog_title_eng_permission_storage, null, R.string.dialog_body_eng_permission_storage_read, HashMaps.arraySureNotThisTimeDontAsk(),
+            UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.word_storage, null, R.string.sentence_needs_storage_permission, HashMaps.arraySureNotThisTimeDontAsk(),
                     window.decorView, this)
-            UIElement.popupDialog(this, "gradientSaved", R.drawable.icon_check, R.string.dialog_title_eng_gradient_saved, null,
-                    R.string.dialog_body_eng_gradient_saved, HashMaps.gradientSavedArrayList(), window.decorView, this)
-            UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.dialog_title_eng_permission_storage, null, R.string.dialog_body_eng_permission_storage_read, HashMaps.arraySureNotThisTimeDontAsk(),
+            UIElement.popupDialog(this, "gradientSaved", R.drawable.icon_check, R.string.dual_gradient_saved, null,
+                    R.string.sentence_gradient_successfully_saved, HashMaps.gradientSavedArrayList(), window.decorView, this)
+            UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.word_storage, null, R.string.sentence_needs_storage_permission, HashMaps.arraySureNotThisTimeDontAsk(),
                     window.decorView, this)
-            UIElement.popupDialog(this, "gradientSaved", R.drawable.icon_check, R.string.dialog_title_eng_gradient_saved, null,
-                    R.string.dialog_body_eng_gradient_saved, HashMaps.gradientSavedArrayList(), window.decorView, this)
-            UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.dialog_title_eng_permission_storage, null, R.string.dialog_body_eng_permission_storage_read, HashMaps.arraySureNotThisTimeDontAsk(),
+            UIElement.popupDialog(this, "gradientSaved", R.drawable.icon_check, R.string.dual_gradient_saved, null,
+                    R.string.sentence_gradient_successfully_saved, HashMaps.gradientSavedArrayList(), window.decorView, this)
+            UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.word_storage, null, R.string.sentence_needs_storage_permission, HashMaps.arraySureNotThisTimeDontAsk(),
                     window.decorView, this)
             true
         }
 
         createButton.setOnClickListener {
-            startActivity(Intent(this, GradientCreator::class.java))
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             Vibration.mediumFeedback(this)
-        }
 
+            if (Values.connectionOffline) {
+                UIElement.popupDialog(this, "noConnection", R.drawable.icon_wifi_red, R.string.dual_no_connection, null, R.string.sentence_needs_internet_connection,
+                HashMaps.noConnectionArrayList(), window.decorView, this)
+            } else {
+                startActivity(Intent(this, GradientCreator::class.java))
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+        }
     }
 
     /**
@@ -136,7 +140,6 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
 
             menuHeight = menu.measuredHeight
             menuWidth = menu.measuredWidth
-            Log.e("INFO", "$bottomSheetPeekHeight")
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse.get_screen_height: ${e.localizedMessage}")
         }
@@ -166,14 +169,12 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
 
                 if (slideOffset >= 0.4f) {
                     if (createButtonExpanded) {
-                        Log.e("INFO", "Don't Expand")
                         UIElement.animateViewWidth("height", createButton, Calculations.convertToDP(this@Browse, 35f).toInt(), 0, 250)
                         UIElement.animateViewWidth("width", createButton, Calculations.convertToDP(this@Browse, 50f).toInt(), 0, 250)
                         createButtonExpanded = false
                     }
                 } else {
                     if (!createButtonExpanded) {
-                        Log.e("Info", "Expand")
                         UIElement.animateViewWidth("height", createButton, Calculations.convertToDP(this@Browse, 60f).toInt(), 0, 250)
                         UIElement.animateViewWidth("width", createButton, Calculations.viewWrapContent(createButton, "width") + Calculations.convertToDP(this@Browse, 11f).toInt(), 0, 250)
                         createButtonExpanded = true
@@ -235,7 +236,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
     private fun gradientsDownloaded() {
         Handler().postDelayed({
             if (Values.gradientList.isNotEmpty()) {
-                screenTitle.setText(R.string.screen_title_browse)
+                screenTitle.setText(R.string.word_browse)
                 if (bottomSheetBehavior.peekHeight != 0) {
                     UIElements.viewObjectAnimator(browseGrid, "scaleX", 0.6f, 350, 0, AccelerateInterpolator(3f))
                     UIElements.viewObjectAnimator(browseGrid, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
@@ -353,7 +354,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
     }
 
     override fun onBackPressed() {
-        UIElement.popupDialog(this, "leave", R.drawable.icon_door, R.string.dialog_title_eng_leave, null, R.string.dialog_body_eng_leave, HashMaps.arrayYesCancel(), window.decorView, this)
+        UIElement.popupDialog(this, "leave", R.drawable.icon_door, R.string.word_leave, null, R.string.question_leave, HashMaps.arrayYesCancel(), window.decorView, this)
     }
 
     override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
@@ -369,7 +370,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             "stillConnecting" -> {
                 when (position) {
                     0 -> {
-                        UIElement.popupDialog(this, "connecting", null, R.string.dialog_title_eng_connecting, null, R.string.dialog_body_eng_connecting, null, window.decorView, null)
+                        UIElement.popupDialog(this, "connecting", null, R.string.word_connecting, null, R.string.sentence_pebble_is_connecting, null, window.decorView, null)
                         Connection.checkDownload(this, window.decorView, this)
                     }
                     1 -> {
@@ -413,6 +414,21 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             }
 
             "noConnection" -> {
+                when (position) {
+                    0 -> {
+                        UIElement.popupDialogHider()
+                        Handler().postDelayed({
+                            checkConnection(this, window.decorView, this)
+                        }, Values.dialogShowAgainTime)
+                    }
+                    1 -> {
+                        UIElement.popupDialogHider()
+                        connectionOffline(this)
+                    }
+                }
+            }
+
+            "offlineMode" -> {
                 when (position) {
                     0 -> {
                         UIElement.popupDialogHider()

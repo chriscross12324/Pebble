@@ -484,7 +484,7 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
 
             return ((diffR + diffG + diffB) / 3) > 0.8
         } catch (e: Exception) {
-            Log.e("ERR", e.localizedMessage as String)
+            Log.e("ERR", "pebble.activities.search.search_by_colour_system: ${e.localizedMessage}")
         }
         return false
     }
@@ -509,8 +509,6 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             hueDiff /= 360
             saturationDiff /= 100
             valueDiff /= 100
-
-            Log.e("INFO", "$hueDiff $saturationDiff $valueDiff")
 
             if (baseColour != "#f5f5f5" || baseColour != "#1c1c1c") {
                 return (((hueDiff) > 0.7) && ((saturationDiff) > 0.2) && ((valueDiff) > 0.3))

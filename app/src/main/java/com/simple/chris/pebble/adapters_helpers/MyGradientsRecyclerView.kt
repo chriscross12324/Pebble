@@ -55,6 +55,8 @@ class MyGradientsRecyclerView internal constructor(var context: Context, private
             val endColour = Color.parseColor(details["endColour"])
             UIElement.gradientDrawable(context, holder.gradientView, startColour, endColour, Values.gradientCornerRadius)
             //holder.gradientView.transitionName = details["gradientName"]
+            //holder.removeText.tag = details["gradientUID"]
+            holder.view.tag = details["gradientUID"]
         } catch (e: Exception) {
             holder.gradientView.setBackgroundColor(context.resources.getColor(R.color.pebbleEnd))
         }
@@ -63,7 +65,7 @@ class MyGradientsRecyclerView internal constructor(var context: Context, private
     /**
      * Referenced to get the views from the module layout
      */
-    inner class ViewHolder internal constructor(view: View, onGradientListener: OnGradientListener) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    inner class ViewHolder internal constructor(var view: View, onGradientListener: OnGradientListener) : RecyclerView.ViewHolder(view), View.OnClickListener {
         var removeText: TextView = view.removeText
         var viewText: TextView = view.viewText
         var gradientView: ImageView = view.gradient

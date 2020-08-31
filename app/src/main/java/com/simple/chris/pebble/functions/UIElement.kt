@@ -108,7 +108,6 @@ object UIElement {
                     buttonArrayList: ArrayList<HashMap<String, Int>>?, decorView: View?, listener: PopupDialogButtonRecycler.OnButtonListener?) {
 
         currentPopupCanBeOverwritten = true
-        Log.e("INFO", popupName)
         /**
          * Checks if popUpDialog is visible; hides it if it does
          */
@@ -263,7 +262,6 @@ object UIElement {
         /**
          * Checks if popupDialog is visible
          */
-        Log.e("ERR", "Called hider")
         try {
             if (dialogList[0].isShowing) {
                 val dialogMain = popupDialog.holder
@@ -278,34 +276,34 @@ object UIElement {
                 UIElements.viewObjectAnimator(dialogRecycler, "alpha", 0f, 150, 200, LinearInterpolator())
 
                 Handler().postDelayed({
-                    hidePopupQueueManager(dialogList[0])
-                    Log.e("INFO", "Waited")
+                    if (dialogList.size > 0) {
+                        hidePopupQueueManager(dialogList[0])
+                    }
+
                 }, 450)
             } else {
                 hidePopupQueueManager(popupDialog)
-                Log.e("INFO", "Going")
             }
         } catch (e: Exception) {
-            Log.e("ERR", "pebble.ui_elements.popup_dialog_hider: ${e.localizedMessage}")
+            Log.e("ERR", "pebble.ui_element.popup_dialog_hider: ${e.localizedMessage}")
         }
     }
 
-    fun showPopupQueueManager(dialog: Dialog) {
+    private fun showPopupQueueManager(dialog: Dialog) {
         if (dialogsToShow.isEmpty()) {
             dialog.show()
-            showDialog(dialog)
+            //showDialog(dialog)
         }
         dialogsToShow.offer(dialog)
-        Log.e("ERR", "Added")
     }
 
-    fun hidePopupQueueManager(dialog: Dialog) {
+    private fun hidePopupQueueManager(dialog: Dialog) {
         dialogsToShow.remove(dialog)
         dialogList.removeAt(0)
         dialog.dismiss()
         if (dialogsToShow.isNotEmpty()) {
-            dialogsToShow.peek().show()
-            showDialog(dialog)
+            dialogsToShow.peek()!!.show()
+            //showDialog(dialog)
         }
     }
 

@@ -34,7 +34,7 @@ class Feedback : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener
         usersEmailField.setOnFocusChangeListener { _, b ->
             if (b) {
                 if (!emailDialogShown) {
-                    UIElements.oneButtonDialog(this, R.drawable.icon_email, R.string.dialog_text_eng_email, R.string.dialog_text_eng_email_body, R.string.text_eng_ok, emailDialogListener)
+                    UIElements.oneButtonDialog(this, R.drawable.icon_email, R.string.word_email, R.string.sentence_email_not_required, R.string.word_ok, emailDialogListener)
                 }
             }
         }
@@ -43,7 +43,7 @@ class Feedback : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener
             if (usersNameField.text.toString().trim().replace(" ", "") != "" && usersMessageField.text.toString().trim().replace(" ", "") != "") {
                 submitFeedback()
             } else {
-                UIElements.oneButtonDialog(this, R.drawable.icon_question, R.string.dialog_text_eng_missing_info, R.string.dialog_text_eng_missing_info_body, R.string.text_eng_ok, missingInfoListener)
+                UIElements.oneButtonDialog(this, R.drawable.icon_question, R.string.dual_missing_info, R.string.sentence_feedback_missing_info, R.string.word_ok, missingInfoListener)
             }
         }
 
@@ -80,7 +80,7 @@ class Feedback : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener
     }
 
     private fun submitFeedback() {
-        UIElement.popupDialog(this, "null", null, R.string.dialog_title_eng_submitting, null, R.string.feedback_submitting_body,
+        UIElement.popupDialog(this, "null", null, R.string.word_submitting, null, R.string.sentence_feedback_submitting,
                 null, window.decorView, null)
         submitButton.isEnabled = false
         val feedbackDatabaseURL = "https://script.google.com/macros/s/AKfycbwQliBYeXxeQFNXixg-SpcoyVB_7mbkCGT0d0iLNo6cy6DxstI/exec"
@@ -91,7 +91,7 @@ class Feedback : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener
                  */
                 Response.Listener {
                     //showDialogs(R.layout.dialog_feedback_submitted)
-                    UIElement.popupDialog(this, "feedbackSubmitted", R.drawable.icon_love, R.string.feedback_submitted, null, R.string.feedback_submitted_body,
+                    UIElement.popupDialog(this, "feedbackSubmitted", R.drawable.icon_love, R.string.dual_feedback_submitted, null, R.string.sentence_feedback_received,
                             HashMaps.BAClose(), window.decorView, this)
                 },
 
@@ -100,7 +100,7 @@ class Feedback : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener
                  */
                 Response.ErrorListener {
                     submitButton.isEnabled = true
-                    UIElement.popupDialog(this, "feedbackFailed", R.drawable.icon_wifi_red, R.string.feedback_failed, null, R.string.feedback_failed_body,
+                    UIElement.popupDialog(this, "feedbackFailed", R.drawable.icon_wifi_red, R.string.word_failed, null, R.string.sentence_feedback_submit_failed,
                             HashMaps.BABackCancel(), window.decorView, this)
                 }) {
 

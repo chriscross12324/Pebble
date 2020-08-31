@@ -27,6 +27,7 @@ object Values {
     var refreshTheme = false
     var gradientCornerRadius = 25f
     var dontAskStorage = false
+    var connectionOffline = false
 
     //Changing Values
     var gradientIsTouched = false

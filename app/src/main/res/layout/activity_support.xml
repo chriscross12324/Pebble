@@ -115,7 +115,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="@string/google_tax"
+                        android:text="@string/sentence_google_tax"
                         android:textColor="?SecondaryTextColour"
                         android:fontFamily="@font/googlesans_regular"
                         android:gravity="center_vertical"

@@ -178,7 +178,7 @@
             android:layout_height="0dp"
             android:fontFamily="@font/googlesans_medium"
             android:gravity="center"
-            android:text="@string/text_eng_submit"
+            android:text="@string/word_submit"
             android:textColor="?SecondaryTextColour"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"

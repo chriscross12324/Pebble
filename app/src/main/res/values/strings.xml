@@ -1,113 +1,100 @@
 <resources>
     <string name="app_name">Pebble</string>
 
-    <!-- English Strings -->
-    <string name="text_eng_ok">Ok</string>
-    <string name="text_eng_next">Next</string>
-    <string name="text_eng_back">Back</string>
-    <string name="text_eng_cancel">Cancel</string>
-    <string name="text_eng_submit">Submit</string>
-    <string name="text_eng_i_understand">I Understand</string>
-    <string name="text_eng_uploading">Uploading</string>
-    <string name="text_eng_take_tour">Take Tour</string>
-    <string name="text_eng_exit">Exit</string>
-    <string name="text_eng_close">Close</string>
-    <string name="text_eng_copy">Copy</string>
-    <string name="text_eng_copy_code">Copy Code</string>
 
-    <!-- Screen Titles -->
-    <string name="screen_title_browse">Browse</string>
-
-    <!-- English Connections -->
-    <string name="dialog_title_eng_data_warning">Trying to use Mobile Data</string>
-    <string name="dialog_body_eng_data_warning">Would you like to use Mobile Data? Overage fees may apply…</string>
-    <string name="dialog_button_eng_use_data">Use Data</string>
-    <string name="dialog_button_eng_use_forever">Use forever</string>
-    <string name="dialog_button_eng_try_wifi">Try Wi-Fi</string>
-
-    <string name="dialog_title_eng_no_connection">No Connection</string>
-    <string name="dialog_body_eng_no_connection">Pebble needs an internet connection, can\'t connect</string>
-    <string name="dialog_button_eng_retry">Retry</string>
-
-    <string name="dialog_title_eng_offline_mode">Offline</string>
-    <string name="dialog_body_eng_offline_mode">Pebble is currently in offline mode, want to go online?</string>
-    <string name="dialog_body_eng_offline_mode_desc">Go online to see gradients</string>
-    <string name="dialog_button_eng_go_online">Go Online</string>
-    <string name="dialog_button_eng_go_offline">Offline Mode</string>
+    <!-- Single word strings -->
+    <string name="word_back">Back</string>
+    <string name="word_browse">Browse</string>
+    <string name="word_cancel">Cancel</string>
+    <string name="word_changelog">Changelog</string>
+    <string name="word_close">Close</string>
+    <string name="word_connecting">Connecting</string>
+    <string name="word_continue">Continue</string>
+    <string name="word_copy">Copy</string>
+    <string name="word_delete">Delete</string>
+    <string name="word_email">Email</string>
+    <string name="word_exit">Exit</string>
+    <string name="word_failed">Failed</string>
+    <string name="word_feedback">Feedback</string>
+    <string name="word_leave">Leave</string>
+    <string name="word_next">Next</string>
+    <string name="word_offline">Offline</string>
+    <string name="word_ok">OK</string>
+    <string name="word_open">Open</string>
+    <string name="word_refresh">Refresh</string>
+    <string name="word_retry">Retry</string>
+    <string name="word_settings">Settings</string>
+    <string name="word_special_search">Search…</string>
+    <string name="word_storage">Storage</string>
+    <string name="word_submit">Submit</string>
+    <string name="word_submitting">Submitting</string>
+    <string name="word_support">Support</string>
+    <string name="word_sure">Sure</string>
+    <string name="word_uploading">Uploading</string>
+    <string name="word_yes">Yes</string>
 
 
-    <!-- English Gradient Details Screen -->
-    <string name="dialog_title_eng_set_wallpaper">Set Wallpaper</string>
-    <string name="dialog_body_eng_set_wallpaper">Where do you want to apply this gradient?</string>
-    <string name="dialog_button_eng_home_screen">Home Screen</string>
-    <string name="dialog_button_eng_lock_screen">Lock Screen</string>
-    <string name="dialog_title_eng_save_gradient">Save Gradient</string>
-    <string name="dialog_title_eng_wallpaper_set">Wallpaper Set</string>
-    <string name="dialog_body_eng_wallpaper_set">Enjoy your new wallpaper!</string>
-    <string name="dialog_body_eng_save_gradient">Would you like to save this gradient to your device?</string>
-    <string name="text_eng_open_gradient">Open</string>
-    <string name="dialog_title_eng_outdated_android">Outdated Android</string>
-    <string name="dialog_body_eng_outdated_android">Your Android version is outdated and isn’t fully supported, set both Home &amp; Lock screen?</string>
+    <!-- Dual word strings -->
+    <string name="dual_copy_code">Copy Code</string>
+    <string name="dual_create_gradient">Create Gradient</string>
+    <string name="dual_feedback_submitted">Feedback Submitted</string>
+    <string name="dual_go_offline">Go Offline</string>
+    <string name="dual_go_online">Go Online</string>
+    <string name="dual_gradient_exists">Gradient Exists</string>
+    <string name="dual_gradient_saved">Gradient Saved</string>
+    <string name="dual_home_screen">Home Screen</string>
+    <string name="dual_i_understand">I Understand</string>
+    <string name="dual_lock_screen">Lock Screen</string>
+    <string name="dual_missing_info">Missing Info</string>
+    <string name="dual_my_gradients">My Gradients</string>
+    <string name="dual_no_connection">No Connection</string>
+    <string name="dual_not_now">Not now</string>
+    <string name="dual_offline_mode">Offline Mode</string>
+    <string name="dual_outdated_android">Outdated Android</string>
+    <string name="dual_push_hold">Push &amp; Hold</string>
+    <string name="dual_save_gradient">Save Gradient</string>
+    <string name="dual_set_wallpaper">Set Wallpaper</string>
+    <string name="dual_still_connecting">Still connecting</string>
+    <string name="dual_take_tour">Take Tour</string>
+    <string name="dual_try_wifi">Try Wi-Fi</string>
+    <string name="dual_use_data">Use Data</string>
+    <string name="dual_use_forever">Use forever</string>
+    <string name="dual_wallpaper_set">Wallpaper Set</string>
 
-    <!-- Dialog Strings English -->
-    <string name="dialog_title_eng_gradient_create_missing">Missing Info</string>
-    <string name="dialog_body_eng_gradient_create_missing">It looks like you’re missing a name for your gradient, add one to submit it…</string>
-    <string name="dialog_title_eng_permission_storage">Storage</string>
-    <string name="dialog_body_eng_permission_storage">Pebble needs access to your storage in order to save the gradient…\n\nAfter giving access click the ‘Save’ button again</string>
-    <string name="dialog_body_eng_permission_storage_read">Pebble needs read permissions in order to make the app look better. No files are collected and everything stays local.</string>
-    <string name="dialog_title_eng_gradient_saved">Gradient Saved</string>
-    <string name="dialog_body_eng_gradient_saved">The gradient was successfully saved!</string>
 
-    <!-- Main Menu Strings-->
-    <string name="dialog_title_eng_connecting">Connecting</string>
-    <string name="dialog_body_eng_connecting">Pebble is connecting to the server, please wait…</string>
-    <string name="eng_refresh">Refresh</string>
-    <string name="eng_make_another">Make Another</string>
-    <string name="dialog_title_eng_leave">Leave?</string>
-    <string name="dialog_body_eng_leave">Would you like to leave Pebble?</string>
+    <!-- Question Strings -->
+    <string name="question_delete_gradient">Are you sure you want to delete this gradient from Pebble?</string>
+    <string name="question_go_online">Pebble is currently in offline mode, want to go online?</string>
+    <string name="question_leave">Would you like to leave Pebble?</string>
+    <string name="question_mobile_data">Would you like to use Mobile Data? Overage fees may apply…</string>
+    <string name="question_outdated_android">Your Android version is outdated and isn’t fully supported, set both Home &amp; Lock screen?</string>
+    <string name="question_save_gradient">Would you like to save this gradient to your device?</string>
+    <string name="question_set_wallpaper">Where do you want to apply this gradient?</string>
+    <string name="question_still_connecting">Pebble is taking a while to connect, what would you like to do?</string>
 
-    <!-- Gradient Creator string -->
-    <string name="dialog_title_eng_gradient_exists">Gradient Exists</string>
-    <string name="dialog_body_eng_gradient_exists">That colour combination already exists, try some different colours…</string>
-    <string name="dialog_title_eng_submitting">Submitting</string>
-    <string name="dialog_body_eng_uploading">Uploading gradient to Pebble</string>
-    <string name="dialog_body_eng_submitted">Copy the unique code above to request an edit or removal, your gradient is now available!</string>
-    <string name="dialog_title_eng_gradient_create">Create Gradient</string>
-    <string name="dialog_body_eng_gradient_create">Welcome to the Gradient Creator, time to create your first gradient! \n\nBy creating a gradient you agree to the rules and understand that the developer can remove any gradient if necessary.</string>
-    <string name="dialog_title_eng_gradient_list_empty">Offline Mode</string>
-    <string name="dialog_body_eng_gradient_list_empty">Pebble just left Offline Mode and needs to download all the gradients; this is to make sure a gradient doesn\'t already exist.</string>
 
-    <string name="pebble">Pebble</string>
-
-    <string name="pushHoldTitle">Push &amp; Hold</string>
-    <string name="PushHoldGradient">Touch the gradient to hide its details and expand the gradient fullscreen. Release to show its details again.</string>
-    <string name="search_field_hint">Search…</string>
-    <string name="dialog_text_eng_missing_info">Missing Info</string>
-    <string name="dialog_text_eng_missing_info_body">It looks like you\'re missing some required information, please make sure you filled out your name and included some feedback.</string>
-    <string name="dialog_text_eng_email">Email</string>
-    <string name="dialog_text_eng_email_body">Providing an email is not required, it just helps us get in contact with you if we need anymore information.</string>
-    <string name="text_eng_yes">Yes</string>
-    <string name="feedback_submitted">Feedback Submitted</string>
-    <string name="feedback_submitted_body">Your feedback has been received, we\'ll try to review it shortly.</string>
-    <string name="feedback_failed_body">The server took to long to respond, try submitting again.</string>
-    <string name="feedback_failed">Failed</string>
-    <string name="feedback_submitting_body">Sending your feedback over the radio waves!</string>
-
-    <!-- Browse Menu Strings -->
-    <string name="myGradientsTitle">My Gradients</string>
-    <string name="feedbackTitle">Feedback</string>
-    <string name="changelogTitle">Changelog</string>
-    <string name="settingsTitle">Settings</string>
-    <string name="refreshTitle">Refresh</string>
-    <string name="supportTitle">Support</string>
-    <string name="google_tax">The Google Play Store takes a 30% cut out of all purchases made through it, including any purchases made to support me. If you choose to support me with $1, Google will receive $0.30 of the purchase.</string>
-
-    <string name="dialog_title_eng_still_connecting">Still connecting</string>
-    <string name="dialog_body_eng_still_connecting">Pebble is taking a while to connect, what would you like to do?</string>
-    <string name="dialog_option_eng_continue">Continue</string>
-
-    <string name="optionSure">Sure</string>
-    <string name="optionNo">Not now</string>
-    <string name="optionDontAsk">Don\'t ask again</string>
+    <!-- Sentence Strings -->
+    <string name="sentence_colour_combination_exists">That colour combination already exists, try some different colours…</string>
+    <string name="sentence_dont_ask_again">Don\'t ask again</string>
+    <string name="sentence_email_not_required">Providing an email is not required, it just helps us get in contact with you if we need anymore information.</string>
+    <string name="sentence_enjoy_your_wallpaper">Enjoy your new wallpaper!</string>
+    <string name="sentence_feedback_missing_info">It looks like you\'re missing some required information, please make sure you filled out your name and included some feedback.</string>
+    <string name="sentence_feedback_received">Your feedback has been received, we\'ll try to review it shortly.</string>
+    <string name="sentence_feedback_submit_failed">The server took to long to respond, try submitting again.</string>
+    <string name="sentence_feedback_submitting">Sending your feedback over the radio waves!</string>
+    <string name="sentence_google_tax">The Google Play Store takes a 30% cut out of all purchases made through it, including any purchases made to support me. If you choose to support me with $1, Google will receive $0.30 of the purchase.</string>
+    <string name="sentence_gradient_creator_welcome">Welcome to the Gradient Creator, time to create your first gradient! \n\nBy creating a gradient you agree to the rules and understand that the developer can remove any gradient if necessary.</string>
+    <string name="sentence_gradient_successfully_saved">The gradient was successfully saved!</string>
+    <string name="sentence_gradient_unique_code">Copy the unique code above to request an edit or removal, your gradient is now available!</string>
+    <string name="sentence_missing_gradient_name">It looks like you’re missing a name for your gradient, add one to submit it…</string>
+    <string name="sentence_needs_internet_connection">Pebble needs an internet connection, can\'t connect</string>
+    <string name="sentence_needs_storage_permission">Pebble needs access to storage for all features to work properly</string>
+    <string name="sentence_needs_updated_gradients">Pebble just left Offline Mode and needs to download all the gradients; this is to make sure a gradient doesn\'t already exist.</string>
+    <string name="sentence_offline_downloaded_gradients">Pebble cannot connect to the server, but has gradients downloaded from the last connection</string>
+    <string name="sentence_online_for_gradients">Go online to see gradients</string>
+    <string name="sentence_pebble_is_connecting">Pebble is connecting to the server, please wait…</string>
+    <string name="sentence_push_hold">Touch the gradient to hide its details and expand the gradient fullscreen. Release to show its details again.</string>
+    <string name="sentence_trying_mobile_data">Trying to use Mobile Data</string>
+    <string name="sentence_uploading_gradient">Uploading gradient to Pebble</string>
 
 </resources>

@@ -174,7 +174,7 @@
             android:background="@android:color/transparent"
             android:fontFamily="@font/googlesans_medium"
             android:gravity="center"
-            android:hint="@string/search_field_hint"
+            android:hint="@string/word_special_search"
             android:inputType="textCapWords"
             android:maxLength="24"
             android:maxLines="1"

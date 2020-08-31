@@ -32,7 +32,7 @@ class SearchColourRecyclerView internal constructor(var context: Context, privat
             val details: HashMap<String, String> = buttons[position]
             UIElement.gradientDrawable(context, holder.buttonBackground, Color.parseColor(details["buttonColour"]), Color.parseColor(details["buttonColour"]), 20f)
         } catch (e: Exception) {
-            Log.e("ERR", "pebble.search_colour_recycler_view_adapter.on_bind_view_holder: ${e.localizedMessage}")
+            Log.e("ERR", "pebble.search_colour_recycler_view.on_bind_view_holder: ${e.localizedMessage}")
         }
     }
 

@@ -67,9 +67,7 @@ class GradientRecyclerView internal constructor(var context: Context, private va
     inner class ViewHolder internal constructor(view: View, onGradientListener: OnGradientListener, onGradientLongClickListener: OnGradientLongClickListener) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener/*, View.OnTouchListener*/ {
         var gradientName: TextView = view.gradientName
         var gradientView: ImageView = view.gradient
-        /*init {
-            view.setOnTouchListener(this)
-        }*/
+
         private val myOnGradientListener = onGradientListener
         private val myOnGradientLongClickListener = onGradientLongClickListener
 

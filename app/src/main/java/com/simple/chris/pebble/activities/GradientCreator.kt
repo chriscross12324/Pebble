@@ -222,7 +222,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
          */
         if (!Values.hintCreateGradientDismissed) {
             Handler().postDelayed({
-                UIElement.popupDialog(this, "gradientCreator", R.drawable.icon_apps, R.string.dialog_title_eng_gradient_create, null, R.string.dialog_body_eng_gradient_create,
+                UIElement.popupDialog(this, "gradientCreator", R.drawable.icon_apps, R.string.dual_create_gradient, null, R.string.sentence_gradient_creator_welcome,
                         HashMaps.createGradientArrayList(), window.decorView, this)
             }, 1000)
         }
@@ -245,7 +245,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
          * Sets icon/text for firstStep
          */
         lastStepIcon.setImageResource(R.drawable.icon_close)
-        nextStepText.setText(R.string.text_eng_next)
+        nextStepText.setText(R.string.word_next)
     }
 
     private fun firstStepExitAnim(mainMenu: Boolean) {
@@ -280,7 +280,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
          * Sets icon/text for lastStep
          */
         lastStepIcon.setImageResource(R.drawable.icon_back)
-        nextStepText.setText(R.string.text_eng_submit)
+        nextStepText.setText(R.string.word_submit)
     }
 
     private fun lastStepExitAnim(mainMenu: Boolean) {
@@ -314,7 +314,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                         if (Values.gradientList[count]["endColour"].equals(Values.gradientCreatorEndColour)) {
                             //Gradient already exists
                             //popupDialog(R.drawable.icon_attention, "Gradient Exists", R.string.dialog_body_eng_exists, R.string.text_eng_ok, dialogExistsListener)
-                            UIElement.popupDialog(this, "gradientExists", R.drawable.icon_attention, R.string.dialog_title_eng_gradient_exists, null, R.string.dialog_body_eng_gradient_exists, HashMaps.gradientExistsArrayList(), window.decorView, this)
+                            UIElement.popupDialog(this, "gradientExists", R.drawable.icon_attention, R.string.dual_gradient_exists, null, R.string.sentence_colour_combination_exists, HashMaps.gradientExistsArrayList(), window.decorView, this)
                             gradientExists = true
                             break
                         }
@@ -323,7 +323,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                     /** Submits gradient if it doesn't already exist */
                     if (count + 1 == Values.gradientList.size && !gradientExists) {
                         //progressPopupDialog(R.string.dialog_title_eng_submitting, R.string.dialog_body_eng_uploading, null, null)
-                        UIElement.popupDialog(this, "submittingGradient", null, R.string.dialog_title_eng_submitting, null, R.string.dialog_body_eng_uploading, null, window.decorView, null)
+                        UIElement.popupDialog(this, "submittingGradient", null, R.string.word_submitting, null, R.string.sentence_uploading_gradient, null, window.decorView, null)
                         gradientPush()
                     }
                 }
@@ -332,7 +332,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
             }
         } else {
             //popupDialog(R.drawable.icon_question, "Missing Info", R.string.dialog_body_eng_gradient_create_missing, R.string.text_eng_ok, dialogMissingListener)
-            UIElement.popupDialog(this, "missingInfo", R.drawable.icon_question, R.string.dialog_title_eng_gradient_create_missing, null, R.string.dialog_body_eng_gradient_create_missing, HashMaps.missingInfoArrayList(), window.decorView, this)
+            UIElement.popupDialog(this, "missingInfo", R.drawable.icon_question, R.string.dual_missing_info, null, R.string.sentence_missing_gradient_name, HashMaps.missingInfoArrayList(), window.decorView, this)
         }
     }
 
@@ -343,7 +343,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         val stringRequest: StringRequest = object : StringRequest(Method.POST, gradientDatabaseURL,
                 Response.Listener { gradientPushComplete() },
                 Response.ErrorListener {
-                    Log.e("ERR", "Failed")
+                    /** Set Error Listener **/
                 }) {
             override fun getParams(): MutableMap<String, String> {
                 val details: MutableMap<String, String> = HashMap()
@@ -377,19 +377,19 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         Values.saveValues(this)
 
         //popupDialog(R.drawable.icon_check, gradientUID, R.string.dialog_body_eng_submitted, R.string.text_eng_exit, dialogCompleteListener)
-        UIElement.popupDialog(this, "gradientSubmitted", R.drawable.icon_check, null, gradientUID, R.string.dialog_body_eng_submitted, HashMaps.gradientSubmittedArrayList(), window.decorView, this)
+        UIElement.popupDialog(this, "gradientSubmitted", R.drawable.icon_check, null, gradientUID, R.string.sentence_gradient_unique_code, HashMaps.gradientSubmittedArrayList(), window.decorView, this)
     }
 
     private fun checkConnection() {
         when (Connection.getConnectionType(this)) {
             0 -> {
-                UIElement.popupDialog(this, "noConnection", R.drawable.icon_warning, R.string.dialog_title_eng_no_connection, null,
-                        R.string.dialog_body_eng_no_connection, HashMaps.noConnectionArrayList(), window.decorView, this)
+                UIElement.popupDialog(this, "noConnection", R.drawable.icon_warning, R.string.dual_no_connection, null,
+                        R.string.sentence_needs_internet_connection, HashMaps.noConnectionArrayList(), window.decorView, this)
             }
             1, 2 -> {
                 if (Values.gradientList.isEmpty()) {
-                    UIElement.popupDialog(this, "gradientsNotDownloaded", R.drawable.icon_warning, R.string.dialog_title_eng_gradient_list_empty, null,
-                            R.string.dialog_body_eng_gradient_list_empty, HashMaps.gradientArrayNotUpdated(), window.decorView, this)
+                    UIElement.popupDialog(this, "gradientsNotDownloaded", R.drawable.icon_warning, R.string.dual_offline_mode, null,
+                            R.string.sentence_needs_updated_gradients, HashMaps.gradientArrayNotUpdated(), window.decorView, this)
                 } else {
                     submitLogic()
                 }

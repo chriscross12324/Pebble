@@ -54,7 +54,6 @@ class Support : AppCompatActivity(), SupportRecyclerView.OnClickListener {
 
             titleHolder.translationY = (((screenHeight * (0.333) - titleHolder.measuredHeight) / 2).toFloat())
             buttonIcon.translationY = (((screenHeight * (0.333) - titleHolder.measuredHeight) / 8).toFloat())
-            Log.e("INFO", "$bottomSheetPeekHeight")
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse.get_screen_height: ${e.localizedMessage}")
         }

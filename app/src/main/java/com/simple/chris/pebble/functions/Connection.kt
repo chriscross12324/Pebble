@@ -17,6 +17,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
+import com.simple.chris.pebble.adapters_helpers.SQLiteHelperFull
 import java.util.*
 
 object Connection {
@@ -53,16 +54,21 @@ object Connection {
     fun checkConnection(context: Context, decorView: View, listener: PopupDialogButtonRecycler.OnButtonListener) {
         when (getConnectionType(context)) {
             0 -> {
-                UIElement.popupDialog(context, "noConnection", R.drawable.icon_warning, R.string.dialog_title_eng_no_connection, null,
-                        R.string.dialog_body_eng_no_connection, HashMaps.noConnectionArrayList(), decorView, listener)
+                if (SQLiteHelperFull(context).readGradients().isEmpty()) {
+                    UIElement.popupDialog(context, "noConnection", R.drawable.icon_warning, R.string.dual_no_connection, null,
+                            R.string.sentence_needs_internet_connection, HashMaps.noConnectionArrayList(), decorView, listener)
+                } else {
+                    UIElement.popupDialog(context, "offlineMode", R.drawable.icon_wifi_red, R.string.word_offline, "", R.string.sentence_offline_downloaded_gradients,
+                    HashMaps.offlineAvailableArrayList(), decorView, listener)
+                }
             }
             1 -> {
                 getGradients(context, decorView, listener)
             }
             2 -> {
                 if (Values.askMobileData) {
-                    UIElement.popupDialog(context, "askMobile", R.drawable.icon_warning, R.string.dialog_title_eng_data_warning, null,
-                            R.string.dialog_body_eng_data_warning, HashMaps.dataWarningArrayList(), decorView, listener)
+                    UIElement.popupDialog(context, "askMobile", R.drawable.icon_warning, R.string.sentence_trying_mobile_data, null,
+                            R.string.question_mobile_data, HashMaps.dataWarningArrayList(), decorView, listener)
                 } else {
                     getGradients(context, decorView, listener)
                 }
@@ -72,12 +78,13 @@ object Connection {
 
     fun getGradients(context: Context, decorView: View, listener: PopupDialogButtonRecycler.OnButtonListener) {
         /** Start connecting animation **/
-        UIElement.popupDialog(context, "connecting", null, R.string.dialog_title_eng_connecting, null, R.string.dialog_body_eng_connecting, null, decorView, null)
+        UIElement.popupDialog(context, "connecting", null, R.string.word_connecting, null, R.string.sentence_pebble_is_connecting, null, decorView, null)
 
         /** Start gradient database download **/
         Values.downloadingGradients = true
         val mQueue: RequestQueue = Volley.newRequestQueue(context)
         val gradientDatabaseURL = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getGradients"
+        SQLiteHelperFull(context).clearGradients()
 
         request = JsonObjectRequest(Request.Method.GET, gradientDatabaseURL, null,
                 { response ->
@@ -96,8 +103,12 @@ object Connection {
 
                             gradientList.add(item)
                             Values.gradientList = gradientList
+                            /** Insert Gradient into "My Gradients" database **/
+                            val db = SQLiteHelperFull(context)
+                            db.insertGradient(item["gradientName"]!!, item["startColour"]!!, item["endColour"]!!, item["description"]!!)
                         }
                         connectionOnline()
+                        Values.connectionOffline = false
                     } catch (e: Exception) {
                         Log.e("ERR", "pebble.main_menu.get_gradients: ${e.localizedMessage}")
                     }
@@ -114,7 +125,7 @@ object Connection {
     fun checkDownload(context: Context, decorView: View, listener: PopupDialogButtonRecycler.OnButtonListener) {
         Handler().postDelayed({
             if (Values.gradientList.isEmpty()) {
-                UIElement.popupDialog(context, "stillConnecting", R.drawable.icon_wifi_green, R.string.dialog_title_eng_still_connecting, null, R.string.dialog_body_eng_still_connecting, HashMaps.arrayContinueOfflineRetry(), decorView, listener)
+                UIElement.popupDialog(context, "stillConnecting", R.drawable.icon_wifi_green, R.string.dual_still_connecting, null, R.string.question_still_connecting, HashMaps.arrayContinueOfflineRetry(), decorView, listener)
             }
         }, 20000)
     }
@@ -122,6 +133,7 @@ object Connection {
     fun cancelConnection() {
         request.cancel()
         UIElement.popupDialogHider()
+        Values.connectionOffline = true
     }
 
     private fun connectionOnline() {
@@ -131,8 +143,14 @@ object Connection {
 
     fun connectionOffline(context: Activity) {
         Values.downloadingGradients = false
-        UIElement.popupDialogHider()
-        context.findViewById<TextView>(R.id.screenTitle).setText(R.string.dialog_title_eng_offline_mode)
-        context.findViewById<TextView>(R.id.resultsText).setText(R.string.dialog_body_eng_offline_mode_desc)
+        Values.connectionOffline = true
+        //UIElement.popupDialogHider()
+        context.findViewById<TextView>(R.id.screenTitle).setText(R.string.word_offline)
+        context.findViewById<TextView>(R.id.resultsText).setText(R.string.sentence_online_for_gradients)
+
+        if (SQLiteHelperFull(context).readGradients().isNotEmpty()) {
+            Values.gradientList = SQLiteHelperFull(context).readGradients()
+            connectionOnline()
+        }
     }
 }

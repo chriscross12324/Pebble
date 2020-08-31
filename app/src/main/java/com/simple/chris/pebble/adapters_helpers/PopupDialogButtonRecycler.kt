@@ -34,7 +34,7 @@ class PopupDialogButtonRecycler internal constructor(var context: Context, var p
             holder.buttonIcon.setImageResource(details["buttonIcon"]!!.toInt())
         } catch (e: Exception) {
             //context.startActivity(Intent(context, Feedback::class.java))
-            Log.e("ERR", "pebble.main_menu_recycler_view_adapter.on_bind_view_holder: ${e.localizedMessage}")
+            Log.e("ERR", "pebble.popup_dialog_button_recycler.on_bind_view_holder: ${e.localizedMessage}")
         }
     }
 

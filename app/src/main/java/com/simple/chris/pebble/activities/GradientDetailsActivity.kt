@@ -200,15 +200,15 @@ class GradientDetailsActivity : AppCompatActivity(), PopupDialogButtonRecycler.O
 
         saveGradientButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                UIElement.popupDialog(this, "readWritePermission", R.drawable.icon_storage, R.string.dialog_title_eng_permission_storage, null, R.string.dialog_body_eng_permission_storage, HashMaps.readWritePermissionArrayList(), window.decorView, this)
+                UIElement.popupDialog(this, "readWritePermission", R.drawable.icon_storage, R.string.word_storage, null, R.string.sentence_needs_storage_permission, HashMaps.readWritePermissionArrayList(), window.decorView, this)
             } else {
-                UIElement.popupDialog(this, "saveGradient", R.drawable.icon_save, R.string.dialog_title_eng_save_gradient, null, R.string.dialog_body_eng_save_gradient,
+                UIElement.popupDialog(this, "saveGradient", R.drawable.icon_save, R.string.dual_save_gradient, null, R.string.question_save_gradient,
                         HashMaps.saveGradientArrayList(), window.decorView, this)
             }
         }
 
         setWallpaperButton.setOnClickListener {
-            UIElement.popupDialog(this, "setWallpaper", R.drawable.icon_wallpaper, R.string.dialog_title_eng_set_wallpaper, null, R.string.dialog_body_eng_set_wallpaper, HashMaps.setWallpaperArrayList(), window.decorView, this)
+            UIElement.popupDialog(this, "setWallpaper", R.drawable.icon_wallpaper, R.string.dual_set_wallpaper, null, R.string.question_set_wallpaper, HashMaps.setWallpaperArrayList(), window.decorView, this)
         }
     }
 
@@ -220,7 +220,7 @@ class GradientDetailsActivity : AppCompatActivity(), PopupDialogButtonRecycler.O
     private fun pushHoldPopup() {
         if (!Values.hintPushHoldDismissed) {
             Handler().postDelayed({
-                UIElements.oneButtonDialog(this, R.drawable.icon_view, R.string.pushHoldTitle, R.string.PushHoldGradient, R.string.text_eng_ok, pushHoldListener)
+                UIElements.oneButtonDialog(this, R.drawable.icon_view, R.string.dual_push_hold, R.string.sentence_push_hold, R.string.word_ok, pushHoldListener)
             }, 1500)
         }
     }
@@ -303,6 +303,8 @@ class GradientDetailsActivity : AppCompatActivity(), PopupDialogButtonRecycler.O
         }, 100)
 
         Vibration.mediumFeedback(this)
+        UIElement.dialogsToShow.clear()
+        UIElement.popupDialogHider()
 
         Handler().postDelayed({
             super@GradientDetailsActivity.onBackPressed()
@@ -332,11 +334,11 @@ class GradientDetailsActivity : AppCompatActivity(), PopupDialogButtonRecycler.O
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 wallpaperManager.setBitmap(createBitmap(gradientDrawable(this, null, startColourInt, endColourInt, 0f) as Drawable,
                                         Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height")), null, true, WallpaperManager.FLAG_SYSTEM)
-                                UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dialog_title_eng_wallpaper_set, null,
-                                        R.string.dialog_body_eng_wallpaper_set, HashMaps.BAClose(), window.decorView, this)
+                                UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dual_wallpaper_set, null,
+                                        R.string.sentence_enjoy_your_wallpaper, HashMaps.BAClose(), window.decorView, this)
                             } else {
-                                UIElement.popupDialog(this, "outdatedAndroid", R.drawable.icon_warning, R.string.dialog_title_eng_outdated_android, null,
-                                        R.string.dialog_body_eng_outdated_android, HashMaps.arrayYesCancel(), window.decorView, this)
+                                UIElement.popupDialog(this, "outdatedAndroid", R.drawable.icon_warning, R.string.dual_outdated_android, null,
+                                        R.string.question_outdated_android, HashMaps.arrayYesCancel(), window.decorView, this)
                             }
                         } catch (e: Exception) {
                             Log.e("ERR", "pebble.activity_gradient_details.buttons.setWallpaper: ${e.localizedMessage}")
@@ -347,11 +349,11 @@ class GradientDetailsActivity : AppCompatActivity(), PopupDialogButtonRecycler.O
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 wallpaperManager.setBitmap(createBitmap(UIElement.gradientDrawable(this, null, startColourInt, endColourInt, 0f) as Drawable,
                                         Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height")), null, true, WallpaperManager.FLAG_LOCK)
-                                UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dialog_title_eng_wallpaper_set, null,
-                                        R.string.dialog_body_eng_wallpaper_set, HashMaps.BAClose(), window.decorView, this)
+                                UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dual_wallpaper_set, null,
+                                        R.string.sentence_enjoy_your_wallpaper, HashMaps.BAClose(), window.decorView, this)
                             } else {
-                                UIElement.popupDialog(this, "outdatedAndroid", R.drawable.icon_warning, R.string.dialog_title_eng_outdated_android, null,
-                                        R.string.dialog_body_eng_outdated_android, HashMaps.arrayYesCancel(), window.decorView, this)
+                                UIElement.popupDialog(this, "outdatedAndroid", R.drawable.icon_warning, R.string.dual_outdated_android, null,
+                                        R.string.question_outdated_android, HashMaps.arrayYesCancel(), window.decorView, this)
                             }
                         } catch (e: Exception) {
 
@@ -397,8 +399,8 @@ class GradientDetailsActivity : AppCompatActivity(), PopupDialogButtonRecycler.O
                             fileOutputStream.close()
 
                             Log.e("INFO", "Successfully Saved to $pebbleDir")
-                            UIElement.popupDialog(this, "gradientSaved", R.drawable.icon_check, R.string.dialog_title_eng_gradient_saved, null,
-                                    R.string.dialog_body_eng_gradient_saved, HashMaps.gradientSavedArrayList(), window.decorView, this)
+                            UIElement.popupDialog(this, "gradientSaved", R.drawable.icon_check, R.string.dual_gradient_saved, null,
+                                    R.string.sentence_gradient_successfully_saved, HashMaps.gradientSavedArrayList(), window.decorView, this)
 
                         } catch (e: java.lang.Exception) {
                             Log.e("INFO", "Failed to save due to: ${e.localizedMessage}")
@@ -434,8 +436,8 @@ class GradientDetailsActivity : AppCompatActivity(), PopupDialogButtonRecycler.O
                         val wallpaperManager = WallpaperManager.getInstance(this)
                         wallpaperManager.setBitmap(createBitmap(gradientDrawable(this, null, startColourInt, endColourInt, 0f) as Drawable,
                                 Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height")))
-                        UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dialog_title_eng_wallpaper_set, null,
-                                R.string.dialog_body_eng_wallpaper_set, HashMaps.BAClose(), window.decorView, this)
+                        UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dual_wallpaper_set, null,
+                                R.string.sentence_enjoy_your_wallpaper, HashMaps.BAClose(), window.decorView, this)
                     }
                     1 -> {
                         UIElement.popupDialogHider()

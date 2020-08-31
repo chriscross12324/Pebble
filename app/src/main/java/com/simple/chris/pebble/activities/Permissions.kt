@@ -56,7 +56,7 @@ class Permissions : AppCompatActivity() {
                 viewObjectAnimator(networkMain, "translationY", 0f, 700, 0, DecelerateInterpolator(3f))
                 UIElements.viewVisibility(networkNotice, View.VISIBLE, 0)
                 noticeShown = true
-                networkUnderstandText.setText(R.string.text_eng_i_understand)
+                networkUnderstandText.setText(R.string.dual_i_understand)
             } else {
                 Values.firstStart = false
                 startActivity(Intent(this, Browse::class.java))

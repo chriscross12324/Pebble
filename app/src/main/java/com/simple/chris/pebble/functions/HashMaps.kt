@@ -11,27 +11,27 @@ object HashMaps {
         val menuArray = ArrayList<HashMap<String, Int>>()
         val myGradients = HashMap<String, Int>()
         myGradients["buttonIcon"] = R.drawable.icon_apps
-        myGradients["buttonText"] = R.string.myGradientsTitle
+        myGradients["buttonText"] = R.string.dual_my_gradients
         menuArray.add(myGradients)
 
         val feedback = HashMap<String, Int>()
         feedback["buttonIcon"] = R.drawable.icon_feedback
-        feedback["buttonText"] = R.string.feedbackTitle
+        feedback["buttonText"] = R.string.word_feedback
         menuArray.add(feedback)
 
         val support = HashMap<String, Int>()
         support["buttonIcon"] = R.drawable.icon_money
-        support["buttonText"] = R.string.supportTitle
+        support["buttonText"] = R.string.word_support
         menuArray.add(support)
 
         val settings = HashMap<String, Int>()
         settings["buttonIcon"] = R.drawable.icon_settings
-        settings["buttonText"] = R.string.settingsTitle
+        settings["buttonText"] = R.string.word_settings
         menuArray.add(settings)
 
         val refresh = HashMap<String, Int>()
         refresh["buttonIcon"] = R.drawable.icon_reload
-        refresh["buttonText"] = R.string.refreshTitle
+        refresh["buttonText"] = R.string.word_refresh
         menuArray.add(refresh)
 
         return menuArray
@@ -43,17 +43,17 @@ object HashMaps {
     fun dataWarningArrayList() : ArrayList<HashMap<String, Int>> {
         val dataWarningArray = ArrayList<HashMap<String, Int>>()
         val useDataHash = HashMap<String, Int>()
-        useDataHash["buttonTitle"] = R.string.dialog_button_eng_use_data
+        useDataHash["buttonTitle"] = R.string.dual_use_data
         useDataHash["buttonIcon"] = R.drawable.icon_cell_wifi
         dataWarningArray.add(useDataHash)
 
         val useForeverHash = HashMap<String, Int>()
-        useForeverHash["buttonTitle"] = R.string.dialog_button_eng_use_forever
+        useForeverHash["buttonTitle"] = R.string.dual_use_forever
         useForeverHash["buttonIcon"] = R.drawable.icon_cell_wifi
         dataWarningArray.add(useForeverHash)
 
         val tryWifiHash = HashMap<String, Int>()
-        tryWifiHash["buttonTitle"] = R.string.dialog_button_eng_try_wifi
+        tryWifiHash["buttonTitle"] = R.string.dual_try_wifi
         tryWifiHash["buttonIcon"] = R.drawable.icon_wifi_green
         dataWarningArray.add(tryWifiHash)
 
@@ -66,14 +66,29 @@ object HashMaps {
     fun noConnectionArrayList() : ArrayList<HashMap<String, Int>> {
         val noConnectionArray = ArrayList<HashMap<String, Int>>()
         val retryHash = HashMap<String, Int>()
-        retryHash["buttonTitle"] = R.string.dialog_button_eng_retry
+        retryHash["buttonTitle"] = R.string.word_retry
         retryHash["buttonIcon"] = R.drawable.icon_reload
         noConnectionArray.add(retryHash)
 
         val cancelHash = HashMap<String, Int>()
-        cancelHash["buttonTitle"] = R.string.text_eng_cancel
+        cancelHash["buttonTitle"] = R.string.word_cancel
         cancelHash["buttonIcon"] = R.drawable.icon_close
         noConnectionArray.add(cancelHash)
+
+        return noConnectionArray
+    }
+
+    fun offlineAvailableArrayList() : ArrayList<HashMap<String, Int>> {
+        val noConnectionArray = ArrayList<HashMap<String, Int>>()
+        val retryHash = HashMap<String, Int>()
+        retryHash["buttonTitle"] = R.string.word_retry
+        retryHash["buttonIcon"] = R.drawable.icon_reload
+        noConnectionArray.add(retryHash)
+
+        val offlineHashHash = HashMap<String, Int>()
+        offlineHashHash["buttonTitle"] = R.string.dual_go_offline
+        offlineHashHash["buttonIcon"] = R.drawable.icon_wifi_red
+        noConnectionArray.add(offlineHashHash)
 
         return noConnectionArray
     }
@@ -84,12 +99,12 @@ object HashMaps {
     fun offlineModeArrayList() : ArrayList<HashMap<String, Int>> {
         val offlineModeArray = ArrayList<HashMap<String, Int>>()
         val goOnlineHash = HashMap<String, Int>()
-        goOnlineHash["buttonTitle"] = R.string.dialog_button_eng_go_online
+        goOnlineHash["buttonTitle"] = R.string.dual_go_online
         goOnlineHash["buttonIcon"] = R.drawable.icon_reload
         offlineModeArray.add(goOnlineHash)
 
         val cancelHash = HashMap<String, Int>()
-        cancelHash["buttonTitle"] = R.string.text_eng_cancel
+        cancelHash["buttonTitle"] = R.string.word_cancel
         cancelHash["buttonIcon"] = R.drawable.icon_close
         offlineModeArray.add(cancelHash)
 
@@ -102,17 +117,17 @@ object HashMaps {
     fun setWallpaperArrayList() : ArrayList<HashMap<String, Int>> {
         val setWallpaperArray = ArrayList<HashMap<String, Int>>()
         val homeScreenHash = HashMap<String, Int>()
-        homeScreenHash["buttonTitle"] = R.string.dialog_button_eng_home_screen
+        homeScreenHash["buttonTitle"] = R.string.dual_home_screen
         homeScreenHash["buttonIcon"] = R.drawable.icon_home
         setWallpaperArray.add(homeScreenHash)
 
         val lockScreenHash = HashMap<String, Int>()
-        lockScreenHash["buttonTitle"] = R.string.dialog_button_eng_lock_screen
+        lockScreenHash["buttonTitle"] = R.string.dual_lock_screen
         lockScreenHash["buttonIcon"] = R.drawable.icon_lock
         setWallpaperArray.add(lockScreenHash)
 
         val cancelHash = HashMap<String, Int>()
-        cancelHash["buttonTitle"] = R.string.text_eng_cancel
+        cancelHash["buttonTitle"] = R.string.word_cancel
         cancelHash["buttonIcon"] = R.drawable.icon_close
         setWallpaperArray.add(cancelHash)
 
@@ -122,12 +137,12 @@ object HashMaps {
     fun createGradientArrayList() : ArrayList<HashMap<String, Int>> {
         val missingInfoArray = ArrayList<HashMap<String, Int>>()
         val makeAnotherHash = HashMap<String, Int>()
-        makeAnotherHash["buttonTitle"] = R.string.text_eng_i_understand
+        makeAnotherHash["buttonTitle"] = R.string.dual_i_understand
         makeAnotherHash["buttonIcon"] = R.drawable.icon_check
         missingInfoArray.add(makeAnotherHash)
 
         val backHash = HashMap<String, Int>()
-        backHash["buttonTitle"] = R.string.text_eng_cancel
+        backHash["buttonTitle"] = R.string.word_cancel
         backHash["buttonIcon"] = R.drawable.icon_close
         missingInfoArray.add(backHash)
 
@@ -137,7 +152,7 @@ object HashMaps {
     fun missingInfoArrayList() : ArrayList<HashMap<String, Int>> {
         val missingInfoArray = ArrayList<HashMap<String, Int>>()
         val backHash = HashMap<String, Int>()
-        backHash["buttonTitle"] = R.string.text_eng_back
+        backHash["buttonTitle"] = R.string.word_back
         backHash["buttonIcon"] = R.drawable.icon_back
         missingInfoArray.add(backHash)
 
@@ -147,7 +162,7 @@ object HashMaps {
     fun gradientExistsArrayList() : ArrayList<HashMap<String, Int>> {
         val missingInfoArray = ArrayList<HashMap<String, Int>>()
         val backHash = HashMap<String, Int>()
-        backHash["buttonTitle"] = R.string.text_eng_back
+        backHash["buttonTitle"] = R.string.word_back
         backHash["buttonIcon"] = R.drawable.icon_back
         missingInfoArray.add(backHash)
 
@@ -157,12 +172,12 @@ object HashMaps {
     fun gradientSubmittedArrayList() : ArrayList<HashMap<String, Int>> {
         val missingInfoArray = ArrayList<HashMap<String, Int>>()
         val makeAnotherHash = HashMap<String, Int>()
-        makeAnotherHash["buttonTitle"] = R.string.text_eng_copy
+        makeAnotherHash["buttonTitle"] = R.string.word_copy
         makeAnotherHash["buttonIcon"] = R.drawable.icon_copy
         missingInfoArray.add(makeAnotherHash)
 
         val backHash = HashMap<String, Int>()
-        backHash["buttonTitle"] = R.string.text_eng_close
+        backHash["buttonTitle"] = R.string.word_close
         backHash["buttonIcon"] = R.drawable.icon_close
         missingInfoArray.add(backHash)
 
@@ -172,7 +187,7 @@ object HashMaps {
     fun readWritePermissionArrayList() : ArrayList<HashMap<String, Int>> {
         val readWritePermissionArray = ArrayList<HashMap<String, Int>>()
         val iUnderstandHash = HashMap<String, Int>()
-        iUnderstandHash["buttonTitle"] = R.string.text_eng_i_understand
+        iUnderstandHash["buttonTitle"] = R.string.dual_i_understand
         iUnderstandHash["buttonIcon"] = R.drawable.icon_view
         readWritePermissionArray.add(iUnderstandHash)
 
@@ -182,12 +197,12 @@ object HashMaps {
     fun saveGradientArrayList() : ArrayList<HashMap<String, Int>> {
         val saveGradientArray = ArrayList<HashMap<String, Int>>()
         val saveGradientHash = HashMap<String, Int>()
-        saveGradientHash["buttonTitle"] = R.string.text_eng_yes
+        saveGradientHash["buttonTitle"] = R.string.word_yes
         saveGradientHash["buttonIcon"] = R.drawable.icon_download
         saveGradientArray.add(saveGradientHash)
 
         val cancelHash = HashMap<String, Int>()
-        cancelHash["buttonTitle"] = R.string.text_eng_cancel
+        cancelHash["buttonTitle"] = R.string.word_cancel
         cancelHash["buttonIcon"] = R.drawable.icon_close
         saveGradientArray.add(cancelHash)
 
@@ -197,12 +212,12 @@ object HashMaps {
     fun gradientSavedArrayList() : ArrayList<HashMap<String, Int>> {
         val gradientSavedArray = ArrayList<HashMap<String, Int>>()
         val openLocationHash = HashMap<String, Int>()
-        openLocationHash["buttonTitle"] = R.string.text_eng_open_gradient
+        openLocationHash["buttonTitle"] = R.string.word_open
         openLocationHash["buttonIcon"] = R.drawable.icon_open
         gradientSavedArray.add(openLocationHash)
 
         val closePopupHash = HashMap<String, Int>()
-        closePopupHash["buttonTitle"] = R.string.text_eng_close
+        closePopupHash["buttonTitle"] = R.string.word_close
         closePopupHash["buttonIcon"] = R.drawable.icon_close
         gradientSavedArray.add(closePopupHash)
 
@@ -212,12 +227,12 @@ object HashMaps {
     fun gradientArrayNotUpdated() : ArrayList<HashMap<String, Int>> {
         val gradientSavedArray = ArrayList<HashMap<String, Int>>()
         val openLocationHash = HashMap<String, Int>()
-        openLocationHash["buttonTitle"] = R.string.dialog_button_eng_go_online
+        openLocationHash["buttonTitle"] = R.string.dual_go_online
         openLocationHash["buttonIcon"] = R.drawable.icon_reload
         gradientSavedArray.add(openLocationHash)
 
         val closePopupHash = HashMap<String, Int>()
-        closePopupHash["buttonTitle"] = R.string.text_eng_cancel
+        closePopupHash["buttonTitle"] = R.string.word_cancel
         closePopupHash["buttonIcon"] = R.drawable.icon_close
         gradientSavedArray.add(closePopupHash)
 
@@ -228,7 +243,7 @@ object HashMaps {
         val array = ArrayList<HashMap<String, Int>>()
 
         val closePopupHash = HashMap<String, Int>()
-        closePopupHash["buttonTitle"] = R.string.text_eng_close
+        closePopupHash["buttonTitle"] = R.string.word_close
         closePopupHash["buttonIcon"] = R.drawable.icon_close
         array.add(closePopupHash)
 
@@ -239,12 +254,12 @@ object HashMaps {
         val array = ArrayList<HashMap<String, Int>>()
 
         val one = HashMap<String, Int>()
-        one["buttonTitle"] = R.string.text_eng_back
+        one["buttonTitle"] = R.string.word_back
         one["buttonIcon"] = R.drawable.icon_back
         array.add(one)
 
         val two = HashMap<String, Int>()
-        two["buttonTitle"] = R.string.text_eng_cancel
+        two["buttonTitle"] = R.string.word_cancel
         two["buttonIcon"] = R.drawable.icon_close
         array.add(two)
 
@@ -255,12 +270,12 @@ object HashMaps {
         val array = ArrayList<HashMap<String, Int>>()
 
         val one = HashMap<String, Int>()
-        one["buttonTitle"] = R.string.text_eng_yes
+        one["buttonTitle"] = R.string.word_yes
         one["buttonIcon"] = R.drawable.icon_check
         array.add(one)
 
         val two = HashMap<String, Int>()
-        two["buttonTitle"] = R.string.text_eng_cancel
+        two["buttonTitle"] = R.string.word_cancel
         two["buttonIcon"] = R.drawable.icon_close
         array.add(two)
 
@@ -271,17 +286,17 @@ object HashMaps {
         val array = ArrayList<HashMap<String, Int>>()
 
         val one = HashMap<String, Int>()
-        one["buttonTitle"] = R.string.dialog_option_eng_continue
+        one["buttonTitle"] = R.string.word_continue
         one["buttonIcon"] = R.drawable.icon_arrow
         array.add(one)
 
         val two = HashMap<String, Int>()
-        two["buttonTitle"] = R.string.dialog_button_eng_go_offline
+        two["buttonTitle"] = R.string.dual_go_offline
         two["buttonIcon"] = R.drawable.icon_wifi_red
         array.add(two)
 
         val three = HashMap<String, Int>()
-        three["buttonTitle"] = R.string.dialog_button_eng_retry
+        three["buttonTitle"] = R.string.word_retry
         three["buttonIcon"] = R.drawable.icon_reload
         array.add(three)
 
@@ -292,17 +307,17 @@ object HashMaps {
         val array = ArrayList<HashMap<String, Int>>()
 
         val one = HashMap<String, Int>()
-        one["buttonTitle"] = R.string.optionSure
+        one["buttonTitle"] = R.string.word_sure
         one["buttonIcon"] = R.drawable.icon_check
         array.add(one)
 
         val two = HashMap<String, Int>()
-        two["buttonTitle"] = R.string.optionNo
+        two["buttonTitle"] = R.string.dual_not_now
         two["buttonIcon"] = R.drawable.icon_close
         array.add(two)
 
         val three = HashMap<String, Int>()
-        three["buttonTitle"] = R.string.optionDontAsk
+        three["buttonTitle"] = R.string.sentence_dont_ask_again
         three["buttonIcon"] = R.drawable.icon_close
         array.add(three)
 

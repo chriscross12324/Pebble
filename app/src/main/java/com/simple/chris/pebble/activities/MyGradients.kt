@@ -1,8 +1,10 @@
 package com.simple.chris.pebble.activities
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -12,16 +14,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.android.volley.DefaultRetryPolicy
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.simple.chris.pebble.*
 import com.simple.chris.pebble.adapters_helpers.MyGradientsRecyclerView
+import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.adapters_helpers.SQLiteHelper
-import com.simple.chris.pebble.adapters_helpers.SupportRecyclerView
 import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.activity_my_gradients.*
-import kotlinx.android.synthetic.main.activity_support.*
 import kotlinx.android.synthetic.main.activity_support.backButton
 import kotlinx.android.synthetic.main.activity_support.bottomSheet
 import kotlinx.android.synthetic.main.activity_support.buttonIcon
@@ -29,9 +33,9 @@ import kotlinx.android.synthetic.main.activity_support.coordinatorLayout
 import kotlinx.android.synthetic.main.activity_support.titleHolder
 import kotlinx.android.synthetic.main.activity_support.wallpaperImageAlpha
 import kotlinx.android.synthetic.main.activity_support.wallpaperImageViewer
-import kotlinx.android.synthetic.main.module_my_gradients.view.*
+import java.util.HashMap
 
-class MyGradients : AppCompatActivity(), MyGradientsRecyclerView.OnGradientListener {
+class MyGradients : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener, MyGradientsRecyclerView.OnGradientListener {
 
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
@@ -70,7 +74,6 @@ class MyGradients : AppCompatActivity(), MyGradientsRecyclerView.OnGradientListe
 
             titleHolder.translationY = (((screenHeight * (0.333) - titleHolder.measuredHeight) / 2).toFloat())
             buttonIcon.translationY = (((screenHeight * (0.333) - titleHolder.measuredHeight) / 8).toFloat())
-            Log.e("INFO", "$bottomSheetPeekHeight")
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse.get_screen_height: ${e.localizedMessage}")
         }
@@ -102,6 +105,30 @@ class MyGradients : AppCompatActivity(), MyGradientsRecyclerView.OnGradientListe
 
     }
 
+    fun deleteGradient(context: Context, gradientUID: String) {
+        val gradientDatabaseURL = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec"
+
+        val stringRequest: StringRequest = object : StringRequest(Method.POST, gradientDatabaseURL,
+                Response.Listener {
+
+                },
+                Response.ErrorListener {
+                }) {
+            override fun getParams(): MutableMap<String, String> {
+                val details: MutableMap<String, String> = HashMap()
+                details["action"] = "deleteGradients"
+                details["gradientUID"] = gradientUID
+                return details
+            }
+        }
+
+        val retryPolicy = DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        stringRequest.retryPolicy = retryPolicy
+
+        val queue = Volley.newRequestQueue(this)
+        queue.add(stringRequest)
+    }
+
     private fun recycler() {
         myGradientsGrid.setHasFixedSize(true)
         val buttonLayoutManager = GridLayoutManager(this, 2)
@@ -110,6 +137,15 @@ class MyGradients : AppCompatActivity(), MyGradientsRecyclerView.OnGradientListe
         myGradientsGrid.layoutManager = buttonLayoutManager
         myGradientsGrid.adapter = buttonAdapter
     }
+
+    /*override fun onBackPressed() {
+        //UIElement.dialogsToShow.clear()
+        //UIElement.popupDialogHider()
+
+        Handler().postDelayed({
+            this.onBackPressed()
+        }, 120)
+    }*/
 
     //Called when Activity Pauses and Finishes
     override fun onPause() {
@@ -136,6 +172,8 @@ class MyGradients : AppCompatActivity(), MyGradientsRecyclerView.OnGradientListe
             R.id.removeText -> {
                 Vibration.strongFeedback(this)
                 Toast.makeText(this, "Remove Gradient", Toast.LENGTH_SHORT).show()
+                UIElement.popupDialog(this, "requestDelete", R.drawable.icon_delete, R.string.word_storage, null, R.string.sentence_needs_storage_permission, HashMaps.arraySureNotThisTimeDontAsk(),
+                        window.decorView, this)
             }
             R.id.viewText -> {
                 Vibration.mediumFeedback(this)
@@ -164,6 +202,23 @@ class MyGradients : AppCompatActivity(), MyGradientsRecyclerView.OnGradientListe
                     startActivity(details, activityOptions.toBundle())
                 } catch (e: Exception) {
                     Log.e("ERR", "pebble.my_gradients.on_gradient_click: ${e.localizedMessage}")
+                }
+            }
+        }
+    }
+
+    override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
+        when (popupName) {
+            "requestDelete" -> {
+                when (position) {
+                    0 -> {
+                        //Yes
+                        //deleteGradient(this, view.tag.toString())
+                        //Log.e("INFO", view.tag)
+                    }
+                    1 -> {
+                        //Cancel
+                    }
                 }
             }
         }
