@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -178,7 +177,7 @@ class MyGradients : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListe
             R.id.viewText -> {
                 Vibration.mediumFeedback(this)
                 try {
-                    val details = Intent(this, GradientDetailsActivity::class.java)
+                    val details = Intent(this, GradientDetails::class.java)
                     val gradientInfo = SQLiteHelper(this).readGradients()[position]
 
                     details.putExtra("gradientName", gradientInfo["gradientName"])

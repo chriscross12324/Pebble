@@ -38,6 +38,87 @@ object HashMaps {
     }
 
     /**
+     * Single Button HashMaps
+     */
+    fun okArray() : ArrayList<HashMap<String, Int>> {
+        val array = ArrayList<HashMap<String, Int>>()
+        val one = HashMap<String, Int>()
+        one["buttonTitle"] = R.string.word_ok
+        one["buttonIcon"] = R.drawable.icon_check
+        array.add(one)
+
+        return array
+    }
+
+    fun understandArray() : ArrayList<HashMap<String, Int>> {
+        val array = ArrayList<HashMap<String, Int>>()
+        val one = HashMap<String, Int>()
+        one["buttonTitle"] = R.string.dual_i_understand
+        one["buttonIcon"] = R.drawable.icon_check
+        array.add(one)
+
+        return array
+    }
+
+
+    /**
+     * Dual Button HashMaps
+     */
+    fun allowDeny() : ArrayList<HashMap<String, Int>> {
+        val array = ArrayList<HashMap<String, Int>>()
+        val one = HashMap<String, Int>()
+        one["buttonTitle"] = R.string.word_allow
+        one["buttonIcon"] = R.drawable.icon_check
+        array.add(one)
+
+        val two = HashMap<String, Int>()
+        two["buttonTitle"] = R.string.word_deny
+        two["buttonIcon"] = R.drawable.icon_close
+        array.add(two)
+
+        return array
+    }
+
+    fun onOff() : ArrayList<HashMap<String, Int>> {
+        val array = ArrayList<HashMap<String, Int>>()
+        val one = HashMap<String, Int>()
+        one["buttonTitle"] = R.string.word_on
+        one["buttonIcon"] = R.drawable.icon_on
+        array.add(one)
+
+        val two = HashMap<String, Int>()
+        two["buttonTitle"] = R.string.word_off
+        two["buttonIcon"] = R.drawable.icon_off
+        array.add(two)
+
+        return array
+    }
+
+
+    /**
+     * Trio Button HashMaps
+     */
+    fun lightDarkDarker() : ArrayList<HashMap<String, Int>> {
+        val array = ArrayList<HashMap<String, Int>>()
+        val one = HashMap<String, Int>()
+        one["buttonTitle"] = R.string.word_light
+        one["buttonIcon"] = R.drawable.icon_theme_light
+        array.add(one)
+
+        val two = HashMap<String, Int>()
+        two["buttonTitle"] = R.string.word_dark
+        two["buttonIcon"] = R.drawable.icon_theme_dark
+        array.add(two)
+
+        val three = HashMap<String, Int>()
+        three["buttonTitle"] = R.string.word_darker
+        three["buttonIcon"] = R.drawable.icon_theme_black
+        array.add(three)
+
+        return array
+    }
+
+    /**
      * Data Warning
      */
     fun dataWarningArrayList() : ArrayList<HashMap<String, Int>> {
@@ -54,7 +135,7 @@ object HashMaps {
 
         val tryWifiHash = HashMap<String, Int>()
         tryWifiHash["buttonTitle"] = R.string.dual_try_wifi
-        tryWifiHash["buttonIcon"] = R.drawable.icon_wifi_green
+        tryWifiHash["buttonIcon"] = R.drawable.icon_wifi_full
         dataWarningArray.add(tryWifiHash)
 
         return dataWarningArray
@@ -87,7 +168,7 @@ object HashMaps {
 
         val offlineHashHash = HashMap<String, Int>()
         offlineHashHash["buttonTitle"] = R.string.dual_go_offline
-        offlineHashHash["buttonIcon"] = R.drawable.icon_wifi_red
+        offlineHashHash["buttonIcon"] = R.drawable.icon_wifi_empty
         noConnectionArray.add(offlineHashHash)
 
         return noConnectionArray
@@ -292,7 +373,7 @@ object HashMaps {
 
         val two = HashMap<String, Int>()
         two["buttonTitle"] = R.string.dual_go_offline
-        two["buttonIcon"] = R.drawable.icon_wifi_red
+        two["buttonIcon"] = R.drawable.icon_wifi_empty
         array.add(two)
 
         val three = HashMap<String, Int>()

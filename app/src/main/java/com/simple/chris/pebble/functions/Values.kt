@@ -17,6 +17,7 @@ object Values {
 
     //Hidden Values
     var firstStart: Boolean = true
+    var setupThemeChange = false
     var lastVersion = 0
     var hintPushHoldDismissed = false
     var hintCreateGradientDismissed = false

@@ -40,7 +40,7 @@ import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.roundToInt
 
-class GradientDetailsActivity : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener {
+class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener {
 
     private lateinit var gradientNameString: String
     private lateinit var gradientDescriptionString: String
@@ -307,7 +307,7 @@ class GradientDetailsActivity : AppCompatActivity(), PopupDialogButtonRecycler.O
         UIElement.popupDialogHider()
 
         Handler().postDelayed({
-            super@GradientDetailsActivity.onBackPressed()
+            super@GradientDetails.onBackPressed()
         }, 250)
     }
 

@@ -3,6 +3,7 @@
 
 
     <!-- Single word strings -->
+    <string name="word_allow">Allow</string>
     <string name="word_back">Back</string>
     <string name="word_browse">Browse</string>
     <string name="word_cancel">Cancel</string>
@@ -11,15 +12,23 @@
     <string name="word_connecting">Connecting</string>
     <string name="word_continue">Continue</string>
     <string name="word_copy">Copy</string>
+    <string name="word_dark">Dark</string>
+    <string name="word_darker">Darker</string>
     <string name="word_delete">Delete</string>
+    <string name="word_deny">Deny</string>
     <string name="word_email">Email</string>
     <string name="word_exit">Exit</string>
     <string name="word_failed">Failed</string>
     <string name="word_feedback">Feedback</string>
+    <string name="word_finishing">Finishing</string>
     <string name="word_leave">Leave</string>
+    <string name="word_light">Light</string>
+    <string name="word_network">Network</string>
     <string name="word_next">Next</string>
+    <string name="word_off">Off</string>
     <string name="word_offline">Offline</string>
     <string name="word_ok">OK</string>
+    <string name="word_on">On</string>
     <string name="word_open">Open</string>
     <string name="word_refresh">Refresh</string>
     <string name="word_retry">Retry</string>
@@ -30,7 +39,10 @@
     <string name="word_submitting">Submitting</string>
     <string name="word_support">Support</string>
     <string name="word_sure">Sure</string>
+    <string name="word_theme">Theme</string>
     <string name="word_uploading">Uploading</string>
+    <string name="word_vibration">Vibration</string>
+    <string name="word_welcome">Welcome</string>
     <string name="word_yes">Yes</string>
 
 
@@ -54,6 +66,7 @@
     <string name="dual_push_hold">Push &amp; Hold</string>
     <string name="dual_save_gradient">Save Gradient</string>
     <string name="dual_set_wallpaper">Set Wallpaper</string>
+    <string name="dual_special_effects">Special Effects</string>
     <string name="dual_still_connecting">Still connecting</string>
     <string name="dual_take_tour">Take Tour</string>
     <string name="dual_try_wifi">Try Wi-Fi</string>
@@ -70,6 +83,9 @@
     <string name="question_outdated_android">Your Android version is outdated and isn’t fully supported, set both Home &amp; Lock screen?</string>
     <string name="question_save_gradient">Would you like to save this gradient to your device?</string>
     <string name="question_set_wallpaper">Where do you want to apply this gradient?</string>
+    <string name="question_setting_effects">Would you like to enable <b>Special Effects</b>?</string>
+    <string name="question_setting_theme">What <b>Theme</b> would you like to set?</string>
+    <string name="question_setting_vibration">Would you like to enable <b>Vibrations</b>?</string>
     <string name="question_still_connecting">Pebble is taking a while to connect, what would you like to do?</string>
 
 
@@ -82,6 +98,8 @@
     <string name="sentence_feedback_received">Your feedback has been received, we\'ll try to review it shortly.</string>
     <string name="sentence_feedback_submit_failed">The server took to long to respond, try submitting again.</string>
     <string name="sentence_feedback_submitting">Sending your feedback over the radio waves!</string>
+    <string name="sentence_finishing_setup">Pebble is finalizing set-up and will redirect you once finished…</string>
+    <string name="sentence_get_best_experience">In order to get the best experience out of Pebble you will be asked to set it up, as-well as accept the required permissions!</string>
     <string name="sentence_google_tax">The Google Play Store takes a 30% cut out of all purchases made through it, including any purchases made to support me. If you choose to support me with $1, Google will receive $0.30 of the purchase.</string>
     <string name="sentence_gradient_creator_welcome">Welcome to the Gradient Creator, time to create your first gradient! \n\nBy creating a gradient you agree to the rules and understand that the developer can remove any gradient if necessary.</string>
     <string name="sentence_gradient_successfully_saved">The gradient was successfully saved!</string>
@@ -93,8 +111,14 @@
     <string name="sentence_offline_downloaded_gradients">Pebble cannot connect to the server, but has gradients downloaded from the last connection</string>
     <string name="sentence_online_for_gradients">Go online to see gradients</string>
     <string name="sentence_pebble_is_connecting">Pebble is connecting to the server, please wait…</string>
+    <string name="sentence_permission_network">Pebble needs an active internet connecting to download and submit gradients, by default you will be warned when trying to use Mobile Data.\n\nNobody but yourself is responsible for exceeding any limit!</string>
     <string name="sentence_push_hold">Touch the gradient to hide its details and expand the gradient fullscreen. Release to show its details again.</string>
     <string name="sentence_trying_mobile_data">Trying to use Mobile Data</string>
     <string name="sentence_uploading_gradient">Uploading gradient to Pebble</string>
+
+
+    <!-- Unorganized -->
+
+
 
 </resources>

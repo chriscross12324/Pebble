@@ -27,7 +27,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/icon_wifi_red"
+            android:src="@drawable/icon_wifi_empty"
             android:tint="?PrimaryTextColour"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

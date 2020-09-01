@@ -27,7 +27,7 @@
         <activity android:name=".activities.GradientCreator" />
         <activity android:name=".activities.MyGradients"/>
         <activity
-            android:name=".activities.GradientDetailsActivity"
+            android:name=".activities.GradientDetails"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activities.SplashScreen"

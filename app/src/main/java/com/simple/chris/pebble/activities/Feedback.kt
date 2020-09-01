@@ -100,7 +100,7 @@ class Feedback : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener
                  */
                 Response.ErrorListener {
                     submitButton.isEnabled = true
-                    UIElement.popupDialog(this, "feedbackFailed", R.drawable.icon_wifi_red, R.string.word_failed, null, R.string.sentence_feedback_submit_failed,
+                    UIElement.popupDialog(this, "feedbackFailed", R.drawable.icon_wifi_empty, R.string.word_failed, null, R.string.sentence_feedback_submit_failed,
                             HashMaps.BABackCancel(), window.decorView, this)
                 }) {
 

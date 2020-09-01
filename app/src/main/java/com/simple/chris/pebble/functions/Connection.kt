@@ -58,7 +58,7 @@ object Connection {
                     UIElement.popupDialog(context, "noConnection", R.drawable.icon_warning, R.string.dual_no_connection, null,
                             R.string.sentence_needs_internet_connection, HashMaps.noConnectionArrayList(), decorView, listener)
                 } else {
-                    UIElement.popupDialog(context, "offlineMode", R.drawable.icon_wifi_red, R.string.word_offline, "", R.string.sentence_offline_downloaded_gradients,
+                    UIElement.popupDialog(context, "offlineMode", R.drawable.icon_wifi_empty, R.string.word_offline, "", R.string.sentence_offline_downloaded_gradients,
                     HashMaps.offlineAvailableArrayList(), decorView, listener)
                 }
             }
@@ -125,7 +125,7 @@ object Connection {
     fun checkDownload(context: Context, decorView: View, listener: PopupDialogButtonRecycler.OnButtonListener) {
         Handler().postDelayed({
             if (Values.gradientList.isEmpty()) {
-                UIElement.popupDialog(context, "stillConnecting", R.drawable.icon_wifi_green, R.string.dual_still_connecting, null, R.string.question_still_connecting, HashMaps.arrayContinueOfflineRetry(), decorView, listener)
+                UIElement.popupDialog(context, "stillConnecting", R.drawable.icon_wifi_full, R.string.dual_still_connecting, null, R.string.question_still_connecting, HashMaps.arrayContinueOfflineRetry(), decorView, listener)
             }
         }, 20000)
     }

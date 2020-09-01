@@ -18,7 +18,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.activities.GradientDetailsActivity
+import com.simple.chris.pebble.activities.GradientDetails
 import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.dialog_long_press_gradients.*
@@ -43,7 +43,7 @@ object RecyclerGrid {
 
     fun gradientGridOnClickListener(context: Activity, gradientJSON: ArrayList<HashMap<String, String>>, view: View, position: Int) {
         try {
-            val details = Intent(context, GradientDetailsActivity::class.java)
+            val details = Intent(context, GradientDetails::class.java)
             val gradientInfo = gradientJSON[position]
 
             details.putExtra("gradientName", gradientInfo["gradientName"])

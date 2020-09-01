@@ -14,6 +14,7 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -56,6 +57,8 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                 if (!Permissions.readStoragePermissionGiven(this)) {
                     //UIElements.oneButtonDialog(this, R.drawable.icon_storage, R.string.dialog_title_eng_permission_storage, R.string.sentence_needs_storage_permission, R.string.text_eng_ok, storageDialogListener)
                 }
+            } else {
+                Log.e("ERR", "Not empty")
             }
         } else {
             Values.refreshTheme = false
@@ -116,7 +119,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             Vibration.mediumFeedback(this)
 
             if (Values.connectionOffline) {
-                UIElement.popupDialog(this, "noConnection", R.drawable.icon_wifi_red, R.string.dual_no_connection, null, R.string.sentence_needs_internet_connection,
+                UIElement.popupDialog(this, "noConnection", R.drawable.icon_wifi_empty, R.string.dual_no_connection, null, R.string.sentence_needs_internet_connection,
                 HashMaps.noConnectionArrayList(), window.decorView, this)
             } else {
                 startActivity(Intent(this, GradientCreator::class.java))
