@@ -39,6 +39,7 @@ import kotlinx.android.synthetic.main.activity_gradient_details.*
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.roundToInt
+import kotlin.system.exitProcess
 
 class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener {
 
@@ -65,8 +66,14 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         //Sets
         gradientNameString = intent.getStringExtra("gradientName") as String
         gradientDescriptionString = intent.getStringExtra("description") as String
-        startColourInt = Color.parseColor(intent.getStringExtra("startColour"))
-        endColourInt = Color.parseColor(intent.getStringExtra("endColour"))
+        try {
+            startColourInt = Color.parseColor(intent.getStringExtra("startColour"))
+            endColourInt = Color.parseColor(intent.getStringExtra("endColour"))
+        } catch (e: Exception) {
+            UIElement.popupDialog(this, "error", R.drawable.icon_attention, R.string.word_error, null,R.string.serious_error, HashMaps.okArray(), window.decorView, this)
+            //exitProcess(1)
+        }
+
 
         gradientDrawable(this, gradientViewStatic, startColourInt, endColourInt, Values.gradientCornerRadius)
         gradientViewStatic.transitionName = gradientNameString
@@ -128,7 +135,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                 copiedAnimationPlaying = true
                 Vibration.notification(this)
 
-                viewObjectAnimator(copiedNotification, "translationY", 0f, 500,
+                viewObjectAnimator(copiedNotification, "translationY", Calculations.cutoutHeight(window).toFloat(), 500,
                         0, DecelerateInterpolator(3f))
                 viewObjectAnimator(copiedNotification, "translationY",
                         convertToDP(this, -60f), 500,
@@ -151,7 +158,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                 copiedAnimationPlaying = true
                 Vibration.notification(this)
 
-                viewObjectAnimator(copiedNotification, "translationY", 0f, 500,
+                viewObjectAnimator(copiedNotification, "translationY", Calculations.cutoutHeight(window).toFloat(), 500,
                         0, DecelerateInterpolator(3f))
                 viewObjectAnimator(copiedNotification, "translationY",
                         convertToDP(this, -60f), 500,
@@ -333,7 +340,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                         try {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 wallpaperManager.setBitmap(createBitmap(gradientDrawable(this, null, startColourInt, endColourInt, 0f) as Drawable,
-                                        Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height")), null, true, WallpaperManager.FLAG_SYSTEM)
+                                        Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)), null, true, WallpaperManager.FLAG_SYSTEM)
                                 UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dual_wallpaper_set, null,
                                         R.string.sentence_enjoy_your_wallpaper, HashMaps.BAClose(), window.decorView, this)
                             } else {
@@ -348,7 +355,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                         try {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 wallpaperManager.setBitmap(createBitmap(UIElement.gradientDrawable(this, null, startColourInt, endColourInt, 0f) as Drawable,
-                                        Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height")), null, true, WallpaperManager.FLAG_LOCK)
+                                        Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)), null, true, WallpaperManager.FLAG_LOCK)
                                 UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dual_wallpaper_set, null,
                                         R.string.sentence_enjoy_your_wallpaper, HashMaps.BAClose(), window.decorView, this)
                             } else {
@@ -393,7 +400,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
 
                             /** Creates the gradient Bitmap to populate the file above **/
                             createBitmap(gradientDrawable(this, null, startColourInt, endColourInt, 0f) as Drawable,
-                                    Calculations.screenMeasure(this, "largest"), Calculations.screenMeasure(this, "largest")).compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+                                    Calculations.screenMeasure(this, "largest", window), Calculations.screenMeasure(this, "largest", window)).compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
 
                             fileOutputStream.flush()
                             fileOutputStream.close()
@@ -435,7 +442,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                     0 -> {
                         val wallpaperManager = WallpaperManager.getInstance(this)
                         wallpaperManager.setBitmap(createBitmap(gradientDrawable(this, null, startColourInt, endColourInt, 0f) as Drawable,
-                                Calculations.screenMeasure(this, "width"), Calculations.screenMeasure(this, "height")))
+                                Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)))
                         UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dual_wallpaper_set, null,
                                 R.string.sentence_enjoy_your_wallpaper, HashMaps.BAClose(), window.decorView, this)
                     }
@@ -443,6 +450,12 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                         UIElement.popupDialogHider()
                     }
                 }
+            }
+            "error" -> {
+                UIElement.popupDialogHider()
+                Handler().postDelayed({
+                    onBackPressed()
+                }, 450)
             }
         }
     }

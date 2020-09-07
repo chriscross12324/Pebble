@@ -116,7 +116,7 @@
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/googlesans_medium"
                 android:hint="Gradient Description"
-                android:inputType="text|textMultiLine|textCapSentences"
+                android:inputType="textMultiLine|textCapSentences"
                 android:imeOptions="actionDone"
                 android:maxHeight="160dp"
                 android:maxLength="200"

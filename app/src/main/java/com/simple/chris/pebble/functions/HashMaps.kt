@@ -9,20 +9,20 @@ object HashMaps {
      */
     fun browseMenuArray() : ArrayList<HashMap<String, Int>> {
         val menuArray = ArrayList<HashMap<String, Int>>()
-        val myGradients = HashMap<String, Int>()
+        /*val myGradients = HashMap<String, Int>()
         myGradients["buttonIcon"] = R.drawable.icon_apps
         myGradients["buttonText"] = R.string.dual_my_gradients
-        menuArray.add(myGradients)
+        menuArray.add(myGradients)*/
 
         val feedback = HashMap<String, Int>()
         feedback["buttonIcon"] = R.drawable.icon_feedback
         feedback["buttonText"] = R.string.word_feedback
         menuArray.add(feedback)
 
-        val support = HashMap<String, Int>()
+        /*val support = HashMap<String, Int>()
         support["buttonIcon"] = R.drawable.icon_money
         support["buttonText"] = R.string.word_support
-        menuArray.add(support)
+        menuArray.add(support)*/
 
         val settings = HashMap<String, Int>()
         settings["buttonIcon"] = R.drawable.icon_settings
@@ -400,6 +400,53 @@ object HashMaps {
         val three = HashMap<String, Int>()
         three["buttonTitle"] = R.string.sentence_dont_ask_again
         three["buttonIcon"] = R.drawable.icon_close
+        array.add(three)
+
+        return array
+    }
+
+    fun settingsArray() : ArrayList<HashMap<String, Int>> {
+        val array = ArrayList<HashMap<String, Int>>()
+
+        val one = HashMap<String, Int>()
+        one["buttonTitle"] = R.string.word_theme
+        one["buttonIcon"] = R.drawable.icon_brush
+        array.add(one)
+
+        val two = HashMap<String, Int>()
+        two["buttonTitle"] = R.string.word_vibration
+        two["buttonIcon"] = R.drawable.icon_vibrate_on
+        array.add(two)
+
+        val three = HashMap<String, Int>()
+        three["buttonTitle"] = R.string.dual_special_effects
+        three["buttonIcon"] = R.drawable.icon_blur_on
+        array.add(three)
+
+        val four = HashMap<String, Int>()
+        four["buttonTitle"] = R.string.dual_use_data
+        four["buttonIcon"] = R.drawable.icon_cell_wifi
+        array.add(four)
+
+        return array
+    }
+
+    fun onOffAsk() : ArrayList<HashMap<String, Int>> {
+        val array = ArrayList<HashMap<String, Int>>()
+
+        val one = HashMap<String, Int>()
+        one["buttonTitle"] = R.string.word_on
+        one["buttonIcon"] = R.drawable.icon_on
+        array.add(one)
+
+        val two = HashMap<String, Int>()
+        two["buttonTitle"] = R.string.word_off
+        two["buttonIcon"] = R.drawable.icon_off
+        array.add(two)
+
+        val three = HashMap<String, Int>()
+        three["buttonTitle"] = R.string.dual_ask_everytime
+        three["buttonIcon"] = R.drawable.icon_reload
         array.add(three)
 
         return array

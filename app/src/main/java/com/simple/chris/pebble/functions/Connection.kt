@@ -10,6 +10,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -66,11 +67,17 @@ object Connection {
                 getGradients(context, decorView, listener)
             }
             2 -> {
-                if (Values.askMobileData) {
-                    UIElement.popupDialog(context, "askMobile", R.drawable.icon_warning, R.string.sentence_trying_mobile_data, null,
-                            R.string.question_mobile_data, HashMaps.dataWarningArrayList(), decorView, listener)
-                } else {
-                    getGradients(context, decorView, listener)
+                when (Values.useMobileData) {
+                    "on" -> {
+                        getGradients(context, decorView, listener)
+                    }
+                    "off" -> {
+                        Toast.makeText(context, "Enable Data Usage in Settings", Toast.LENGTH_LONG).show()
+                    }
+                    "ask" -> {
+                        UIElement.popupDialog(context, "askMobile", R.drawable.icon_warning, R.string.sentence_trying_mobile_data, null,
+                                R.string.question_mobile_data, HashMaps.dataWarningArrayList(), decorView, listener)
+                    }
                 }
             }
         }

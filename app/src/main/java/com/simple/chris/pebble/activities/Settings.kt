@@ -4,26 +4,31 @@ import android.content.Intent
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.simple.chris.pebble.*
-import com.simple.chris.pebble.functions.Calculations
-import com.simple.chris.pebble.functions.UIElement
-import com.simple.chris.pebble.functions.UIElements
-import com.simple.chris.pebble.functions.Values
+import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
+import com.simple.chris.pebble.adapters_helpers.SettingsRecyclerView
+import com.simple.chris.pebble.functions.*
+import kotlinx.android.synthetic.main.activity_browse.*
+import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.activity_settings.*
-import kotlinx.android.synthetic.main.activity_settings.bottomSheet
-import kotlinx.android.synthetic.main.activity_settings.buttonIcon
-import kotlinx.android.synthetic.main.activity_settings.coordinatorLayout
-import kotlinx.android.synthetic.main.activity_settings.titleHolder
-import kotlinx.android.synthetic.main.activity_settings.wallpaperImageAlpha
-import kotlinx.android.synthetic.main.activity_settings.wallpaperImageViewer
+import kotlinx.android.synthetic.main.activity_settings_new.*
+import kotlinx.android.synthetic.main.activity_settings_new.backButton
+import kotlinx.android.synthetic.main.activity_settings_new.bottomSheet
+import kotlinx.android.synthetic.main.activity_settings_new.buttonIcon
+import kotlinx.android.synthetic.main.activity_settings_new.coordinatorLayout
+import kotlinx.android.synthetic.main.activity_settings_new.titleHolder
+import kotlinx.android.synthetic.main.activity_settings_new.wallpaperImageAlpha
+import kotlinx.android.synthetic.main.activity_settings_new.wallpaperImageViewer
 import java.lang.Exception
 import kotlin.math.roundToInt
 
-class Settings : AppCompatActivity() {
+class Settings : AppCompatActivity(), SettingsRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
     private var screenHeight = 0
@@ -32,60 +37,19 @@ class Settings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UIElement.setTheme(this)
-        setContentView(R.layout.activity_settings)
-        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
+        setContentView(R.layout.activity_settings_new)
         Values.currentActivity = "Settings"
 
         coordinatorLayout.post {
-            calculateHeights()
-            bottomSheet()
-            initiateOptionsBackgrounds()
-            setButtonBackgroundAlpha()
-        }
+            settingsList.setHasFixedSize(true)
+            val buttonLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            val buttonAdapter = SettingsRecyclerView(this, HashMaps.settingsArray(), this)
 
-        /** Set theme of app **/
-        lightThemeOption.setOnClickListener {
-            if (Values.settingThemes != "light") {
-                Values.settingThemes = "light"
-                setButtonBackgroundAlpha()
-                refreshTheme()
+            settingsList.layoutManager = buttonLayoutManager
+            settingsList.adapter = buttonAdapter
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                Log.e("INFO", "Cutout height: ${window.decorView.rootWindowInsets.displayCutout}")
             }
-        }
-        darkThemeOption.setOnClickListener {
-            if (Values.settingThemes != "dark") {
-                Values.settingThemes = "dark"
-                setButtonBackgroundAlpha()
-                refreshTheme()
-            }
-        }
-        blackThemeOption.setOnClickListener {
-            if (Values.settingThemes != "black") {
-                Values.settingThemes = "black"
-                setButtonBackgroundAlpha()
-                refreshTheme()
-            }
-        }
-
-        /** Set vibration of app **/
-        onVibrationOption.setOnClickListener {
-            Values.settingVibrations = true
-            setButtonBackgroundAlpha()
-        }
-        offVibrationOption.setOnClickListener {
-            Values.settingVibrations = false
-            setButtonBackgroundAlpha()
-        }
-
-        /** Set specialEffects for app **/
-        onSpecialOption.setOnClickListener {
-            Values.settingsSpecialEffects = true
-            setButtonBackgroundAlpha()
-            UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
-        }
-        offSpecialOption.setOnClickListener {
-            Values.settingsSpecialEffects = false
-            setButtonBackgroundAlpha()
-            UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
         }
 
         backButton.setOnClickListener {
@@ -93,93 +57,51 @@ class Settings : AppCompatActivity() {
         }
     }
 
+    override fun onAttachedToWindow() {
+        bottomSheet.post {
+            calculateHeights()
+            bottomSheet()
+        }
+        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha, window)
+    }
+
     private fun calculateHeights() {
         try {
-            screenHeight = Calculations.screenMeasure(this, "height")
+            screenHeight = Calculations.screenMeasure(this, "height", window)
 
             bottomSheetPeekHeight = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 screenHeight
             } else {
-                ((screenHeight * (0.667)) + Calculations.convertToDP(this, 16f)).toInt()
+                (screenHeight * (0.667)).toInt()
             }
 
-            titleHolder.translationY = ((((screenHeight * (0.333) - titleHolder.measuredHeight) / 2) /*+ Calculations.convertToDP(this, 16f)*/).toFloat())
-            screenDescription.text = "Customize Pebble"
+            titleHolder.translationY = (((screenHeight * (0.333)) / 2) - (titleHolder.measuredHeight / 2)).toFloat()
+            buttonIcon.translationY = (((screenHeight * (0.333)) / 8) - (titleHolder.measuredHeight / 8)).toFloat()
+            screenDescription.text = R.string.dual_customize_pebble.toString()
         } catch (e: Exception) {
             Log.e("ERR", "pebble.settings.calculate_height: ${e.localizedMessage}")
         }
     }
 
     private fun bottomSheet() {
+        bottomSheet.background.alpha = (75 * 2.55).roundToInt()
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         //UIElements.bottomSheetPeekHeightAnim(bottomSheetBehavior, bottomSheetPeekHeight, 300, 0, DecelerateInterpolator(3f))
         bottomSheetBehavior.peekHeight = bottomSheetPeekHeight
 
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                titleHolder.translationY = (((screenHeight * (-0.333) * slideOffset + screenHeight * (0.333) - (titleHolder.measuredHeight)) / 2) /*+ Calculations.convertToDP(this@Settings, 16f)*/).toFloat()
-                //Log.e("ERR", "$slideOffset")
-                if (slideOffset > 0) {
-                    titleHolder.alpha = ((slideOffset * -1) + 1)
-                    buttonIcon.alpha = ((slideOffset * -0.1) + 0.1).toFloat()
-                } else {
-                    titleHolder.alpha = 1f
-                    buttonIcon.alpha = 0.1f
-                }
+                titleHolder.translationY = ((screenHeight * (-0.333) * slideOffset + screenHeight * (0.333) - (titleHolder.measuredHeight)) / 2).toFloat()
+                buttonIcon.translationY = ((screenHeight * (-0.333) * slideOffset + screenHeight * (0.333) - (titleHolder.measuredHeight)) / 8).toFloat()
+                val cornerRadius = ((slideOffset * -1) + 1) * Calculations.convertToDP(this@Settings, 20f)
+                val bottomShe = findViewById<CardView>(R.id.bottomSheet)
+                bottomShe.radius = cornerRadius
             }
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
             }
 
         })
-    }
-
-    private fun initiateOptionsBackgrounds() {
-        themeOptions.background.alpha = (75 * 2.55).roundToInt()
-        vibrationOptions.background.alpha = (75 * 2.55).roundToInt()
-        specialOptions.background.alpha = (75 * 2.55).roundToInt()
-    }
-
-    private fun setButtonBackgroundAlpha() {
-        when (Values.settingThemes) {
-            "light" -> {
-                lightThemeOption.background.alpha = (100 * 2.55).roundToInt()
-                darkThemeOption.background.alpha = (40 * 2.55).roundToInt()
-                blackThemeOption.background.alpha = (40 * 2.55).roundToInt()
-            }
-            "dark" -> {
-                lightThemeOption.background.alpha = (40 * 2.55).roundToInt()
-                darkThemeOption.background.alpha = (100 * 2.55).roundToInt()
-                blackThemeOption.background.alpha = (40 * 2.55).roundToInt()
-            }
-            "black" -> {
-                lightThemeOption.background.alpha = (40 * 2.55).roundToInt()
-                darkThemeOption.background.alpha = (40 * 2.55).roundToInt()
-                blackThemeOption.background.alpha = (100 * 2.55).roundToInt()
-            }
-        }
-
-        when (Values.settingVibrations) {
-            true -> {
-                onVibrationOption.background.alpha = (100 * 2.55).roundToInt()
-                offVibrationOption.background.alpha = (40 * 2.55).roundToInt()
-            }
-            false -> {
-                onVibrationOption.background.alpha = (40 * 2.55).roundToInt()
-                offVibrationOption.background.alpha = (100 * 2.55).roundToInt()
-            }
-        }
-
-        when (Values.settingsSpecialEffects) {
-            true -> {
-                onSpecialOption.background.alpha = (100 * 2.55).roundToInt()
-                offSpecialOption.background.alpha = (40 * 2.55).roundToInt()
-            }
-            false -> {
-                onSpecialOption.background.alpha = (40 * 2.55).roundToInt()
-                offSpecialOption.background.alpha = (100 * 2.55).roundToInt()
-            }
-        }
     }
 
     private fun refreshTheme() {
@@ -199,6 +121,100 @@ class Settings : AppCompatActivity() {
             startActivity(Intent(this, SplashScreen::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
+        }
+    }
+
+    override fun onButtonClick(position: Int, view: View) {
+        when (position) {
+            0 -> {
+                //Theme
+                UIElement.popupDialog(this, "settingTheme", R.drawable.icon_brush, R.string.word_theme, null, R.string.question_setting_theme,
+                        HashMaps.lightDarkDarker(), window.decorView, this)
+            }
+            1 -> {
+                //Vibration
+                UIElement.popupDialog(this, "settingVibration", R.drawable.icon_vibrate_on, R.string.word_vibration, null, R.string.question_setting_vibration,
+                        HashMaps.onOff(), window.decorView, this)
+            }
+            2 -> {
+                //Special Effects
+                UIElement.popupDialog(this, "settingSpecialEffects", R.drawable.icon_blur_on, R.string.dual_special_effects, null, R.string.question_setting_effects,
+                        HashMaps.onOff(), window.decorView, this)
+            }
+            3 -> {
+                //Cellular Data
+                UIElement.popupDialog(this, "settingNetwork", R.drawable.icon_cell_wifi, R.string.word_network, null, R.string.question_setting_network,
+                        HashMaps.onOffAsk(), window.decorView, this)
+            }
+        }
+    }
+
+    override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
+        when (popupName) {
+            "settingTheme" -> {
+                when (position) {
+                    0 -> {
+                        //Light
+                        Values.settingThemes = "light"
+                    }
+                    1 -> {
+                        //Dark
+                        Values.settingThemes = "dark"
+                    }
+                    2 -> {
+                        //Darker
+                        Values.settingThemes = "darker"
+                    }
+                }
+                UIElement.popupDialogHider()
+                Handler().postDelayed({
+                    refreshTheme()
+                }, 450)
+            }
+            "settingVibration" -> {
+                when (position) {
+                    0 -> {
+                        //On
+                        Values.settingVibrations = true
+                    }
+                    1 -> {
+                        //Off
+                        Values.settingVibrations = false
+                    }
+                }
+                UIElement.popupDialogHider()
+            }
+            "settingSpecialEffects" -> {
+                when (position) {
+                    0 -> {
+                        //On
+                        Values.settingsSpecialEffects = true
+                    }
+                    1 -> {
+                        //Off
+                        Values.settingsSpecialEffects = false
+                    }
+                }
+                UIElement.popupDialogHider()
+                UIElement.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
+            }
+            "settingNetwork" -> {
+                when (position) {
+                    0 -> {
+                        //On
+                        Values.useMobileData = "on"
+                    }
+                    1 -> {
+                        //Off
+                        Values.useMobileData = "off"
+                    }
+                    2 -> {
+                        //Ask Every-time
+                        Values.useMobileData = "ask"
+                    }
+                }
+                UIElement.popupDialogHider()
+            }
         }
     }
 }

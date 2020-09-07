@@ -29,7 +29,7 @@ class Feedback : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener
         setContentView(R.layout.activity_feedback)
         Values.currentActivity = "Feedback"
 
-        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
+        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha, window)
 
         usersEmailField.setOnFocusChangeListener { _, b ->
             if (b) {

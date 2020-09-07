@@ -34,7 +34,7 @@ object Values {
     var gradientIsTouched = false
 
     //Settings
-    var askMobileData: Boolean = true
+    var useMobileData: String = "ask"
 
     var settingThemes = "dark"
     var settingVibrations = true
@@ -64,7 +64,7 @@ object Values {
         editor.putBoolean("hintPushHoldDismissed", hintPushHoldDismissed)
         editor.putBoolean("settingVibrations", settingVibrations)
         editor.putString("settingThemes", settingThemes)
-        editor.putBoolean("askMobileData", askMobileData)
+        editor.putString("useMobileData", useMobileData)
         editor.putBoolean("settingsSpecialEffects", settingsSpecialEffects)
         editor.putBoolean("gcFirstStart", gcFirstStart)
         editor.putString("gradientCreatorGradientName", gradientCreatorGradientName)
@@ -87,8 +87,8 @@ object Values {
         hintPushHoldDismissed = sharedPrefs.getBoolean("hintPushHoldDismissed", false)
         settingVibrations = sharedPrefs.getBoolean("settingVibrations", true)
         settingThemes = sharedPrefs.getString("settingThemes", "dark")!!
-        askMobileData = sharedPrefs.getBoolean("askMobileData", true)
-        settingsSpecialEffects = sharedPrefs.getBoolean("settingsSpecialEffects", true)!!
+        useMobileData = sharedPrefs.getString("useMobileData", "ask")!!
+        settingsSpecialEffects = sharedPrefs.getBoolean("settingsSpecialEffects", true)
         gcFirstStart = sharedPrefs.getBoolean("gcFirstStart", true)
         gradientCreatorGradientName = sharedPrefs.getString("gradientCreatorGradientName", "")!!
         gradientCreatorStartColour = sharedPrefs.getString("gradientCreatorStartColour", "")!!

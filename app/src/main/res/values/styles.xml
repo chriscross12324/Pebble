@@ -28,7 +28,7 @@
         <item name="SupportBackground">@color/darkSupportBackground</item>
     </style>
 
-    <style name="ThemeBlack" parent="Main">
+    <style name="ThemeDarker" parent="Main">
         <item name="BackgroundColour">@color/blackBackground</item>
         <item name="ForegroundColour">@color/blackForeground</item>
         <item name="PrimaryTextColour">@color/blackTextPrimary</item>

@@ -17,6 +17,7 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jgabrielfreitas.core.BlurImageView
@@ -39,7 +40,11 @@ object UIElement {
         when (Values.settingThemes) {
             "light" -> context.setTheme(R.style.ThemeLight)
             "dark" -> context.setTheme(R.style.ThemeDark)
-            "black" -> context.setTheme(R.style.ThemeBlack)
+            "darker" -> context.setTheme(R.style.ThemeDarker)
+            "black" -> {
+                context.setTheme(R.style.ThemeDarker)
+                Values.settingThemes = "darker"
+            }
         }
     }
 
@@ -138,6 +143,13 @@ object UIElement {
         val dialogTitle = popupDialog.permissionTitle
         val dialogDescription = popupDialog.permissionDescription
         val dialogRecycler = popupDialog.popupButtonRecycler
+        val backgroundDimmer = popupDialog.backgroundDimmer
+
+        if (context.toString().contains("Settings")) {
+            backgroundDimmer.setOnClickListener {
+                popupDialogHider()
+            }
+        }
 
         if (icon != null) {
             dialogIcon.setImageResource(icon)

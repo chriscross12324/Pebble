@@ -15,6 +15,7 @@ import android.renderscript.*
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
@@ -146,7 +147,7 @@ object UIElements {
         }, delay)
     }
 
-    fun setWallpaper(context: Context, imageView: BlurImageView, alphaLayer: ImageView) {
+    fun setWallpaper(context: Context, imageView: BlurImageView, alphaLayer: ImageView, window: Window) {
         if (Permissions.readStoragePermissionGiven(context)) {
             if (Values.settingsSpecialEffects) {
                 try {
@@ -154,7 +155,7 @@ object UIElements {
                     val wallpaperDrawable: Drawable = wallpaper.drawable
                     val bmpDraw = wallpaperDrawable as BitmapDrawable
                     val bmp = bmpDraw.bitmap
-                    val wallpaperBMP = Bitmap.createScaledBitmap(bmp, Calculations.screenMeasure(context, "width"), Calculations.screenMeasure(context, "height"), true)
+                    val wallpaperBMP = Bitmap.createScaledBitmap(bmp, Calculations.screenMeasure(context, "width", window), Calculations.screenMeasure(context, "height", window), true)
                     imageView.setImageBitmap(wallpaperBMP)
                     imageView.setBlur(15)
                     viewObjectAnimator(alphaLayer, "alpha", 0.5f, 150, 0, LinearInterpolator())

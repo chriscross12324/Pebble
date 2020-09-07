@@ -63,13 +63,13 @@ object RecyclerGrid {
         /**
          * Checks if gradientPopup is visible; hides if it is
          */
-        /*try {
+        try {
             if (gradientPopup.isShowing) {
                 gradientPopup.dismiss()
             }
         } catch (e: Exception) {
             Log.e("ERR", "pebble.recycler_grid.gradient_grid_on_long_click_listener: ${e.localizedMessage}")
-        }*/
+        }
 
         /** Creates gradientPopup **/
         gradientPopup = Dialog(context, R.style.dialogStyle)
@@ -88,7 +88,13 @@ object RecyclerGrid {
         val gradientDescription = gradientPopup.gradientDialogGradientDescription as TextView
 
         val gradientInfo = gradientJSON[position]
-        UIElement.gradientDrawable(context, gradientView, Color.parseColor(gradientInfo["startColour"]), Color.parseColor(gradientInfo["endColour"]), Values.gradientCornerRadius - 5f)
+        try {
+            UIElement.gradientDrawable(context, gradientView, Color.parseColor(gradientInfo["startColour"]), Color.parseColor(gradientInfo["endColour"]), Values.gradientCornerRadius - 5f)
+        } catch (e: Exception) {
+            Log.e("ERR", "pebble.adapter_helpers.recycler_grid.gradient_grid_on_long_click_listener: ${e.localizedMessage}")
+            gradientPopup.cancel()
+        }
+
         gradientName.text = gradientInfo["gradientName"]
         gradientDescription.text = gradientInfo["description"]
 

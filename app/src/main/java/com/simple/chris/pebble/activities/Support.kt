@@ -29,7 +29,7 @@ class Support : AppCompatActivity(), SupportRecyclerView.OnClickListener {
         super.onCreate(savedInstanceState)
         UIElement.setTheme(this)
         setContentView(R.layout.activity_support)
-        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
+        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha, window)
 
         coordinatorLayout.post {
             getHeights()
@@ -48,7 +48,7 @@ class Support : AppCompatActivity(), SupportRecyclerView.OnClickListener {
      */
     private fun getHeights() {
         try {
-            screenHeight = Calculations.screenMeasure(this, "height")
+            screenHeight = Calculations.screenMeasure(this, "height", window)
 
             bottomSheetPeekHeight = (screenHeight * (0.667)).toInt()
 
@@ -67,7 +67,7 @@ class Support : AppCompatActivity(), SupportRecyclerView.OnClickListener {
         bottomSheetBehavior.peekHeight = bottomSheetPeekHeight
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            bottomSheetPeekHeight = Calculations.screenMeasure(this, "height")
+            bottomSheetPeekHeight = Calculations.screenMeasure(this, "height", window)
         }
 
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {

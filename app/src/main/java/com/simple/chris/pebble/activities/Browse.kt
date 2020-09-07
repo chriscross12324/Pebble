@@ -18,10 +18,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
+import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
-import com.simple.chris.pebble.*
+import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.BrowseMenuRecyclerView
 import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
@@ -29,7 +30,6 @@ import com.simple.chris.pebble.functions.*
 import com.simple.chris.pebble.functions.Connection.checkConnection
 import com.simple.chris.pebble.functions.Connection.connectionOffline
 import com.simple.chris.pebble.functions.Connection.getGradients
-import com.simple.chris.pebble.functions.Permissions
 import kotlinx.android.synthetic.main.activity_browse.*
 
 
@@ -54,28 +54,11 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         if (!Values.refreshTheme) {
             if (Values.gradientList.isEmpty()) {
                 checkConnection(this, window.decorView, this)
-                if (!Permissions.readStoragePermissionGiven(this)) {
-                    //UIElements.oneButtonDialog(this, R.drawable.icon_storage, R.string.dialog_title_eng_permission_storage, R.string.sentence_needs_storage_permission, R.string.text_eng_ok, storageDialogListener)
-                }
             } else {
                 Log.e("ERR", "Not empty")
             }
         } else {
             Values.refreshTheme = false
-        }
-
-        if (!Permissions.readStoragePermissionGiven(this) && !Values.dontAskStorage) {
-            UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.word_storage, null, R.string.sentence_needs_storage_permission, HashMaps.arraySureNotThisTimeDontAsk(),
-            window.decorView, this)
-        }
-
-        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
-
-        coordinatorLayout.post {
-            getHeights()
-            bottomSheet()
-            connectionChecker()
-            browseMenuButtons()
         }
 
         menuButton.setOnClickListener {
@@ -120,7 +103,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
 
             if (Values.connectionOffline) {
                 UIElement.popupDialog(this, "noConnection", R.drawable.icon_wifi_empty, R.string.dual_no_connection, null, R.string.sentence_needs_internet_connection,
-                HashMaps.noConnectionArrayList(), window.decorView, this)
+                        HashMaps.noConnectionArrayList(), window.decorView, this)
             } else {
                 startActivity(Intent(this, GradientCreator::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -128,17 +111,27 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         }
     }
 
+    override fun onAttachedToWindow() {
+        bottomSheet.post {
+            getHeights()
+            bottomSheet()
+        }
+        connectionChecker()
+        browseMenuButtons()
+        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha, window)
+    }
+
     /**
      * Get/Set bottomSheetPeekHeight based on screen height and other elements
      */
     private fun getHeights() {
         try {
-            screenHeight = Calculations.screenMeasure(this, "height")
+            screenHeight = Calculations.screenMeasure(this, "height", window)
 
             bottomSheetPeekHeight = (screenHeight * (0.667)).toInt()
 
-            titleHolder.translationY = (((screenHeight * (0.333) - titleHolder.measuredHeight) / 2).toFloat())
-            buttonIcon.translationY = (((screenHeight * (0.333) - titleHolder.measuredHeight) / 8).toFloat())
+            titleHolder.translationY = (((screenHeight * (0.333)) / 2) - (titleHolder.measuredHeight / 2)).toFloat()
+            buttonIcon.translationY = (((screenHeight * (0.333)) / 8) - (titleHolder.measuredHeight / 8)).toFloat()
             createButtonExpandedWidth = createButton.measuredWidth
 
             menuHeight = menu.measuredHeight
@@ -156,7 +149,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         bottomSheetBehavior.peekHeight = 0
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            bottomSheetPeekHeight = Calculations.screenMeasure(this, "height")
+            bottomSheetPeekHeight = Calculations.screenMeasure(this, "height", window)
         }
 
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
@@ -184,6 +177,9 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                     }
 
                 }
+
+                //browseGrid.setPadding(browseGrid.paddingLeft, Calculations.convertToDP(this@Browse, ((Calculations.cutoutHeight(window) * slideOffset) + 16f)).toInt(), browseGrid.paddingRight, browseGrid.paddingBottom)
+                //Toast.makeText(this@Browse, "${browseGrid.paddingTop + Calculations.convertToDP(this@Browse, (Calculations.cutoutHeight(window) * slideOffset))}", Toast.LENGTH_SHORT).show()
             }
         })
 
@@ -209,7 +205,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                 else -> {
                     Values.currentActivity = "Browse"
                     touchBlocker.visibility = View.GONE
-                    UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
+                    UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha, window)
                 }
             }
             Values.saveValues(this)
@@ -218,6 +214,11 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                 startActivity(Intent(this, SplashScreen::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 finish()
+            }
+
+            if (Values.justSubmitted) {
+                gradientsDownloaded()
+                Values.justSubmitted = false
             }
         }
     }
@@ -283,7 +284,6 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
 
         browseMenu.layoutManager = buttonLayoutManager
         browseMenu.adapter = buttonAdapter
-        //browseMenu.addItemDecoration(DividerItemDecoration(browseMenu.context, DividerItemDecoration.VERTICAL))
     }
 
     override fun onGradientClick(position: Int, view: View) {
@@ -317,35 +317,35 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
 
     override fun onButtonClick(position: Int, view: View) {
         when (position) {
-            0 -> {
+            /*0 -> {
                 hideMenu()
                 Handler().postDelayed({
                     startActivity(Intent(this, MyGradients::class.java))
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }, 400)
-            }
-            1 -> {
+            }*/
+            0 -> {
                 hideMenu()
                 Handler().postDelayed({
                     startActivity(Intent(this, Feedback::class.java))
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }, 400)
             }
-            2 -> {
+            /*2 -> {
                 hideMenu()
                 Handler().postDelayed({
                     startActivity(Intent(this, Support::class.java))
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }, 400)
-            }
-            3 -> {
+            }*/
+            1 -> {
                 hideMenu()
                 Handler().postDelayed({
                     startActivity(Intent(this, Settings::class.java))
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }, 400)
             }
-            4 -> {
+            2 -> {
                 hideMenu()
                 Handler().postDelayed({
                     Values.gradientList.clear()
@@ -393,7 +393,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                         UIElement.popupDialogHider()
                     }
                     1 -> {
-                        Values.askMobileData = false
+                        Values.useMobileData = "on"
                         getGradients(this, window.decorView, this)
                         UIElement.popupDialogHider()
                     }

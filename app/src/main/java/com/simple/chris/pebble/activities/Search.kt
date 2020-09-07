@@ -23,6 +23,7 @@ import com.simple.chris.pebble.*
 import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
 import com.simple.chris.pebble.adapters_helpers.SearchColourRecyclerView
 import com.simple.chris.pebble.functions.*
+import kotlinx.android.synthetic.main.activity_browse.*
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.activity_search.bottomSheet
 import kotlinx.android.synthetic.main.activity_search.buttonIcon
@@ -51,13 +52,12 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         UIElement.setTheme(this)
         setContentView(R.layout.activity_search)
         Values.currentActivity = "SearchActivity"
-        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
         searchLogic()
 
         coordinatorLayout.post {
-            getHeights()
+            /*getHeights()
             bottomSheet()
-            searchColourButtons()
+            searchColourButtons()*/
             /*val gradientStrokeShader = SweepGradient((searchByColourCircle.width/2).toFloat(), (searchByColourCircle.height/ 2).toFloat(), intArrayOf(Color.parseColor("#f00000"), Color.parseColor("#ffff00"), Color.parseColor("#00ff00"), Color.parseColor("#00ffff"), Color.parseColor("#0000ff"), Color.parseColor("#ff00ff"), Color.parseColor("#f00000")), null)
             val bitmap = Bitmap.createBitmap((searchByColourCircle.width/2), (searchByColourCircle.height/ 2), Bitmap.Config.ARGB_8888) as Bitmap
             val paint = Paint()
@@ -92,7 +92,7 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             if (!colourPickerExpanded) {
                 Vibration.lowFeedback(this)
                 colourPickerExpanded = true
-                val colourPickerButtonExpandedSize = (Calculations.screenMeasure(this, "width") - Calculations.convertToDP(this, 180f))
+                val colourPickerButtonExpandedSize = (Calculations.screenMeasure(this, "width", window) - Calculations.convertToDP(this, 180f))
                 UIElements.viewWidthAnimator(searchByColourButton, searchByColourButton.width.toFloat(), colourPickerButtonExpandedSize, 500, 100, DecelerateInterpolator(3f))
                 UIElements.viewObjectAnimator(searchField, "alpha", 0f, 150, 0, LinearInterpolator())
                 UIElements.viewVisibility(searchField, View.GONE, 150)
@@ -125,12 +125,21 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
 
     }
 
+    override fun onAttachedToWindow() {
+        bottomSheet.post {
+            getHeights()
+            bottomSheet()
+        }
+        searchColourButtons()
+        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha, window)
+    }
+
     private fun getHeights() {
         try {
-            screenHeight = Calculations.screenMeasure(this, "height")
+            screenHeight = Calculations.screenMeasure(this, "height", window)
             bottomSheetPeekHeight = (screenHeight * 0.667).toInt()
-            titleHolder.translationY = (((screenHeight * 0.333) - titleHolder.measuredHeight) / 2).toFloat()
-            buttonIcon.translationY = (((screenHeight * 0.333) - titleHolder.measuredHeight) / 8).toFloat()
+            titleHolder.translationY = (((screenHeight * (0.333)) / 2) - (titleHolder.measuredHeight / 2)).toFloat()
+            buttonIcon.translationY = (((screenHeight * (0.333)) / 8) - (titleHolder.measuredHeight / 8)).toFloat()
         } catch (e: Exception) {
             Log.e("ERR", "pebble.search_activity.get_heights: ${e.localizedMessage}")
         }
@@ -141,7 +150,7 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         bottomSheetBehavior.peekHeight = bottomSheetPeekHeight
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                titleHolder.translationY = ((screenHeight * -0.333 * slideOffset + screenHeight * 0.333 - (titleHolder.measuredHeight)) / 2).toFloat()
+                titleHolder.translationY = ((screenHeight * (-0.333) * slideOffset + screenHeight * (0.333) - (titleHolder.measuredHeight)) / 2).toFloat()
                 buttonIcon.translationY = ((screenHeight * (-0.333) * slideOffset + screenHeight * (0.333) - (titleHolder.measuredHeight)) / 8).toFloat()
                 val cornerRadius = ((slideOffset * -1) + 1) * Calculations.convertToDP(this@Search, 20f)
                 val bottomShe = findViewById<CardView>(R.id.bottomSheet)

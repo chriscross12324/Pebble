@@ -27,6 +27,7 @@ import com.simple.chris.pebble.functions.Calculations.convertToDP
 import com.simple.chris.pebble.functions.UIElements.viewObjectAnimator
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.adapters_helpers.SQLiteHelper
+import com.simple.chris.pebble.adapters_helpers.SQLiteHelperFull
 import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.activity_gradient_creator.*
 import kotlinx.android.synthetic.main.activity_feedback.*
@@ -149,7 +150,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         }
 
         gradientCreatorGradientDescription.imeOptions = EditorInfo.IME_ACTION_DONE
-        gradientCreatorGradientDescription.setRawInputType(InputType.TYPE_CLASS_TEXT)
+        gradientCreatorGradientDescription.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
 
     }
 
@@ -368,6 +369,17 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         /** Insert Gradient into "My Gradients" database **/
         val db = SQLiteHelper(this)
         db.insertGradient(gradientCreatorGradientName.text.toString(), Values.gradientCreatorStartColour, Values.gradientCreatorEndColour, gradientCreatorGradientDescription.text.toString(), gradientUID)
+        val offlineDB = SQLiteHelperFull(this)
+        offlineDB.insertGradient(gradientCreatorGradientName.text.toString(), Values.gradientCreatorStartColour, Values.gradientCreatorEndColour, gradientCreatorGradientDescription.text.toString())
+
+        val newGradient = HashMap<String, String>()
+        newGradient["gradientName"] = gradientCreatorGradientName.text.toString()
+        newGradient["startColour"] = Values.gradientCreatorStartColour
+        newGradient["endColour"] = Values.gradientCreatorEndColour
+        newGradient["description"] = gradientCreatorGradientDescription.text.toString()
+        Values.gradientList.add(0, newGradient)
+
+        Log.e("INFO", "Submitted: ${Values.gradientCreatorStartColour}")
 
         Values.justSubmitted = true
         Values.gradientCreatorGradientName = ""
@@ -377,6 +389,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         Values.saveValues(this)
 
         //popupDialog(R.drawable.icon_check, gradientUID, R.string.dialog_body_eng_submitted, R.string.text_eng_exit, dialogCompleteListener)
+        UIElement.popupDialogHider()
         UIElement.popupDialog(this, "gradientSubmitted", R.drawable.icon_check, null, gradientUID, R.string.sentence_gradient_unique_code, HashMaps.gradientSubmittedArrayList(), window.decorView, this)
     }
 

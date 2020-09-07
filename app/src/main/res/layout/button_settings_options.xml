@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="16dp"
+        android:paddingEnd="16dp"
+        android:background="@drawable/details_background">
+
+        <ImageView
+            android:id="@+id/optionIcon"
+            android:layout_width="25dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8.5dp"
+            android:layout_marginBottom="10.5dp"
+            android:layout_weight="1"
+            android:src="@drawable/icon_brush"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?PrimaryTextColour" />
+
+        <ImageView
+            android:id="@+id/imageView14"
+            android:layout_width="2dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/details_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/optionIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            android:backgroundTint="?SecondaryTextColour" />
+
+        <TextView
+            android:id="@+id/optionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/googlesans_bold"
+            android:gravity="start"
+            android:text="@string/word_theme"
+            android:textColor="?PrimaryTextColour"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/optionIcon"
+            app:layout_constraintStart_toEndOf="@+id/imageView14"
+            app:layout_constraintTop_toTopOf="@+id/optionIcon" />
+
+        <ImageView
+            android:id="@+id/imageView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/icon_arrow"
+            app:tint="?PrimaryTextColour" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

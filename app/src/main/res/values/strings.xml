@@ -17,6 +17,7 @@
     <string name="word_delete">Delete</string>
     <string name="word_deny">Deny</string>
     <string name="word_email">Email</string>
+    <string name="word_error">Error</string>
     <string name="word_exit">Exit</string>
     <string name="word_failed">Failed</string>
     <string name="word_feedback">Feedback</string>
@@ -47,6 +48,7 @@
 
 
     <!-- Dual word strings -->
+    <string name="dual_ask_everytime">Ask Every-time</string>
     <string name="dual_copy_code">Copy Code</string>
     <string name="dual_create_gradient">Create Gradient</string>
     <string name="dual_feedback_submitted">Feedback Submitted</string>
@@ -84,6 +86,7 @@
     <string name="question_save_gradient">Would you like to save this gradient to your device?</string>
     <string name="question_set_wallpaper">Where do you want to apply this gradient?</string>
     <string name="question_setting_effects">Would you like to enable <b>Special Effects</b>?</string>
+    <string name="question_setting_network">Would you like to enable <b>Cellular Data</b> usage?</string>
     <string name="question_setting_theme">What <b>Theme</b> would you like to set?</string>
     <string name="question_setting_vibration">Would you like to enable <b>Vibrations</b>?</string>
     <string name="question_still_connecting">Pebble is taking a while to connect, what would you like to do?</string>
@@ -113,8 +116,10 @@
     <string name="sentence_pebble_is_connecting">Pebble is connecting to the server, please wait…</string>
     <string name="sentence_permission_network">Pebble needs an active internet connecting to download and submit gradients, by default you will be warned when trying to use Mobile Data.\n\nNobody but yourself is responsible for exceeding any limit!</string>
     <string name="sentence_push_hold">Touch the gradient to hide its details and expand the gradient fullscreen. Release to show its details again.</string>
+    <string name="serious_error">A serious error has occurred and was caught before Pebble crashed, returning to <b>Browse</b> screen.</string>
     <string name="sentence_trying_mobile_data">Trying to use Mobile Data</string>
     <string name="sentence_uploading_gradient">Uploading gradient to Pebble</string>
+    <string name="dual_customize_pebble">Customize Pebble</string>
 
 
     <!-- Unorganized -->

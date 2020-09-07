@@ -6,32 +6,59 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Toast
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
 object Calculations {
 
-    fun screenMeasure(context: Context, value: String): Int {
-        when(value) {
-            "height" -> return context.resources.displayMetrics.heightPixels
+    fun screenMeasure(context: Context, value: String, window: Window): Int {
+        when (value) {
+            "height" -> {
+                Log.e("INFO", "${context.resources.displayMetrics.heightPixels + cutoutHeight(window)}")
+                return context.resources.displayMetrics.heightPixels + cutoutHeight(window)
+            }
             "width" -> return context.resources.displayMetrics.widthPixels
             "largest" -> {
-                return if (screenMeasure(context, "height") > screenMeasure(context, "width")) {
-                    screenMeasure(context, "height")
+                return if (screenMeasure(context, "height", window) > screenMeasure(context, "width", window)) {
+                    screenMeasure(context, "height", window)
                 } else {
-                    screenMeasure(context, "width")
+                    screenMeasure(context, "width", window)
                 }
             }
             "smallest" -> {
-                return if (screenMeasure(context, "height") < screenMeasure(context, "width")) {
-                    screenMeasure(context, "height")
+                return if (screenMeasure(context, "height", window) < screenMeasure(context, "width", window)) {
+                    screenMeasure(context, "height", window)
                 } else {
-                    screenMeasure(context, "width")
+                    screenMeasure(context, "width", window)
                 }
             }
         }
         return 0
     }
+
+    fun cutoutHeight(window: Window): Int {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val windowInsets = window.decorView.rootWindowInsets
+            if (windowInsets != null) {
+                val displayCutout = windowInsets.displayCutout
+                if (displayCutout != null) {
+                    Log.e("ERR", "${displayCutout.safeInsetTop}")
+                    return displayCutout.safeInsetTop
+                }
+            }
+        }
+        return 0
+    }
+
+    /*fun cutoutHeight(decorView: View) : Int {
+        return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            decorView.rootWindowInsets.displayCutout!!.boundingRects.
+        } else {
+            0
+        }
+    }*/
 
     fun viewWrapContent(view: View, value: String): Int {
         view.measure(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -53,13 +80,13 @@ object Calculations {
         return false
     }
 
-    fun approximatelyEqual(desiredValue: Float, actualValue: Float, tolerancePercentage: Float) : Boolean {
+    fun approximatelyEqual(desiredValue: Float, actualValue: Float, tolerancePercentage: Float): Boolean {
         val diff = abs(desiredValue - actualValue)
         val tolerance = tolerancePercentage / 100 * desiredValue
-        return  diff < tolerance
+        return diff < tolerance
     }
 
-    fun averageColour(startColour: String, endColour: String) : String? {
+    fun averageColour(startColour: String, endColour: String): String? {
         try {
             /** Remove # from hex **/
             val startRem = startColour.replace("#", "")

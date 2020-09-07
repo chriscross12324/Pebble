@@ -24,7 +24,7 @@ class Permissions : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListe
         super.onCreate(savedInstanceState)
         UIElement.setTheme(this)
         setContentView(R.layout.activity_permissions)
-        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
+        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha, window)
 
         getStarted.setOnClickListener {
             UIElements.viewObjectAnimator(welcomeHolder, "alpha", 0f, 125, 0, LinearInterpolator())
@@ -45,7 +45,7 @@ class Permissions : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListe
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 checkStoragePermission()
             } else {
-                UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
+                UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha, window)
             }
         }, 1000)
     }
@@ -78,7 +78,7 @@ class Permissions : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListe
                     }
                 }
                 UIElement.popupDialogHider()
-                UIElement.popupDialog(this, "settingTheme", R.drawable.icon_theme_dark, R.string.word_theme, null, R.string.question_setting_theme,
+                UIElement.popupDialog(this, "settingTheme", R.drawable.icon_brush, R.string.word_theme, null, R.string.question_setting_theme,
                         HashMaps.lightDarkDarker(), window.decorView, this)
             }
             "settingTheme" -> {
@@ -108,7 +108,7 @@ class Permissions : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListe
                         Values.settingsSpecialEffects = false
                     }
                 }
-                UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha)
+                UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha, window)
                 UIElement.popupDialogHider()
                 UIElement.popupDialog(this, "finishingSetup", null, R.string.word_finishing, null, R.string.sentence_finishing_setup,
                         null, window.decorView, null)
