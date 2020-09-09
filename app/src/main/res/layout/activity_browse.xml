@@ -33,6 +33,16 @@
         app:tint="?SecondaryTextColour" />
 
     <LinearLayout
+        android:id="@+id/gradientCreatorSharedElementView"
+        android:layout_width="150dp"
+        android:layout_height="170dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        android:transitionName="gradientCreatorViewer"/>
+
+    <LinearLayout
         android:id="@+id/titleHolder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

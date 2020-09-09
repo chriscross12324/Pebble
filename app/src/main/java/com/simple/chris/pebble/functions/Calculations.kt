@@ -1,6 +1,7 @@
 package com.simple.chris.pebble.functions
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import android.util.Log
 import android.util.TypedValue
@@ -59,6 +60,20 @@ object Calculations {
             0
         }
     }*/
+
+    fun stringArraytoIntArray(stringArray: ArrayList<String>): IntArray {
+        val intArray: IntArray
+        val arrayList: ArrayList<Int> = ArrayList()
+        for (i in 0 until stringArray.size) { //i in stringArray.size - 1 downTo 0
+            try {
+                arrayList.add(Color.parseColor(stringArray[i]))
+            } catch (e: Exception) {
+                Log.e("ERR", "pebble.functions.calculations.string_array_to_int_array: ${e.localizedMessage}")
+            }
+        }
+        intArray = arrayList.toIntArray()
+        return intArray
+    }
 
     fun viewWrapContent(view: View, value: String): Int {
         view.measure(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)

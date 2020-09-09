@@ -83,6 +83,27 @@ object UIElement {
         return null
     }
 
+    @SuppressLint("NewApi")
+    fun gradientDrawableNew(context: Context, view: View?, colourArray: ArrayList<String>, cornerRadius: Float): Drawable? {
+        /** Create Gradient Drawable**/
+        val gradientDrawable = GradientDrawable(
+                GradientDrawable.Orientation.TL_BR,
+                Calculations.stringArraytoIntArray(colourArray)
+        )
+        gradientDrawable.cornerRadius = Calculations.convertToDP(context, cornerRadius)
+
+        /** Set or return gradientDrawable **/
+        if (view != null) {
+            view.background = gradientDrawable
+            if (Calculations.isAndroidPOrGreater()) {
+                //view.outlineSpotShadowColor = endColour
+            }
+        } else {
+            return gradientDrawable
+        }
+        return null
+    }
+
     fun animateViewWidth(axis: String, view: View, newValue: Int, delay: Long, duration: Long) {
         /**
          * Determines if animating height or width

@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_colour_picker.*
 import java.lang.Exception
 import kotlin.random.Random
 
-class ColourPicker : AppCompatActivity() {
+class ColourPickerNew : AppCompatActivity() {
 
     private var hexValue = 0
     private var hexString = ""
@@ -44,10 +44,7 @@ class ColourPicker : AppCompatActivity() {
             try {
                 Vibration.mediumFeedback(this)
                 val colour = Color.parseColor("#$hexString")
-                when (Values.currentColourPOS) {
-                    "startColour" -> Values.gradientCreatorStartColour = "#$hexString"
-                    "endColour" -> Values.gradientCreatorEndColour = "#$hexString"
-                }
+                Values.gradientCreatorColours[Values.editingColourAtPos] = "#$hexString"
 
                 animationOut()
             } catch (e: Exception) {
@@ -73,11 +70,7 @@ class ColourPicker : AppCompatActivity() {
     }
 
     private fun setInitialValues() {
-        hexValue = if (Values.currentColourPOS == "startColour") {
-            Color.parseColor(Values.gradientCreatorStartColour)
-        } else {
-            Color.parseColor(Values.gradientCreatorEndColour)
-        }
+        hexValue = Color.parseColor(Values.gradientCreatorColours[Values.editingColourAtPos])
         Color.colorToHSV(hexValue, hsv)
 
         /** Set HSV values **/

@@ -16,10 +16,13 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.view.inputmethod.EditorInfo
+import android.widget.Adapter
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
@@ -35,10 +38,12 @@ import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.activity_gradient_creator.*
 import kotlinx.android.synthetic.main.activity_feedback.*
 import org.apache.commons.lang3.RandomStringUtils
+import java.util.*
+import kotlin.collections.HashMap
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener, GradientCreatorRecycler.OnButtonListener {
+class GradientCreatorNew : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener, GradientCreatorRecycler.OnButtonListener {
 
     lateinit var dialog: Dialog
 
@@ -47,6 +52,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
     private var submitStep = false
     private var gradientExists = false
     var gradientUID = ""
+    lateinit var buttonAdapter: GradientCreatorRecycler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,8 +136,14 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
          * Randomly generates gradient
          */
         randomGradientButton.setOnClickListener {
+            val colourCount = Values.gradientCreatorColours.size
+            Values.gradientCreatorColours.clear()
+            repeat(colourCount) {
+                val startRNDM = Random
+                Values.gradientCreatorColours.add("#" + Integer.toHexString(Color.rgb(startRNDM.nextInt(256), startRNDM.nextInt(256), startRNDM.nextInt(256))).substring(2))
+            }
             Vibration.lowFeedback(this)
-            UIElements.viewVisibility(touchBlocker, View.VISIBLE, 0)
+            /*UIElements.viewVisibility(touchBlocker, View.VISIBLE, 0)
             viewObjectAnimator(backgroundFadeOut, "alpha", 1f, 450, 0, LinearInterpolator())
             viewObjectAnimator(endColourPicker, "translationY", convertToDP(this, 58f), 450, 0, DecelerateInterpolator(3f))
             viewObjectAnimator(startColourPicker, "translationY", convertToDP(this, 116f), 450, 0, DecelerateInterpolator(3f))
@@ -139,16 +151,17 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
             viewObjectAnimator(backgroundFadeOut, "alpha", 0f, 450, 550, LinearInterpolator())
             viewObjectAnimator(endColourPicker, "translationY", 0f, 450, 550, DecelerateInterpolator(3f))
             viewObjectAnimator(startColourPicker, "translationY", 0f, 450, 550, DecelerateInterpolator(3f))
-            Values.gradientCreatorStartColour = ""
+            Values.gradientCreatorStartColour = ""*/
             Handler().postDelayed({
                 refreshGradientDrawable()
+                colourButtonsRecycler()
             }, 450)
         }
 
         addColour.setOnClickListener {
             if (Values.gradientCreatorColours.size < 5) {
                 val startRNDM = Random
-                Values.gradientCreatorColours.add("#" + Integer.toHexString(Color.rgb(startRNDM.nextInt(256), startRNDM.nextInt(256), startRNDM.nextInt(256))).substring(2))
+                Values.gradientCreatorColours.add(0, "#" + Integer.toHexString(Color.rgb(startRNDM.nextInt(256), startRNDM.nextInt(256), startRNDM.nextInt(256))).substring(2))
                 colourButtonsRecycler()
             } else {
                 Vibration.notification(this)
@@ -166,6 +179,27 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         gradientCreatorGradientDescription.imeOptions = EditorInfo.IME_ACTION_DONE
         gradientCreatorGradientDescription.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
 
+        val touchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                val sourcePosition = viewHolder.adapterPosition
+                val targetPosition = target.adapterPosition
+                Collections.swap(Values.gradientCreatorColours, sourcePosition, targetPosition)
+                buttonAdapter.notifyItemMoved(sourcePosition, targetPosition)
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+                super.clearView(recyclerView, viewHolder)
+                colourButtonsRecycler()
+            }
+
+        })
+        touchHelper.attachToRecyclerView(colourButtonsRecycler)
+
     }
 
     private fun colourButtonsRecycler() {
@@ -177,26 +211,20 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
 
         colourButtonsRecycler.setHasFixedSize(true)
         val buttonLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        val buttonAdapter = GradientCreatorRecycler(this, Values.gradientCreatorColours, this)
+        buttonAdapter = GradientCreatorRecycler(this, Values.gradientCreatorColours, this)
         colourButtonsRecycler.layoutManager = buttonLayoutManager
         colourButtonsRecycler.adapter = buttonAdapter
+        refreshGradientDrawable()
     }
+
+
 
     private fun refreshGradientDrawable() {
         /**
          * Re-draws gradient after start/end colour change
          */
-        if (Values.gradientCreatorStartColour == "") {
-            val startRNDM = Random
-            startColour = Color.rgb(startRNDM.nextInt(256), startRNDM.nextInt(256), startRNDM.nextInt(256))
-            endColour = Color.rgb(startRNDM.nextInt(256), startRNDM.nextInt(256), startRNDM.nextInt(256))
-            Values.gradientCreatorStartColour = "#" + Integer.toHexString(startColour).substring(2)
-            Values.gradientCreatorEndColour = "#" + Integer.toHexString(endColour).substring(2)
-        } else {
-            startColour = Color.parseColor(Values.gradientCreatorStartColour)
-            endColour = Color.parseColor(Values.gradientCreatorEndColour)
-        }
-        UIElement.gradientDrawable(this, gradientCreatorGradientViewer, startColour, endColour, 0f)
+        //UIElement.gradientDrawable(this, gradientCreatorGradientViewer, startColour, endColour, 0f)
+        UIElement.gradientDrawableNew(this, gradientCreatorGradientViewer, Values.gradientCreatorColours, 0f)
 
         val gradientDrawableStartCircle = GradientDrawable()
         gradientDrawableStartCircle.shape = GradientDrawable.OVAL
@@ -215,11 +243,6 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         val sharedStartColour = ContextCompat.getColor(this, R.color.pebbleStart)
         val sharedEndColour = ContextCompat.getColor(this, R.color.pebbleEnd)
         UIElement.gradientDrawable(this, sharedElementsTransitionView, sharedStartColour, sharedEndColour, 20f)
-
-        /**
-         * Creates gradient based on user choice
-         */
-        refreshGradientDrawable()
 
         /**
          * Animates gradient from sharedElement to user choice
@@ -447,6 +470,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         if (Values.currentActivity == "ColourPicker") {
             Values.currentActivity = "GradientCreator"
             refreshGradientDrawable()
+            colourButtonsRecycler()
             firstStepEnterAnim()
         }
 

@@ -51,6 +51,8 @@ object Values {
     var currentColourHEX = ""
     var justSubmitted = false
     var gcFirstStart = true
+    var gradientCreatorColours: ArrayList<String> = ArrayList()
+    var editingColourAtPos = 0
 
 
     /**

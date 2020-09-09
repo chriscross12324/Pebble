@@ -71,7 +71,8 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
             endColourInt = Color.parseColor(intent.getStringExtra("endColour"))
         } catch (e: Exception) {
             UIElement.popupDialog(this, "error", R.drawable.icon_attention, R.string.word_error, null,R.string.serious_error, HashMaps.okArray(), window.decorView, this)
-            //exitProcess(1)
+            //
+            // exitProcess(1)
         }
 
 
@@ -335,6 +336,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         when (popupName) {
             "setWallpaper" -> {
                 val wallpaperManager = WallpaperManager.getInstance(this)
+                UIElement.popupDialogHider()
                 when (position) {
                     0 -> {
                         try {
@@ -367,7 +369,6 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                         }
                     }
                     2 -> {
-                        UIElement.popupDialogHider()
                     }
                 }
             }
@@ -376,6 +377,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
             }
             "saveGradient" -> {
+                UIElement.popupDialogHider()
                 when (position) {
                     0 -> {
                         /**
@@ -413,10 +415,10 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                             Log.e("INFO", "Failed to save due to: ${e.localizedMessage}")
                         }
                     }
-                    1 -> UIElement.popupDialogHider()
                 }
             }
             "gradientSaved" -> {
+                UIElement.popupDialogHider()
                 when (position) {
                     0 -> {
                         val intent = Intent(Intent.ACTION_VIEW)
@@ -428,9 +430,6 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                         } catch (e: Exception) {
                             Log.e("ERR", "pebble.gradient_details_activity.on_button_click_popup.gradient_saved: ${e.localizedMessage}")
                         }
-                    }
-                    1 -> {
-                        UIElement.popupDialogHider()
                     }
                 }
             }

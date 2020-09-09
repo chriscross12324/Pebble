@@ -9,8 +9,8 @@ android {
         applicationId "com.simple.chris.pebble"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 11
-        versionName "v1.0"
+        versionCode 12
+        versionName "v1.0.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         renderscriptTargetApi 29
         renderscriptSupportModeEnabled true

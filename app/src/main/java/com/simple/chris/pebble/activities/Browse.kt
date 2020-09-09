@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -105,8 +106,9 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                 UIElement.popupDialog(this, "noConnection", R.drawable.icon_wifi_empty, R.string.dual_no_connection, null, R.string.sentence_needs_internet_connection,
                         HashMaps.noConnectionArrayList(), window.decorView, this)
             } else {
-                startActivity(Intent(this, GradientCreator::class.java))
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, gradientCreatorSharedElementView, "gradientCreatorViewer")
+                startActivity(Intent(this, GradientCreatorNew::class.java), activityOptions.toBundle())
+                //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }
         }
     }

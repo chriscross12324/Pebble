@@ -51,4 +51,8 @@
 
 
 
+    <declare-styleable name="TransitionArcMotion">
+        <attr name="arcRadius" format="integer"/>
+    </declare-styleable>
+
 </resources>
