@@ -39,7 +39,6 @@ import kotlinx.android.synthetic.main.activity_gradient_details.*
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.roundToInt
-import kotlin.system.exitProcess
 
 class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener {
 
@@ -65,18 +64,15 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
 
         //Sets
         gradientNameString = intent.getStringExtra("gradientName") as String
-        gradientDescriptionString = intent.getStringExtra("description") as String
+        gradientDescriptionString = intent.getStringExtra("gradientDescription") as String
         try {
-            startColourInt = Color.parseColor(intent.getStringExtra("startColour"))
-            endColourInt = Color.parseColor(intent.getStringExtra("endColour"))
+            val gradientColours = intent.getStringExtra("gradientColours")!!.replace("[", "").replace("]", "").split(",").map { it.trim() }
+            val nl = ArrayList<String>(gradientColours)
+            UIElement.gradientDrawableNew(this, gradientViewStatic, nl, Values.gradientCornerRadius)
         } catch (e: Exception) {
             UIElement.popupDialog(this, "error", R.drawable.icon_attention, R.string.word_error, null,R.string.serious_error, HashMaps.okArray(), window.decorView, this)
-            //
-            // exitProcess(1)
         }
 
-
-        gradientDrawable(this, gradientViewStatic, startColourInt, endColourInt, Values.gradientCornerRadius)
         gradientViewStatic.transitionName = gradientNameString
 
         if (gradientDescriptionString == "") {
@@ -88,24 +84,13 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
             Values.currentActivity = "GradientDetails"
             buttons()
             preViewPlacements()
-            animateGradient()
+            hideUI()
             pushHoldPopup()
             detailsHolderFixer()
         }
 
         gradientName.text = gradientNameString.replace("\n", " ")
         gradientDescription.text = gradientDescriptionString
-        gradientStartHex.text = intent.getStringExtra("startColour")
-        gradientEndHex.text = intent.getStringExtra("endColour")
-
-        val gradientDrawableStartCircle = GradientDrawable()
-        gradientDrawableStartCircle.shape = GradientDrawable.OVAL
-        gradientDrawableStartCircle.setStroke(convertToDP(this, 3f).roundToInt(), startColourInt)
-        val gradientDrawableEndCircle = GradientDrawable()
-        gradientDrawableEndCircle.shape = GradientDrawable.OVAL
-        gradientDrawableEndCircle.setStroke(convertToDP(this, 3f).roundToInt(), endColourInt)
-        startHexCircle.background = gradientDrawableStartCircle
-        endHexCircle.background = gradientDrawableEndCircle
     }
 
     private fun preViewPlacements() {
@@ -234,7 +219,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun animateGradient() {
+    private fun hideUI() {
         gradientViewStatic.setOnTouchListener { _, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 //Hide UI
@@ -284,13 +269,6 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         drawable.draw(canvas)
 
         return mutableBitmap
-    }
-
-    private val codeCopyListener = View.OnClickListener {
-        val intent = Intent(Intent.ACTION_VIEW)
-        val uri = Uri.parse(Environment.getExternalStorageDirectory().path + File.pathSeparator + "Pebble" + File.pathSeparator)
-        intent.setDataAndType(uri, DocumentsContract.Document.MIME_TYPE_DIR)
-        startActivity(Intent.createChooser(intent, "Open folder"))
     }
 
     override fun onBackPressed() {

@@ -90,7 +90,7 @@ object Connection {
         /** Start gradient database download **/
         Values.downloadingGradients = true
         val mQueue: RequestQueue = Volley.newRequestQueue(context)
-        val gradientDatabaseURL = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getGradients"
+        val gradientDatabaseURL = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getGradientsV3"
         SQLiteHelperFull(context).clearGradients()
 
         request = JsonObjectRequest(Request.Method.GET, gradientDatabaseURL, null,
@@ -104,15 +104,14 @@ object Connection {
 
                             val item = HashMap<String, String>()
                             item["gradientName"] = downloadedItem.getString("gradientName")
-                            item["startColour"] = downloadedItem.getString("startColour")
-                            item["endColour"] = downloadedItem.getString("endColour")
-                            item["description"] = downloadedItem.getString("description")
+                            item["gradientColours"] = downloadedItem.getString("gradientColours")
+                            item["gradientDescription"] = downloadedItem.getString("gradientDescription")
 
                             gradientList.add(item)
                             Values.gradientList = gradientList
                             /** Insert Gradient into "My Gradients" database **/
                             val db = SQLiteHelperFull(context)
-                            db.insertGradient(item["gradientName"]!!, item["startColour"]!!, item["endColour"]!!, item["description"]!!)
+                            //db.insertGradient(item["gradientName"]!!, item["startColour"]!!, item["endColour"]!!, item["description"]!!)
                         }
                         connectionOnline()
                         Values.connectionOffline = false

@@ -42,7 +42,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         app:layout_constraintBottom_toTopOf="@+id/lastStepButton"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:clipToPadding="false" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/gradientNameHolder"
@@ -54,7 +55,6 @@
         android:background="@drawable/details_background"
         android:backgroundTint="?BackgroundColour"
         android:elevation="8dp"
-        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/gradientDescriptionHolder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -94,7 +94,7 @@
         android:background="@drawable/details_background"
         android:backgroundTint="?BackgroundColour"
         android:elevation="8dp"
-        android:alpha="0"
+        android:alpha="1"
         app:layout_constraintBottom_toTopOf="@id/nextStepButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -185,6 +185,32 @@
             android:layout_margin="10dp"
             android:rotation="45"
             android:src="@drawable/icon_close"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?SecondaryTextColour" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/removeColour"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:alpha="0.5"
+        android:background="@drawable/details_background"
+        android:elevation="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/addColour"
+        app:layout_constraintEnd_toEndOf="@+id/addColour"
+        app:layout_constraintStart_toStartOf="@+id/addColour">
+
+
+        <ImageView
+            android:id="@+id/removeColourIcon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/icon_delete"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

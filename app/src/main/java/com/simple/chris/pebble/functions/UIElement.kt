@@ -7,6 +7,8 @@ import android.app.Dialog
 import android.app.WallpaperManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Handler
@@ -86,21 +88,35 @@ object UIElement {
     @SuppressLint("NewApi")
     fun gradientDrawableNew(context: Context, view: View?, colourArray: ArrayList<String>, cornerRadius: Float): Drawable? {
         /** Create Gradient Drawable**/
-        val gradientDrawable = GradientDrawable(
-                GradientDrawable.Orientation.TL_BR,
-                Calculations.stringArraytoIntArray(colourArray)
-        )
-        gradientDrawable.cornerRadius = Calculations.convertToDP(context, cornerRadius)
+        if (colourArray.size >= 2) {
+            val gradientDrawable = GradientDrawable(
+                    GradientDrawable.Orientation.TL_BR,
+                    Calculations.stringArraytoIntArray(colourArray)
+            )
+            gradientDrawable.cornerRadius = Calculations.convertToDP(context, cornerRadius)
 
-        /** Set or return gradientDrawable **/
-        if (view != null) {
-            view.background = gradientDrawable
-            if (Calculations.isAndroidPOrGreater()) {
-                //view.outlineSpotShadowColor = endColour
+            /** Set or return gradientDrawable **/
+            if (view != null) {
+                view.background = gradientDrawable
+                if (Calculations.isAndroidPOrGreater()) {
+                    //view.outlineSpotShadowColor = endColour
+                }
+            } else {
+                return gradientDrawable
             }
         } else {
-            return gradientDrawable
+            val colourDrawable = ColorDrawable(Color.parseColor(colourArray.toString().replace("[", "").replace("]", "")))
+            /** Set or return gradientDrawable **/
+            if (view != null) {
+                view.background = colourDrawable
+                if (Calculations.isAndroidPOrGreater()) {
+                    //view.outlineSpotShadowColor = endColour
+                }
+            } else {
+                return colourDrawable
+            }
         }
+
         return null
     }
 

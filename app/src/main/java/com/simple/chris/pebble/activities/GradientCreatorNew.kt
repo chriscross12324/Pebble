@@ -18,6 +18,7 @@ import android.view.animation.LinearInterpolator
 import android.view.inputmethod.EditorInfo
 import android.widget.Adapter
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -37,6 +38,7 @@ import com.simple.chris.pebble.adapters_helpers.SQLiteHelperFull
 import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.activity_gradient_creator.*
 import kotlinx.android.synthetic.main.activity_feedback.*
+import org.apache.commons.lang3.ArrayUtils
 import org.apache.commons.lang3.RandomStringUtils
 import java.util.*
 import kotlin.collections.HashMap
@@ -53,6 +55,7 @@ class GradientCreatorNew : AppCompatActivity(), PopupDialogButtonRecycler.OnButt
     private var gradientExists = false
     var gradientUID = ""
     lateinit var buttonAdapter: GradientCreatorRecycler
+    var deleteColourMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -159,12 +162,25 @@ class GradientCreatorNew : AppCompatActivity(), PopupDialogButtonRecycler.OnButt
         }
 
         addColour.setOnClickListener {
-            if (Values.gradientCreatorColours.size < 5) {
+            if (Values.gradientCreatorColours.size <= 6) {
                 val startRNDM = Random
                 Values.gradientCreatorColours.add(0, "#" + Integer.toHexString(Color.rgb(startRNDM.nextInt(256), startRNDM.nextInt(256), startRNDM.nextInt(256))).substring(2))
                 colourButtonsRecycler()
+                if (Values.gradientCreatorColours.size == 7) {
+                    addColour.visibility = View.GONE
+                }
             } else {
                 Vibration.notification(this)
+            }
+        }
+
+        removeColour.setOnClickListener {
+            if (deleteColourMode) {
+                deleteColourMode = false
+                removeColour.alpha = 0.5f
+            } else {
+                deleteColourMode = true
+                removeColour.alpha = 1.0f
             }
         }
 
@@ -399,10 +415,9 @@ class GradientCreatorNew : AppCompatActivity(), PopupDialogButtonRecycler.OnButt
                 }) {
             override fun getParams(): MutableMap<String, String> {
                 val details: MutableMap<String, String> = HashMap()
-                details["action"] = "addGradientV2"
+                details["action"] = "addGradientV6"
                 details["gradientName"] = gradientCreatorGradientName.text.toString()
-                details["startColour"] = Values.gradientCreatorStartColour
-                details["endColour"] = Values.gradientCreatorEndColour
+                details["gradientColours"] = Values.gradientCreatorColours.toString().replace(" ", "")
                 details["gradientDescription"] = gradientCreatorGradientDescription.text.toString()
                 details["gradientUID"] = gradientUID
                 return details
@@ -425,9 +440,8 @@ class GradientCreatorNew : AppCompatActivity(), PopupDialogButtonRecycler.OnButt
 
         val newGradient = HashMap<String, String>()
         newGradient["gradientName"] = gradientCreatorGradientName.text.toString()
-        newGradient["startColour"] = Values.gradientCreatorStartColour
-        newGradient["endColour"] = Values.gradientCreatorEndColour
-        newGradient["description"] = gradientCreatorGradientDescription.text.toString()
+        newGradient["gradientColours"] = Values.gradientCreatorColours.toString().replace(" ", "")
+        newGradient["gradientDescription"] = gradientCreatorGradientDescription.text.toString()
         Values.gradientList.add(0, newGradient)
 
         Log.e("INFO", "Submitted: ${Values.gradientCreatorStartColour}")
@@ -463,6 +477,7 @@ class GradientCreatorNew : AppCompatActivity(), PopupDialogButtonRecycler.OnButt
 
     override fun onResume() {
         super.onResume()
+        Log.e("INFO", Values.gradientCreatorColours.toString())
 
         /**
          * Checks if resuming from colourPicker
@@ -576,11 +591,23 @@ class GradientCreatorNew : AppCompatActivity(), PopupDialogButtonRecycler.OnButt
     }
 
     override fun onButtonClick(position: Int, view: View) {
-        firstStepExitAnim(false)
-        Handler().postDelayed({
-            Values.editingColourAtPos = position
-            startActivity(Intent(this, ColourPickerNew::class.java))
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }, 500)
+        if (!deleteColourMode) {
+            firstStepExitAnim(false)
+            Handler().postDelayed({
+                Values.editingColourAtPos = position
+                startActivity(Intent(this, ColourPickerNew::class.java))
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }, 500)
+        } else {
+            if (Values.gradientCreatorColours.size != 1) {
+                Values.gradientCreatorColours.removeAt(position)
+                colourButtonsRecycler()
+                if (Values.gradientCreatorColours.size < 7) {
+                    addColour.visibility = View.VISIBLE
+                }
+            } else {
+                Toast.makeText(this, "Can't delete all colours!", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

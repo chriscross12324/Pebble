@@ -47,9 +47,8 @@ object RecyclerGrid {
             val gradientInfo = gradientJSON[position]
 
             details.putExtra("gradientName", gradientInfo["gradientName"])
-            details.putExtra("startColour", gradientInfo["startColour"])
-            details.putExtra("endColour", gradientInfo["endColour"])
-            details.putExtra("description", gradientInfo["description"])
+            details.putExtra("gradientColours", gradientInfo["gradientColours"])
+            details.putExtra("gradientDescription", gradientInfo["gradientDescription"])
 
             val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(context, view.findViewById(R.id.gradient), gradientInfo["gradientName"] as String)
             context.startActivity(details, activityOptions.toBundle())
@@ -89,14 +88,16 @@ object RecyclerGrid {
 
         val gradientInfo = gradientJSON[position]
         try {
-            UIElement.gradientDrawable(context, gradientView, Color.parseColor(gradientInfo["startColour"]), Color.parseColor(gradientInfo["endColour"]), Values.gradientCornerRadius - 5f)
+            val gradientColours = gradientInfo["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }
+            val nl = ArrayList<String>(gradientColours)
+            UIElement.gradientDrawableNew(context, gradientView, nl, Values.gradientCornerRadius - 5f)
         } catch (e: Exception) {
             Log.e("ERR", "pebble.adapter_helpers.recycler_grid.gradient_grid_on_long_click_listener: ${e.localizedMessage}")
             gradientPopup.cancel()
         }
 
         gradientName.text = gradientInfo["gradientName"]
-        gradientDescription.text = gradientInfo["description"]
+        gradientDescription.text = gradientInfo["gradientDescription"]
 
         gradientPopup.show()
 

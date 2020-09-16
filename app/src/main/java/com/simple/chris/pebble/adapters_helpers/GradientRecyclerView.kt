@@ -3,6 +3,7 @@ package com.simple.chris.pebble.adapters_helpers
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,9 @@ import kotlinx.android.synthetic.main.module_browse_normal.view.*
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.UIElement
 import com.simple.chris.pebble.functions.Values
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * Creates a gradient modules for each gradient
@@ -52,14 +56,18 @@ class GradientRecyclerView internal constructor(var context: Context, private va
         try {
             val details: HashMap<String, String> = gradients[position]
             holder.gradientName.text = details["gradientName"]
-            val startColour = Color.parseColor(details["startColour"])
-            val endColour = Color.parseColor(details["endColour"])
-            UIElement.gradientDrawable(context, holder.gradientView, startColour, endColour, Values.gradientCornerRadius)
+            val gradientColours = details["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }
+            val nl = ArrayList<String>(gradientColours)
+            UIElement.gradientDrawableNew(context, holder.gradientView, nl, Values.gradientCornerRadius)
         } catch (e: Exception) {
             holder.gradientView.setBackgroundColor(context.resources.getColor(R.color.pebbleEnd))
             holder.gradientName.text = "[Broken Data]"
         }
     }
+
+    fun stringToWords(s: String) = s.trim().splitToSequence(",")
+            .filter { it.isNotEmpty() }
+            .toList()
 
     /**
      * Referenced to get the views from the module layout

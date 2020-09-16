@@ -85,20 +85,6 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             Vibration.mediumFeedback(this)
         }
 
-        searchButton.setOnLongClickListener {
-            UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.word_storage, null, R.string.sentence_needs_storage_permission, HashMaps.arraySureNotThisTimeDontAsk(),
-                    window.decorView, this)
-            UIElement.popupDialog(this, "gradientSaved", R.drawable.icon_check, R.string.dual_gradient_saved, null,
-                    R.string.sentence_gradient_successfully_saved, HashMaps.gradientSavedArrayList(), window.decorView, this)
-            UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.word_storage, null, R.string.sentence_needs_storage_permission, HashMaps.arraySureNotThisTimeDontAsk(),
-                    window.decorView, this)
-            UIElement.popupDialog(this, "gradientSaved", R.drawable.icon_check, R.string.dual_gradient_saved, null,
-                    R.string.sentence_gradient_successfully_saved, HashMaps.gradientSavedArrayList(), window.decorView, this)
-            UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.word_storage, null, R.string.sentence_needs_storage_permission, HashMaps.arraySureNotThisTimeDontAsk(),
-                    window.decorView, this)
-            true
-        }
-
         createButton.setOnClickListener {
             Vibration.mediumFeedback(this)
 
