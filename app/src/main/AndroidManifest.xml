@@ -26,7 +26,6 @@
         <activity android:name=".activities.ColourPicker" />
         <activity android:name=".activities.ColourPickerNew" />
         <activity android:name=".activities.GradientCreator" />
-        <activity android:name=".activities.GradientCreatorNew" />
         <activity android:name=".activities.MyGradients"/>
         <activity
             android:name=".activities.GradientDetails"

@@ -12,8 +12,7 @@ class SQLiteHelper(val context: Context): SQLiteOpenHelper(context, DATABASE_NAM
 
         val createTable = "CREATE TABLE " + TABLE_NAME + " (" +
                 GRADIENT_NAME + " TEXT," +
-                START_COLOUR + " TEXT," +
-                END_COLOUR + " TEXT," +
+                GRADIENT_COLOURS + " TEXT," +
                 GRADIENT_DESCRIPTION + " TEXT," +
                 GRADIENT_UID + " TEXT)"
         p0?.execSQL(createTable)
@@ -24,13 +23,12 @@ class SQLiteHelper(val context: Context): SQLiteOpenHelper(context, DATABASE_NAM
         onCreate(p0)
     }
 
-    fun insertGradient(name: String, start: String, end: String, desc: String, uid: String) {
+    fun insertGradient(name: String, colours: String, desc: String, uid: String) {
         val db = this.writableDatabase
         var cv = ContentValues()
 
         cv.put(GRADIENT_NAME, name)
-        cv.put(START_COLOUR, start)
-        cv.put(END_COLOUR, end)
+        cv.put(GRADIENT_COLOURS, colours)
         cv.put(GRADIENT_DESCRIPTION, desc)
         cv.put(GRADIENT_UID, uid)
         val result = db.insert(TABLE_NAME, null, cv)
@@ -50,8 +48,7 @@ class SQLiteHelper(val context: Context): SQLiteOpenHelper(context, DATABASE_NAM
             do {
                 val item = HashMap<String, String>()
                 item["gradientName"] = result.getString(result.getColumnIndex(GRADIENT_NAME))
-                item["startColour"] = result.getString(result.getColumnIndex(START_COLOUR))
-                item["endColour"] = result.getString(result.getColumnIndex(END_COLOUR))
+                item["gradientColours"] = result.getString(result.getColumnIndex(GRADIENT_COLOURS))
                 item["description"] = result.getString(result.getColumnIndex(GRADIENT_DESCRIPTION))
                 item["gradientUID"] = result.getString(result.getColumnIndex(GRADIENT_UID))
 
@@ -70,8 +67,7 @@ class SQLiteHelper(val context: Context): SQLiteOpenHelper(context, DATABASE_NAM
         const val DATABASE_NAME = "UserPublished.db"
         const val TABLE_NAME = "user_gradients"
         const val GRADIENT_NAME = "NAME"
-        const val START_COLOUR = "START"
-        const val END_COLOUR = "END"
+        const val GRADIENT_COLOURS = "COLOURS"
         const val GRADIENT_DESCRIPTION = "DESCRIPTION"
         const val GRADIENT_UID = "UID"
     }

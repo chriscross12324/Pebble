@@ -13,6 +13,7 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -160,25 +161,6 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             override fun onStateChanged(bottomSheet: View, newState: Int) {
             }
         })
-
-        /*searchResultsRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if (!colourPickerAnimating) {
-                    colourPickerAnimating = true
-                    if (dy > 60) {
-                        UIElements.viewObjectAnimator(searchColourRecycler, "translationY", 80f, 300, 0, DecelerateInterpolator(3f))
-                        UIElements.viewObjectAnimator(searchColourRecycler, "alpha", 0f, 150, 0, LinearInterpolator())
-                    } else if (dy < -80) {
-                        UIElements.viewObjectAnimator(searchColourRecycler, "translationY", 0f, 300, 0, DecelerateInterpolator(3f))
-                        UIElements.viewObjectAnimator(searchColourRecycler, "alpha", 1f, 150, 0, LinearInterpolator())
-                    }
-                    Handler().postDelayed({
-                        colourPickerAnimating = false
-                    }, 250)
-                }
-            }
-        })*/
     }
 
     private fun searchColourButtons() {
@@ -211,10 +193,6 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         val purpleHash = HashMap<String, String>()
         purpleHash["buttonColour"] = "#9C27B0"
         colourArray.add(purpleHash)
-
-        /*val brownHash = HashMap<String, String>()
-        brownHash["buttonColour"] = "#5D4037"
-        colourArray.add(brownHash)*/
 
         val blackHash = HashMap<String, String>()
         blackHash["buttonColour"] = "#1c1c1c"
@@ -283,9 +261,8 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                         val found = HashMap<String, String>()
 
                         found["gradientName"] = allItems[count]["gradientName"] as String
-                        found["startColour"] = allItems[count]["startColour"] as String
-                        found["endColour"] = allItems[count]["endColour"] as String
-                        found["description"] = allItems[count]["description"] as String
+                        found["gradientColours"] = allItems[count]["gradientColours"] as String
+                        found["gradientDescription"] = allItems[count]["gradientDescription"] as String
 
                         searchResults.add(found)
                         foundGradients++
@@ -391,20 +368,26 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         //Search prerequisites
         searchResults.clear()
         var foundGradients = 0
+        Toast.makeText(this, "Got here", Toast.LENGTH_SHORT).show()
 
         try {
             for (count in 0 until allItems.size) {
-                if (searchByColourSystem(baseColour, allItems[count]["startColour"] as String, allItems[count]["endColour"] as String)) {
+                //val colourList = allItems[count]["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }
+                //Toast.makeText(this, "${allItems[count]["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }}", Toast.LENGTH_SHORT).show()
+                Log.e("INFO", "${allItems[count]["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }}")
+                //val nl = ArrayList<String>(colourList)
+
+                /*for (countNL in 0 until nl.size)
+                if (searchByColourSystem(baseColour, nl[count])) {
                     val found = HashMap<String, String>()
 
                     found["gradientName"] = allItems[count]["gradientName"] as String
-                    found["startColour"] = allItems[count]["startColour"] as String
-                    found["endColour"] = allItems[count]["endColour"] as String
-                    found["description"] = allItems[count]["description"] as String
+                    found["gradientColours"] = allItems[count]["gradientColours"] as String
+                    found["gradientDescription"] = allItems[count]["gradientDescription"] as String
 
                     searchResults.add(found)
                     foundGradients++
-                }
+                }*/
             }
 
             //After search, set the view
@@ -464,12 +447,12 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         return false
     }*/
 
-    private fun searchByColourSystem(baseHex: String, startColour: String, endColour: String): Boolean {
+    private fun searchByColourSystem(baseHex: String, colour: String): Boolean {
         try {
             //Remove # from hex
             val base = baseHex.replace("#", "")
 
-            val averageColour = Calculations.averageColour(startColour, endColour) as String
+
 
             //Get RGB in values of baseHex
             val baseR = Integer.valueOf(base.substring(0, 2), 16)
@@ -477,9 +460,9 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             val baseB = Integer.valueOf(base.substring(4, 6), 16)
 
             //Get RGB in values of colourGiven
-            val givenR = Integer.valueOf(averageColour.substring(0, 2), 16)
-            val givenG = Integer.valueOf(averageColour.substring(2, 4), 16)
-            val givenB = Integer.valueOf(averageColour.substring(4, 6), 16)
+            val givenR = Integer.valueOf(colour.substring(0, 2), 16)
+            val givenG = Integer.valueOf(colour.substring(2, 4), 16)
+            val givenB = Integer.valueOf(colour.substring(4, 6), 16)
 
             //Calculate different between base & given
             var diffR: Double = 255 - abs(baseR - givenR).toDouble()

@@ -111,7 +111,7 @@ object Connection {
                             Values.gradientList = gradientList
                             /** Insert Gradient into "My Gradients" database **/
                             val db = SQLiteHelperFull(context)
-                            //db.insertGradient(item["gradientName"]!!, item["startColour"]!!, item["endColour"]!!, item["description"]!!)
+                            db.insertGradient(item["gradientName"]!!, item["gradientColours"]!!, item["gradientDescription"]!!)
                         }
                         connectionOnline()
                         Values.connectionOffline = false

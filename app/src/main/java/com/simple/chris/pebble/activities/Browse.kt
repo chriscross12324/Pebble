@@ -14,12 +14,10 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
-import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
@@ -93,7 +91,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                         HashMaps.noConnectionArrayList(), window.decorView, this)
             } else {
                 val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, gradientCreatorSharedElementView, "gradientCreatorViewer")
-                startActivity(Intent(this, GradientCreatorNew::class.java), activityOptions.toBundle())
+                startActivity(Intent(this, GradientCreator::class.java), activityOptions.toBundle())
                 //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }
         }

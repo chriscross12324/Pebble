@@ -3,22 +3,18 @@ package com.simple.chris.pebble.activities
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.WallpaperManager
-import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
-import android.provider.DocumentsContract
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -35,6 +31,7 @@ import com.simple.chris.pebble.functions.UIElements.constraintLayoutElevationAni
 import com.simple.chris.pebble.functions.UIElements.viewObjectAnimator
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.functions.*
+import com.simple.chris.pebble.functions.UIElement.gradientDrawableNew
 import kotlinx.android.synthetic.main.activity_gradient_details.*
 import java.io.File
 import java.io.FileOutputStream
@@ -53,6 +50,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
     private var copiedAnimationPlaying = false
 
     private var savedFileName = ""
+    lateinit var gradientArrayList: ArrayList<String>
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,8 +65,8 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         gradientDescriptionString = intent.getStringExtra("gradientDescription") as String
         try {
             val gradientColours = intent.getStringExtra("gradientColours")!!.replace("[", "").replace("]", "").split(",").map { it.trim() }
-            val nl = ArrayList<String>(gradientColours)
-            UIElement.gradientDrawableNew(this, gradientViewStatic, nl, Values.gradientCornerRadius)
+            gradientArrayList = ArrayList(gradientColours)
+            gradientDrawableNew(this, gradientViewStatic, gradientArrayList, Values.gradientCornerRadius)
         } catch (e: Exception) {
             UIElement.popupDialog(this, "error", R.drawable.icon_attention, R.string.word_error, null,R.string.serious_error, HashMaps.okArray(), window.decorView, this)
         }
@@ -112,7 +110,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
     private fun buttons() {
         val clipboardManager: ClipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
-        startHex.setOnLongClickListener {
+        /*startHex.setOnLongClickListener {
             val clipData = ClipData.newPlainText("startHex", intent.getStringExtra("startColour"))
             clipboardManager.setPrimaryClip(clipData)
             copiedNotification.visibility = View.VISIBLE
@@ -133,9 +131,9 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                 }, 2500)
             }
             false
-        }
+        }*/
 
-        endHex.setOnLongClickListener {
+        /*endHex.setOnLongClickListener {
             val clipData = ClipData.newPlainText("endHex", intent.getStringExtra("endColour"))
             clipboardManager.setPrimaryClip(clipData)
             copiedNotification.visibility = View.VISIBLE
@@ -156,7 +154,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                 }, 2500)
             }
             false
-        }
+        }*/
 
         backButton.setOnClickListener {
             //imageViewObjectAnimator(gradientViewAnimated, "alpha", 0f, 0, 0, LinearInterpolator())
@@ -166,7 +164,8 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
 
         }
 
-        hideButton.setOnClickListener {
+        optionsButton.setOnClickListener {
+            Vibration.mediumFeedback(this)
             if (!detailsHolderExpanded) {
                 viewObjectAnimator(detailsHolder, "translationY", convertToDP(this, -66f), 500, 0, DecelerateInterpolator(3f))
                 constraintLayoutElevationAnimator(saveGradientButton, 0f, convertToDP(this, 12f), 500, 100, DecelerateInterpolator())
@@ -192,6 +191,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         }
 
         saveGradientButton.setOnClickListener {
+            Vibration.lowFeedback(this)
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 UIElement.popupDialog(this, "readWritePermission", R.drawable.icon_storage, R.string.word_storage, null, R.string.sentence_needs_storage_permission, HashMaps.readWritePermissionArrayList(), window.decorView, this)
             } else {
@@ -201,6 +201,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         }
 
         setWallpaperButton.setOnClickListener {
+            Vibration.lowFeedback(this)
             UIElement.popupDialog(this, "setWallpaper", R.drawable.icon_wallpaper, R.string.dual_set_wallpaper, null, R.string.question_set_wallpaper, HashMaps.setWallpaperArrayList(), window.decorView, this)
         }
     }
@@ -319,7 +320,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                     0 -> {
                         try {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                wallpaperManager.setBitmap(createBitmap(gradientDrawable(this, null, startColourInt, endColourInt, 0f) as Drawable,
+                                wallpaperManager.setBitmap(createBitmap(gradientDrawableNew(this, null, gradientArrayList, 0f) as Drawable,
                                         Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)), null, true, WallpaperManager.FLAG_SYSTEM)
                                 UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dual_wallpaper_set, null,
                                         R.string.sentence_enjoy_your_wallpaper, HashMaps.BAClose(), window.decorView, this)
@@ -334,7 +335,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                     1 -> {
                         try {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                wallpaperManager.setBitmap(createBitmap(UIElement.gradientDrawable(this, null, startColourInt, endColourInt, 0f) as Drawable,
+                                wallpaperManager.setBitmap(createBitmap(gradientDrawableNew(this, null, gradientArrayList, 0f) as Drawable,
                                         Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)), null, true, WallpaperManager.FLAG_LOCK)
                                 UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dual_wallpaper_set, null,
                                         R.string.sentence_enjoy_your_wallpaper, HashMaps.BAClose(), window.decorView, this)
@@ -379,7 +380,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                             val fileOutputStream = FileOutputStream(file)
 
                             /** Creates the gradient Bitmap to populate the file above **/
-                            createBitmap(gradientDrawable(this, null, startColourInt, endColourInt, 0f) as Drawable,
+                            createBitmap(gradientDrawableNew(this, null, gradientArrayList, 0f) as Drawable,
                                     Calculations.screenMeasure(this, "largest", window), Calculations.screenMeasure(this, "largest", window)).compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
 
                             fileOutputStream.flush()

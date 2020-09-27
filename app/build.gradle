@@ -53,6 +53,7 @@ dependencies {
     implementation 'com.eightbitlab:blurview:1.6.3'
     implementation 'com.github.hamzaahmedkhan:BlurImageView:v1.0.2'
     implementation 'com.jackandphantom.android:blurimage:1.2.0'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
 }
 repositories {
     mavenCentral()

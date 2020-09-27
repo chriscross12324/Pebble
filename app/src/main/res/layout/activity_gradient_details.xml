@@ -103,106 +103,33 @@
                 android:layout_width="0dp"
                 android:layout_height="2.3dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:src="@drawable/details_background"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/gradientDescription"
                 app:tint="?ForegroundColour" />
 
-            <LinearLayout
-                android:id="@+id/hexHolder"
+            <TextView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginBottom="16dp"
-                android:orientation="horizontal"
-                android:visibility="visible"
-                android:weightSum="2"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/details_background_less"
+                android:backgroundTint="?ForegroundColour"
+                android:fontFamily="@font/googlesans_medium"
+                android:gravity="center"
+                android:text="View Colours"
+                android:textColor="?SecondaryTextColour"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dividerOne">
+                app:layout_constraintTop_toBottomOf="@+id/dividerOne" />
 
-                <LinearLayout
-                    android:id="@+id/startHex"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:id="@+id/startHexCircle"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:background="@color/blackBackground"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/gradientStartHex"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:fontFamily="@font/googlesans_bold"
-                            android:text="#76E646"
-                            android:textAlignment="center"
-                            android:textColor="?SecondaryTextColour"
-                            android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/startHexCircle"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/endHex"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:id="@+id/endHexCircle"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:background="@color/blackBackground"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/gradientEndHex"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:fontFamily="@font/googlesans_bold"
-                            android:text="#76E646"
-                            android:textAlignment="center"
-                            android:textColor="?SecondaryTextColour"
-                            android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/endHexCircle"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </LinearLayout>
-
-            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
@@ -294,7 +221,7 @@
                 app:tint="?ForegroundColour" />
 
             <LinearLayout
-                android:id="@+id/hideButton"
+                android:id="@+id/optionsButton"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:gravity="center"
@@ -321,7 +248,7 @@
                 android:layout_height="0dp"
                 android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/hideButton"
+                app:layout_constraintEnd_toStartOf="@id/optionsButton"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 

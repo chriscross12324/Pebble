@@ -13,6 +13,7 @@
         android:background="@drawable/placeholder_gradient"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:transitionName="gradientCreatorViewer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,8 +21,8 @@
         android:id="@+id/sharedElementsTransitionView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:alpha="0"
         android:background="@drawable/placeholder_gradient"
-        android:transitionName="gradientCreatorViewer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -36,14 +37,58 @@
         android:background="#000000"
         android:alpha="0"/>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/removeNotification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/details_background"
+        android:elevation="12dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/copiedText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="2dp"
+            android:fontFamily="@font/googlesans_medium"
+            android:gravity="center"
+            android:text="Tap colours\nto remove"
+            android:textColor="?SecondaryTextColour"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/copiedIcon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/copiedIcon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icon_delete"
+            app:tint="?SecondaryTextColour" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/colourButtonsRecycler"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/lastStepButton"
-        app:layout_constraintStart_toStartOf="parent"
-        android:clipToPadding="false" />
+        android:layout_marginBottom="8dp"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toTopOf="@+id/randomGradientButton"
+        app:layout_constraintEnd_toEndOf="@+id/randomGradientButton"
+        app:layout_constraintStart_toStartOf="@+id/randomGradientButton" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/gradientNameHolder"
@@ -174,8 +219,8 @@
         android:background="@drawable/details_background"
         android:elevation="12dp"
         app:layout_constraintBottom_toTopOf="@+id/colourButtonsRecycler"
-        app:layout_constraintEnd_toEndOf="@+id/lastStepButton"
-        app:layout_constraintStart_toStartOf="@+id/lastStepButton">
+        app:layout_constraintEnd_toEndOf="@+id/colourButtonsRecycler"
+        app:layout_constraintStart_toStartOf="@+id/colourButtonsRecycler">
 
 
         <ImageView
@@ -296,46 +341,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
-        android:id="@+id/startColourPicker"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="8dp"
-        android:alpha="1"
-        android:background="@drawable/details_background"
-        android:backgroundTint="?BackgroundColour"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/endColourPicker"
-        app:layout_constraintEnd_toEndOf="@+id/endColourPicker"
-        app:layout_constraintStart_toStartOf="@+id/endColourPicker">
-
-        <ImageView
-            android:id="@+id/startColourPreview"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/endColourPicker"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
-        android:alpha="1"
-        android:background="@drawable/details_background"
-        android:backgroundTint="?BackgroundColour"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@id/randomGradientButton"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageView
-            android:id="@+id/endColourPreview"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/randomGradientButton"
