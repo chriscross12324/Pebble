@@ -203,7 +203,7 @@ object UIElement {
         val dialogRecycler = popupDialog.popupButtonRecycler
         val backgroundDimmer = popupDialog.backgroundDimmer
 
-        if (context.toString().contains("Settings")) {
+        if (popupName.contains("setting")) {
             backgroundDimmer.setOnClickListener {
                 popupDialogHider()
             }

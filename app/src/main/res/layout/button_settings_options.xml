@@ -34,19 +34,19 @@
 
         <TextView
             android:id="@+id/optionTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:layout_weight="1"
             android:fontFamily="@font/googlesans_medium"
-            android:gravity="start"
-            android:text="@string/dual_use_data"
+            android:gravity="center"
+            android:text="@string/dual_special_effects"
             android:textColor="?PrimaryTextColour"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/optionIcon"
-            app:layout_constraintStart_toStartOf="@+id/optionIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/optionIcon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

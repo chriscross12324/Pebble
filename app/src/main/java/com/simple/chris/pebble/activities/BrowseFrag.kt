@@ -2,29 +2,35 @@ package com.simple.chris.pebble.activities
 
 import android.animation.ObjectAnimator
 import android.app.Activity
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.BrowseMenuRecyclerView
 import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.functions.*
-import kotlinx.android.synthetic.main.activity_browse.*
 import kotlinx.android.synthetic.main.fragment_browse.*
 import kotlinx.android.synthetic.main.fragment_browse.bottomSheet
+import kotlinx.android.synthetic.main.fragment_browse.browseMenu
 import kotlinx.android.synthetic.main.fragment_browse.buttonIcon
 import kotlinx.android.synthetic.main.fragment_browse.createButton
 import kotlinx.android.synthetic.main.fragment_browse.menu
+import kotlinx.android.synthetic.main.fragment_browse.menuArrow
+import kotlinx.android.synthetic.main.fragment_browse.menuButton
 import kotlinx.android.synthetic.main.fragment_browse.resultsText
 import kotlinx.android.synthetic.main.fragment_browse.titleHolder
+import kotlinx.android.synthetic.main.fragment_browse.touchBlockerDark
 import java.lang.Exception
 
 class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGradientListener, GradientRecyclerView.OnGradientLongClickListener, BrowseMenuRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
@@ -46,11 +52,20 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
             getHeights()
             bottomSheet()
             showGradients()
+            browseMenuButtons()
         }
 
         createButton.setOnClickListener {
-            (activity as MainActivity).startSettingFrag()
+            (activity as MainActivity).startSettings()
             Log.e("INFO", "Create Clicked")
+        }
+
+        menuButton.setOnClickListener {
+            showMenu()
+        }
+
+        touchBlockerDark.setOnClickListener {
+            hideMenu()
         }
     }
 
@@ -111,9 +126,44 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         })
     }
 
+    private fun showMenu() {
+        touchBlockerDark.visibility = View.VISIBLE
+        menuArrow.visibility = View.INVISIBLE
+        menu.visibility = View.VISIBLE
+        menu.layoutParams.height = Calculations.convertToDP((activity as MainActivity), 60f).toInt()
+        UIElements.viewObjectAnimator(touchBlockerDark, "alpha", 1f, 250, 0, LinearInterpolator())
+        UIElements.viewObjectAnimator(menu, "alpha", 1f, 250, 0, LinearInterpolator())
+        UIElement.animateViewWidth("height", menu, Calculations.viewWrapContent(menu, "height"), 50, 500)
+        UIElements.viewObjectAnimator(menuArrow, "translationY", Calculations.convertToDP((activity as MainActivity), 0f), 250, 250, DecelerateInterpolator())
+        UIElements.viewVisibility(menuArrow, View.VISIBLE, 250)
+        Vibration.lowFeedback((activity as MainActivity))
+    }
+
+    private fun hideMenu() {
+        UIElement.animateViewWidth("height", menu, Calculations.convertToDP((activity as MainActivity), 55f).toInt(), 0, 400)
+        UIElements.viewObjectAnimator(menu, "alpha", 0f, 175, 125, LinearInterpolator())
+        UIElements.viewObjectAnimator(menuArrow, "translationY", Calculations.convertToDP((activity as MainActivity), -25f), 150, 0, DecelerateInterpolator())
+        UIElements.viewVisibility(menuArrow, View.INVISIBLE, 150)
+        UIElements.viewObjectAnimator(touchBlockerDark, "alpha", 0f, 175, 175, LinearInterpolator())
+        Handler().postDelayed({
+            touchBlockerDark.visibility = View.GONE
+            menuArrow.visibility = View.GONE
+            menu.visibility = View.GONE
+        }, 400)
+    }
+
     private fun showGradients() {
         RecyclerGrid.gradientGrid((activity as MainActivity), gradientGrid, Values.gradientList, this, this)
         resultsText.text = "${Values.gradientList.size} gradients"
+    }
+
+    private fun browseMenuButtons() {
+        browseMenu.setHasFixedSize(true)
+        val buttonLayoutManager = LinearLayoutManager((activity as MainActivity), LinearLayoutManager.VERTICAL, false)
+        val buttonAdapter = BrowseMenuRecyclerView((activity as MainActivity), HashMaps.browseMenuArray(), this)
+
+        browseMenu.layoutManager = buttonLayoutManager
+        browseMenu.adapter = buttonAdapter
     }
 
     override fun onGradientClick(position: Int, view: View) {
@@ -144,7 +194,30 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
     }
 
     override fun onButtonClick(position: Int, view: View) {
-        //TODO("Not yet implemented")
+        when (position) {
+            0 -> {
+                hideMenu()
+                Handler().postDelayed({
+                    startActivity(Intent((activity as MainActivity), Feedback::class.java))
+                    (activity as MainActivity).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                }, 400)
+            }
+            1 -> {
+                hideMenu()
+                Handler().postDelayed({
+                    (activity as MainActivity).startDonating()
+                }, 250)
+            }
+            2 -> {
+                hideMenu()
+                Handler().postDelayed({
+                    (activity as MainActivity).startSettings()
+                }, 250)
+            }
+            3 -> {
+                Toast.makeText((activity as MainActivity), "Not migrated", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onButtonClickPopup(popupName: String, position: Int, view: View) {

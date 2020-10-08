@@ -11,14 +11,19 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.functions.Calculations
-import com.simple.chris.pebble.functions.UIElement
-import com.simple.chris.pebble.functions.UIElements
-import com.simple.chris.pebble.functions.Values
+import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
+import com.simple.chris.pebble.adapters_helpers.SettingsRecyclerView
+import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.ssDescription
+import kotlinx.android.synthetic.main.activity_main.ssIcon
+import kotlinx.android.synthetic.main.activity_main.ssRecycler
+import kotlinx.android.synthetic.main.activity_main.ssTitle
+import kotlinx.android.synthetic.main.small_screen.*
 
-class MainActivity : FragmentActivity() {
+class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
     var screenHeight = 0
     var bottomSheetPeekHeight = 0
     lateinit var browseFragment: Fragment
@@ -26,6 +31,7 @@ class MainActivity : FragmentActivity() {
     lateinit var gradientFragment: Fragment
     lateinit var settingsFragment: Fragment
     lateinit var fragmentManager: FragmentManager
+    private var currentSmallScreen = "null"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,13 +61,41 @@ class MainActivity : FragmentActivity() {
         }
     }
 
-    fun startSettingFrag() {
-        Log.e("INFO", "Called")
+    fun startSettings() {
+        if (currentSmallScreen != "settings") {
+            currentSmallScreen = "settings"
+            ssIcon.setImageResource(R.drawable.icon_settings)
+            ssTitle.setText(R.string.word_settings)
+            ssDescription.setText(R.string.sentence_customize_pebble)
 
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.smallScreenFragHolder, settingsFragment)
-            commit()
-            Log.e("INFO", "Showed")
+            ssRecycler.setHasFixedSize(true)
+            val buttonLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            val buttonAdapter = SettingsRecyclerView(this, HashMaps.settingsArray(), this)
+
+            ssRecycler.layoutManager = buttonLayoutManager
+            ssRecycler.adapter = buttonAdapter
+        }
+        ssRecycler.post {
+            showSmallScreen(smallScreenFragHolder.measuredHeight.toFloat())
+        }
+    }
+
+    fun startDonating() {
+        if (currentSmallScreen != "donate") {
+            currentSmallScreen = "donate"
+            ssIcon.setImageResource(R.drawable.icon_money)
+            ssTitle.setText(R.string.word_donate)
+            ssDescription.setText(R.string.sentence_donate)
+
+            ssRecycler.setHasFixedSize(true)
+            val buttonLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            val buttonAdapter = SettingsRecyclerView(this, HashMaps.donateArray(), this)
+
+            ssRecycler.layoutManager = buttonLayoutManager
+            ssRecycler.adapter = buttonAdapter
+        }
+        ssRecycler.post {
+            showSmallScreen(smallScreenFragHolder.measuredHeight.toFloat())
         }
     }
 
@@ -110,5 +144,104 @@ class MainActivity : FragmentActivity() {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }, 500)
+    }
+
+    override fun onButtonClick(position: Int, view: View) {
+        when (position) {
+            0 -> {
+                //Theme
+                UIElement.popupDialog(this, "settingTheme", R.drawable.icon_brush, R.string.word_theme, null, R.string.question_setting_theme,
+                        HashMaps.lightDarkDarker(), window.decorView, this)
+            }
+            1 -> {
+                //Vibration
+                UIElement.popupDialog(this, "settingVibration", R.drawable.icon_vibrate_on, R.string.word_vibration, null, R.string.question_setting_vibration,
+                        HashMaps.onOff(), window.decorView, this)
+            }
+            2 -> {
+                //Special Effects
+                UIElement.popupDialog(this, "settingSpecialEffects", R.drawable.icon_blur_on, R.string.dual_special_effects, null, R.string.question_setting_effects,
+                        HashMaps.onOff(), window.decorView, this)
+            }
+            3 -> {
+                //Cellular Data
+                UIElement.popupDialog(this, "settingNetwork", R.drawable.icon_cell_wifi, R.string.word_network, null, R.string.question_setting_network,
+                        HashMaps.onOffAsk(), window.decorView, this)
+            }
+        }
+    }
+
+    override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
+        when (popupName) {
+            "settingTheme" -> {
+                val current = Values.settingThemes
+                when (position) {
+                    0 -> {
+                        //Light
+                        Values.settingThemes = "light"
+                    }
+                    1 -> {
+                        //Dark
+                        Values.settingThemes = "dark"
+                    }
+                    2 -> {
+                        //Darker
+                        Values.settingThemes = "darker"
+                    }
+                }
+                UIElement.popupDialogHider()
+                Handler().postDelayed({
+                    if (current != Values.settingThemes) {
+                        hideSmallScreen()
+                        refreshTheme()
+                    }
+                }, 450)
+            }
+            "settingVibration" -> {
+                when (position) {
+                    0 -> {
+                        //On
+                        Values.settingVibrations = true
+                    }
+                    1 -> {
+                        //Off
+                        Values.settingVibrations = false
+                    }
+                }
+                UIElement.popupDialogHider()
+            }
+            "settingSpecialEffects" -> {
+                when (position) {
+                    0 -> {
+                        //On
+                        Values.settingsSpecialEffects = true
+                    }
+                    1 -> {
+                        //Off
+                        Values.settingsSpecialEffects = false
+                    }
+                }
+                UIElement.popupDialogHider()
+                UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha, window)
+            }
+            "settingNetwork" -> {
+                when (position) {
+                    0 -> {
+                        //On
+                        Values.useMobileData = "on"
+                    }
+                    1 -> {
+                        //Off
+                        Values.useMobileData = "off"
+                    }
+                    2 -> {
+                        //Ask Every-time
+                        Values.useMobileData = "ask"
+                    }
+                }
+                UIElement.popupDialogHider()
+            }
+        }
+        Values.saveValues(this)
     }
 }

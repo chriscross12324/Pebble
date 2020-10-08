@@ -19,10 +19,10 @@ object HashMaps {
         feedback["buttonText"] = R.string.word_feedback
         menuArray.add(feedback)
 
-        /*val support = HashMap<String, Int>()
+        val support = HashMap<String, Int>()
         support["buttonIcon"] = R.drawable.icon_money
-        support["buttonText"] = R.string.word_support
-        menuArray.add(support)*/
+        support["buttonText"] = R.string.word_donate
+        menuArray.add(support)
 
         val settings = HashMap<String, Int>()
         settings["buttonIcon"] = R.drawable.icon_settings
@@ -427,6 +427,32 @@ object HashMaps {
         four["buttonTitle"] = R.string.dual_use_data
         four["buttonIcon"] = R.drawable.icon_cell_wifi
         array.add(four)
+
+        return array
+    }
+
+    fun donateArray() : ArrayList<HashMap<String, Int>> {
+        val array = ArrayList<HashMap<String, Int>>()
+
+        val one = HashMap<String, Int>()
+        one["buttonIcon"] = R.drawable.icon_dollar_1
+        one["buttonTitle"] = R.string.word_usd
+        array.add(one)
+
+        val two = HashMap<String, Int>()
+        two["buttonIcon"] = R.drawable.icon_dollar_2
+        two["buttonTitle"] = R.string.word_usd
+        array.add(two)
+
+        val five = HashMap<String, Int>()
+        five["buttonIcon"] = R.drawable.icon_dollar_5
+        five["buttonTitle"] = R.string.word_usd
+        array.add(five)
+
+        val ten = HashMap<String, Int>()
+        ten["buttonIcon"] = R.drawable.icon_dollar_10
+        ten["buttonTitle"] = R.string.word_usd
+        array.add(ten)
 
         return array
     }

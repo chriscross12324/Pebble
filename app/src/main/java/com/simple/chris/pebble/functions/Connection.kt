@@ -45,6 +45,8 @@ object Connection {
                         return 1
                     } else if (hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                         return 2
+                    } else if (hasTransport(NetworkCapabilities.TRANSPORT_VPN)) {
+                        return 1
                     }
                 }
             }

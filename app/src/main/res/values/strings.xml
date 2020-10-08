@@ -16,6 +16,7 @@
     <string name="word_darker">Darker</string>
     <string name="word_delete">Delete</string>
     <string name="word_deny">Deny</string>
+    <string name="word_donate">Donate</string>
     <string name="word_email">Email</string>
     <string name="word_error">Error</string>
     <string name="word_exit">Exit</string>
@@ -42,6 +43,7 @@
     <string name="word_sure">Sure</string>
     <string name="word_theme">Theme</string>
     <string name="word_uploading">Uploading</string>
+    <string name="word_usd">USD</string>
     <string name="word_vibration">Vibration</string>
     <string name="word_welcome">Welcome</string>
     <string name="word_yes">Yes</string>
@@ -96,6 +98,7 @@
     <!-- Sentence Strings -->
     <string name="sentence_colour_combination_exists">That colour combination already exists, try some different colours…</string>
     <string name="sentence_customize_pebble">Make Pebble the way you like!</string>
+    <string name="sentence_donate">Support my development of Pebble and other future projects</string>
     <string name="sentence_dont_ask_again">Don\'t ask again</string>
     <string name="sentence_email_not_required">Providing an email is not required, it just helps us get in contact with you if we need anymore information.</string>
     <string name="sentence_enjoy_your_wallpaper">Enjoy your new wallpaper!</string>
