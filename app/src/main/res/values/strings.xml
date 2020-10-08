@@ -51,6 +51,7 @@
     <string name="dual_ask_everytime">Ask Every-time</string>
     <string name="dual_copy_code">Copy Code</string>
     <string name="dual_create_gradient">Create Gradient</string>
+    <string name="dual_customize_pebble">Customize Pebble</string>
     <string name="dual_feedback_submitted">Feedback Submitted</string>
     <string name="dual_go_offline">Go Offline</string>
     <string name="dual_go_online">Go Online</string>
@@ -94,6 +95,7 @@
 
     <!-- Sentence Strings -->
     <string name="sentence_colour_combination_exists">That colour combination already exists, try some different colours…</string>
+    <string name="sentence_customize_pebble">Make Pebble the way you like!</string>
     <string name="sentence_dont_ask_again">Don\'t ask again</string>
     <string name="sentence_email_not_required">Providing an email is not required, it just helps us get in contact with you if we need anymore information.</string>
     <string name="sentence_enjoy_your_wallpaper">Enjoy your new wallpaper!</string>
@@ -119,11 +121,11 @@
     <string name="serious_error">A serious error has occurred and was caught before Pebble crashed, returning to <b>Browse</b> screen.</string>
     <string name="sentence_trying_mobile_data">Trying to use Mobile Data</string>
     <string name="sentence_uploading_gradient">Uploading gradient to Pebble</string>
-    <string name="dual_customize_pebble">Customize Pebble</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
     <!-- Unorganized -->
-
 
 
 </resources>

@@ -12,8 +12,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.module_browse_normal.view.*
 import com.simple.chris.pebble.R
+import com.simple.chris.pebble.functions.Calculations
 import com.simple.chris.pebble.functions.UIElement
 import com.simple.chris.pebble.functions.Values
+import com.sinaseyfi.advancedcardview.AdvancedCardView
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -58,10 +60,11 @@ class GradientRecyclerView internal constructor(var context: Context, private va
             holder.gradientName.text = details["gradientName"]
             val gradientColours = details["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }
             val nl = ArrayList<String>(gradientColours)
-            UIElement.gradientDrawableNew(context, holder.gradientView, nl, Values.gradientCornerRadius)
+            UIElement.gradientDrawableNew(context, holder.gradientViewer, nl, Values.gradientCornerRadius)
         } catch (e: Exception) {
-            holder.gradientView.setBackgroundColor(context.resources.getColor(R.color.pebbleEnd))
+            holder.gradientViewer.setBackgroundColor(context.resources.getColor(R.color.pebbleEnd))
             holder.gradientName.text = "[Broken Data]"
+            Log.e("ERR", e.localizedMessage)
         }
     }
 
@@ -74,7 +77,7 @@ class GradientRecyclerView internal constructor(var context: Context, private va
      */
     inner class ViewHolder internal constructor(view: View, onGradientListener: OnGradientListener, onGradientLongClickListener: OnGradientLongClickListener) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener/*, View.OnTouchListener*/ {
         var gradientName: TextView = view.gradientName
-        var gradientView: ImageView = view.gradient
+        var gradientViewer: ImageView = view.gradient
 
         private val myOnGradientListener = onGradientListener
         private val myOnGradientLongClickListener = onGradientLongClickListener

@@ -5,9 +5,8 @@
             <solid android:color="@color/darkBackground"/>
         </shape>
     </item>
-    <item android:gravity="center" android:width="150dp" android:height="150dp">
-        <bitmap android:src="@drawable/thaelo" />
+    <item android:gravity="center" android:width="150dp" android:height="180dp">
+        <bitmap android:src="@drawable/icon_pebble_sunshine" />
     </item>
-
 
 </layer-list>

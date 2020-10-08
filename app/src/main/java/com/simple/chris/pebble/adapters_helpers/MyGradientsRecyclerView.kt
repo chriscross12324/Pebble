@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.module_browse_normal.view.*
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.UIElement
 import com.simple.chris.pebble.functions.Values
+import com.sinaseyfi.advancedcardview.AdvancedCardView
 import kotlinx.android.synthetic.main.module_browse_normal.view.gradient
 import kotlinx.android.synthetic.main.module_my_gradients.view.*
 

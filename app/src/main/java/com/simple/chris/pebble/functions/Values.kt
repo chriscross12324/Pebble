@@ -29,6 +29,7 @@ object Values {
     var gradientCornerRadius = 25f
     var dontAskStorage = false
     var connectionOffline = false
+    var screenHeight = 0
 
     //Changing Values
     var gradientIsTouched = false

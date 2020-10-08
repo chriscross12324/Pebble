@@ -9,12 +9,10 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
-import com.simple.chris.pebble.functions.HashMaps
-import com.simple.chris.pebble.functions.UIElement
-import com.simple.chris.pebble.functions.UIElements
-import com.simple.chris.pebble.functions.Values
+import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.activity_permissions.*
 import kotlin.random.Random
 
@@ -54,8 +52,14 @@ class Permissions : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListe
         when (popupName) {
             "networkNotice" -> {
                 UIElement.popupDialogHider()
-                UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.word_storage, null, R.string.sentence_needs_storage_permission,
-                        HashMaps.allowDeny(), window.decorView, this)
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    UIElement.popupDialog(this, "settingVibration", R.drawable.icon_vibrate_on, R.string.word_vibration, null, R.string.question_setting_vibration,
+                            HashMaps.onOff(), window.decorView, this)
+                } else {
+                    UIElement.popupDialog(this, "storagePermission", R.drawable.icon_storage, R.string.word_storage, null, R.string.sentence_needs_storage_permission,
+                            HashMaps.allowDeny(), window.decorView, this)
+                }
+
             }
             "storagePermission" -> {
                 when (position) {
@@ -121,7 +125,7 @@ class Permissions : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListe
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                         finish()
                     }, 450)
-                }, Random.nextLong(5000, 8000))
+                }, Random.nextLong(2000, 5000))
             }
         }
     }

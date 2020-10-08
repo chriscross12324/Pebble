@@ -1,5 +1,6 @@
 package com.simple.chris.pebble.functions
 
+import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -20,6 +21,7 @@ import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jgabrielfreitas.core.BlurImageView
@@ -29,6 +31,11 @@ import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.dialog_one_button.*
 import kotlinx.android.synthetic.main.dialog_popup.*
 import java.util.concurrent.LinkedBlockingDeque
+import com.sinaseyfi.advancedcardview.AdvancedCardView
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.math.roundToInt
 
 object UIElement {
 
@@ -99,7 +106,8 @@ object UIElement {
             if (view != null) {
                 view.background = gradientDrawable
                 if (Calculations.isAndroidPOrGreater()) {
-                    //view.outlineSpotShadowColor = endColour
+                    Log.e("INFOghhlk", colourArray[colourArray.size-1])
+                    view.outlineSpotShadowColor = Color.parseColor(colourArray[colourArray.size-1])
                 }
             } else {
                 return gradientDrawable
@@ -118,6 +126,19 @@ object UIElement {
         }
 
         return null
+    }
+
+    fun cardRadiusAnimator(layout: CardView, newRadius: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
+        Handler().postDelayed({
+            val valueAnimator = ValueAnimator.ofInt(layout.radius.roundToInt(), newRadius.roundToInt())
+            valueAnimator.addUpdateListener {
+                val value = it.animatedValue as Int
+                layout.radius = value.toFloat()
+            }
+            valueAnimator.interpolator = interpolator
+            valueAnimator.duration = duration
+            valueAnimator.start()
+        }, delay)
     }
 
     fun animateViewWidth(axis: String, view: View, newValue: Int, delay: Long, duration: Long) {
@@ -253,7 +274,7 @@ object UIElement {
     }
 
     fun popupDialogReformat(context: Context, popupName: String, icon: Int?, title: Int?, titleString: String?, description: Int,
-                    buttonArrayList: ArrayList<HashMap<String, Int>>?, decorView: View?, listener: PopupDialogButtonRecycler.OnButtonListener?) {
+                            buttonArrayList: ArrayList<HashMap<String, Int>>?, decorView: View?, listener: PopupDialogButtonRecycler.OnButtonListener?) {
 
         /** Creates popupDialog **/
         popupDialog = Dialog(context, R.style.dialogStyle)
@@ -335,6 +356,13 @@ object UIElement {
             }
         } catch (e: Exception) {
             Log.e("ERR", "pebble.ui_element.popup_dialog_hider: ${e.localizedMessage}")
+        }
+    }
+
+    fun killDialogs() {
+        if (dialogList.isNotEmpty()) {
+            hidePopupQueueManager(dialogList[0])
+            dialogList.clear()
         }
     }
 

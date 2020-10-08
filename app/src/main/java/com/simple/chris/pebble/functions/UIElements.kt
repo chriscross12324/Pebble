@@ -158,7 +158,7 @@ object UIElements {
                     val wallpaperBMP = Bitmap.createScaledBitmap(bmp, Calculations.screenMeasure(context, "width", window), Calculations.screenMeasure(context, "height", window), true)
                     imageView.setImageBitmap(wallpaperBMP)
                     imageView.setBlur(15)
-                    viewObjectAnimator(alphaLayer, "alpha", 0.5f, 150, 0, LinearInterpolator())
+                    viewObjectAnimator(alphaLayer, "alpha", 0.3f, 150, 0, LinearInterpolator())
                 } catch (e: Exception) {
                     Log.e("ERR", "pebble.ui_elements.set_wallpaper.from.$context.${e.localizedMessage}")
                 }

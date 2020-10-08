@@ -53,6 +53,7 @@ class Settings : AppCompatActivity(), SettingsRecyclerView.OnButtonListener, Pop
         }
 
         backButton.setOnClickListener {
+            UIElement.killDialogs()
             onBackPressed()
         }
     }

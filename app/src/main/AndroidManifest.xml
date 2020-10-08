@@ -19,14 +19,15 @@
         android:supportsRtl="true"
         android:theme="@style/Main"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <activity android:name=".activities.MainActivity"></activity>
         <activity android:name=".activities.Search" />
         <activity android:name=".activities.Settings" />
-        <activity android:name=".activities.Support"/>
+        <activity android:name=".activities.Support" />
         <activity android:name=".activities.Feedback" />
         <activity android:name=".activities.ColourPicker" />
         <activity android:name=".activities.ColourPickerNew" />
         <activity android:name=".activities.GradientCreator" />
-        <activity android:name=".activities.MyGradients"/>
+        <activity android:name=".activities.MyGradients" />
         <activity
             android:name=".activities.GradientDetails"
             tools:ignore="LockedOrientationActivity" />

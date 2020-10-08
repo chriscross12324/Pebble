@@ -73,6 +73,12 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             Vibration.lowFeedback(this)
         }
 
+        menuButton.setOnLongClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            true
+        }
+
         touchBlockerDark.setOnClickListener {
             hideMenu()
         }
