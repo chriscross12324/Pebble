@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.ads.*
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.adapters_helpers.SettingsRecyclerView
@@ -24,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_main.ssTitle
 import kotlinx.android.synthetic.main.small_screen.*
 
 class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
+    private lateinit var mInterstitialAd: InterstitialAd
     var screenHeight = 0
     var bottomSheetPeekHeight = 0
     lateinit var browseFragment: Fragment
@@ -37,11 +39,13 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
         super.onCreate(savedInstanceState)
         UIElement.setTheme(this)
         setContentView(R.layout.activity_main)
+        if (Values.gradientList.isEmpty()) {
+            Connection.checkConnection(this, window.decorView, this)
+        }
 
         browseFragment = BrowseFrag()
         searchFragment = SearchFrag()
         gradientFragment = GradientFrag()
-        settingsFragment = SettingsFrag()
 
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragmentHolder, browseFragment)
@@ -51,6 +55,8 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
         tapReturn.setOnClickListener {
             hideSmallScreen()
         }
+
+        adMob()
     }
 
     override fun onAttachedToWindow() {
@@ -59,6 +65,25 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
             Values.screenHeight = Calculations.screenMeasure(this, "height", window)
             bottomSheetPeekHeight = (screenHeight * (0.667)).toInt()
         }
+    }
+
+    private fun connectionChecker() {
+        val handler = Handler()
+        handler.postDelayed({
+            if (Values.gradientList.isEmpty()) {
+                gradientsDownloaded()
+            } else {
+                connectionChecker()
+            }
+        }, 500)
+    }
+
+    private fun gradientsDownloaded() {
+        Handler().postDelayed({
+            if (Values.gradientList.isNotEmpty()) {
+
+            }
+        }, 500)
     }
 
     fun startSettings() {
@@ -70,7 +95,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
 
             ssRecycler.setHasFixedSize(true)
             val buttonLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-            val buttonAdapter = SettingsRecyclerView(this, HashMaps.settingsArray(), this)
+            val buttonAdapter = SettingsRecyclerView(this, "settings", HashMaps.settingsArray(), this)
 
             ssRecycler.layoutManager = buttonLayoutManager
             ssRecycler.adapter = buttonAdapter
@@ -89,7 +114,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
 
             ssRecycler.setHasFixedSize(true)
             val buttonLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-            val buttonAdapter = SettingsRecyclerView(this, HashMaps.donateArray(), this)
+            val buttonAdapter = SettingsRecyclerView(this, "donate", HashMaps.donateArray(), this)
 
             ssRecycler.layoutManager = buttonLayoutManager
             ssRecycler.adapter = buttonAdapter
@@ -146,29 +171,42 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
         }, 500)
     }
 
-    override fun onButtonClick(position: Int, view: View) {
-        when (position) {
-            0 -> {
-                //Theme
-                UIElement.popupDialog(this, "settingTheme", R.drawable.icon_brush, R.string.word_theme, null, R.string.question_setting_theme,
-                        HashMaps.lightDarkDarker(), window.decorView, this)
+    override fun onButtonClick(screenName: String, position: Int, view: View) {
+        when (screenName) {
+            "settings" -> {
+                when (position) {
+                    0 -> {
+                        //Theme
+                        UIElement.popupDialog(this, "settingTheme", R.drawable.icon_brush, R.string.word_theme, null, R.string.question_setting_theme,
+                                HashMaps.lightDarkDarker(), window.decorView, this)
+                    }
+                    1 -> {
+                        //Vibration
+                        UIElement.popupDialog(this, "settingVibration", R.drawable.icon_vibrate_on, R.string.word_vibration, null, R.string.question_setting_vibration,
+                                HashMaps.onOff(), window.decorView, this)
+                    }
+                    2 -> {
+                        //Special Effects
+                        UIElement.popupDialog(this, "settingSpecialEffects", R.drawable.icon_blur_on, R.string.dual_special_effects, null, R.string.question_setting_effects,
+                                HashMaps.onOff(), window.decorView, this)
+                    }
+                    3 -> {
+                        //Cellular Data
+                        UIElement.popupDialog(this, "settingNetwork", R.drawable.icon_cell_wifi, R.string.word_network, null, R.string.question_setting_network,
+                                HashMaps.onOffAsk(), window.decorView, this)
+                    }
+                }
             }
-            1 -> {
-                //Vibration
-                UIElement.popupDialog(this, "settingVibration", R.drawable.icon_vibrate_on, R.string.word_vibration, null, R.string.question_setting_vibration,
-                        HashMaps.onOff(), window.decorView, this)
-            }
-            2 -> {
-                //Special Effects
-                UIElement.popupDialog(this, "settingSpecialEffects", R.drawable.icon_blur_on, R.string.dual_special_effects, null, R.string.question_setting_effects,
-                        HashMaps.onOff(), window.decorView, this)
-            }
-            3 -> {
-                //Cellular Data
-                UIElement.popupDialog(this, "settingNetwork", R.drawable.icon_cell_wifi, R.string.word_network, null, R.string.question_setting_network,
-                        HashMaps.onOffAsk(), window.decorView, this)
+            "donate" -> {
+                when (position) {
+                    0 -> {
+                        mInterstitialAd.loadAd(AdRequest.Builder().build())
+                        UIElement.popupDialog(this, "loadingAd", null, R.string.dual_ad_loading, null, R.string.sentence_ad_loading, null, window.decorView, null)
+                    }
+                }
             }
         }
+
     }
 
     override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
@@ -243,5 +281,29 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
             }
         }
         Values.saveValues(this)
+    }
+
+    private fun adMob() {
+        MobileAds.initialize(this) {Values.adMobInitialized = true}
+        mInterstitialAd = InterstitialAd(this)
+        mInterstitialAd.adUnitId = "ca-app-pub-3940256099942544/1033173712"
+
+        mInterstitialAd.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                //Hide popup
+                mInterstitialAd.show()
+                UIElement.popupDialogHider()
+                //Show Ad
+            }
+
+            override fun onAdFailedToLoad(p0: LoadAdError?) {
+                //Warn user
+            }
+
+            override fun onAdClosed() {
+
+            }
+        }
+
     }
 }

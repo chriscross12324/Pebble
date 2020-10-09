@@ -43,7 +43,7 @@ class Settings : AppCompatActivity(), SettingsRecyclerView.OnButtonListener, Pop
         coordinatorLayout.post {
             settingsList.setHasFixedSize(true)
             val buttonLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            val buttonAdapter = SettingsRecyclerView(this, HashMaps.settingsArray(), this)
+            val buttonAdapter = SettingsRecyclerView(this, "settings", HashMaps.settingsArray(), this)
 
             settingsList.layoutManager = buttonLayoutManager
             settingsList.adapter = buttonAdapter
@@ -125,7 +125,7 @@ class Settings : AppCompatActivity(), SettingsRecyclerView.OnButtonListener, Pop
         }
     }
 
-    override fun onButtonClick(position: Int, view: View) {
+    override fun onButtonClick(screenName: String, position: Int, view: View) {
         when (position) {
             0 -> {
                 //Theme

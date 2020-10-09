@@ -434,6 +434,11 @@ object HashMaps {
     fun donateArray() : ArrayList<HashMap<String, Int>> {
         val array = ArrayList<HashMap<String, Int>>()
 
+        val ad = HashMap<String, Int>()
+        ad["buttonIcon"] = R.drawable.icon_advertise
+        ad["buttonTitle"] = R.string.word_ad
+        array.add(ad)
+
         val one = HashMap<String, Int>()
         one["buttonIcon"] = R.drawable.icon_dollar_1
         one["buttonTitle"] = R.string.word_usd

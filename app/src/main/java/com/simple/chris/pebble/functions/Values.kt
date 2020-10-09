@@ -8,6 +8,7 @@ import android.content.Context
 object Values {
     private const val SAVE = "SavedValues"
     var valuesLoaded = false
+    var adMobInitialized = false
 
     //Vibrations
     val notificationPattern = longArrayOf(0, 5, 5, 5)

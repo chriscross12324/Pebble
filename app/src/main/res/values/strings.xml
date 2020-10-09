@@ -3,6 +3,7 @@
 
 
     <!-- Single word strings -->
+    <string name="word_ad">AD</string>
     <string name="word_allow">Allow</string>
     <string name="word_back">Back</string>
     <string name="word_browse">Browse</string>
@@ -50,6 +51,7 @@
 
 
     <!-- Dual word strings -->
+    <string name="dual_ad_loading">AD Loading</string>
     <string name="dual_ask_everytime">Ask Every-time</string>
     <string name="dual_copy_code">Copy Code</string>
     <string name="dual_create_gradient">Create Gradient</string>
@@ -74,6 +76,7 @@
     <string name="dual_special_effects">Special Effects</string>
     <string name="dual_still_connecting">Still connecting</string>
     <string name="dual_take_tour">Take Tour</string>
+    <string name="dual_thank_you">Thank You</string>
     <string name="dual_try_wifi">Try Wi-Fi</string>
     <string name="dual_use_data">Use Data</string>
     <string name="dual_use_forever">Use forever</string>
@@ -96,6 +99,8 @@
 
 
     <!-- Sentence Strings -->
+    <string name="sentence_ad_loading">The ad will show once loaded…</string>
+    <string name="sentence_ad_thanks">Thanks for the support!</string>
     <string name="sentence_colour_combination_exists">That colour combination already exists, try some different colours…</string>
     <string name="sentence_customize_pebble">Make Pebble the way you like!</string>
     <string name="sentence_donate">Support my development of Pebble and other future projects</string>

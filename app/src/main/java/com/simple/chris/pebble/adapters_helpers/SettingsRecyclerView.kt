@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.button_menu_options.view.buttonIcon
 import kotlinx.android.synthetic.main.button_menu_options.view.buttonText
 import kotlinx.android.synthetic.main.button_settings_options.view.*
 
-class SettingsRecyclerView internal constructor(var context: Context, private val buttons: ArrayList<HashMap<String, Int>>, onButtonListener: OnButtonListener): RecyclerView.Adapter<SettingsRecyclerView.ViewHolder>() {
+class SettingsRecyclerView internal constructor(var context: Context, var screenName: String, private val buttons: ArrayList<HashMap<String, Int>>, onButtonListener: OnButtonListener): RecyclerView.Adapter<SettingsRecyclerView.ViewHolder>() {
     private var mOnButtonListener = onButtonListener
     private var layoutInflater = LayoutInflater.from(context)
 
@@ -51,13 +51,13 @@ class SettingsRecyclerView internal constructor(var context: Context, private va
         }
 
         override fun onClick(v: View?) {
-            myOnButtonListener.onButtonClick(adapterPosition, v as View)
+            myOnButtonListener.onButtonClick(screenName, adapterPosition, v as View)
             Vibration.mediumFeedback(context)
         }
     }
 
     interface OnButtonListener {
-        fun onButtonClick(position: Int, view: View)
+        fun onButtonClick(screenName: String, position: Int, view: View)
     }
 
 }
