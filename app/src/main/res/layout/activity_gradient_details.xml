@@ -237,7 +237,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:fontFamily="@font/googlesans_medium"
-                    android:text="Options"
+                    android:text="@string/word_options"
                     android:textColor="?SecondaryTextColour"
                     android:textSize="18sp" />
             </LinearLayout>
@@ -258,7 +258,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:fontFamily="@font/googlesans_medium"
-                    android:text="Back"
+                    android:text="@string/word_back"
                     android:textColor="?SecondaryTextColour"
                     android:textSize="18sp" />
             </LinearLayout>

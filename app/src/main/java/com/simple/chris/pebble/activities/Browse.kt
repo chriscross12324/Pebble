@@ -98,7 +98,6 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             } else {
                 val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, gradientCreatorSharedElementView, "gradientCreatorViewer")
                 startActivity(Intent(this, GradientCreator::class.java), activityOptions.toBundle())
-                //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }
         }
     }

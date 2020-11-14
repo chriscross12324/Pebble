@@ -8,6 +8,7 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.Toast
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -17,11 +18,15 @@ import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.adapters_helpers.SettingsRecyclerView
 import com.simple.chris.pebble.functions.*
+import kotlinx.android.synthetic.main.activity_browse.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.gradientCreatorSharedElementView
 import kotlinx.android.synthetic.main.activity_main.ssDescription
 import kotlinx.android.synthetic.main.activity_main.ssIcon
 import kotlinx.android.synthetic.main.activity_main.ssRecycler
 import kotlinx.android.synthetic.main.activity_main.ssTitle
+import kotlinx.android.synthetic.main.activity_main.wallpaperImageAlpha
+import kotlinx.android.synthetic.main.activity_main.wallpaperImageViewer
 import kotlinx.android.synthetic.main.small_screen.*
 
 class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
@@ -81,7 +86,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
     private fun gradientsDownloaded() {
         Handler().postDelayed({
             if (Values.gradientList.isNotEmpty()) {
-
+                (browseFragment as BrowseFrag).showGradients()
             }
         }, 500)
     }
@@ -124,33 +129,40 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
         }
     }
 
-    private fun shrinkFrag(height: Float) {
+    fun shrinkFrag() {
         UIElements.viewObjectAnimator(fragmentHolder, "scaleY", 0.7f, 500, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(fragmentHolder, "scaleX", 0.7f, 500, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(fragmentHolder, "translationY", -(height * 0.8).toFloat(), 500, 0, DecelerateInterpolator(3f))
         UIElement.cardRadiusAnimator(fragmentHolder, Calculations.convertToDP(this, 30f), 500, 0, DecelerateInterpolator(3f))
+    }
+
+    private fun moveUpFrag(height: Float) {
+        UIElements.viewObjectAnimator(fragmentHolder, "translationY", -(height * 0.8).toFloat(), 500, 0, DecelerateInterpolator(3f))
     }
 
     private fun growFrag() {
         UIElements.viewObjectAnimator(fragmentHolder, "scaleY", 1f, 500, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(fragmentHolder, "scaleX", 1f, 500, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(fragmentHolder, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
         UIElement.cardRadiusAnimator(fragmentHolder, 0f, 500, 0, DecelerateInterpolator(3f))
-        Log.e("INFO", "Growing")
+    }
+
+    private fun moveDownFrag() {
+        UIElements.viewObjectAnimator(fragmentHolder, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
     }
 
     fun showSmallScreen(height: Float) {
         tapReturn.visibility = View.VISIBLE
         tapReturnText.visibility = View.VISIBLE
-        shrinkFrag(height)
+        shrinkFrag()
+        moveUpFrag(height)
         UIElements.viewObjectAnimator(smallScreenFragHolder, "translationY", -height, 500, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(tapReturn, "alpha", 0.6f, 250, 0, LinearInterpolator())
         UIElements.viewObjectAnimator(tapReturnText, "alpha", 1f, 250, 0, LinearInterpolator())
-        tapReturnText.translationY = (-height/2)
+        tapReturnText.translationY = (-height / 2)
     }
 
     fun hideSmallScreen() {
         growFrag()
+        moveDownFrag()
         UIElements.viewObjectAnimator(smallScreenFragHolder, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(tapReturn, "alpha", 0f, 150, 0, LinearInterpolator())
         UIElements.viewObjectAnimator(tapReturnText, "alpha", 0f, 150, 0, LinearInterpolator())
@@ -161,6 +173,19 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
         //onBackPressed()
     }
 
+    fun startGradientCreator() {
+        shrinkFrag()
+        Handler().postDelayed({
+            if (Values.connectionOffline) {
+                UIElement.popupDialog(this, "noConnection", R.drawable.icon_wifi_empty, R.string.dual_no_connection, null, R.string.sentence_needs_internet_connection,
+                        HashMaps.noConnectionArrayList(), window.decorView, this)
+            } else {
+                val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, gradientCreatorSharedElementView, "gradientCreatorViewer")
+                startActivity(Intent(this, GradientCreator::class.java), activityOptions.toBundle())
+            }
+        }, 0)
+    }
+
     fun refreshTheme() {
         val fragment = supportFragmentManager.findFragmentById(R.id.fragmentHolder)
         (browseFragment as BrowseFrag).gridToTop()
@@ -169,6 +194,14 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }, 500)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (Values.currentActivity == "CreateGradient") {
+            growFrag()
+        }
+        Values.currentActivity = "MainActivity"
     }
 
     override fun onButtonClick(screenName: String, position: Int, view: View) {
@@ -284,7 +317,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
     }
 
     private fun adMob() {
-        MobileAds.initialize(this) {Values.adMobInitialized = true}
+        MobileAds.initialize(this) { Values.adMobInitialized = true }
         mInterstitialAd = InterstitialAd(this)
         mInterstitialAd.adUnitId = "ca-app-pub-3940256099942544/1033173712"
 

@@ -10,6 +10,8 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.text.InputType
+import android.transition.Transition
+import android.transition.Transition.TransitionListener
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -201,7 +203,6 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         }
     }
 
-
     private fun refreshGradientDrawable() {
         /**
          * Re-draws gradient after start/end colour change
@@ -218,7 +219,13 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         randomGradientButton.translationY = convertToDP(this, 74f)
         gradientDescriptionHolder.translationY = convertToDP(this, 90f) + gradientDescriptionHolder.height
         gradientNameHolder.translationY = convertToDP(this, 106f) + gradientDescriptionHolder.height + gradientNameHolder.height
-        removeNotification.translationY = convertToDP(this, -16f) + removeNotification.measuredHeight
+        removeNotification.translationY = convertToDP(this, -16f) - removeNotification.measuredHeight
+        colourButtonsRecycler.post {
+            colourButtonsRecycler.translationY = colourButtonsRecycler.measuredHeight.toFloat() + convertToDP(this, 8f)
+            //onEnterAnimationComplete()
+            UIElements.viewVisibility(colourButtonsRecycler, View.VISIBLE, 750)
+            viewObjectAnimator(colourButtonsRecycler, "translationY", 0f, 750, 750, DecelerateInterpolator(3f))
+        }
 
         /**
          * Sets prerequisites for textViews
@@ -260,10 +267,12 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         viewObjectAnimator(nextStepButton, "translationY", convertToDP(this, 74f), 700, 100, DecelerateInterpolator(3f))
         viewObjectAnimator(lastStepButton, "translationY", convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
         viewObjectAnimator(randomGradientButton, "translationY", convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewVisibility(colourButtonsRecycler, View.INVISIBLE, 100)
+        viewObjectAnimator(colourButtonsRecycler, "translationY", colourButtonsRecycler.measuredHeight.toFloat() + convertToDP(this, 8f), 100, 0, DecelerateInterpolator(3f))
 
         if (mainMenu) {
-            viewObjectAnimator(sharedElementsTransitionView, "alpha", 1f, 150, 0, LinearInterpolator())
-            UIElements.viewVisibility(sharedElementsTransitionView, View.VISIBLE, 0)
+            //viewObjectAnimator(sharedElementsTransitionView, "alpha", 1f, 150, 0, LinearInterpolator())
+            //UIElements.viewVisibility(sharedElementsTransitionView, View.VISIBLE, 0)
         }
     }
 
@@ -294,8 +303,8 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         viewObjectAnimator(gradientNameHolder, "translationY", convertToDP(this, 106f) + gradientDescriptionHolder.height + gradientNameHolder.height, 700, 250, DecelerateInterpolator(3f))
 
         if (mainMenu) {
-            viewObjectAnimator(sharedElementsTransitionView, "alpha", 1f, 150, 0, LinearInterpolator())
-            UIElements.viewVisibility(sharedElementsTransitionView, View.VISIBLE, 0)
+            //viewObjectAnimator(sharedElementsTransitionView, "alpha", 1f, 150, 0, LinearInterpolator())
+            //UIElements.viewVisibility(sharedElementsTransitionView, View.VISIBLE, 0)
         }
     }
 

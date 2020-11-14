@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/googlesans_bold"
-            android:text="@string/word_settings"
+            android:text="Who We Are"
             android:textColor="?PrimaryTextColour"
             android:textSize="36sp"
             android:transitionName="buttonTitle" />
@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/googlesans_medium"
-            android:text="@string/dual_customize_pebble"
+            android:text="The story waiting to be told"
             android:textColor="?SecondaryTextColour"
             android:textSize="14sp"
             android:transitionName="buttonTitle"

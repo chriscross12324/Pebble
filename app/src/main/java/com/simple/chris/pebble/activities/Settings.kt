@@ -14,9 +14,6 @@ import com.simple.chris.pebble.*
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.adapters_helpers.SettingsRecyclerView
 import com.simple.chris.pebble.functions.*
-import kotlinx.android.synthetic.main.activity_browse.*
-import kotlinx.android.synthetic.main.activity_search.*
-import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.activity_settings_new.*
 import kotlinx.android.synthetic.main.activity_settings_new.backButton
 import kotlinx.android.synthetic.main.activity_settings_new.bottomSheet
@@ -78,7 +75,6 @@ class Settings : AppCompatActivity(), SettingsRecyclerView.OnButtonListener, Pop
 
             titleHolder.translationY = (((screenHeight * (0.333)) / 2) - (titleHolder.measuredHeight / 2)).toFloat()
             buttonIcon.translationY = (((screenHeight * (0.333)) / 8) - (titleHolder.measuredHeight / 8)).toFloat()
-            screenDescription.text = R.string.dual_customize_pebble.toString()
         } catch (e: Exception) {
             Log.e("ERR", "pebble.settings.calculate_height: ${e.localizedMessage}")
         }

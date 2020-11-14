@@ -80,15 +80,31 @@
             app:tint="?SecondaryTextColour" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/colourButtonsRecycler"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/colourPickerHolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:clipToPadding="false"
-        app:layout_constraintBottom_toTopOf="@+id/randomGradientButton"
+        android:orientation="vertical"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/randomGradientButton"
         app:layout_constraintEnd_toEndOf="@+id/randomGradientButton"
-        app:layout_constraintStart_toStartOf="@+id/randomGradientButton" />
+        app:layout_constraintStart_toStartOf="@+id/randomGradientButton">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/colourButtonsRecycler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:layout_marginBottom="58dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/randomGradientButton"
+            app:layout_constraintEnd_toEndOf="@+id/randomGradientButton"
+            app:layout_constraintStart_toStartOf="@+id/randomGradientButton" />
+
+    </androidx.cardview.widget.CardView>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/gradientNameHolder"
@@ -214,13 +230,13 @@
         android:id="@+id/addColour"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:alpha="0.5"
         android:background="@drawable/details_background"
         android:elevation="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/colourButtonsRecycler"
-        app:layout_constraintEnd_toEndOf="@+id/colourButtonsRecycler"
-        app:layout_constraintStart_toStartOf="@+id/colourButtonsRecycler">
+        app:layout_constraintBottom_toTopOf="@+id/colourPickerHolder"
+        app:layout_constraintEnd_toEndOf="@+id/colourPickerHolder"
+        app:layout_constraintStart_toStartOf="@+id/colourPickerHolder">
 
 
         <ImageView

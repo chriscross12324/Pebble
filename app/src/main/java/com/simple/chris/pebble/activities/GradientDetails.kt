@@ -215,7 +215,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         if (!Values.hintPushHoldDismissed) {
             Handler().postDelayed({
                 UIElements.oneButtonDialog(this, R.drawable.icon_view, R.string.dual_push_hold, R.string.sentence_push_hold, R.string.word_ok, pushHoldListener)
-            }, 1500)
+            }, 1000)
         }
     }
 

@@ -1,19 +1,17 @@
 {
-  "version": 1,
+  "version": 2,
   "artifactType": {
     "type": "APK",
     "kind": "Directory"
   },
   "applicationId": "com.simple.chris.pebble",
-  "variantName": "release",
+  "variantName": "processReleaseResources",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
-      "properties": [],
-      "versionCode": 11,
-      "versionName": "v1.0",
-      "enabled": true,
+      "versionCode": 12,
+      "versionName": "v1.0.5",
       "outputFile": "app-release.apk"
     }
   ]

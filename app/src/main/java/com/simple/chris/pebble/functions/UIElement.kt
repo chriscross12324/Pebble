@@ -171,19 +171,6 @@ object UIElement {
                     buttonArrayList: ArrayList<HashMap<String, Int>>?, decorView: View?, listener: PopupDialogButtonRecycler.OnButtonListener?) {
 
         currentPopupCanBeOverwritten = true
-        /**
-         * Checks if popUpDialog is visible; hides it if it does
-         */
-//        try {
-//            if (popupDialog.isShowing) {
-//                if (popupDialog.popupButtonRecycler.adapter == null) {
-//                    popupDialog.dismiss()
-//                }
-//            }
-//        } catch (e: Exception) {
-//            Log.e("ERR", "pebble.ui_element.popup_dialog: ${e.localizedMessage}")
-//        }
-
         /** Creates popupDialog **/
         popupDialog = Dialog(context, R.style.dialogStyle)
         popupDialog.setCancelable(false)

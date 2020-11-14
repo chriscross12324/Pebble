@@ -13,6 +13,7 @@
     <string name="word_connecting">Connecting</string>
     <string name="word_continue">Continue</string>
     <string name="word_copy">Copy</string>
+    <string name="word_create">Create</string>
     <string name="word_dark">Dark</string>
     <string name="word_darker">Darker</string>
     <string name="word_delete">Delete</string>
@@ -35,6 +36,7 @@
     <string name="word_open">Open</string>
     <string name="word_refresh">Refresh</string>
     <string name="word_retry">Retry</string>
+    <string name="word_search">Search</string>
     <string name="word_settings">Settings</string>
     <string name="word_special_search">Search…</string>
     <string name="word_storage">Storage</string>
@@ -76,7 +78,9 @@
     <string name="dual_special_effects">Special Effects</string>
     <string name="dual_still_connecting">Still connecting</string>
     <string name="dual_take_tour">Take Tour</string>
+    <string name="dual_tap_here">Tap here</string>
     <string name="dual_thank_you">Thank You</string>
+    <string name="dual_to_return">to return</string>
     <string name="dual_try_wifi">Try Wi-Fi</string>
     <string name="dual_use_data">Use Data</string>
     <string name="dual_use_forever">Use forever</string>
@@ -106,6 +110,7 @@
     <string name="sentence_donate">Support my development of Pebble and other future projects</string>
     <string name="sentence_dont_ask_again">Don\'t ask again</string>
     <string name="sentence_email_not_required">Providing an email is not required, it just helps us get in contact with you if we need anymore information.</string>
+    <string name="sentence_enter_text_below">Enter text below</string>
     <string name="sentence_enjoy_your_wallpaper">Enjoy your new wallpaper!</string>
     <string name="sentence_feedback_missing_info">It looks like you\'re missing some required information, please make sure you filled out your name and included some feedback.</string>
     <string name="sentence_feedback_received">Your feedback has been received, we\'ll try to review it shortly.</string>
@@ -131,6 +136,7 @@
     <string name="sentence_uploading_gradient">Uploading gradient to Pebble</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="word_options">Options</string>
 
 
     <!-- Unorganized -->

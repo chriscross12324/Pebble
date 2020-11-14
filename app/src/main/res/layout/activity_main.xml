@@ -18,6 +18,16 @@
         android:alpha="0.5"
         android:background="?BackgroundColour" />
 
+    <LinearLayout
+        android:id="@+id/gradientCreatorSharedElementView"
+        android:layout_width="150dp"
+        android:layout_height="170dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        android:transitionName="gradientCreatorViewer"/>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/fragmentHolder"
         android:name="com.simple.chris.pebble.activities.BrowseFrag"
@@ -52,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/googlesans_bold"
-            android:text="Tap here"
+            android:text="@string/dual_tap_here"
             android:textColor="@color/darkTextPrimary"
             android:textSize="38sp" />
 
@@ -61,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="-4dp"
             android:fontFamily="@font/googlesans_medium"
-            android:text="to return"
+            android:text="@string/dual_to_return"
             android:textColor="@color/darkTextSecondary"
             android:textSize="18sp" />
     </LinearLayout>

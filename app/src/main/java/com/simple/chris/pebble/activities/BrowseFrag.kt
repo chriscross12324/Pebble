@@ -31,6 +31,7 @@ import kotlinx.android.synthetic.main.fragment_browse.menuArrow
 import kotlinx.android.synthetic.main.fragment_browse.menuButton
 import kotlinx.android.synthetic.main.fragment_browse.resultsText
 import kotlinx.android.synthetic.main.fragment_browse.titleHolder
+import kotlinx.android.synthetic.main.fragment_browse.touchBlocker
 import kotlinx.android.synthetic.main.fragment_browse.touchBlockerDark
 import java.lang.Exception
 
@@ -49,7 +50,6 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         context = (activity as MainActivity)
 
         bottomSheet.post {
-            Toast.makeText(context, "Got here", Toast.LENGTH_SHORT).show()
             getHeights()
             bottomSheet()
             showGradients()
@@ -57,8 +57,7 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         }
 
         createButton.setOnClickListener {
-            (activity as MainActivity).startSettings()
-            Log.e("INFO", "Create Clicked")
+            (activity as MainActivity).startGradientCreator()
         }
 
         menuButton.setOnClickListener {
@@ -72,10 +71,8 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
 
     private fun getHeights() {
         try {
-            Toast.makeText(context, "${Values.screenHeight}", Toast.LENGTH_SHORT).show()
             titleHolder.translationY = (((Values.screenHeight * (0.333)) / 2) - (titleHolder.measuredHeight / 2)).toFloat()
             buttonIcon.translationY = (((Values.screenHeight * (0.333)) / 8) - (titleHolder.measuredHeight / 8)).toFloat()
-            //Toast.makeText(activity, "${Calculations.screenMeasure((activity as MainActivity), "height", (activity as MainActivity).window)}", Toast.LENGTH_SHORT).show()
             createButtonWidth = createButton.measuredWidth
             bottomSheetPeekHeight = (Values.screenHeight * (0.667)).toInt()
 
@@ -153,7 +150,7 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         }, 400)
     }
 
-    private fun showGradients() {
+    fun showGradients() {
         UIElements.viewObjectAnimator(gradientGrid, "scaleX", 0.6f, 350, 0, AccelerateInterpolator(3f))
         UIElements.viewObjectAnimator(gradientGrid, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
         UIElements.viewObjectAnimator(gradientGrid, "alpha", 0f, 150, 200, LinearInterpolator())
@@ -163,7 +160,7 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
             UIElements.viewObjectAnimator(gradientGrid, "scaleY", 1f, 0, 0, LinearInterpolator())
             UIElements.viewObjectAnimator(gradientGrid, "alpha", 1f, 0, 0, LinearInterpolator())
             RecyclerGrid.gradientGrid((activity as MainActivity), gradientGrid, Values.gradientList, this, this)
-            resultsText.text = "${Values.gradientList.size} gradients"
+            resultsText.text = "${Values.gradientList.size} gradientes"
             gradientGrid.scheduleLayoutAnimation()
         }, 500)
     }
@@ -178,7 +175,9 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
     }
 
     override fun onGradientClick(position: Int, view: View) {
-        //TODO("Not yet implemented")
+        Vibration.lowFeedback((activity as MainActivity))
+        touchBlocker.visibility = View.VISIBLE
+        RecyclerGrid.gradientGridOnClickListener((activity as MainActivity), Values.gradientList, view, position)
     }
 
     override fun onGradientLongClick(position: Int, view: View) {
@@ -237,6 +236,38 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
 
     fun gridToTop() {
         gradientGrid.smoothScrollToPosition(0)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        /**
+         * Checks if app settings unloaded during pause
+         */
+        if (!Values.valuesLoaded) {
+            startActivity(Intent((activity as MainActivity), SplashScreen::class.java))
+            (activity as MainActivity).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            (activity as MainActivity).finish()
+        } else {
+            when (Values.currentActivity) {
+                else -> {
+                    Values.currentActivity = "Browse"
+                    touchBlocker.visibility = View.GONE
+                }
+            }
+            Values.saveValues((activity as MainActivity))
+
+            /*if (Values.refreshTheme) {
+                startActivity(Intent((activity as MainActivity), SplashScreen::class.java))
+                (activity as MainActivity).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                (activity as MainActivity).finish()
+            }
+
+            if (Values.justSubmitted) {
+                gradientsDownloaded()
+                Values.justSubmitted = false
+            }*/
+        }
     }
 
 }
