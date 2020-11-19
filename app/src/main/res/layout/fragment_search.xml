@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".activities.BrowseFrag">
+    tools:context=".activities.Search">
 
     <ImageView
         android:id="@+id/buttonIcon"
@@ -20,16 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:tint="?SecondaryTextColour" />
-
-    <LinearLayout
-        android:id="@+id/gradientCreatorSharedElementView"
-        android:layout_width="150dp"
-        android:layout_height="170dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        android:transitionName="gradientCreatorViewer"/>
 
     <LinearLayout
         android:id="@+id/titleHolder"
@@ -56,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/googlesans_medium"
-            android:text="@string/sentence_enter_text_below"
+            android:text="Enter text below"
             android:textColor="?SecondaryTextColour"
             android:textSize="14sp"
             android:transitionName="buttonTitle"
@@ -65,11 +55,12 @@
             app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="0dp"
+        android:elevation="9dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -94,16 +85,19 @@
                 android:paddingEnd="16dp">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/gradientGrid"
+                    android:id="@+id/searchResultsRecycler"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
                     android:fadingEdge="none"
-                    android:layoutAnimation="@anim/recycler_animation"
                     android:paddingTop="16dp"
                     android:paddingBottom="98dp"
                     android:requiresFadingEdge="none"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    android:layoutAnimation="@anim/recycler_animation"
+                    app:layout_anchor="@+id/bottomSheet"
+                    app:layout_anchorGravity="center" />
+
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -130,7 +124,7 @@
             android:layout_margin="10dp"
             android:rotation="180"
             android:src="@drawable/icon_arrow"
-            app:tint="?PrimaryTextColour" />
+            android:tint="?PrimaryTextColour" />
     </LinearLayout>
 
     <LinearLayout
@@ -157,7 +151,7 @@
             android:src="@drawable/icon_text"
             android:visibility="gone"
             android:alpha="0"
-            app:tint="?SecondaryTextColour" />
+            android:tint="?SecondaryTextColour" />
 
         <EditText
             android:id="@+id/searchField"
@@ -221,6 +215,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
+
     <View
         android:id="@+id/touchBlocker"
         android:layout_width="match_parent"
@@ -229,16 +224,5 @@
         android:elevation="21dp"
         android:focusable="true"
         android:visibility="gone" />
-
-    <View
-        android:id="@+id/touchBlockerDark"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#80000000"
-        android:clickable="true"
-        android:elevation="21dp"
-        android:focusable="true"
-        android:visibility="gone"
-        android:alpha="0"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

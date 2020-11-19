@@ -416,7 +416,6 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
 
     override fun onResume() {
         super.onResume()
-        Log.e("INFO", Values.gradientCreatorColours.toString())
 
         /**
          * Checks if resuming from colourPicker

@@ -9,7 +9,7 @@
         android:id="@+id/backgroundDimmer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?ForegroundColour"/>
+        android:background="#000000"/>
 
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"

@@ -6,7 +6,10 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -17,57 +20,93 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.adapters_helpers.BrowseMenuRecyclerView
 import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
+import com.simple.chris.pebble.adapters_helpers.SearchColourRecyclerView
 import com.simple.chris.pebble.functions.*
-import kotlinx.android.synthetic.main.fragment_browse.*
-import kotlinx.android.synthetic.main.fragment_browse.bottomSheet
-import kotlinx.android.synthetic.main.fragment_browse.browseMenu
-import kotlinx.android.synthetic.main.fragment_browse.buttonIcon
-import kotlinx.android.synthetic.main.fragment_browse.createButton
-import kotlinx.android.synthetic.main.fragment_browse.menu
-import kotlinx.android.synthetic.main.fragment_browse.menuArrow
-import kotlinx.android.synthetic.main.fragment_browse.menuButton
-import kotlinx.android.synthetic.main.fragment_browse.resultsText
-import kotlinx.android.synthetic.main.fragment_browse.titleHolder
-import kotlinx.android.synthetic.main.fragment_browse.touchBlocker
-import kotlinx.android.synthetic.main.fragment_browse.touchBlockerDark
-import java.lang.Exception
+import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.android.synthetic.main.fragment_search.*
+import kotlinx.android.synthetic.main.fragment_search.backButton
+import kotlinx.android.synthetic.main.fragment_search.bottomSheet
+import kotlinx.android.synthetic.main.fragment_search.buttonIcon
+import kotlinx.android.synthetic.main.fragment_search.iconText
+import kotlinx.android.synthetic.main.fragment_search.resultsText
+import kotlinx.android.synthetic.main.fragment_search.searchByColourButton
+import kotlinx.android.synthetic.main.fragment_search.searchByColourCircle
+import kotlinx.android.synthetic.main.fragment_search.searchColourRecycler
+import kotlinx.android.synthetic.main.fragment_search.searchField
+import kotlinx.android.synthetic.main.fragment_search.searchFieldHolder
+import kotlinx.android.synthetic.main.fragment_search.searchResultsRecycler
+import kotlinx.android.synthetic.main.fragment_search.titleHolder
+import kotlinx.android.synthetic.main.fragment_search.touchBlocker
+import kotlin.math.abs
 
-class SearchFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGradientListener, GradientRecyclerView.OnGradientLongClickListener, BrowseMenuRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
+class SearchFrag : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGradientListener, GradientRecyclerView.OnGradientLongClickListener, SearchColourRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
 
+    private var searchResults: ArrayList<HashMap<String, String>> = ArrayList()
     private lateinit var context: Activity
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
     private var bottomSheetPeekHeight = 0
-    private var createButtonExpanded = true
-    var createButtonWidth = 0
-    var menuHeight = 0
-    var menuWidth = 0
+    private var fieldChange = false
+    private var colourPickerExpanded = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         context = (activity as MainActivity)
 
+        backButton.setOnClickListener {
+            (activity as MainActivity).closeSearch()
+        }
+
+        searchByColourButton.setOnClickListener {
+            if (!colourPickerExpanded) {
+                Vibration.lowFeedback(context)
+                colourPickerExpanded = true
+                val colourPickerButtonExpandedSize = (Calculations.screenMeasure(context, "width", context.window) - Calculations.convertToDP(context, 180f))
+                UIElements.viewWidthAnimator(searchByColourButton, searchByColourButton.width.toFloat(), colourPickerButtonExpandedSize, 500, 100, DecelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(searchField, "alpha", 0f, 150, 0, LinearInterpolator())
+                UIElements.viewVisibility(searchField, View.GONE, 150)
+                UIElements.viewObjectAnimator(iconText, "alpha", 1f, 150, 50, LinearInterpolator())
+                UIElements.viewVisibility(iconText, View.VISIBLE, 150)
+
+                UIElements.viewObjectAnimator(searchByColourCircle, "alpha", 0f, 150, 0, LinearInterpolator())
+                UIElements.viewVisibility(searchByColourCircle, View.GONE, 150)
+                UIElements.viewObjectAnimator(searchColourRecycler, "alpha", 1f, 150, 100, LinearInterpolator())
+                UIElements.viewVisibility(searchColourRecycler, View.VISIBLE, 150)
+            }
+        }
+
+        searchFieldHolder.setOnClickListener {
+            if (colourPickerExpanded) {
+                Vibration.lowFeedback(context)
+                colourPickerExpanded = false
+                UIElements.viewWidthAnimator(searchByColourButton, searchByColourButton.width.toFloat(), Calculations.convertToDP(context, 50f), 500, 100, DecelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(searchField, "alpha", 1f, 150, 50, LinearInterpolator())
+                UIElements.viewVisibility(searchField, View.VISIBLE, 150)
+                UIElements.viewObjectAnimator(iconText, "alpha", 0f, 150, 0, LinearInterpolator())
+                UIElements.viewVisibility(iconText, View.GONE, 150)
+
+                UIElements.viewObjectAnimator(searchByColourCircle, "alpha", 1f, 150, 100, LinearInterpolator())
+                UIElements.viewVisibility(searchByColourCircle, View.VISIBLE, 150)
+                UIElements.viewObjectAnimator(searchColourRecycler, "alpha", 0f, 150, 0, LinearInterpolator())
+                UIElements.viewVisibility(searchColourRecycler, View.GONE, 150)
+            }
+        }
+
         bottomSheet.post {
             getHeights()
             bottomSheet()
-            showGradients()
-            browseMenuButtons()
+            searchLogic()
+            searchByColourInitializer()
         }
     }
 
     private fun getHeights() {
         try {
-            //Toast.makeText(context, "${Values.screenHeight}", Toast.LENGTH_SHORT).show()
             titleHolder.translationY = (((Values.screenHeight * (0.333)) / 2) - (titleHolder.measuredHeight / 2)).toFloat()
             buttonIcon.translationY = (((Values.screenHeight * (0.333)) / 8) - (titleHolder.measuredHeight / 8)).toFloat()
-            //Toast.makeText(activity, "${Calculations.screenMeasure((activity as MainActivity), "height", (activity as MainActivity).window)}", Toast.LENGTH_SHORT).show()
-            createButtonWidth = createButton.measuredWidth
             bottomSheetPeekHeight = (Values.screenHeight * (0.667)).toInt()
 
-            menuHeight = menu.measuredHeight
-            menuWidth = menu.measuredWidth
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse_frag.get_heights: ${e.localizedMessage}")
         }
@@ -92,82 +131,94 @@ class SearchFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                 val cornerRadius = ((slideOffset * -1) + 1) * Calculations.convertToDP((activity as MainActivity), 20f)
                 val bottomShe = view?.findViewById<CardView>(R.id.bottomSheet)
                 bottomShe?.radius = cornerRadius
-
-                if (slideOffset >= 0.4f) {
-                    if (createButtonExpanded) {
-                        UIElement.animateViewWidth("height", createButton, Calculations.convertToDP((activity as MainActivity), 35f).toInt(), 0, 250)
-                        UIElement.animateViewWidth("width", createButton, Calculations.convertToDP((activity as MainActivity), 50f).toInt(), 0, 250)
-                        createButtonExpanded = false
-                    }
-                } else {
-                    if (!createButtonExpanded) {
-                        UIElement.animateViewWidth("height", createButton, Calculations.convertToDP((activity as MainActivity), 60f).toInt(), 0, 250)
-                        UIElement.animateViewWidth("width", createButton, Calculations.viewWrapContent(createButton, "width") + Calculations.convertToDP((activity as MainActivity), 11f).toInt(), 0, 250)
-                        createButtonExpanded = true
-                    }
-
-                }
-
-                //browseGrid.setPadding(browseGrid.paddingLeft, Calculations.convertToDP(this@Browse, ((Calculations.cutoutHeight(window) * slideOffset) + 16f)).toInt(), browseGrid.paddingRight, browseGrid.paddingBottom)
-                //Toast.makeText(this@Browse, "${browseGrid.paddingTop + Calculations.convertToDP(this@Browse, (Calculations.cutoutHeight(window) * slideOffset))}", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    private fun showMenu() {
-        touchBlockerDark.visibility = View.VISIBLE
-        menuArrow.visibility = View.INVISIBLE
-        menu.visibility = View.VISIBLE
-        menu.layoutParams.height = Calculations.convertToDP((activity as MainActivity), 60f).toInt()
-        UIElements.viewObjectAnimator(touchBlockerDark, "alpha", 1f, 250, 0, LinearInterpolator())
-        UIElements.viewObjectAnimator(menu, "alpha", 1f, 250, 0, LinearInterpolator())
-        UIElement.animateViewWidth("height", menu, Calculations.viewWrapContent(menu, "height"), 50, 500)
-        UIElements.viewObjectAnimator(menuArrow, "translationY", Calculations.convertToDP((activity as MainActivity), 0f), 250, 250, DecelerateInterpolator())
-        UIElements.viewVisibility(menuArrow, View.VISIBLE, 250)
-        Vibration.lowFeedback((activity as MainActivity))
+    private fun searchByColourInitializer() {
+        searchColourRecycler.setHasFixedSize(true)
+        val buttonLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        val buttonAdapter = SearchColourRecyclerView(context, HashMaps.searchByColourButtons(), this)
+
+        searchColourRecycler.layoutManager = buttonLayoutManager
+        searchColourRecycler.adapter = buttonAdapter
     }
 
-    private fun hideMenu() {
-        UIElement.animateViewWidth("height", menu, Calculations.convertToDP((activity as MainActivity), 55f).toInt(), 0, 400)
-        UIElements.viewObjectAnimator(menu, "alpha", 0f, 175, 125, LinearInterpolator())
-        UIElements.viewObjectAnimator(menuArrow, "translationY", Calculations.convertToDP((activity as MainActivity), -25f), 150, 0, DecelerateInterpolator())
-        UIElements.viewVisibility(menuArrow, View.INVISIBLE, 150)
-        UIElements.viewObjectAnimator(touchBlockerDark, "alpha", 0f, 175, 175, LinearInterpolator())
-        Handler().postDelayed({
-            touchBlockerDark.visibility = View.GONE
-            menuArrow.visibility = View.GONE
-            menu.visibility = View.GONE
-        }, 400)
+    private fun searchLogic() {
+        searchField.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                fieldChange = true
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
+
+        /** Detect 'Enter' Key press **/
+        searchField.setOnKeyListener { view, i, _ ->
+            if (i == KeyEvent.KEYCODE_ENTER) {
+                if (fieldChange) {
+                    fieldChange = false
+                    UIElement.hideSoftKeyboard(context)
+                    view.clearFocus()
+                    searchByName()
+                }
+            }
+            false
+        }
     }
 
-    fun showGradients() {
-        UIElements.viewObjectAnimator(gradientGrid, "scaleX", 0.6f, 350, 0, AccelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(gradientGrid, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(gradientGrid, "alpha", 0f, 150, 200, LinearInterpolator())
+    private fun searchByName() {
+        searchResults.clear()
+        var foundGradients = 0
+        val stringForCode = searchField.text.toString().replace(" ", "").toLowerCase()
 
-        Handler().postDelayed({
-            UIElements.viewObjectAnimator(gradientGrid, "scaleX", 1f, 0, 0, LinearInterpolator())
-            UIElements.viewObjectAnimator(gradientGrid, "scaleY", 1f, 0, 0, LinearInterpolator())
-            UIElements.viewObjectAnimator(gradientGrid, "alpha", 1f, 0, 0, LinearInterpolator())
-            RecyclerGrid.gradientGrid((activity as MainActivity), gradientGrid, Values.gradientList, this, this)
-            resultsText.text = "${Values.gradientList.size} gradients"
-            gradientGrid.scheduleLayoutAnimation()
-        }, 500)
-    }
+        /** Find Gradient by Name **/
+        if (stringForCode != "") {
+            try {
+                for (count in 0 until Values.gradientList.size) {
+                    if (Values.gradientList[count]["gradientName"]!!.replace(" ", "").toLowerCase().contains(stringForCode)) {
+                        val found = HashMap<String, String>()
 
-    private fun browseMenuButtons() {
-        browseMenu.setHasFixedSize(true)
-        val buttonLayoutManager = LinearLayoutManager((activity as MainActivity), LinearLayoutManager.VERTICAL, false)
-        val buttonAdapter = BrowseMenuRecyclerView((activity as MainActivity), HashMaps.browseMenuArray(), this)
+                        found["gradientName"] = Values.gradientList[count]["gradientName"] as String
+                        found["gradientColours"] = Values.gradientList[count]["gradientColours"] as String
+                        found["gradientDescription"] = Values.gradientList[count]["gradientDescription"] as String
 
-        browseMenu.layoutManager = buttonLayoutManager
-        browseMenu.adapter = buttonAdapter
+                        searchResults.add(found)
+                        foundGradients++
+                    }
+                }
+
+                UIElements.viewObjectAnimator(searchResultsRecycler, "scaleX", 0.6f, 350, 0, AccelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 0f, 150, 200, LinearInterpolator())
+
+                Handler().postDelayed({
+                    UIElements.viewObjectAnimator(searchResultsRecycler, "scaleX", 1f, 0, 0, LinearInterpolator())
+                    UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 1f, 0, 0, LinearInterpolator())
+                    UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 1f, 0, 0, LinearInterpolator())
+                    RecyclerGrid.gradientGrid(context, searchResultsRecycler, searchResults, this, this)
+                    resultsText.text = "$foundGradients results found"
+                    searchResultsRecycler.scheduleLayoutAnimation()
+                }, 400)
+
+            } catch (e: Exception) {
+                Log.e("ERR", "pebble.search_fragment.search_system: ${e.localizedMessage}")
+            }
+
+        } else {
+            resultsText.text = "Enter text below"
+        }
     }
 
     override fun onGradientClick(position: Int, view: View) {
         Vibration.lowFeedback((activity as MainActivity))
         touchBlocker.visibility = View.VISIBLE
-        RecyclerGrid.gradientGridOnClickListener((activity as MainActivity), Values.gradientList, view, position)
+        RecyclerGrid.gradientGridOnClickListener((activity as MainActivity), searchResults, view, position)
     }
 
     override fun onGradientLongClick(position: Int, view: View) {
@@ -185,7 +236,7 @@ class SearchFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
             gradientScaleX.reverse()
             gradientScaleY.reverse()
 
-            RecyclerGrid.gradientGridOnLongClickListener((activity as MainActivity), Values.gradientList, position, (activity as MainActivity).window.decorView)
+            RecyclerGrid.gradientGridOnLongClickListener((activity as MainActivity), searchResults, position, context.window.decorView)
 
             Handler().postDelayed({
                 Vibration.mediumFeedback((activity as MainActivity))
@@ -193,39 +244,8 @@ class SearchFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         }, 150)
     }
 
-    override fun onButtonClick(position: Int, view: View) {
-        when (position) {
-            0 -> {
-                hideMenu()
-                Handler().postDelayed({
-                    startActivity(Intent((activity as MainActivity), Feedback::class.java))
-                    (activity as MainActivity).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                }, 400)
-            }
-            1 -> {
-                hideMenu()
-                Handler().postDelayed({
-                    (activity as MainActivity).startDonating()
-                }, 250)
-            }
-            2 -> {
-                hideMenu()
-                Handler().postDelayed({
-                    (activity as MainActivity).startSettings()
-                }, 250)
-            }
-            3 -> {
-                Toast.makeText((activity as MainActivity), "Not migrated", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
     override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
         //TODO("Not yet implemented")
-    }
-
-    fun gridToTop() {
-        gradientGrid.smoothScrollToPosition(0)
     }
 
     override fun onResume() {
@@ -241,23 +261,96 @@ class SearchFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         } else {
             when (Values.currentActivity) {
                 else -> {
-                    Values.currentActivity = "Browse"
+                    Values.currentActivity = "Search"
                     touchBlocker.visibility = View.GONE
                 }
             }
             Values.saveValues((activity as MainActivity))
+        }
+    }
 
-            /*if (Values.refreshTheme) {
-                startActivity(Intent((activity as MainActivity), SplashScreen::class.java))
-                (activity as MainActivity).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                (activity as MainActivity).finish()
+    override fun onButtonClick(position: Int, view: View, buttonColour: String) {
+        searchField.setText("")
+        UIElements.viewObjectAnimator(searchResultsRecycler, "scaleX", 0.6f, 350, 0, AccelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 0f, 150, 200, LinearInterpolator())
+
+        Handler().postDelayed({
+            UIElements.viewObjectAnimator(searchResultsRecycler, "scaleX", 1f, 0, 0, LinearInterpolator())
+            UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 1f, 0, 0, LinearInterpolator())
+            UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 1f, 0, 0, LinearInterpolator())
+            searchByColour(buttonColour)
+            searchResultsRecycler.scheduleLayoutAnimation()
+        }, 400)
+    }
+
+    private fun searchByColour(baseColour: String) {
+        searchResults.clear()
+        var foundGradients = 0
+
+        try {
+            for (count in 0 until Values.gradientList.size) {
+                val colourList = Values.gradientList[count]["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }
+                val nl = ArrayList<String>(colourList)
+
+                for (countNL in 0 until nl.size) {
+                    if (searchByColourSystem(baseColour, nl[countNL])) {
+                        val found = HashMap<String, String>()
+
+                        found["gradientName"] = Values.gradientList[count]["gradientName"] as String
+                        found["gradientColours"] = Values.gradientList[count]["gradientColours"] as String
+                        found["gradientDescription"] = Values.gradientList[count]["gradientDescription"] as String
+
+                        searchResults.add(found)
+                        foundGradients++
+                        break
+                    }
+                }
             }
 
-            if (Values.justSubmitted) {
-                gradientsDownloaded()
-                Values.justSubmitted = false
-            }*/
+            /** Set View **/
+            RecyclerGrid.gradientGrid(context, searchResultsRecycler, searchResults, this, this)
+            resultsText.text = "$foundGradients results found"
+
+        } catch (e: Exception) {
+            Log.e("ERR", "pebble.search_activity.search_system: ${e.localizedMessage}")
         }
+    }
+
+    private fun searchByColourSystem(baseHex: String, colour: String): Boolean {
+        try {
+            //Remove # from hex
+            val base = baseHex.replace("#", "")
+            val given = colour.replace("#", "")
+
+            Log.e("BASE", base)
+
+            //Get RGB in values of baseHex
+            val baseR = Integer.valueOf(base.substring(0, 2), 16)
+            val baseG = Integer.valueOf(base.substring(2, 4), 16)
+            val baseB = Integer.valueOf(base.substring(4, 6), 16)
+            Log.e("BASER", "$baseR")
+
+            //Get RGB in values of colourGiven
+            val givenR = Integer.valueOf(given.substring(0, 2), 16)
+            val givenG = Integer.valueOf(given.substring(2, 4), 16)
+            val givenB = Integer.valueOf(given.substring(4, 6), 16)
+
+            //Calculate different between base & given
+            var diffR: Double = 255 - abs(baseR - givenR).toDouble()
+            var diffG: Double = 255 - abs(baseG - givenG).toDouble()
+            var diffB: Double = 255 - abs(baseB - givenB).toDouble()
+
+            //Limit RGB values between 0 & 1
+            diffR /= 255
+            diffG /= 255
+            diffB /= 255
+
+            return ((diffR + diffG + diffB) / 3) > 0.8
+        } catch (e: Exception) {
+            Log.e("ERR", "pebble.activities.search.search_by_colour_system: ${e.localizedMessage}")
+        }
+        return false
     }
 
 }

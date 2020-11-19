@@ -558,4 +558,44 @@ object HashMaps {
 
         return array
     }
+
+
+    /** Search By Colour Buttons **/
+    fun searchByColourButtons() : ArrayList<HashMap<String, String>> {
+        val array = ArrayList<HashMap<String, String>>()
+
+        val redHash = HashMap<String, String>()
+        redHash["buttonColour"] = "#F44336"
+        array.add(redHash)
+
+        val orangeHash = HashMap<String, String>()
+        orangeHash["buttonColour"] = "#FF9800"
+        array.add(orangeHash)
+
+        val yellowHash = HashMap<String, String>()
+        yellowHash["buttonColour"] = "#FFEB3B"
+        array.add(yellowHash)
+
+        val greenHash = HashMap<String, String>()
+        greenHash["buttonColour"] = "#4CAF50"
+        array.add(greenHash)
+
+        val blueHash = HashMap<String, String>()
+        blueHash["buttonColour"] = "#2196F3"
+        array.add(blueHash)
+
+        val purpleHash = HashMap<String, String>()
+        purpleHash["buttonColour"] = "#9C27B0"
+        array.add(purpleHash)
+
+        val blackHash = HashMap<String, String>()
+        blackHash["buttonColour"] = "#1c1c1c"
+        array.add(blackHash)
+
+        val whiteHash = HashMap<String, String>()
+        whiteHash["buttonColour"] = "#f5f5f5"
+        array.add(whiteHash)
+
+        return array
+    }
 }

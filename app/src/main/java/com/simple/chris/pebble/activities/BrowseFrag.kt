@@ -64,6 +64,10 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
             showMenu()
         }
 
+        searchButton.setOnClickListener {
+            (activity as MainActivity).startSearch()
+        }
+
         touchBlockerDark.setOnClickListener {
             hideMenu()
         }
@@ -225,7 +229,12 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                 }, 250)
             }
             3 -> {
-                Toast.makeText((activity as MainActivity), "Not migrated", Toast.LENGTH_SHORT).show()
+                hideMenu()
+                Handler().postDelayed({
+                    Values.gradientList.clear()
+                    Connection.checkConnection(context, context.window.decorView, this)
+                    (activity as MainActivity).connectionChecker()
+                }, 400)
             }
         }
     }
@@ -256,17 +265,6 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                 }
             }
             Values.saveValues((activity as MainActivity))
-
-            /*if (Values.refreshTheme) {
-                startActivity(Intent((activity as MainActivity), SplashScreen::class.java))
-                (activity as MainActivity).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                (activity as MainActivity).finish()
-            }
-
-            if (Values.justSubmitted) {
-                gradientsDownloaded()
-                Values.justSubmitted = false
-            }*/
         }
     }
 

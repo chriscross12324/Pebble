@@ -106,7 +106,6 @@ object UIElement {
             if (view != null) {
                 view.background = gradientDrawable
                 if (Calculations.isAndroidPOrGreater()) {
-                    Log.e("INFOghhlk", colourArray[colourArray.size-1])
                     view.outlineSpotShadowColor = Color.parseColor(colourArray[colourArray.size-1])
                 }
             } else {

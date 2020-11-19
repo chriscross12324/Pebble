@@ -37,6 +37,15 @@
         app:cardCornerRadius="0dp"
         app:cardElevation="0dp" />
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/fragmentHolderSecondary"
+        android:name="com.simple.chris.pebble.activities.SearchFrag"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="#00000000"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="0dp" />
+
     <ImageView
         android:id="@+id/tapReturn"
         android:layout_width="match_parent"

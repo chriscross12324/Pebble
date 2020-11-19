@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -44,9 +46,15 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
         super.onCreate(savedInstanceState)
         UIElement.setTheme(this)
         setContentView(R.layout.activity_main)
-        if (Values.gradientList.isEmpty()) {
-            Connection.checkConnection(this, window.decorView, this)
+        if (!Values.refreshTheme) {
+            if (Values.gradientList.isEmpty()) {
+                Connection.checkConnection(this, window.decorView, this)
+                connectionChecker()
+            }
+        } else {
+            Values.refreshTheme = false
         }
+
 
         browseFragment = BrowseFrag()
         searchFragment = SearchFrag()
@@ -70,17 +78,6 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
             Values.screenHeight = Calculations.screenMeasure(this, "height", window)
             bottomSheetPeekHeight = (screenHeight * (0.667)).toInt()
         }
-    }
-
-    private fun connectionChecker() {
-        val handler = Handler()
-        handler.postDelayed({
-            if (Values.gradientList.isEmpty()) {
-                gradientsDownloaded()
-            } else {
-                connectionChecker()
-            }
-        }, 500)
     }
 
     private fun gradientsDownloaded() {
@@ -129,20 +126,28 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
         }
     }
 
-    fun shrinkFrag() {
-        UIElements.viewObjectAnimator(fragmentHolder, "scaleY", 0.7f, 500, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(fragmentHolder, "scaleX", 0.7f, 500, 0, DecelerateInterpolator(3f))
-        UIElement.cardRadiusAnimator(fragmentHolder, Calculations.convertToDP(this, 30f), 500, 0, DecelerateInterpolator(3f))
+    fun shrinkFrag(fragment: CardView) {
+        UIElements.viewObjectAnimator(fragment, "scaleY", 0.7f, 500, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(fragment, "scaleX", 0.7f, 500, 0, DecelerateInterpolator(3f))
+        UIElement.cardRadiusAnimator(fragment, Calculations.convertToDP(this, 30f), 500, 0, DecelerateInterpolator(3f))
     }
 
     private fun moveUpFrag(height: Float) {
         UIElements.viewObjectAnimator(fragmentHolder, "translationY", -(height * 0.8).toFloat(), 500, 0, DecelerateInterpolator(3f))
     }
 
-    private fun growFrag() {
-        UIElements.viewObjectAnimator(fragmentHolder, "scaleY", 1f, 500, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(fragmentHolder, "scaleX", 1f, 500, 0, DecelerateInterpolator(3f))
-        UIElement.cardRadiusAnimator(fragmentHolder, 0f, 500, 0, DecelerateInterpolator(3f))
+    private fun moveFragLeft(width: Float, fragment: View) {
+        UIElements.viewObjectAnimator(fragment, "translationX", -width, 500, 0, DecelerateInterpolator(3f))
+    }
+
+    private fun moveFragRight(width: Float, fragment: View) {
+        UIElements.viewObjectAnimator(fragment, "translationX", width, 500, 0, DecelerateInterpolator(3f))
+    }
+
+    private fun growFrag(fragment: CardView) {
+        UIElements.viewObjectAnimator(fragment, "scaleY", 1f, 500, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(fragment, "scaleX", 1f, 500, 0, DecelerateInterpolator(3f))
+        UIElement.cardRadiusAnimator(fragment, 0f, 500, 0, DecelerateInterpolator(3f))
     }
 
     private fun moveDownFrag() {
@@ -152,7 +157,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
     fun showSmallScreen(height: Float) {
         tapReturn.visibility = View.VISIBLE
         tapReturnText.visibility = View.VISIBLE
-        shrinkFrag()
+        shrinkFrag(fragmentHolder)
         moveUpFrag(height)
         UIElements.viewObjectAnimator(smallScreenFragHolder, "translationY", -height, 500, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(tapReturn, "alpha", 0.6f, 250, 0, LinearInterpolator())
@@ -161,7 +166,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
     }
 
     fun hideSmallScreen() {
-        growFrag()
+        growFrag(fragmentHolder)
         moveDownFrag()
         UIElements.viewObjectAnimator(smallScreenFragHolder, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(tapReturn, "alpha", 0f, 150, 0, LinearInterpolator())
@@ -174,7 +179,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
     }
 
     fun startGradientCreator() {
-        shrinkFrag()
+        shrinkFrag(fragmentHolder)
         Handler().postDelayed({
             if (Values.connectionOffline) {
                 UIElement.popupDialog(this, "noConnection", R.drawable.icon_wifi_empty, R.string.dual_no_connection, null, R.string.sentence_needs_internet_connection,
@@ -184,6 +189,34 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
                 startActivity(Intent(this, GradientCreator::class.java), activityOptions.toBundle())
             }
         }, 0)
+    }
+
+    fun startSearch() {
+        fragmentHolderSecondary.translationX = fragmentHolderSecondary.width.toFloat()
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentHolderSecondary, searchFragment)
+                .commitAllowingStateLoss()
+        moveFragLeft(fragmentHolder.width.toFloat(), fragmentHolder)
+        moveFragLeft(0f, fragmentHolderSecondary)
+        shrinkFrag(fragmentHolder)
+        shrinkFrag(fragmentHolderSecondary)
+        Handler().postDelayed({
+            growFrag(fragmentHolder)
+            growFrag(fragmentHolderSecondary)
+            Values.currentActivity = "Search"
+        }, 500)
+    }
+
+    fun closeSearch() {
+        moveFragRight(0f, fragmentHolder)
+        moveFragRight(fragmentHolder.width.toFloat(), fragmentHolderSecondary)
+        shrinkFrag(fragmentHolder)
+        shrinkFrag(fragmentHolderSecondary)
+        Handler().postDelayed({
+            growFrag(fragmentHolder)
+            growFrag(fragmentHolderSecondary)
+            Values.currentActivity = "Browse"
+        }, 500)
     }
 
     fun refreshTheme() {
@@ -199,7 +232,11 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
     override fun onResume() {
         super.onResume()
         if (Values.currentActivity == "CreateGradient") {
-            growFrag()
+            if (Values.justSubmitted) {
+                gradientsDownloaded()
+                Values.justSubmitted = false
+            }
+            growFrag(fragmentHolder)
         }
         Values.currentActivity = "MainActivity"
     }
@@ -312,6 +349,63 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
                 }
                 UIElement.popupDialogHider()
             }
+            "leave" -> {
+                when (position) {
+                    0 -> {
+                        finishAndRemoveTask()
+                    }
+                    1 -> UIElement.popupDialogHider()
+                }
+            }
+            "stillConnecting" -> {
+                when (position) {
+                    0 -> {
+                        UIElement.popupDialog(this, "connecting", null, R.string.word_connecting, null, R.string.sentence_pebble_is_connecting, null, window.decorView, null)
+                        Connection.checkDownload(this, window.decorView, this)
+                    }
+                    1 -> {
+                        Connection.cancelConnection()
+                        Connection.connectionOffline(this)
+                    }
+                    2 -> {
+                        Connection.cancelConnection()
+                        Connection.checkConnection(this, window.decorView, this)
+                    }
+                }
+            }
+            "askMobile" -> {
+                when (position) {
+                    0 -> {
+                        Connection.getGradients(this, window.decorView, this)
+                        UIElement.popupDialogHider()
+                    }
+                    1 -> {
+                        Values.useMobileData = "on"
+                        Connection.getGradients(this, window.decorView, this)
+                        UIElement.popupDialogHider()
+                    }
+                    2 -> {
+                        UIElement.popupDialogHider()
+                        Handler().postDelayed({
+                            Connection.checkConnection(this, window.decorView, this)
+                        }, Values.dialogShowAgainTime)
+                    }
+                }
+            }
+            "noConnection" -> {
+                when (position) {
+                    0 -> {
+                        UIElement.popupDialogHider()
+                        Handler().postDelayed({
+                            Connection.checkConnection(this, window.decorView, this)
+                        }, Values.dialogShowAgainTime)
+                    }
+                    1 -> {
+                        UIElement.popupDialogHider()
+                        Connection.connectionOffline(this)
+                    }
+                }
+            }
         }
         Values.saveValues(this)
     }
@@ -335,6 +429,28 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
 
             override fun onAdClosed() {
 
+            }
+        }
+
+    }
+
+    fun connectionChecker() {
+        Handler().postDelayed({
+            if (Values.gradientList.isNotEmpty()) {
+                ((browseFragment as BrowseFrag).showGradients())
+            } else {
+                connectionChecker()
+            }
+        }, 500)
+    }
+
+    override fun onBackPressed() {
+        when (Values.currentActivity) {
+            "Browse" -> {
+                UIElement.popupDialog(this, "leave", R.drawable.icon_door, R.string.word_leave, null, R.string.question_leave, HashMaps.arrayYesCancel(), window.decorView, this)
+            }
+            "Search" -> {
+                closeSearch()
             }
         }
 

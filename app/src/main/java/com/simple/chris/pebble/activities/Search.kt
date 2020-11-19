@@ -55,19 +55,6 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         Values.currentActivity = "SearchActivity"
         searchLogic()
 
-        coordinatorLayout.post {
-            /*getHeights()
-            bottomSheet()
-            searchColourButtons()*/
-            /*val gradientStrokeShader = SweepGradient((searchByColourCircle.width/2).toFloat(), (searchByColourCircle.height/ 2).toFloat(), intArrayOf(Color.parseColor("#f00000"), Color.parseColor("#ffff00"), Color.parseColor("#00ff00"), Color.parseColor("#00ffff"), Color.parseColor("#0000ff"), Color.parseColor("#ff00ff"), Color.parseColor("#f00000")), null)
-            val bitmap = Bitmap.createBitmap((searchByColourCircle.width/2), (searchByColourCircle.height/ 2), Bitmap.Config.ARGB_8888) as Bitmap
-            val paint = Paint()
-            paint.shader = gradientStrokeShader
-            val canvas = Canvas(bitmap)
-            canvas.drawCircle((searchByColourCircle.width/2).toFloat(), (searchByColourCircle.height/2).toFloat(), Calculations.convertToDP(this, 5f), paint)
-            searchByColourCircle.setImageBitmap(bitmap)*/
-        }
-
         //Initiate searchResultsRecycler
         searchResultsRecycler.setHasFixedSize(true)
         searchResultsRecycler.layoutManager = GridLayoutManager(this, 2)
@@ -368,15 +355,27 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         //Search prerequisites
         searchResults.clear()
         var foundGradients = 0
-        Toast.makeText(this, "Got here", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Got here: $baseColour", Toast.LENGTH_SHORT).show()
 
         try {
             for (count in 0 until allItems.size) {
-                //val colourList = allItems[count]["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }
-                //Toast.makeText(this, "${allItems[count]["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }}", Toast.LENGTH_SHORT).show()
-                Log.e("INFO", "${allItems[count]["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }}")
-                //val nl = ArrayList<String>(colourList)
+                val colourList = allItems[count]["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }
+                //Log.e("INFO", "${allItems[count]["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }}")
+                val nl = ArrayList<String>(colourList)
 
+                for (countNL in 0 until nl.size) {
+                    if (searchByColourSystem(baseColour, nl[countNL])) {
+                        val found = HashMap<String, String>()
+
+                        found["gradientName"] = allItems[count]["gradientName"] as String
+                        found["gradientColours"] = allItems[count]["gradientColours"] as String
+                        found["gradientDescription"] = allItems[count]["gradientDescription"] as String
+
+                        searchResults.add(found)
+                        foundGradients++
+                        break
+                    }
+                }
                 /*for (countNL in 0 until nl.size)
                 if (searchByColourSystem(baseColour, nl[count])) {
                     val found = HashMap<String, String>()
@@ -401,68 +400,24 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         }
     }
 
-    /*private fun searchByColourSystem(baseHex: String, colourGiven: String) : Boolean{
+    private fun searchByColourSystem(baseHex: String, colour: String): Boolean {
         try {
             //Remove # from hex
             val base = baseHex.replace("#", "")
-            val given = colourGiven.replace("#", "")
+            val given = colour.replace("#", "")
+
+            Log.e("BASE", base)
 
             //Get RGB in values of baseHex
             val baseR = Integer.valueOf(base.substring(0, 2), 16)
             val baseG = Integer.valueOf(base.substring(2, 4), 16)
             val baseB = Integer.valueOf(base.substring(4, 6), 16)
+            Log.e("BASER", "$baseR")
 
             //Get RGB in values of colourGiven
             val givenR = Integer.valueOf(given.substring(0, 2), 16)
             val givenG = Integer.valueOf(given.substring(2, 4), 16)
             val givenB = Integer.valueOf(given.substring(4, 6), 16)
-
-            //Calculate different between base & given
-            var diffR: Double = 255 - abs(baseR - givenR).toDouble()
-            var diffG: Double = 255 - abs(baseG - givenG).toDouble()
-            var diffB: Double = 255 - abs(baseB - givenB).toDouble()
-
-            //Limit RGB values between 0 & 1
-            diffR /= 255
-            diffG /= 255
-            diffB /= 255
-
-            Log.e("baseR", "$baseR")
-            Log.e("baseG", "$baseG")
-            Log.e("baseB", "$baseB")
-
-            Log.e("givenR", "$givenR")
-            Log.e("givenG", "$givenG")
-            Log.e("givenB", "$givenB")
-
-            Log.e("diffR", "$diffR")
-            Log.e("diffG", "$diffG")
-            Log.e("diffB", "$diffB")
-
-            //Log.e("INFO", "${((diffR + diffG + diffB) / 3).roundToInt()}")
-            return ((diffR + diffG + diffB) / 3) > 0.7
-        } catch (e: Exception) {
-            Log.e("ERR", e.localizedMessage)
-        }
-        return false
-    }*/
-
-    private fun searchByColourSystem(baseHex: String, colour: String): Boolean {
-        try {
-            //Remove # from hex
-            val base = baseHex.replace("#", "")
-
-
-
-            //Get RGB in values of baseHex
-            val baseR = Integer.valueOf(base.substring(0, 2), 16)
-            val baseG = Integer.valueOf(base.substring(2, 4), 16)
-            val baseB = Integer.valueOf(base.substring(4, 6), 16)
-
-            //Get RGB in values of colourGiven
-            val givenR = Integer.valueOf(colour.substring(0, 2), 16)
-            val givenG = Integer.valueOf(colour.substring(2, 4), 16)
-            val givenB = Integer.valueOf(colour.substring(4, 6), 16)
 
             //Calculate different between base & given
             var diffR: Double = 255 - abs(baseR - givenR).toDouble()

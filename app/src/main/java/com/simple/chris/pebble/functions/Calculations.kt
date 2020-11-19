@@ -17,7 +17,7 @@ object Calculations {
     fun screenMeasure(context: Context, value: String, window: Window): Int {
         when (value) {
             "height" -> {
-                Log.e("INFO", "${context.resources.displayMetrics.heightPixels + cutoutHeight(window)}")
+                Log.v("INFO", "${context.resources.displayMetrics.heightPixels + cutoutHeight(window)}")
                 return context.resources.displayMetrics.heightPixels + cutoutHeight(window)
             }
             "width" -> return context.resources.displayMetrics.widthPixels

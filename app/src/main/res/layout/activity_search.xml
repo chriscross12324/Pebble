@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/googlesans_bold"
-            android:text="Search"
+            android:text="@string/word_search"
             android:textColor="?PrimaryTextColour"
             android:textSize="36sp"
             android:transitionName="buttonTitle" />
