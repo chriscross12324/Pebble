@@ -148,7 +148,7 @@
             android:layout_marginEnd="7dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/details_background"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/actionsHolder"
             app:layout_constraintEnd_toStartOf="@+id/optionsBaseView"
             app:layout_constraintStart_toStartOf="@+id/detailsHolder">
@@ -173,7 +173,7 @@
             android:layout_marginStart="7dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/details_background"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/actionsHolder"
             app:layout_constraintEnd_toEndOf="@+id/detailsHolder"
             app:layout_constraintStart_toEndOf="@+id/optionsBaseView">

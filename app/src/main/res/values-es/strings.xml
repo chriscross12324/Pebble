@@ -26,6 +26,7 @@
     <string name="word_failed">Fracasado</string>
     <string name="word_feedback">Comentario</string>
     <string name="word_finishing">Acabado</string>
+    <string name="__gradients">%1$d gradientes</string>
     <string name="word_leave">Dejar</string>
     <string name="word_light">Claro</string>
     <string name="word_network">Network</string>
@@ -39,7 +40,7 @@
     <string name="word_retry">Retry</string>
     <string name="word_search">Buscar</string>
     <string name="word_settings">Configuración</string>
-    <string name="word_special_search">Buscar...</string>
+    <string name="word_special_search">Buscar…</string>
     <string name="word_storage">Storage</string>
     <string name="word_submit">Submit</string>
     <string name="word_submitting">Submitting</string>
@@ -77,6 +78,7 @@
     <string name="dual_save_gradient">Save Gradient</string>
     <string name="dual_set_wallpaper">Set Wallpaper</string>
     <string name="dual_special_effects">Efectos Especiales</string>
+    <string name="dual_split_screen">Split Screen</string>
     <string name="dual_still_connecting">Still connecting</string>
     <string name="dual_take_tour">Take Tour</string>
     <string name="dual_tap_here">Pulse aquí</string>
@@ -98,8 +100,9 @@
     <string name="question_set_wallpaper">Where do you want to apply this gradient?</string>
     <string name="question_setting_effects">Would you like to enable <b>Special Effects</b>?</string>
     <string name="question_setting_network">Would you like to enable <b>Cellular Data</b> usage?</string>
-    <string name="question_setting_theme">What <b>Theme</b> would you like to set?</string>
+    <string name="question_setting_theme">¿Cuál <b>Tema</b>?</string>
     <string name="question_setting_vibration">Would you like to enable <b>Vibrations</b>?</string>
+    <string name="question_setting_split_screen">Would you like to enable <b>Split Screen</b> mode if your screen size is supported?</string>
     <string name="question_still_connecting">Pebble is taking a while to connect, what would you like to do?</string>
 
 
@@ -107,6 +110,7 @@
     <string name="sentence_ad_loading">The ad will show once loaded…</string>
     <string name="sentence_ad_thanks">Thanks for the support!</string>
     <string name="sentence_colour_combination_exists">That colour combination already exists, try some different colours…</string>
+    <string name="sentence_copied_to_clipboard">Copied to Clipboard</string>
     <string name="sentence_customize_pebble">Personalizar Pebble</string>
     <string name="sentence_donate">Support my development of Pebble and other future projects</string>
     <string name="sentence_dont_ask_again">Don\'t ask again</string>

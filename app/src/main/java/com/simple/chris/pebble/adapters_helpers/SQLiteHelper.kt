@@ -34,7 +34,7 @@ class SQLiteHelper(val context: Context): SQLiteOpenHelper(context, DATABASE_NAM
         val result = db.insert(TABLE_NAME, null, cv)
 
         if (result == (-1).toLong()) {
-            Toast.makeText(context, "SQLite Failed", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, "SQLite Failed", Toast.LENGTH_SHORT).show()
         }
     }
 

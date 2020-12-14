@@ -4,8 +4,11 @@ import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -17,6 +20,7 @@ import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.simple.chris.pebble.R
@@ -24,6 +28,7 @@ import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.adapters_helpers.SearchColourRecyclerView
 import com.simple.chris.pebble.functions.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.backButton
@@ -55,14 +60,14 @@ class SearchFrag : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
         context = (activity as MainActivity)
 
         backButton.setOnClickListener {
-            (activity as MainActivity).closeSearch()
+            (activity as MainActivity).closeSecondary()
         }
 
         searchByColourButton.setOnClickListener {
             if (!colourPickerExpanded) {
                 Vibration.lowFeedback(context)
                 colourPickerExpanded = true
-                val colourPickerButtonExpandedSize = (Calculations.screenMeasure(context, "width", context.window) - Calculations.convertToDP(context, 180f))
+                val colourPickerButtonExpandedSize = (activity as MainActivity).getFragmentWidth() - Calculations.convertToDP(context, 180f)
                 UIElements.viewWidthAnimator(searchByColourButton, searchByColourButton.width.toFloat(), colourPickerButtonExpandedSize, 500, 100, DecelerateInterpolator(3f))
                 UIElements.viewObjectAnimator(searchField, "alpha", 0f, 150, 0, LinearInterpolator())
                 UIElements.viewVisibility(searchField, View.GONE, 150)
@@ -197,7 +202,7 @@ class SearchFrag : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
                 UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
                 UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 0f, 150, 200, LinearInterpolator())
 
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     UIElements.viewObjectAnimator(searchResultsRecycler, "scaleX", 1f, 0, 0, LinearInterpolator())
                     UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 1f, 0, 0, LinearInterpolator())
                     UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 1f, 0, 0, LinearInterpolator())
@@ -232,13 +237,13 @@ class SearchFrag : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
         gradientScaleX.start()
         gradientScaleY.start()
 
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             gradientScaleX.reverse()
             gradientScaleY.reverse()
 
-            RecyclerGrid.gradientGridOnLongClickListener((activity as MainActivity), searchResults, position, context.window.decorView)
+            RecyclerGrid.gradientGridOnLongClickListener((activity as MainActivity), searchResults, position, context.window)
 
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 Vibration.mediumFeedback((activity as MainActivity))
             }, 150)
         }, 150)
@@ -275,13 +280,49 @@ class SearchFrag : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
         UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
         UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 0f, 150, 200, LinearInterpolator())
 
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             UIElements.viewObjectAnimator(searchResultsRecycler, "scaleX", 1f, 0, 0, LinearInterpolator())
             UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 1f, 0, 0, LinearInterpolator())
             UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 1f, 0, 0, LinearInterpolator())
-            searchByColour(buttonColour)
+            searchByDomColour(buttonColour)
             searchResultsRecycler.scheduleLayoutAnimation()
         }, 400)
+    }
+
+    private fun searchByDomColour(baseColour: String) {
+        //UIElement.popupDialog(context, "searching", null, R.string.word_connecting, null, R.string.sentence_pebble_is_connecting, null, context.window.decorView, null)
+        searchResults.clear()
+        var foundGradients = 0
+
+        try {
+            for (count in 0 until Values.gradientList.size) {
+                val colourList = Values.gradientList[count]["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }
+                val nl = ArrayList<String>(colourList)
+                val bitmap = Calculations.createBitmap(UIElement.gradientDrawableNew(context, null, nl, 0f) as Drawable,
+                        10, 10)
+                Palette.Builder(bitmap).generate { it?.let { palette ->
+                    val colour = palette.getDominantColor(Color.parseColor("#ffffff"))
+                    val colourHEX = "#" + Integer.toHexString(colour).substring(2)
+                    if (searchByColourSystem(baseColour, colourHEX)) {
+                        val found = HashMap<String, String>()
+
+                        found["gradientName"] = Values.gradientList[count]["gradientName"] as String
+                        found["gradientColours"] = Values.gradientList[count]["gradientColours"] as String
+                        found["gradientDescription"] = Values.gradientList[count]["gradientDescription"] as String
+
+                        searchResults.add(found)
+                        foundGradients++
+                        resultsText.text = "$foundGradients results found"
+                    }
+                } }
+            }
+
+            /** Set View **/
+            //UIElement.popupDialogHider()
+            RecyclerGrid.gradientGrid(context, searchResultsRecycler, searchResults, this, this)
+        } catch (e: Exception) {
+            Log.e("ERR", "pebble.activities.search_frag.search_by_dom_colour: ${e.localizedMessage}")
+        }
     }
 
     private fun searchByColour(baseColour: String) {
@@ -323,13 +364,10 @@ class SearchFrag : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
             val base = baseHex.replace("#", "")
             val given = colour.replace("#", "")
 
-            Log.e("BASE", base)
-
             //Get RGB in values of baseHex
             val baseR = Integer.valueOf(base.substring(0, 2), 16)
             val baseG = Integer.valueOf(base.substring(2, 4), 16)
             val baseB = Integer.valueOf(base.substring(4, 6), 16)
-            Log.e("BASER", "$baseR")
 
             //Get RGB in values of colourGiven
             val givenR = Integer.valueOf(given.substring(0, 2), 16)

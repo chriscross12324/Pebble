@@ -7,6 +7,7 @@ import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.os.Build
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -131,7 +132,7 @@ object Connection {
     }
 
     fun checkDownload(context: Context, decorView: View, listener: PopupDialogButtonRecycler.OnButtonListener) {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             if (Values.gradientList.isEmpty()) {
                 UIElement.popupDialog(context, "stillConnecting", R.drawable.icon_wifi_full, R.string.dual_still_connecting, null, R.string.question_still_connecting, HashMaps.arrayContinueOfflineRetry(), decorView, listener)
             }

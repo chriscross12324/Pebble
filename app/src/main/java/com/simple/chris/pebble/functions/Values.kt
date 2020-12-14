@@ -17,7 +17,7 @@ object Values {
     val strongVibration = longArrayOf(0, 20)
 
     //Hidden Values
-    var firstStart: Boolean = true
+    var firstStart = true
     var setupThemeChange = false
     var lastVersion = 0
     var hintPushHoldDismissed = false
@@ -31,13 +31,14 @@ object Values {
     var dontAskStorage = false
     var connectionOffline = false
     var screenHeight = 0
+    var currentlySplitScreened = false
 
-    //Changing Values
+    //Gradient Details
     var gradientIsTouched = false
 
     //Settings
     var useMobileData: String = "ask"
-
+    var useSplitScreen = true
     var settingThemes = "dark"
     var settingVibrations = true
     var settingsSpecialEffects = true

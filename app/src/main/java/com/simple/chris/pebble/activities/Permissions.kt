@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
@@ -39,7 +40,7 @@ class Permissions : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListe
     }
 
     private fun checkStoragePermission() {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 checkStoragePermission()
             } else {
@@ -118,9 +119,9 @@ class Permissions : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListe
                         null, window.decorView, null)
                 Values.firstStart = false
                 Values.saveValues(this)
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     UIElement.popupDialogHider()
-                    Handler().postDelayed({
+                    Handler(Looper.getMainLooper()).postDelayed({
                         startActivity(Intent(this, MainActivity::class.java))
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                         finish()

@@ -2,6 +2,7 @@ package com.simple.chris.pebble.activities
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +30,9 @@ class Feedback : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener
         setContentView(R.layout.activity_feedback)
         Values.currentActivity = "Feedback"
 
-        UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha, window)
+        wallpaperImageViewer.post {
+            UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha, window)
+        }
 
         usersEmailField.setOnFocusChangeListener { _, b ->
             if (b) {
@@ -136,7 +139,7 @@ class Feedback : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener
 
     override fun onBackPressed() {
         animateViewsOut()
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             finish()
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }, 550)

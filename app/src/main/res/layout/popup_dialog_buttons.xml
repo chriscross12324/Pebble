@@ -32,7 +32,7 @@
 
         <ImageView
             android:id="@+id/imageView9"
-            android:layout_width="2dp"
+            android:layout_width="2.3dp"
             android:layout_height="0dp"
             android:layout_marginStart="14dp"
             android:layout_marginTop="12dp"

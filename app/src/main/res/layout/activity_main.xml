@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
+    <View
+        android:id="@+id/gradientScreenAnimationHero"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/placeholder_gradient"/>
+
     <com.jgabrielfreitas.core.BlurImageView
         android:id="@+id/wallpaperImageViewer"
         android:layout_width="match_parent"
@@ -26,7 +35,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="parent"
-        android:transitionName="gradientCreatorViewer"/>
+        android:transitionName="gradientCreatorViewer">
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/separator"
+        android:layout_width="10dp"
+        android:layout_height="match_parent"
+        android:background="#BF000000"
+        app:layout_constraintStart_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="3dp"
+            android:layout_height="100dp"
+            android:background="@drawable/details_background"
+            android:backgroundTint="#BFFFFFFF"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/fragmentHolder"
@@ -35,16 +66,22 @@
         android:layout_height="match_parent"
         app:cardBackgroundColor="#00000000"
         app:cardCornerRadius="0dp"
-        app:cardElevation="0dp" />
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/fragmentHolderSecondary"
         android:name="com.simple.chris.pebble.activities.SearchFrag"
-        android:layout_width="match_parent"
+        android:layout_width="100dp"
         android:layout_height="match_parent"
         app:cardBackgroundColor="#00000000"
         app:cardCornerRadius="0dp"
-        app:cardElevation="0dp" />
+        app:cardElevation="0dp"
+        app:layout_constraintStart_toEndOf="@id/separator" />
 
     <ImageView
         android:id="@+id/tapReturn"
@@ -155,7 +192,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ssDescription" />
+                app:layout_constraintTop_toBottomOf="@+id/ssDescription"
+                android:foregroundGravity="center"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 

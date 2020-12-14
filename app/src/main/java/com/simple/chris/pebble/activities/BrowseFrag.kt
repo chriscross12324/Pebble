@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
@@ -14,6 +15,7 @@ import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.simple.chris.pebble.R
@@ -65,7 +67,7 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         }
 
         searchButton.setOnClickListener {
-            (activity as MainActivity).startSearch()
+            (activity as MainActivity).startSecondary((activity as MainActivity).returnSearchFragment(), null)
         }
 
         touchBlockerDark.setOnClickListener {
@@ -147,11 +149,17 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         UIElements.viewObjectAnimator(menuArrow, "translationY", Calculations.convertToDP((activity as MainActivity), -25f), 150, 0, DecelerateInterpolator())
         UIElements.viewVisibility(menuArrow, View.INVISIBLE, 150)
         UIElements.viewObjectAnimator(touchBlockerDark, "alpha", 0f, 175, 175, LinearInterpolator())
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             touchBlockerDark.visibility = View.GONE
             menuArrow.visibility = View.GONE
             menu.visibility = View.GONE
         }, 400)
+    }
+
+    fun updateColumnCount(count: Int, delay: Long) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            gradientGrid.layoutManager = GridLayoutManager(context, count)
+        }, delay)
     }
 
     fun showGradients() {
@@ -159,7 +167,7 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         UIElements.viewObjectAnimator(gradientGrid, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
         UIElements.viewObjectAnimator(gradientGrid, "alpha", 0f, 150, 200, LinearInterpolator())
 
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             UIElements.viewObjectAnimator(gradientGrid, "scaleX", 1f, 0, 0, LinearInterpolator())
             UIElements.viewObjectAnimator(gradientGrid, "scaleY", 1f, 0, 0, LinearInterpolator())
             UIElements.viewObjectAnimator(gradientGrid, "alpha", 1f, 0, 0, LinearInterpolator())
@@ -180,8 +188,9 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
 
     override fun onGradientClick(position: Int, view: View) {
         Vibration.lowFeedback((activity as MainActivity))
-        touchBlocker.visibility = View.VISIBLE
-        RecyclerGrid.gradientGridOnClickListener((activity as MainActivity), Values.gradientList, view, position)
+        /*touchBlocker.visibility = View.VISIBLE
+        RecyclerGrid.gradientGridOnClickListener((activity as MainActivity), Values.gradientList, view, position)*/
+        (activity as MainActivity).openGradientScreen(position, view)
     }
 
     override fun onGradientLongClick(position: Int, view: View) {
@@ -195,13 +204,13 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         gradientScaleX.start()
         gradientScaleY.start()
 
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             gradientScaleX.reverse()
             gradientScaleY.reverse()
 
-            RecyclerGrid.gradientGridOnLongClickListener((activity as MainActivity), Values.gradientList, position, (activity as MainActivity).window.decorView)
+            RecyclerGrid.gradientGridOnLongClickListener((activity as MainActivity), Values.gradientList, position, (activity as MainActivity).window)
 
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 Vibration.mediumFeedback((activity as MainActivity))
             }, 150)
         }, 150)
@@ -211,26 +220,26 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         when (position) {
             0 -> {
                 hideMenu()
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     startActivity(Intent((activity as MainActivity), Feedback::class.java))
                     (activity as MainActivity).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }, 400)
             }
             1 -> {
                 hideMenu()
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     (activity as MainActivity).startDonating()
                 }, 250)
             }
             2 -> {
                 hideMenu()
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     (activity as MainActivity).startSettings()
                 }, 250)
             }
             3 -> {
                 hideMenu()
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     Values.gradientList.clear()
                     Connection.checkConnection(context, context.window.decorView, this)
                     (activity as MainActivity).connectionChecker()

@@ -61,6 +61,7 @@ class GradientRecyclerView internal constructor(var context: Context, private va
             val gradientColours = details["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }
             val nl = ArrayList<String>(gradientColours)
             UIElement.gradientDrawableNew(context, holder.gradientViewer, nl, Values.gradientCornerRadius)
+            holder.gradientViewer.transitionName = details["gradientName"]
         } catch (e: Exception) {
             holder.gradientViewer.setBackgroundColor(context.resources.getColor(R.color.pebbleEnd))
             holder.gradientName.text = "[Broken Data]"

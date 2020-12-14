@@ -7,14 +7,13 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
+import android.os.*
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -24,6 +23,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.palette.graphics.Palette
 import com.simple.chris.pebble.*
 import com.simple.chris.pebble.functions.Calculations.convertToDP
 import com.simple.chris.pebble.functions.UIElement.gradientDrawable
@@ -33,6 +33,8 @@ import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.functions.*
 import com.simple.chris.pebble.functions.UIElement.gradientDrawableNew
 import kotlinx.android.synthetic.main.activity_gradient_details.*
+import kotlinx.android.synthetic.main.activity_gradient_details.backButton
+import kotlinx.android.synthetic.main.fragment_search.*
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.roundToInt
@@ -126,7 +128,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                         2000, DecelerateInterpolator(3f))
                 UIElements.viewVisibility(copiedNotification, View.INVISIBLE, 2500)
 
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     copiedAnimationPlaying = false
                 }, 2500)
             }
@@ -149,7 +151,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                         2000, DecelerateInterpolator(3f))
                 UIElements.viewVisibility(copiedNotification, View.INVISIBLE, 2500)
 
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     copiedAnimationPlaying = false
                 }, 2500)
             }
@@ -158,7 +160,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
 
         backButton.setOnClickListener {
             //imageViewObjectAnimator(gradientViewAnimated, "alpha", 0f, 0, 0, LinearInterpolator())
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 onBackPressed()
             }, 0)
 
@@ -168,19 +170,19 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
             Vibration.mediumFeedback(this)
             if (!detailsHolderExpanded) {
                 viewObjectAnimator(detailsHolder, "translationY", convertToDP(this, -66f), 500, 0, DecelerateInterpolator(3f))
-                constraintLayoutElevationAnimator(saveGradientButton, 0f, convertToDP(this, 12f), 500, 100, DecelerateInterpolator())
-                constraintLayoutElevationAnimator(setWallpaperButton, 0f, convertToDP(this, 12f), 500, 100, DecelerateInterpolator())
+                constraintLayoutElevationAnimator(saveGradientButton, 12f, 500, 100, DecelerateInterpolator())
+                constraintLayoutElevationAnimator(setWallpaperButton, 12f, 500, 100, DecelerateInterpolator())
                 saveGradientButton.visibility = View.VISIBLE
                 setWallpaperButton.visibility = View.VISIBLE
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     detailsHolderExpanded = true
                 }, 500)
 
             } else {
                 viewObjectAnimator(detailsHolder, "translationY", convertToDP(this, 0f), 500, 0, DecelerateInterpolator(3f))
-                constraintLayoutElevationAnimator(saveGradientButton, convertToDP(this, 12f), 0f, 500, 0, DecelerateInterpolator())
-                constraintLayoutElevationAnimator(setWallpaperButton, convertToDP(this, 12f), 0f, 500, 0, DecelerateInterpolator())
-                Handler().postDelayed({
+                constraintLayoutElevationAnimator(saveGradientButton, 0f, 500, 0, DecelerateInterpolator())
+                constraintLayoutElevationAnimator(setWallpaperButton, 0f, 500, 0, DecelerateInterpolator())
+                Handler(Looper.getMainLooper()).postDelayed({
                     if (detailsHolder.translationY == convertToDP(this, 0f)) {
                         saveGradientButton.visibility = View.GONE
                         setWallpaperButton.visibility = View.GONE
@@ -213,7 +215,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
 
     private fun pushHoldPopup() {
         if (!Values.hintPushHoldDismissed) {
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 UIElements.oneButtonDialog(this, R.drawable.icon_view, R.string.dual_push_hold, R.string.sentence_push_hold, R.string.word_ok, pushHoldListener)
             }, 1000)
         }
@@ -229,9 +231,9 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                 viewObjectAnimator(actionsHolder, "translationY", 100f, 300, 0, DecelerateInterpolator(3f))
                 viewObjectAnimator(actionsHolder, "alpha", 0f, 100, 0, LinearInterpolator())
 
-                constraintLayoutElevationAnimator(saveGradientButton, convertToDP(this, 12f), 0f, 100, 0, DecelerateInterpolator())
-                constraintLayoutElevationAnimator(setWallpaperButton, convertToDP(this, 12f), 0f, 100, 0, DecelerateInterpolator())
-                Handler().postDelayed({
+                constraintLayoutElevationAnimator(saveGradientButton, 0f, 100, 0, DecelerateInterpolator())
+                constraintLayoutElevationAnimator(setWallpaperButton, 0f, 100, 0, DecelerateInterpolator())
+                Handler(Looper.getMainLooper()).postDelayed({
                     saveGradientButton.visibility = View.GONE
                     setWallpaperButton.visibility = View.GONE
                 }, 100)
@@ -248,7 +250,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
     }
 
     private fun detailsHolderFixer() {
-        val handler = Handler()
+        val handler = Handler(Looper.getMainLooper())
         handler.postDelayed(object : Runnable {
             @SuppressLint("SyntheticAccessor")
             override fun run() {
@@ -263,15 +265,6 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         }, 1000)
     }
 
-    private fun createBitmap(drawable: Drawable, width: Int, height: Int): Bitmap {
-        val mutableBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(mutableBitmap)
-        drawable.setBounds(0, 0, width, height)
-        drawable.draw(canvas)
-
-        return mutableBitmap
-    }
-
     override fun onBackPressed() {
         viewObjectAnimator(detailsHolder, "translationY",
                 (90 * resources.displayMetrics.density + detailsHolder.height).roundToInt().toFloat(), 250,
@@ -284,7 +277,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         UIElements.viewVisibility(detailsHolder, View.INVISIBLE, 250)
         UIElements.viewVisibility(actionsHolder, View.INVISIBLE, 250)
         UIElements.viewVisibility(copiedNotification, View.INVISIBLE, 250)
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             saveGradientButton.visibility = View.GONE
             setWallpaperButton.visibility = View.GONE
         }, 100)
@@ -293,7 +286,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         UIElement.dialogsToShow.clear()
         UIElement.popupDialogHider()
 
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             super@GradientDetails.onBackPressed()
         }, 250)
     }
@@ -320,7 +313,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                     0 -> {
                         try {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                wallpaperManager.setBitmap(createBitmap(gradientDrawableNew(this, null, gradientArrayList, 0f) as Drawable,
+                                wallpaperManager.setBitmap(Calculations.createBitmap(gradientDrawableNew(this, null, gradientArrayList, 0f) as Drawable,
                                         Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)), null, true, WallpaperManager.FLAG_SYSTEM)
                                 UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dual_wallpaper_set, null,
                                         R.string.sentence_enjoy_your_wallpaper, HashMaps.BAClose(), window.decorView, this)
@@ -335,7 +328,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                     1 -> {
                         try {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                wallpaperManager.setBitmap(createBitmap(gradientDrawableNew(this, null, gradientArrayList, 0f) as Drawable,
+                                wallpaperManager.setBitmap(Calculations.createBitmap(gradientDrawableNew(this, null, gradientArrayList, 0f) as Drawable,
                                         Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)), null, true, WallpaperManager.FLAG_LOCK)
                                 UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dual_wallpaper_set, null,
                                         R.string.sentence_enjoy_your_wallpaper, HashMaps.BAClose(), window.decorView, this)
@@ -380,7 +373,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                             val fileOutputStream = FileOutputStream(file)
 
                             /** Creates the gradient Bitmap to populate the file above **/
-                            createBitmap(gradientDrawableNew(this, null, gradientArrayList, 0f) as Drawable,
+                            Calculations.createBitmap(gradientDrawableNew(this, null, gradientArrayList, 0f) as Drawable,
                                     Calculations.screenMeasure(this, "largest", window), Calculations.screenMeasure(this, "largest", window)).compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
 
                             fileOutputStream.flush()
@@ -419,7 +412,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                 when (position) {
                     0 -> {
                         val wallpaperManager = WallpaperManager.getInstance(this)
-                        wallpaperManager.setBitmap(createBitmap(gradientDrawable(this, null, startColourInt, endColourInt, 0f) as Drawable,
+                        wallpaperManager.setBitmap(Calculations.createBitmap(gradientDrawable(this, null, startColourInt, endColourInt, 0f) as Drawable,
                                 Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)))
                         UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dual_wallpaper_set, null,
                                 R.string.sentence_enjoy_your_wallpaper, HashMaps.BAClose(), window.decorView, this)
@@ -431,7 +424,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
             }
             "error" -> {
                 UIElement.popupDialogHider()
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     onBackPressed()
                 }, 450)
             }

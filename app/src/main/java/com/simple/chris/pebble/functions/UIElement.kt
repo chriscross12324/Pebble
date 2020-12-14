@@ -13,6 +13,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateInterpolator
@@ -94,41 +95,51 @@ object UIElement {
 
     @SuppressLint("NewApi")
     fun gradientDrawableNew(context: Context, view: View?, colourArray: ArrayList<String>, cornerRadius: Float): Drawable? {
-        /** Create Gradient Drawable**/
-        if (colourArray.size >= 2) {
-            val gradientDrawable = GradientDrawable(
-                    GradientDrawable.Orientation.TL_BR,
-                    Calculations.stringArraytoIntArray(colourArray)
-            )
-            gradientDrawable.cornerRadius = Calculations.convertToDP(context, cornerRadius)
+        try {
+            /** Create Gradient Drawable**/
+            if (colourArray.size >= 2) {
+                val gradientDrawable = GradientDrawable(
+                        GradientDrawable.Orientation.TL_BR,
+                        Calculations.stringArraytoIntArray(colourArray)
+                )
+                gradientDrawable.cornerRadius = Calculations.convertToDP(context, cornerRadius)
 
-            /** Set or return gradientDrawable **/
-            if (view != null) {
-                view.background = gradientDrawable
-                if (Calculations.isAndroidPOrGreater()) {
-                    view.outlineSpotShadowColor = Color.parseColor(colourArray[colourArray.size-1])
+                /** Set or return gradientDrawable **/
+                if (view != null) {
+                    view.background = gradientDrawable
+                    if (Calculations.isAndroidPOrGreater()) {
+                        view.outlineSpotShadowColor = Color.parseColor(colourArray[colourArray.size - 1])
+                    }
+                } else {
+                    return gradientDrawable
                 }
             } else {
-                return gradientDrawable
-            }
-        } else {
-            val colourDrawable = ColorDrawable(Color.parseColor(colourArray.toString().replace("[", "").replace("]", "")))
-            /** Set or return gradientDrawable **/
-            if (view != null) {
-                view.background = colourDrawable
-                if (Calculations.isAndroidPOrGreater()) {
-                    //view.outlineSpotShadowColor = endColour
+                val colour = Color.parseColor(colourArray.toString().replace("[", "").replace("]", ""))
+                val gradientDrawable = GradientDrawable(
+                        GradientDrawable.Orientation.TL_BR,
+                        intArrayOf(colour, colour)
+                )
+                gradientDrawable.cornerRadius = Calculations.convertToDP(context, cornerRadius)
+                /** Set or return gradientDrawable **/
+                if (view != null) {
+                    view.background = gradientDrawable
+                    if (Calculations.isAndroidPOrGreater()) {
+                        view.outlineSpotShadowColor = colour
+                    }
+                } else {
+                    return gradientDrawable
                 }
-            } else {
-                return colourDrawable
             }
+        } catch (e: java.lang.Exception) {
+            Log.e("ERR", "pebble.functions.ui_element.gradient_drawable_new: ${e.localizedMessage}")
         }
+
 
         return null
     }
 
     fun cardRadiusAnimator(layout: CardView, newRadius: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             val valueAnimator = ValueAnimator.ofInt(layout.radius.roundToInt(), newRadius.roundToInt())
             valueAnimator.addUpdateListener {
                 val value = it.animatedValue as Int
@@ -144,7 +155,7 @@ object UIElement {
         /**
          * Determines if animating height or width
          */
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             val valueAnimator: ValueAnimator = if (axis == "height") {
                 ValueAnimator.ofInt(view.height, newValue)
             } else {
@@ -179,6 +190,12 @@ object UIElement {
         dialogWindow.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
         dialogWindow.setDimAmount(0.1f)
         dialogWindow.setGravity(Gravity.CENTER)
+        val width = ViewGroup.LayoutParams.MATCH_PARENT
+        popupDialog.window?.setLayout(width, width)
+        popupDialog.window?.decorView?.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
         /** Set popupDialog layout **/
         val dialogMain = popupDialog.holder
@@ -250,9 +267,12 @@ object UIElement {
                         .setBlurAlgorithm(RenderScriptBlur(context))
                         .setBlurRadius(20f)
                         .setHasFixedTransformationMatrix(true)
+                        .setOverlayColor(Color.parseColor("#33000000"))
             } catch (e: Exception) {
                 Log.e("ERR", "pebble.ui_elements.popup_dialog: ${e.localizedMessage}")
             }
+            val backgroundDimmer = popupDialog.backgroundDimmer
+            backgroundDimmer.alpha = 0.75f
         } else {
             val backgroundDimmer = popupDialog.backgroundDimmer
             backgroundDimmer.alpha = 0.75f
@@ -331,7 +351,7 @@ object UIElement {
                 UIElements.viewObjectAnimator(dialogRecycler, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
                 UIElements.viewObjectAnimator(dialogRecycler, "alpha", 0f, 150, 200, LinearInterpolator())
 
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     if (dialogList.size > 0) {
                         hidePopupQueueManager(dialogList[0])
                     }
@@ -353,20 +373,28 @@ object UIElement {
     }
 
     private fun showPopupQueueManager(dialog: Dialog) {
-        if (dialogsToShow.isEmpty()) {
-            dialog.show()
-            //showDialog(dialog)
+        try {
+            if (dialogsToShow.isEmpty()) {
+                dialog.show()
+                //showDialog(dialog)
+            }
+            dialogsToShow.offer(dialog)
+        } catch (e: java.lang.Exception) {
+            Log.e("ERR", "pebble.functions.ui_elements.show_popup_queue_manager: ${e.localizedMessage}")
         }
-        dialogsToShow.offer(dialog)
+
     }
 
     private fun hidePopupQueueManager(dialog: Dialog) {
-        dialogsToShow.remove(dialog)
-        dialogList.removeAt(0)
-        dialog.dismiss()
-        if (dialogsToShow.isNotEmpty()) {
-            dialogsToShow.peek()!!.show()
-            //showDialog(dialog)
+        try {
+            dialogsToShow.remove(dialog)
+            dialogList.removeAt(0)
+            dialog.dismiss()
+            if (dialogsToShow.isNotEmpty()) {
+                dialogsToShow.peek()!!.show()
+            }
+        } catch (e: java.lang.Exception) {
+            Log.e("ERR", "pebble.ui_elements.hide_popup_queue_manager: ${e.localizedMessage}")
         }
     }
 
@@ -417,7 +445,7 @@ object UIElement {
     }
 
     fun startActivityFade(context: Context, activity: Activity, delay: Long) {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             context.startActivity(Intent(context, activity::class.java))
             activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }, delay)

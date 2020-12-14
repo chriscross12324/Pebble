@@ -11,6 +11,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Handler
+import android.os.Looper
 import android.renderscript.*
 import android.util.Log
 import android.view.Gravity
@@ -36,13 +37,13 @@ object UIElements {
     lateinit var popupDialog: Dialog
 
     fun viewVisibility(view: View, visibility: Int, delay: Long) {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             view.visibility = visibility
         }, delay)
     }
 
     fun viewObjectAnimator(view: View, propertyName: String, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             val objectAnimator = ObjectAnimator.ofFloat(view, propertyName, endValue)
             objectAnimator.duration = duration
             objectAnimator.interpolator = interpolator
@@ -51,7 +52,7 @@ object UIElements {
     }
 
     fun constraintLayoutHeightAnimator(layout: ConstraintLayout, startValue: Float, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             val valueAnimator = ValueAnimator.ofInt(startValue.roundToInt(), endValue.roundToInt())
             valueAnimator.addUpdateListener {
                 val value = it.animatedValue as Int
@@ -66,7 +67,7 @@ object UIElements {
     }
 
     fun viewWidthAnimator(layout: View, startValue: Float, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             val valueAnimator = ValueAnimator.ofInt(startValue.roundToInt(), endValue.roundToInt())
             valueAnimator.addUpdateListener {
                 val value = it.animatedValue as Int
@@ -80,9 +81,24 @@ object UIElements {
         }, delay)
     }
 
-    fun constraintLayoutElevationAnimator(layout: ConstraintLayout, startElevation: Float, endElevation: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
-        Handler().postDelayed({
-            val valueAnimator = ValueAnimator.ofFloat(startElevation, endElevation)
+    fun viewHeightAnimator(layout: View, startValue: Float, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            val valueAnimator = ValueAnimator.ofInt(startValue.roundToInt(), endValue.roundToInt())
+            valueAnimator.addUpdateListener {
+                val value = it.animatedValue as Int
+                val layoutParams = layout.layoutParams
+                layoutParams.height = value
+                layout.layoutParams = layoutParams
+            }
+            valueAnimator.interpolator = interpolator
+            valueAnimator.duration = duration
+            valueAnimator.start()
+        }, delay)
+    }
+
+    fun constraintLayoutElevationAnimator(layout: ConstraintLayout, endElevation: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            val valueAnimator = ValueAnimator.ofFloat(layout.elevation, endElevation)
             valueAnimator.addUpdateListener {
                 val current = it.animatedValue as Float
                 layout.elevation = current
@@ -94,7 +110,7 @@ object UIElements {
     }
 
     fun linearLayoutHeightAnimator(layout: LinearLayout, startValue: Float, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             val valueAnimator = ValueAnimator.ofInt(startValue.roundToInt(), endValue.roundToInt())
             valueAnimator.addUpdateListener {
                 val value = it.animatedValue as Int
@@ -109,7 +125,7 @@ object UIElements {
     }
 
     fun linearLayoutElevationAnimator(layout: LinearLayout, startElevation: Float, endElevation: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             val valueAnimator = ValueAnimator.ofFloat(startElevation, endElevation)
             valueAnimator.addUpdateListener {
                 val current = it.animatedValue as Float
@@ -122,7 +138,7 @@ object UIElements {
     }
 
     fun textViewTextChanger(layout: TextView, text: String, delay: Long) {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             layout.text = text
         }, delay)
     }
@@ -134,7 +150,7 @@ object UIElements {
     }
 
     fun bottomSheetPeekHeightAnim(bottomSheet: BottomSheetBehavior<CardView>, peekHeight: Int, duration: Long, delay: Long, interpolator: TimeInterpolator) {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             var valueAnimator = ValueAnimator()
             valueAnimator.setIntValues(bottomSheet.peekHeight, peekHeight)
             valueAnimator.duration = duration
@@ -230,7 +246,7 @@ object UIElements {
         viewObjectAnimator(dialogButton, "translationY", dialogButton.height + convertToDP(context, 24f), 700, 0, DecelerateInterpolator(3f))
         viewObjectAnimator(dialogMainHolder, "translationY", dialogMainHolder.height + dialogButton.height + convertToDP(context, 40f), 700, 100, DecelerateInterpolator(3f))
 
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             dialogOneButton.dismiss()
         }, 800)
     }

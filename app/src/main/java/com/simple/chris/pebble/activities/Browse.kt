@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
@@ -215,7 +216,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
     }
 
     private fun connectionChecker() {
-        val handler = Handler()
+        val handler = Handler(Looper.getMainLooper())
         handler.postDelayed(object : Runnable {
             @SuppressLint("SyntheticAccessor")
             override fun run() {
@@ -229,7 +230,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
     }
 
     private fun gradientsDownloaded() {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             if (Values.gradientList.isNotEmpty()) {
                 screenTitle.setText(R.string.word_browse)
                 if (bottomSheetBehavior.peekHeight != 0) {
@@ -237,7 +238,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                     UIElements.viewObjectAnimator(browseGrid, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
                     UIElements.viewObjectAnimator(browseGrid, "alpha", 0f, 150, 200, LinearInterpolator())
 
-                    Handler().postDelayed({
+                    Handler(Looper.getMainLooper()).postDelayed({
                         UIElements.viewObjectAnimator(browseGrid, "scaleX", 1f, 0, 0, LinearInterpolator())
                         UIElements.viewObjectAnimator(browseGrid, "scaleY", 1f, 0, 0, LinearInterpolator())
                         UIElements.viewObjectAnimator(browseGrid, "alpha", 1f, 0, 0, LinearInterpolator())
@@ -261,7 +262,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         UIElements.viewObjectAnimator(menuArrow, "translationY", Calculations.convertToDP(this, -25f), 150, 0, DecelerateInterpolator())
         UIElements.viewVisibility(menuArrow, View.INVISIBLE, 150)
         UIElements.viewObjectAnimator(touchBlockerDark, "alpha", 0f, 175, 175, LinearInterpolator())
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             touchBlockerDark.visibility = View.GONE
             menuArrow.visibility = View.GONE
             menu.visibility = View.GONE
@@ -294,13 +295,13 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         gradientScaleX.start()
         gradientScaleY.start()
 
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             gradientScaleX.reverse()
             gradientScaleY.reverse()
 
-            RecyclerGrid.gradientGridOnLongClickListener(this, Values.gradientList, position, window.decorView)
+            RecyclerGrid.gradientGridOnLongClickListener(this, Values.gradientList, position, window)
 
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 Vibration.mediumFeedback(this)
             }, 150)
         }, 150)
@@ -310,35 +311,35 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         when (position) {
             /*0 -> {
                 hideMenu()
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     startActivity(Intent(this, MyGradients::class.java))
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }, 400)
             }*/
             0 -> {
                 hideMenu()
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     startActivity(Intent(this, Feedback::class.java))
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }, 400)
             }
             /*2 -> {
                 hideMenu()
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     startActivity(Intent(this, Support::class.java))
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }, 400)
             }*/
             1 -> {
                 hideMenu()
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     startActivity(Intent(this, Settings::class.java))
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }, 400)
             }
             2 -> {
                 hideMenu()
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     Values.gradientList.clear()
                     checkConnection(this, window.decorView, this)
                     connectionChecker()
@@ -390,7 +391,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                     }
                     2 -> {
                         UIElement.popupDialogHider()
-                        Handler().postDelayed({
+                        Handler(Looper.getMainLooper()).postDelayed({
                             checkConnection(this, window.decorView, this)
                         }, Values.dialogShowAgainTime)
                     }
@@ -411,7 +412,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                 when (position) {
                     0 -> {
                         UIElement.popupDialogHider()
-                        Handler().postDelayed({
+                        Handler(Looper.getMainLooper()).postDelayed({
                             checkConnection(this, window.decorView, this)
                         }, Values.dialogShowAgainTime)
                     }
@@ -426,7 +427,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                 when (position) {
                     0 -> {
                         UIElement.popupDialogHider()
-                        Handler().postDelayed({
+                        Handler(Looper.getMainLooper()).postDelayed({
                             checkConnection(this, window.decorView, this)
                         }, Values.dialogShowAgainTime)
                     }

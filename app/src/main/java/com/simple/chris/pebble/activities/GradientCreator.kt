@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.text.InputType
 import android.transition.Transition
 import android.transition.Transition.TransitionListener
@@ -60,7 +61,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         UIElement.setTheme(this)
         setContentView(R.layout.activity_gradient_creator)
         postponeEnterTransition()
-        Values.currentActivity = "CreateGradient"
+        Values.currentActivity = "GradientCreator"
 
         gradientCreatorGradientViewer.post {
             setViewPlacements()
@@ -77,7 +78,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
             if (!submitStep) {
                 firstStepExitAnim(false)
                 submitStep = true
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     lastStepEnterAnim()
                 }, 800)
             } else {
@@ -94,13 +95,13 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
             Vibration.lowFeedback(this)
             if (!submitStep) {
                 firstStepExitAnim(true)
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     onBackPressed()
                 }, 450)
             } else {
                 lastStepExitAnim(false)
                 submitStep = false
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     firstStepEnterAnim()
                 }, 950)
             }
@@ -117,7 +118,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                 Values.gradientCreatorColours.add("#" + Integer.toHexString(Color.rgb(startRNDM.nextInt(256), startRNDM.nextInt(256), startRNDM.nextInt(256))).substring(2))
             }
             Vibration.lowFeedback(this)
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 refreshGradientDrawable()
                 colourButtonsRecycler()
             }, 450)
@@ -237,7 +238,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
          * Checks if Gradient Creator has been opened before
          */
         if (!Values.hintCreateGradientDismissed) {
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 UIElement.popupDialog(this, "gradientCreator", R.drawable.icon_apps, R.string.dual_create_gradient, null, R.string.sentence_gradient_creator_welcome,
                         HashMaps.createGradientArrayList(), window.decorView, this)
             }, 1000)
@@ -425,6 +426,8 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
             refreshGradientDrawable()
             colourButtonsRecycler()
             firstStepEnterAnim()
+            viewObjectAnimator(colourButtonsRecycler, "translationY", 0f, 750, 750, DecelerateInterpolator(3f))
+            UIElements.viewVisibility(colourButtonsRecycler, View.VISIBLE, 750)
         }
 
         /**
@@ -451,9 +454,9 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                     }
                     1 -> {
                         UIElement.popupDialogHider()
-                        Handler().postDelayed({
+                        Handler(Looper.getMainLooper()).postDelayed({
                             firstStepExitAnim(true)
-                            Handler().postDelayed({
+                            Handler(Looper.getMainLooper()).postDelayed({
                                 onBackPressed()
                             }, 850)
                         }, Values.dialogShowAgainTime)
@@ -466,9 +469,9 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
             }
             "gradientExists" -> {
                 UIElement.popupDialogHider()
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     lastStepExitAnim(false)
-                    Handler().postDelayed({
+                    Handler(Looper.getMainLooper()).postDelayed({
                         firstStepEnterAnim()
                         submitStep = false
                         nextStepButton.isEnabled = true
@@ -484,9 +487,9 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                     }
                     1 -> {
                         UIElement.popupDialogHider()
-                        Handler().postDelayed({
+                        Handler(Looper.getMainLooper()).postDelayed({
                             lastStepExitAnim(true)
-                            Handler().postDelayed({
+                            Handler(Looper.getMainLooper()).postDelayed({
                                 onBackPressed()
                             }, 850)
                         }, Values.dialogShowAgainTime)
@@ -497,7 +500,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                 when (position) {
                     0 -> {
                         UIElement.popupDialogHider()
-                        Handler().postDelayed({
+                        Handler(Looper.getMainLooper()).postDelayed({
                             checkConnection()
                         }, Values.dialogShowAgainTime)
                     }
@@ -512,9 +515,9 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                     0 -> {
                         UIElement.popupDialogHider()
                         Values.justSubmitted = true
-                        Handler().postDelayed({
+                        Handler(Looper.getMainLooper()).postDelayed({
                             lastStepExitAnim(true)
-                            Handler().postDelayed({
+                            Handler(Looper.getMainLooper()).postDelayed({
                                 onBackPressed()
                             }, 850)
                         }, Values.dialogShowAgainTime)
@@ -531,7 +534,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
     override fun onButtonClick(position: Int, view: View) {
         if (!deleteColourMode) {
             firstStepExitAnim(false)
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 Values.editingColourAtPos = position
                 startActivity(Intent(this, ColourPickerNew::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)

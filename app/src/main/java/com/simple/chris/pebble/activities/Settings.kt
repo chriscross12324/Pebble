@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.cardview.widget.CardView
@@ -164,7 +165,7 @@ class Settings : AppCompatActivity(), SettingsRecyclerView.OnButtonListener, Pop
                     }
                 }
                 UIElement.popupDialogHider()
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     refreshTheme()
                 }, 450)
             }

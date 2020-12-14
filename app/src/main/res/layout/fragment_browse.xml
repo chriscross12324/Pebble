@@ -166,7 +166,7 @@
             android:fontFamily="@font/googlesans_medium"
             android:gravity="center"
             android:singleLine="true"
-            android:text="Crear"
+            android:text="@string/word_create"
             android:textColor="?PrimaryTextColour"
             android:textSize="18sp" />
     </LinearLayout>

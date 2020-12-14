@@ -1,11 +1,13 @@
 package com.simple.chris.pebble.functions
 
+import GridAutofitLayoutManager
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateInterpolator
@@ -13,6 +15,7 @@ import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -58,7 +61,7 @@ object RecyclerGrid {
         }
     }
 
-    fun gradientGridOnLongClickListener(context: Activity, gradientJSON: ArrayList<HashMap<String, String>>, position: Int, decorView: View?) {
+    fun gradientGridOnLongClickListener(context: Activity, gradientJSON: ArrayList<HashMap<String, String>>, position: Int, window: Window?) {
         /**
          * Checks if gradientPopup is visible; hides if it is
          */
@@ -74,9 +77,16 @@ object RecyclerGrid {
         gradientPopup = Dialog(context, R.style.dialogStyle)
         gradientPopup.setCancelable(false)
         gradientPopup.setContentView(R.layout.dialog_long_press_gradients)
+        if (window != null) {
+            gradientPopup.window?.setLayout(Calculations.screenMeasure(context, "width", window), Calculations.screenMeasure(context, "height", window))
+            gradientPopup.window?.decorView?.systemUiVisibility =
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                            View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
 
         val dialogWindow: Window = gradientPopup.window!!
-        dialogWindow.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+        //dialogWindow.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
         dialogWindow.setDimAmount(0.1f)
         dialogWindow.setGravity(Gravity.CENTER)
 
@@ -109,16 +119,18 @@ object RecyclerGrid {
         }
 
         /** Create blurView **/
-        if (decorView != null && Values.settingsSpecialEffects) {
+        if (window?.decorView != null && Values.settingsSpecialEffects) {
             try {
-                val rootView = decorView.findViewById<ViewGroup>(android.R.id.content)
-                val windowBackground = decorView.background
+                val rootView = window.decorView.findViewById<ViewGroup>(android.R.id.content)
+                val windowBackground = window.decorView.background
 
                 gradientPopup.blurView.setupWith(rootView)
                         .setFrameClearDrawable(windowBackground)
                         .setBlurAlgorithm(RenderScriptBlur(context))
                         .setBlurRadius(20f)
                         .setHasFixedTransformationMatrix(true)
+                        .setBlurAutoUpdate(true)
+                        .setOverlayColor(Color.parseColor("#33000000"))
             } catch (e: Exception) {
                 Log.e("ERR", "pebble.recycler_grid.gradient_grid_on_long_click_listener: ${e.localizedMessage}")
             }
@@ -132,7 +144,7 @@ object RecyclerGrid {
             UIElements.viewObjectAnimator(dialogMain, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
             UIElements.viewObjectAnimator(dialogMain, "alpha", 0f, 200, 200, LinearInterpolator())
 
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 gradientPopup.dismiss()
             }, 450)
         }

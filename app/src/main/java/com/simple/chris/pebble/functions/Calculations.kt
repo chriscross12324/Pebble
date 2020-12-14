@@ -1,14 +1,19 @@
 package com.simple.chris.pebble.functions
 
 import android.content.Context
+import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Build
+import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Toast
+import androidx.palette.graphics.Palette
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -17,10 +22,22 @@ object Calculations {
     fun screenMeasure(context: Context, value: String, window: Window): Int {
         when (value) {
             "height" -> {
-                Log.v("INFO", "${context.resources.displayMetrics.heightPixels + cutoutHeight(window)}")
-                return context.resources.displayMetrics.heightPixels + cutoutHeight(window)
+                return if (context.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    context.resources.displayMetrics.heightPixels + cutoutHeight(window)
+                } else {
+                    context.resources.displayMetrics.heightPixels
+                }
             }
-            "width" -> return context.resources.displayMetrics.widthPixels
+            "width" -> {
+                //Toast.makeText(context, "${context.resources.displayMetrics.widthPixels + cutoutHeight(window)}", Toast.LENGTH_SHORT).show()
+                return if (context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    context.resources.displayMetrics.widthPixels + cutoutHeight(window)
+
+                } else {
+                    context.resources.displayMetrics.widthPixels
+                }
+
+            }
             "largest" -> {
                 return if (screenMeasure(context, "height", window) > screenMeasure(context, "width", window)) {
                     screenMeasure(context, "height", window)
@@ -39,27 +56,45 @@ object Calculations {
         return 0
     }
 
+    fun pxToIn(context: Context, window: Window): Float {
+        val displayMetrics = DisplayMetrics()
+        window.windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val dpi = displayMetrics.xdpi
+        return screenMeasure(context, "width", window) / dpi
+    }
+
     fun cutoutHeight(window: Window): Int {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val windowInsets = window.decorView.rootWindowInsets
             if (windowInsets != null) {
                 val displayCutout = windowInsets.displayCutout
                 if (displayCutout != null) {
-                    Log.e("ERR", "${displayCutout.safeInsetTop}")
-                    return displayCutout.safeInsetTop
+                    return displayCutout.safeInsetTop + displayCutout.safeInsetBottom + displayCutout.safeInsetLeft + displayCutout.safeInsetRight
                 }
             }
         }
         return 0
     }
 
-    /*fun cutoutHeight(decorView: View) : Int {
-        return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-            decorView.rootWindowInsets.displayCutout!!.boundingRects.
-        } else {
-            0
-        }
-    }*/
+    fun dominantColour(context: Context, colourArray: ArrayList<String>): String {
+        var colourHEX = "#ffffff"
+        val bitmap = createBitmap(UIElement.gradientDrawableNew(context, null, colourArray, 0f) as Drawable,
+            10, 10)
+        Palette.Builder(bitmap).generate { it?.let { palette ->
+            val colour = palette.getDominantColor(Color.parseColor("#ffffff"))
+            colourHEX = Integer.toHexString(colour)
+        } }
+        return ""
+    }
+
+    fun createBitmap(drawable: Drawable, width: Int, height: Int): Bitmap {
+        val mutableBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(mutableBitmap)
+        drawable.setBounds(0, 0, width, height)
+        drawable.draw(canvas)
+
+        return mutableBitmap
+    }
 
     fun stringArraytoIntArray(stringArray: ArrayList<String>): IntArray {
         val intArray: IntArray

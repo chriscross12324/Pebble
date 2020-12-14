@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -52,7 +53,7 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         super.onCreate(savedInstanceState)
         UIElement.setTheme(this)
         setContentView(R.layout.activity_search)
-        Values.currentActivity = "SearchActivity"
+        Values.currentActivity = "Search"
         searchLogic()
 
         //Initiate searchResultsRecycler
@@ -260,7 +261,7 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                 UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
                 UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 0f, 150, 200, LinearInterpolator())
 
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     UIElements.viewObjectAnimator(searchResultsRecycler, "scaleX", 1f, 0, 0, LinearInterpolator())
                     UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 1f, 0, 0, LinearInterpolator())
                     UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 1f, 0, 0, LinearInterpolator())
@@ -320,13 +321,13 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         gradientScaleX.start()
         gradientScaleY.start()
 
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             gradientScaleX.reverse()
             gradientScaleY.reverse()
 
-            RecyclerGrid.gradientGridOnLongClickListener(this, searchResults, position, window.decorView)
+            RecyclerGrid.gradientGridOnLongClickListener(this, searchResults, position, window)
 
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 Vibration.mediumFeedback(this)
             }, 150)
         }, 150)
@@ -339,7 +340,7 @@ class Search : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
         UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 0f, 150, 200, LinearInterpolator())
 
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             UIElements.viewObjectAnimator(searchResultsRecycler, "scaleX", 1f, 0, 0, LinearInterpolator())
             UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 1f, 0, 0, LinearInterpolator())
             UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 1f, 0, 0, LinearInterpolator())

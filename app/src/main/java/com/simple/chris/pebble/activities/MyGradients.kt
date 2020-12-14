@@ -141,7 +141,7 @@ class MyGradients : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListe
         //UIElement.dialogsToShow.clear()
         //UIElement.popupDialogHider()
 
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             this.onBackPressed()
         }, 120)
     }*/

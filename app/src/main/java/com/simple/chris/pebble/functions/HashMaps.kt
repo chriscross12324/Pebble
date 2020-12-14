@@ -424,9 +424,14 @@ object HashMaps {
         array.add(three)
 
         val four = HashMap<String, Int>()
-        four["buttonTitle"] = R.string.dual_use_data
-        four["buttonIcon"] = R.drawable.icon_cell_wifi
+        four["buttonTitle"] = R.string.dual_split_screen
+        four["buttonIcon"] = R.drawable.split_screen
         array.add(four)
+
+        val five = HashMap<String, Int>()
+        five["buttonTitle"] = R.string.dual_use_data
+        five["buttonIcon"] = R.drawable.icon_cell_wifi
+        array.add(five)
 
         return array
     }
@@ -592,9 +597,9 @@ object HashMaps {
         blackHash["buttonColour"] = "#1c1c1c"
         array.add(blackHash)
 
-        val whiteHash = HashMap<String, String>()
+        /*val whiteHash = HashMap<String, String>()
         whiteHash["buttonColour"] = "#f5f5f5"
-        array.add(whiteHash)
+        array.add(whiteHash)*/
 
         return array
     }

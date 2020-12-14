@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.KeyEvent
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
@@ -179,7 +180,7 @@ class ColourPicker : AppCompatActivity() {
         UIElements.viewObjectAnimator(colourCodeHolder, "translationY", (colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f)) / 2, 700, 100, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(colourCodeHolder, "alpha", 0f, 500, 450, LinearInterpolator())
 
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             finish()
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }, 950)
