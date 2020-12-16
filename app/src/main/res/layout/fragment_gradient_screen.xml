@@ -4,8 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="#00000000"
     tools:ignore="UseAppTint">
+
+    <ImageView
+        android:id="@+id/backgroundDimmer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:background="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/gradientViewer"
@@ -96,7 +107,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="2dp"
             android:fontFamily="@font/googlesans_medium"
             android:gravity="center"
             android:text="A lake where you can see the bottom through the clear water"
@@ -106,17 +117,37 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/gradientNameText" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/colourElementsRecycler"
+        <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_margin="8dp"
-            android:background="@drawable/details_background_less"
-            android:backgroundTint="?ForegroundColour"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginBottom="8dp"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="?ForegroundColour"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/gradientDescriptionText" />
+            app:layout_constraintTop_toBottomOf="@id/gradientDescriptionText">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/colourElementsRecycler"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="?ForegroundColour"
+                    android:overScrollMode="never"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -84,11 +84,6 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             hideMenu()
         }
 
-        searchButton.setOnClickListener {
-            startActivity(Intent(this, Search::class.java))
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            Vibration.mediumFeedback(this)
-        }
 
         createButton.setOnClickListener {
             Vibration.mediumFeedback(this)
@@ -331,11 +326,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                 }, 400)
             }*/
             1 -> {
-                hideMenu()
-                Handler(Looper.getMainLooper()).postDelayed({
-                    startActivity(Intent(this, Settings::class.java))
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                }, 400)
+
             }
             2 -> {
                 hideMenu()

@@ -17,7 +17,6 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.palette.graphics.Palette
@@ -28,25 +27,10 @@ import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.adapters_helpers.SearchColourRecyclerView
 import com.simple.chris.pebble.functions.*
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.fragment_search.*
-import kotlinx.android.synthetic.main.fragment_search.backButton
-import kotlinx.android.synthetic.main.fragment_search.bottomSheet
-import kotlinx.android.synthetic.main.fragment_search.buttonIcon
-import kotlinx.android.synthetic.main.fragment_search.iconText
-import kotlinx.android.synthetic.main.fragment_search.resultsText
-import kotlinx.android.synthetic.main.fragment_search.searchByColourButton
-import kotlinx.android.synthetic.main.fragment_search.searchByColourCircle
-import kotlinx.android.synthetic.main.fragment_search.searchColourRecycler
-import kotlinx.android.synthetic.main.fragment_search.searchField
-import kotlinx.android.synthetic.main.fragment_search.searchFieldHolder
-import kotlinx.android.synthetic.main.fragment_search.searchResultsRecycler
-import kotlinx.android.synthetic.main.fragment_search.titleHolder
-import kotlinx.android.synthetic.main.fragment_search.touchBlocker
 import kotlin.math.abs
 
-class SearchFrag : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGradientListener, GradientRecyclerView.OnGradientLongClickListener, SearchColourRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
+class FragSearch : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGradientListener, GradientRecyclerView.OnGradientLongClickListener, SearchColourRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
 
     private var searchResults: ArrayList<HashMap<String, String>> = ArrayList()
     private lateinit var context: Activity
@@ -60,7 +44,7 @@ class SearchFrag : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
         context = (activity as MainActivity)
 
         backButton.setOnClickListener {
-            (activity as MainActivity).closeSecondary()
+            //(activity as MainActivity).closeSecondary()
         }
 
         searchByColourButton.setOnClickListener {
@@ -300,21 +284,23 @@ class SearchFrag : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
                 val nl = ArrayList<String>(colourList)
                 val bitmap = Calculations.createBitmap(UIElement.gradientDrawableNew(context, null, nl, 0f) as Drawable,
                         10, 10)
-                Palette.Builder(bitmap).generate { it?.let { palette ->
-                    val colour = palette.getDominantColor(Color.parseColor("#ffffff"))
-                    val colourHEX = "#" + Integer.toHexString(colour).substring(2)
-                    if (searchByColourSystem(baseColour, colourHEX)) {
-                        val found = HashMap<String, String>()
+                Palette.Builder(bitmap).generate {
+                    it?.let { palette ->
+                        val colour = palette.getDominantColor(Color.parseColor("#ffffff"))
+                        val colourHEX = "#" + Integer.toHexString(colour).substring(2)
+                        if (searchByColourSystem(baseColour, colourHEX)) {
+                            val found = HashMap<String, String>()
 
-                        found["gradientName"] = Values.gradientList[count]["gradientName"] as String
-                        found["gradientColours"] = Values.gradientList[count]["gradientColours"] as String
-                        found["gradientDescription"] = Values.gradientList[count]["gradientDescription"] as String
+                            found["gradientName"] = Values.gradientList[count]["gradientName"] as String
+                            found["gradientColours"] = Values.gradientList[count]["gradientColours"] as String
+                            found["gradientDescription"] = Values.gradientList[count]["gradientDescription"] as String
 
-                        searchResults.add(found)
-                        foundGradients++
-                        resultsText.text = "$foundGradients results found"
+                            searchResults.add(found)
+                            foundGradients++
+                            resultsText.text = "$foundGradients results found"
+                        }
                     }
-                } }
+                }
             }
 
             /** Set View **/

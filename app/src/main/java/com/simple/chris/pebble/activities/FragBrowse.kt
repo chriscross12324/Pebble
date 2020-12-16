@@ -35,9 +35,10 @@ import kotlinx.android.synthetic.main.fragment_browse.resultsText
 import kotlinx.android.synthetic.main.fragment_browse.titleHolder
 import kotlinx.android.synthetic.main.fragment_browse.touchBlocker
 import kotlinx.android.synthetic.main.fragment_browse.touchBlockerDark
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
 import java.lang.Exception
 
-class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGradientListener, GradientRecyclerView.OnGradientLongClickListener, BrowseMenuRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
+class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGradientListener, GradientRecyclerView.OnGradientLongClickListener, BrowseMenuRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
 
     private lateinit var context: Activity
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CardView>
@@ -67,7 +68,7 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         }
 
         searchButton.setOnClickListener {
-            (activity as MainActivity).startSecondary((activity as MainActivity).returnSearchFragment(), null)
+            //(activity as MainActivity).startSecondary((activity as MainActivity).returnSearchFragment())
         }
 
         touchBlockerDark.setOnClickListener {
@@ -172,6 +173,7 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
             UIElements.viewObjectAnimator(gradientGrid, "scaleY", 1f, 0, 0, LinearInterpolator())
             UIElements.viewObjectAnimator(gradientGrid, "alpha", 1f, 0, 0, LinearInterpolator())
             RecyclerGrid.gradientGrid((activity as MainActivity), gradientGrid, Values.gradientList, this, this)
+            OverScrollDecoratorHelper.setUpOverScroll(gradientGrid, OverScrollDecoratorHelper.ORIENTATION_VERTICAL)
             resultsText.text = "${Values.gradientList.size} gradientes"
             gradientGrid.scheduleLayoutAnimation()
         }, 500)
@@ -188,9 +190,10 @@ class BrowseFrag : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
 
     override fun onGradientClick(position: Int, view: View) {
         Vibration.lowFeedback((activity as MainActivity))
+        Values.currentActivity = "GradientScreen"
         /*touchBlocker.visibility = View.VISIBLE
         RecyclerGrid.gradientGridOnClickListener((activity as MainActivity), Values.gradientList, view, position)*/
-        (activity as MainActivity).openGradientScreen(position, view)
+        //(activity as MainActivity).openGradientScreen(position, view)
     }
 
     override fun onGradientLongClick(position: Int, view: View) {

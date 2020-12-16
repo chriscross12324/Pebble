@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".activities.BrowseFrag">
+    tools:context=".activities.FragBrowse"
+    tools:ignore="UseAppTint">
 
     <ImageView
         android:id="@+id/buttonIcon"

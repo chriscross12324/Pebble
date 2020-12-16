@@ -24,14 +24,9 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3224190453693148~1184570101"/>
         <activity android:name=".activities.MainActivity"/>
-        <activity android:name=".activities.Search" />
-        <activity android:name=".activities.Settings" />
-        <activity android:name=".activities.Support" />
         <activity android:name=".activities.Feedback" />
-        <activity android:name=".activities.ColourPicker" />
         <activity android:name=".activities.ColourPickerNew" />
         <activity android:name=".activities.GradientCreator" />
-        <activity android:name=".activities.MyGradients" />
         <activity
             android:name=".activities.GradientDetails"
             tools:ignore="LockedOrientationActivity" />

@@ -603,4 +603,38 @@ object HashMaps {
 
         return array
     }
+
+    fun colours() : ArrayList<HashMap<String, String>> {
+        val array = ArrayList<HashMap<String, String>>()
+
+        val redHash = HashMap<String, String>()
+        redHash["buttonColour"] = "#d48ec3"
+        array.add(redHash)
+
+        val orangeHash = HashMap<String, String>()
+        orangeHash["buttonColour"] = "#bf96ff"
+        array.add(orangeHash)
+
+        val yellowHash = HashMap<String, String>()
+        yellowHash["buttonColour"] = "#679fd6"
+        array.add(yellowHash)
+
+        val redash = HashMap<String, String>()
+        redash["buttonColour"] = "#8acf8a"
+        array.add(redash)
+
+        val orangeHsh = HashMap<String, String>()
+        orangeHsh["buttonColour"] = "#d6d05a"
+        array.add(orangeHsh)
+
+        val yellwHash = HashMap<String, String>()
+        yellwHash["buttonColour"] = "#ebab57"
+        array.add(yellwHash)
+
+        val yelwHash = HashMap<String, String>()
+        yelwHash["buttonColour"] = "#eb3d3d"
+        array.add(yelwHash)
+
+        return array
+    }
 }

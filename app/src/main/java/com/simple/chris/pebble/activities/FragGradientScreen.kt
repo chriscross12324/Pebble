@@ -12,19 +12,23 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
+import com.simple.chris.pebble.adapters_helpers.SearchColourRecyclerView
 import com.simple.chris.pebble.functions.*
-import kotlinx.android.synthetic.main.activity_gradient_details.*
 import kotlinx.android.synthetic.main.fragment_gradient_screen.*
 import kotlinx.android.synthetic.main.fragment_gradient_screen.actionsHolder
 import kotlinx.android.synthetic.main.fragment_gradient_screen.detailsHolder
+import kotlinx.android.synthetic.main.fragment_search.*
 import java.lang.Exception
 
-class GradientFrag : Fragment(R.layout.fragment_gradient_screen), PopupDialogButtonRecycler.OnButtonListener {
+class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), PopupDialogButtonRecycler.OnButtonListener, SearchColourRecyclerView.OnButtonListener {
     private lateinit var context: Activity
     private lateinit var gradientName: String
     private lateinit var gradientDescription: String
@@ -40,8 +44,9 @@ class GradientFrag : Fragment(R.layout.fragment_gradient_screen), PopupDialogBut
         context = (activity as MainActivity)
     }
 
-    fun startLayout() {
+/*    private fun startLayout() {
         buttonFunctionality()
+        colourRecycler()
         gradientViewer.transitionName = gradientName
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
         //Toast.makeText(context, "${ViewCompat.getTransitionName(gradientViewer)}", Toast.LENGTH_SHORT).show()
@@ -68,7 +73,7 @@ class GradientFrag : Fragment(R.layout.fragment_gradient_screen), PopupDialogBut
         Values.currentActivity = "GradientScreen"
     }
 
-    fun animateLayout() {
+    private fun animateLayout() {
         Handler(Looper.getMainLooper()).postDelayed({
             detailsHolderExpanded = false
             gradientNameText.text = gradientName.replace("\n", " ")
@@ -79,6 +84,7 @@ class GradientFrag : Fragment(R.layout.fragment_gradient_screen), PopupDialogBut
                 gradientDescriptionText.visibility = View.VISIBLE
             }
             UIElement.gradientDrawableNew(context, gradientViewer, gradientColourArray, 20f)
+            (activity as MainActivity).hideSharedElementHero()
             Handler(Looper.getMainLooper()).postDelayed({
                 detailsHolderHeight = detailsHolder.height
                 detailsHolder.translationY = (90 * resources.displayMetrics.density) + detailsHolderHeight
@@ -93,7 +99,19 @@ class GradientFrag : Fragment(R.layout.fragment_gradient_screen), PopupDialogBut
         }, 250)
     }
 
-    fun closingAnimation() {
+    fun bringUpUI() {
+        detailsHolder.visibility = View.VISIBLE
+        actionsHolder.visibility = View.VISIBLE
+
+        UIElements.viewObjectAnimator(detailsHolder, "translationY",
+                0f, 700,
+                50, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(actionsHolder, "translationY",
+                0f, 700,
+                0, DecelerateInterpolator(3f))
+    }
+
+    fun sendDownUI() {
         UIElements.viewObjectAnimator(detailsHolder, "translationY",
                 (90 * resources.displayMetrics.density) + detailsHolderHeight, 700,
                 50, DecelerateInterpolator(3f))
@@ -108,14 +126,45 @@ class GradientFrag : Fragment(R.layout.fragment_gradient_screen), PopupDialogBut
         }, 700)
     }
 
-    fun setText() {
-        gradientNameText.text = gradientName.replace("\n", " ")
-        gradientDescriptionText.text = gradientDescription
-        if (gradientDescription == "") {
-            gradientDescriptionText.visibility = View.GONE
-        } else {
-            gradientDescriptionText.visibility = View.VISIBLE
-        }
+    fun animateBackgroundDimmer() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (backgroundDimmer != null) {
+                UIElements.viewObjectAnimator(backgroundDimmer, "alpha", 1f, 500, 0, LinearInterpolator())
+            } else {
+                animateBackgroundDimmer()
+                Log.e("ERR", "Run")
+            }
+        }, 10)
+
+    }
+
+    fun hideAllUIInstant() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (detailsHolder != null && optionsHolder != null) {
+                backgroundDimmer.alpha = 0f
+                gradientViewer.background = null
+                UIElements.viewObjectAnimator(detailsHolder, "translationY",
+                        (90 * resources.displayMetrics.density) + detailsHolderHeight, 0,
+                        0, LinearInterpolator())
+                UIElements.viewObjectAnimator(actionsHolder, "translationY",
+                        (74 * resources.displayMetrics.density) + detailsHolderHeight, 0,
+                        0, LinearInterpolator())
+                optionsHolder.visibility = View.INVISIBLE
+                detailsHolder.visibility = View.INVISIBLE
+            } else {
+                hideAllUIInstant()
+            }
+        }, 5)
+    }*/
+
+    private fun colourRecycler() {
+        colourElementsRecycler.setHasFixedSize(true)
+        val buttonLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        val buttonAdapter = SearchColourRecyclerView(context, HashMaps.colours(), this)
+        Log.e("INFO", "${Values.gradientScreenColours} : ${HashMaps.colours()}")
+
+        colourElementsRecycler.layoutManager = buttonLayoutManager
+        colourElementsRecycler.adapter = buttonAdapter
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -123,9 +172,9 @@ class GradientFrag : Fragment(R.layout.fragment_gradient_screen), PopupDialogBut
         buttonBack.setOnClickListener {
             Vibration.mediumFeedback(context)
             //Close Fragment
-            closingAnimation()
+            //sendDownUI()
             Handler(Looper.getMainLooper()).postDelayed({
-                (activity as MainActivity).closeSecondary()
+                //(activity as MainActivity).closeSecondary()
             }, 700)
         }
         buttonOptions.setOnClickListener {
@@ -173,24 +222,16 @@ class GradientFrag : Fragment(R.layout.fragment_gradient_screen), PopupDialogBut
 
 
 
-    fun passThroughVariables(gradientArray: ArrayList<HashMap<String, String>>, position: Int) {
+    fun passThroughVariables() {
         try {
-            gradientViewer.post {
-                Toast.makeText(context, "Here", Toast.LENGTH_SHORT).show()
-            }
             Handler(Looper.getMainLooper()).postDelayed({
                 if (gradientViewer != null) {
-                    val gradientInfo = gradientArray[position]
-
-                    gradientName = gradientInfo["gradientName"] as String
-                    gradientDescription = gradientInfo["gradientDescription"] as String
-                    val gradientColours = gradientInfo["gradientColours"]!!.replace("[", "").replace("]", "")
-                            .split(",").map { it.trim() }
-                    gradientColourArray = ArrayList(gradientColours)
-                    startLayout()
-                    gradientViewer.background = resources.getDrawable(R.drawable.black_drawable)
+                    gradientName = Values.gradientScreenName
+                    gradientDescription = Values.gradientScreenDesc
+                    gradientColourArray = Values.gradientScreenColours
+                    //startLayout()
                 } else {
-                    passThroughVariables(gradientArray, position)
+                    passThroughVariables()
                 }
             }, 10)
 
@@ -201,6 +242,10 @@ class GradientFrag : Fragment(R.layout.fragment_gradient_screen), PopupDialogBut
 
     override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
         //TODO("Not yet implemented")
+    }
+
+    override fun onButtonClick(position: Int, view: View, buttonColour: String) {
+        TODO("Not yet implemented")
     }
 
 }

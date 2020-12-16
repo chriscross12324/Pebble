@@ -34,7 +34,9 @@ object Values {
     var currentlySplitScreened = false
 
     //Gradient Details
-    var gradientIsTouched = false
+    var gradientScreenName = ""
+    var gradientScreenDesc = ""
+    lateinit var gradientScreenColours: ArrayList<String>
 
     //Settings
     var useMobileData: String = "ask"
