@@ -11,6 +11,14 @@
         android:layout_height="match_parent"
         android:background="#000000"/>
 
+    <ImageView
+        android:id="@+id/drawCaller"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:alpha="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"
         android:layout_width="match_parent"

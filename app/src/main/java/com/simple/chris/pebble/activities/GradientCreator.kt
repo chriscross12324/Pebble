@@ -1,29 +1,21 @@
 package com.simple.chris.pebble.activities
 
-import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.InputType
-import android.transition.Transition
-import android.transition.Transition.TransitionListener
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
-import android.view.animation.LinearInterpolator
 import android.view.inputmethod.EditorInfo
-import android.widget.Adapter
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,16 +28,12 @@ import com.simple.chris.pebble.adapters_helpers.GradientCreatorRecycler
 import com.simple.chris.pebble.functions.Calculations.convertToDP
 import com.simple.chris.pebble.functions.UIElements.viewObjectAnimator
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
-import com.simple.chris.pebble.adapters_helpers.SQLiteHelper
-import com.simple.chris.pebble.adapters_helpers.SQLiteHelperFull
 import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.activity_gradient_creator.*
 import kotlinx.android.synthetic.main.activity_feedback.*
-import org.apache.commons.lang3.ArrayUtils
 import org.apache.commons.lang3.RandomStringUtils
 import java.util.*
 import kotlin.collections.HashMap
-import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListener, GradientCreatorRecycler.OnButtonListener {
@@ -375,12 +363,6 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
     }
 
     private fun gradientPushComplete() {
-        /** Insert Gradient into "My Gradients" database **/
-        val db = SQLiteHelper(this)
-        db.insertGradient(gradientCreatorGradientName.text.toString(), Values.gradientCreatorColours.toString(), gradientCreatorGradientDescription.text.toString(), gradientUID)
-        val offlineDB = SQLiteHelperFull(this)
-        offlineDB.insertGradient(gradientCreatorGradientName.text.toString(), Values.gradientCreatorColours.toString(), gradientCreatorGradientDescription.text.toString())
-
         val newGradient = HashMap<String, String>()
         newGradient["gradientName"] = gradientCreatorGradientName.text.toString()
         newGradient["gradientColours"] = Values.gradientCreatorColours.toString().replace(" ", "")

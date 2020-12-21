@@ -22,7 +22,7 @@
         android:id="@+id/gradientViewer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="1"
+        android:visibility="invisible"
         android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,13 +33,12 @@
         android:id="@+id/notification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:background="@drawable/details_background"
         android:elevation="12dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toTopOf="parent">
 
         <ImageView
             android:id="@+id/notificationIcon"
@@ -179,7 +178,7 @@
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:layout_margin="12dp"
-                android:src="@drawable/icon_save"
+                android:src="@drawable/icon_download"
                 android:tint="?PrimaryTextColour" />
         </LinearLayout>
 
@@ -210,7 +209,7 @@
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:layout_margin="12dp"
-                android:src="@drawable/icon_wallpaper"
+                android:src="@drawable/icon_wallpaper_new"
                 android:tint="?PrimaryTextColour" />
         </LinearLayout>
 

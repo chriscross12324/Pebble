@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/backgroundDimmer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?ForegroundColour" />
+
+    <ImageView
+        android:id="@+id/drawCaller"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:alpha="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/blurView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/holder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/popupHolder"
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="?BackgroundColour"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/gradientPreview"
+                            android:layout_width="190dp"
+                            android:layout_height="190dp"
+                            android:background="@drawable/placeholder_colour"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="190dp"
+                            android:orientation="vertical"
+                            android:scrollbars="none"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/gradientPreview">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <LinearLayout
+                                    android:id="@+id/heightHolder"
+                                    android:layout_width="0dp"
+                                    android:layout_height="45dp"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:background="@drawable/background_gradient_screen_colour_text"
+                                    android:backgroundTint="?ForegroundColour"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
+
+                                    <EditText
+                                        android:id="@+id/heightText"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@android:color/transparent"
+                                        android:fontFamily="@font/googlesans_bold"
+                                        android:gravity="center"
+                                        android:hint="1920"
+                                        android:textColor="?PrimaryTextColour"
+                                        android:textColorHint="?SecondaryTextColour"
+                                        android:textSize="16sp" />
+
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/heightHint"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:fontFamily="@font/googlesans_medium"
+                                    android:text="Height"
+                                    android:textColor="?SecondaryTextColour"
+                                    android:textSize="11sp"
+                                    app:layout_constraintEnd_toEndOf="@+id/heightHolder"
+                                    app:layout_constraintStart_toStartOf="@+id/heightHolder"
+                                    app:layout_constraintTop_toBottomOf="@+id/heightHolder" />
+
+                                <LinearLayout
+                                    android:id="@+id/widthHolder"
+                                    android:layout_width="0dp"
+                                    android:layout_height="45dp"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:background="@drawable/background_gradient_screen_colour_text"
+                                    android:backgroundTint="?ForegroundColour"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/heightHint">
+
+                                    <EditText
+                                        android:id="@+id/widthText"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@android:color/transparent"
+                                        android:fontFamily="@font/googlesans_bold"
+                                        android:gravity="center"
+                                        android:hint="1080"
+                                        android:textColor="?PrimaryTextColour"
+                                        android:textColorHint="?SecondaryTextColour"
+                                        android:textSize="16sp" />
+
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/widthHint"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:fontFamily="@font/googlesans_medium"
+                                    android:text="Width"
+                                    android:textColor="?SecondaryTextColour"
+                                    android:textSize="11sp"
+                                    app:layout_constraintEnd_toEndOf="@+id/widthHolder"
+                                    app:layout_constraintStart_toStartOf="@+id/widthHolder"
+                                    app:layout_constraintTop_toBottomOf="@+id/widthHolder" />
+
+                                <LinearLayout
+                                    android:id="@+id/presetButton"
+                                    android:layout_width="0dp"
+                                    android:layout_height="45dp"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:background="@drawable/background_gradient_screen_colour_text"
+                                    android:backgroundTint="?ForegroundColour"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/widthHint">
+
+                                    <TextView
+                                        android:id="@+id/presetText"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@android:color/transparent"
+                                        android:fontFamily="@font/googlesans_bold"
+                                        android:gravity="center"
+                                        android:text="Use Screen Size"
+                                        android:textColor="?PrimaryTextColour"
+                                        android:textSize="16sp" />
+
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/presetHint"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:layout_marginBottom="16dp"
+                                    android:fontFamily="@font/googlesans_medium"
+                                    android:text="Preset"
+                                    android:textColor="?SecondaryTextColour"
+                                    android:textSize="11sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="@+id/presetButton"
+                                    app:layout_constraintStart_toStartOf="@+id/presetButton"
+                                    app:layout_constraintTop_toBottomOf="@+id/presetButton" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </ScrollView>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/saveGradientButton"
+                    android:layout_width="190dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/details_background"
+                    android:backgroundTint="?BackgroundColour"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/popupHolder">
+
+                    <ImageView
+                        android:id="@+id/buttonIcon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginStart="16dp"
+                        android:src="@drawable/icon_download"
+                        android:tint="?SecondaryTextColour"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/separator"
+                        android:layout_width="2.3dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="12dp"
+                        android:src="@drawable/details_background"
+                        android:tint="?ForegroundColour"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/buttonIcon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/buttonTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/googlesans_medium"
+                        android:text="Save"
+                        android:textColor="?PrimaryTextColour"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/separator"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </eightbitlab.com.blurview.BlurView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

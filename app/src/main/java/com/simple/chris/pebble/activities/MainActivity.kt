@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.activity_main.ssRecycler
 import kotlinx.android.synthetic.main.activity_main.ssTitle
 import kotlinx.android.synthetic.main.activity_main.wallpaperImageAlpha
 import kotlinx.android.synthetic.main.activity_main.wallpaperImageViewer
+import kotlinx.android.synthetic.main.module_browse_normal.view.*
 
 class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
     private lateinit var mInterstitialAd: InterstitialAd
@@ -43,7 +44,9 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
     var gradientViewSizeX = 0f
     var gradientViewSizeY = 0f
     var gradientViewPos = IntArray(2)
-    var secondaryFragPos = IntArray(2)
+    var secondaryFragScaleX = 0f
+    var secondaryFragScaleY = 0f
+    var secondaryFragPosX = 0f
 
     /**
      * gradientsDownload
@@ -200,84 +203,6 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
         }, 0)
     }
 
-    /*fun openGradientScreen(position: Int, view: View) {
-        startSecondary(gradientFragment)
-        passThroughVariables(position)
-        (gradientFragment as GradientFrag).passThroughVariables()
-        sharedElement(position, view)
-    }
-
-    fun startSec(fragment: Fragment, delay: Long, canAnim: Boolean, canBackStack: Boolean) {
-        if (Values.currentlySplitScreened) {
-            //
-            when (Values.currentActivity) {
-
-            }
-        } else {
-            if (Values.useSplitScreen && Calculations.pxToIn(this, window) >= 4) {
-                replaceFrag(fragment, delay, canAnim, canBackStack)
-                if (fragment == gradientFragment) {
-
-                }
-            }
-
-        }
-    }
-    fun startSecondary(fragment: Fragment) {
-        if (!Values.currentlySplitScreened) {
-            Toast.makeText(this, "Not Split Screened", Toast.LENGTH_SHORT).show()
-            //Not Split Screen Already
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentHolderSecondary, fragment)
-                    .commitAllowingStateLoss()
-            if (Values.useSplitScreen && Calculations.pxToIn(this, window) >= 4) {
-                openSplitScreen(true)
-            } else {
-                Toast.makeText(this, "Full", Toast.LENGTH_SHORT).show()
-                UIElements.viewWidthAnimator(fragmentHolderSecondary, fragmentHolderSecondary.width.toFloat(),
-                        Calculations.screenMeasure(this, "width", window).toFloat(), 0, 0, LinearInterpolator())
-                if (fragment == gradientFragment) {
-                    separator.post {
-                        UIElements.viewObjectAnimator(fragmentHolderSecondary, "translationX",
-                                -Calculations.screenMeasure(this, "width", window).toFloat() - separator.width, 0, 0, LinearInterpolator())
-                        (gradientFragment as GradientFrag).passThroughVariables()
-                    }
-                } else {
-                    Toast.makeText(this, "Not gradientFragment", Toast.LENGTH_SHORT).show()
-                    moveFragLeft(Calculations.screenMeasure(this, "width", window).toFloat(), fragmentHolder)
-                    moveFragLeft(Calculations.screenMeasure(this, "width", window).toFloat() + separator.width, fragmentHolderSecondary)
-                    shrinkFrag(fragmentHolder, 0.9f, 100, DecelerateInterpolator(3f))
-                    shrinkFrag(fragmentHolderSecondary, 0.9f, 100, DecelerateInterpolator(3f))
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        growFrag(fragmentHolder, 1f, 200, AccelerateInterpolator())
-                        growFrag(fragmentHolderSecondary, 1f, 200, AccelerateInterpolator())
-                    }, 100)
-                }
-            }
-        } else {
-            Toast.makeText(this, "Already Split Screened", Toast.LENGTH_SHORT).show()
-            //Fade Instead
-        }
-    }
-
-    fun openSplitScreen(animation: Boolean) {
-        val duration: Long = if (animation) 500 else 0
-        UIElements.viewWidthAnimator(fragmentHolderSecondary, fragmentHolderSecondary.width.toFloat(),
-                Calculations.screenMeasure(this, "width", window) / 2 - (separator.width / 2).toFloat(), 0, 0, LinearInterpolator())
-        UIElements.viewWidthAnimator(fragmentHolder, fragmentHolder.width.toFloat(),
-                (Calculations.screenMeasure(this, "width", window) / 2) - (separator.width / 2).toFloat(), duration, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(separator, "translationX",
-                -((Calculations.screenMeasure(this, "width", window) / 2) + (separator.width / 2)).toFloat(), duration, 0, DecelerateInterpolator(3f))
-        val secondaryPlacement = (Calculations.screenMeasure(this, "width", window) / 2) + (separator.width / 2).toFloat()
-        UIElements.viewObjectAnimator(fragmentHolderSecondary, "translationX", -secondaryPlacement, duration, 0, DecelerateInterpolator(3f))
-        Values.currentlySplitScreened = true
-    }
-
-    fun hideSharedElementHero() {
-        UIElements.viewWidthAnimator(gradientScreenAnimationHero, 0f, 0f, 0, 0, LinearInterpolator())
-        UIElements.viewHeightAnimator(gradientScreenAnimationHero, 0f, 0f, 0, 0, LinearInterpolator())
-    }
-
     fun closeSecondary() {
         if (Values.currentlySplitScreened) {
             Values.currentlySplitScreened = false
@@ -305,58 +230,6 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
         Values.currentActivity = "Browse"
     }
 
-    fun replaceFrag(fragment: Fragment, delay: Long, canAnim: Boolean, canBackStack: Boolean) {
-        Handler(Looper.getMainLooper()).postDelayed({
-            val manager = supportFragmentManager
-            val ft = manager.beginTransaction()
-            ft.replace(R.id.fragmentHolderSecondary, fragment)
-            ft.commitAllowingStateLoss()
-            if (canAnim) {
-                ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-            }
-            if (canBackStack) {
-                ft.addToBackStack(backStack)
-            }
-        }, delay)
-    }
-
-    fun sharedElement(position: Int, view: View) {
-        Handler(Looper.getMainLooper()).postDelayed({
-            gradientViewSizeX = view.gradient.width.toFloat()
-            gradientViewSizeY = view.gradient.height.toFloat()
-            view.gradient.getLocationOnScreen(gradientViewPos)
-            fragmentHolderSecondary.getLocationOnScreen(secondaryFragPos)
-            val gradientColours = Values.gradientList[position]["gradientColours"]!!.replace("[", "").replace("]", "")
-                    .split(",").map { it.trim() }
-            var posX: Float
-            var scaleX: Float
-            if (Values.useSplitScreen && Calculations.pxToIn(this, window) >= 4) {
-                posX = (Calculations.screenMeasure(this, "width", window) / 2) + (separator.width / 2).toFloat()
-                scaleX = Calculations.screenMeasure(this, "width", window) / 2 - (separator.width / 2).toFloat()
-            } else {
-                posX = 0f
-                scaleX = Calculations.screenMeasure(this, "width", window).toFloat()
-            }
-            UIElements.viewWidthAnimator(gradientScreenAnimationHero, 0f, gradientViewSizeX, 0, 0, LinearInterpolator())
-            UIElements.viewHeightAnimator(gradientScreenAnimationHero, 0f, gradientViewSizeY, 0, 0, LinearInterpolator())
-            UIElements.viewObjectAnimator(gradientScreenAnimationHero, "translationX", gradientViewPos[0].toFloat(), 0, 0, LinearInterpolator())
-            UIElements.viewObjectAnimator(gradientScreenAnimationHero, "translationY", gradientViewPos[1].toFloat(), 0, 0, LinearInterpolator())
-            UIElement.gradientDrawableNew(this, gradientScreenAnimationHero, ArrayList(gradientColours), 20f)
-            UIElements.viewObjectAnimator(gradientScreenAnimationHero, "translationX", posX, 710, 0, DecelerateInterpolator(3f))
-            UIElements.viewObjectAnimator(gradientScreenAnimationHero, "translationY", 0f, 710, 0, DecelerateInterpolator(3f))
-            UIElements.viewWidthAnimator(gradientScreenAnimationHero, gradientViewSizeX, scaleX, 710, 0, DecelerateInterpolator(3f))
-            UIElements.viewHeightAnimator(gradientScreenAnimationHero, gradientViewSizeY, fragmentHolderSecondary.height.toFloat(), 710, 0, DecelerateInterpolator(3f))
-        }, 10)
-    }
-
-    fun returnSearchFragment(): Fragment {
-        return searchFragment
-    }
-
-    fun returnGradientFragment(): Fragment {
-        return gradientFragment
-    }*/
-
     fun refreshTheme() {
         val fragment = supportFragmentManager.findFragmentById(R.id.fragmentHolder)
         (browseFragment as FragBrowse).gridToTop()
@@ -365,92 +238,6 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }, 500)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Toast.makeText(this, "Portrait: ${Values.currentActivity}", Toast.LENGTH_SHORT).show()
-            when (Values.currentActivity) {
-                "GradientScreen" -> {
-
-                }
-                "Search" -> {
-
-                }
-            }
-        } else {
-            Toast.makeText(this, "Landscape: ${Values.currentActivity}", Toast.LENGTH_SHORT).show()
-            when (Values.currentActivity) {
-                "GradientScreen" -> {
-
-                }
-                "Search" -> {
-
-                }
-            }
-        }
-        /*if (Values.currentlySplitScreened) {
-            Values.currentlySplitScreened = false
-            //Toast.makeText(this, "Yes currently", Toast.LENGTH_SHORT).show()
-            startSecondary(
-                    when (Values.currentActivity) {
-                        "Search" -> searchFragment
-                        "GradientScreen" -> gradientFragment
-                        else -> searchFragment
-                    }
-            )
-        } else {
-            //Toast.makeText(this, "No currently", Toast.LENGTH_SHORT).show()
-        }*/
-        when (Values.currentActivity) {
-            "GradientCreator" -> {
-                if (Values.justSubmitted) {
-                    gradientsDownloaded()
-                    Values.justSubmitted = false
-                }
-                growFrag(fragmentHolder, 1f, 500, DecelerateInterpolator(3f))
-                Values.currentActivity = "Browse"
-            }
-            "Browse" -> {
-                /*Toast.makeText(this, "Browse", Toast.LENGTH_SHORT).show()
-                closeSearch()*/
-            }
-            "Search" -> {
-                /*Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show()
-                startSearch()*/
-            }
-        }
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        Toast.makeText(this, "${Values.currentActivity}", Toast.LENGTH_SHORT).show()
-        when (newConfig.orientation) {
-            Configuration.ORIENTATION_PORTRAIT -> {
-                when (Values.currentActivity) {
-                    "GradientScreen" -> {
-                        Toast.makeText(this, "GradientScreen", Toast.LENGTH_SHORT).show()
-                    }
-                    "Search" -> {
-                        Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-            Configuration.ORIENTATION_LANDSCAPE -> {
-                when (Values.currentActivity) {
-                    "GradientScreen" -> {
-                        Toast.makeText(this, "GradientScreen", Toast.LENGTH_SHORT).show()
-                    }
-                    "Search" -> {
-                        Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-            else -> {
-
-            }
-        }
-        super.onConfigurationChanged(newConfig)
     }
 
     override fun onButtonClick(screenName: String, position: Int, view: View) {
@@ -496,8 +283,190 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
 
     }
 
-    fun sharedElement(position: Int, view: View) {
+    fun startGradientScreen(animateNew: Boolean) {
+        if (!Values.currentlySplitScreened) {
+            if (Calculations.splitScreenPossible(this, window)) {
+                openSplitScreen(true)
+            } else {
+                openFullScreen(false)
+            }
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentHolderSecondary, gradientFragment)
+                    .commitAllowingStateLoss()
+            (gradientFragment as FragGradientScreen).startSplitScreen()
+        } else {
+            if (animateNew) {
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentHolderSecondary, gradientFragment)
+                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                        .commitAllowingStateLoss()
+                (gradientFragment as FragGradientScreen).startSplitScreen()
+            } else {
+                (gradientFragment as FragGradientScreen).continueSplitScreen()
+            }
+        }
+    }
 
+    fun sharedElement(position: Int, view: View) {
+        if (Values.currentGradientScreenPos == position) {
+            Vibration.notification(this)
+            shrinkFrag(fragmentHolderSecondary, 0.95f, 150, AccelerateDecelerateInterpolator())
+            Handler(Looper.getMainLooper()).postDelayed({
+                growFrag(fragmentHolderSecondary, 1f, 150, AccelerateDecelerateInterpolator())
+                Handler(Looper.getMainLooper()).postDelayed({
+                    Values.canDismissSharedElement = true
+                    Values.animatingSharedElement = false
+                }, 300)
+            }, 150)
+        } else {
+            Values.currentGradientScreenPos = position
+            /** Get scale/position of clicked Gradient **/
+            gradientViewSizeX = view.gradient.width.toFloat()
+            gradientViewSizeY = view.gradient.height.toFloat()
+            view.gradient.getLocationOnScreen(gradientViewPos)
+
+            /** Get scale/position of secondFrag **/
+            if (Values.settingSplitScreen && Calculations.pxToIn(this, window) >= 4) {
+                secondaryFragPosX = (Calculations.screenMeasure(this, "width", window) / 2) + (separator.width / 2).toFloat()
+                secondaryFragScaleX = (Calculations.screenMeasure(this, "width", window) / 2) - (separator.width / 2).toFloat()
+                secondaryFragScaleY = Calculations.screenMeasure(this, "height", window).toFloat()
+            } else {
+                secondaryFragPosX = 0f
+                secondaryFragScaleX = Calculations.screenMeasure(this, "width", window).toFloat()
+                secondaryFragScaleY = Calculations.screenMeasure(this, "height", window).toFloat()
+            }
+
+            /** Set values for FragGradientScreen in Values.kt **/
+            Values.gradientScreenName = Values.gradientList[position]["gradientName"] as String
+            Values.gradientScreenDesc = Values.gradientList[position]["gradientDescription"] as String
+            Values.gradientScreenColours = ArrayList(Values.gradientList[position]["gradientColours"]!!.replace("[", "").replace("]", "")
+                    .split(",").map { it.trim() })
+            startGradientScreen(false)
+
+            /** Set initial properties of SharedElement **/
+            UIElements.viewVisibility(gradientScreenAnimationHero, View.VISIBLE, 0)
+            UIElements.cardViewCornerRadiusAnimator(gradientScreenAnimationHero, Calculations.convertToDP(this, 20f), 0, 0, LinearInterpolator())
+            UIElements.viewWidthAnimator(gradientScreenAnimationHero, 0f, gradientViewSizeX, 0, 0, LinearInterpolator())
+            UIElements.viewHeightAnimator(gradientScreenAnimationHero, 0f, gradientViewSizeY, 0, 0, LinearInterpolator())
+            UIElements.viewObjectAnimator(gradientScreenAnimationHero, "translationX", gradientViewPos[0].toFloat(), 0, 0, LinearInterpolator())
+            UIElements.viewObjectAnimator(gradientScreenAnimationHero, "translationY", gradientViewPos[1].toFloat(), 0, 0, LinearInterpolator())
+            UIElement.gradientDrawableNew(this, sharedElementGradientViewer, Values.gradientScreenColours, 0f)
+
+            /** Animate SharedElement **/
+            UIElements.viewWidthAnimator(gradientScreenAnimationHero, gradientViewSizeX, secondaryFragScaleX, Values.sharedElementLength, 0, DecelerateInterpolator(3f))
+            UIElements.viewHeightAnimator(gradientScreenAnimationHero, gradientViewSizeY, secondaryFragScaleY, Values.sharedElementLength, 0, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(gradientScreenAnimationHero, "translationX", secondaryFragPosX, Values.sharedElementLength, 0, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(gradientScreenAnimationHero, "translationY", 0f, Values.sharedElementLength, 0, DecelerateInterpolator(3f))
+            UIElements.cardViewCornerRadiusAnimator(gradientScreenAnimationHero, 0f, Values.sharedElementLength - 100, 0, LinearInterpolator())
+
+            /** Tells app sharedElement can be dismissed **/
+            Handler(Looper.getMainLooper()).postDelayed({
+                Values.canDismissSharedElement = true
+            }, Values.sharedElementLength)
+        }
+    }
+
+    fun endSharedElement() {
+        /** Called from FragGradientScreen.kt; hides sharedElement **/
+        UIElements.viewVisibility(gradientScreenAnimationHero, View.GONE, 0)
+        (gradientFragment as FragGradientScreen).showUI()
+    }
+
+    fun openSplitScreen(animation: Boolean) {
+        separator.post {
+            val duration: Long = if (animation) 500 else 0
+            UIElements.viewWidthAnimator(fragmentHolderSecondary, fragmentHolderSecondary.width.toFloat(),
+                    Calculations.screenMeasure(this, "width", window) / 2 - (separator.width / 2).toFloat(), 0, 0, LinearInterpolator())
+            UIElements.viewWidthAnimator(fragmentHolder, fragmentHolder.width.toFloat(),
+                    (Calculations.screenMeasure(this, "width", window) / 2) - (separator.width / 2).toFloat(), duration, 0, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(separator, "translationX",
+                    -((Calculations.screenMeasure(this, "width", window) / 2) + (separator.width / 2)).toFloat(), duration, 0, DecelerateInterpolator(3f))
+            val secondaryPlacement = (Calculations.screenMeasure(this, "width", window) / 2) + (separator.width / 2).toFloat()
+            UIElements.viewObjectAnimator(fragmentHolderSecondary, "translationX", -secondaryPlacement, duration, 0, DecelerateInterpolator(3f))
+            Values.currentlySplitScreened = true
+        }
+    }
+
+    fun openFullScreen(animation: Boolean) {
+        separator.post {
+            if (animation) {
+
+            } else {
+                shrinkFrag(fragmentHolder, 0.9f, 200, DecelerateInterpolator(3f))
+                UIElements.viewWidthAnimator(fragmentHolderSecondary, fragmentHolderSecondary.width.toFloat(),
+                        Calculations.screenMeasure(this, "width", window).toFloat(), 0, 0, LinearInterpolator())
+                UIElements.viewObjectAnimator(fragmentHolderSecondary, "translationX",
+                        -(Calculations.screenMeasure(this, "width", window) + separator.width).toFloat(), 0, 0, LinearInterpolator())
+            }
+        }
+    }
+
+    fun hideFullScreen(animation: Boolean) {
+        Values.animatingSharedElement = true
+        if (animation) {
+            Toast.makeText(this, "Hide Search", Toast.LENGTH_SHORT).show()
+        } else {
+            //Gradient Screen
+            if (!Calculations.splitScreenPossible(this, window)) {
+                //Shared Element
+                /** Get scale/position of clicked Gradient **/
+                gradientViewSizeX = Values.currentGradientScreenView.gradient.width.toFloat()
+                gradientViewSizeY = Values.currentGradientScreenView.gradient.height.toFloat()
+                Values.currentGradientScreenView.gradient.getLocationOnScreen(gradientViewPos)
+
+                /** Get scale/position of secondFrag **/
+                if (Values.settingSplitScreen && Calculations.pxToIn(this, window) >= 4) {
+                    secondaryFragPosX = (Calculations.screenMeasure(this, "width", window) / 2) + (separator.width / 2).toFloat()
+                    secondaryFragScaleX = (Calculations.screenMeasure(this, "width", window) / 2) - (separator.width / 2).toFloat()
+                    secondaryFragScaleY = Calculations.screenMeasure(this, "height", window).toFloat()
+                } else {
+                    secondaryFragPosX = 0f
+                    secondaryFragScaleX = Calculations.screenMeasure(this, "width", window).toFloat()
+                    secondaryFragScaleY = Calculations.screenMeasure(this, "height", window).toFloat()
+                }
+
+                /** Set initial properties of SharedElement **/
+                UIElement.gradientDrawableNew(this, sharedElementGradientViewer, Values.gradientScreenColours, 0f)
+                UIElements.cardViewCornerRadiusAnimator(gradientScreenAnimationHero, 0f, 0, 0, LinearInterpolator())
+                UIElements.viewWidthAnimator(gradientScreenAnimationHero, 0f, secondaryFragScaleX, 0, 0, LinearInterpolator())
+                UIElements.viewHeightAnimator(gradientScreenAnimationHero, 0f, secondaryFragScaleY, 0, 0, LinearInterpolator())
+                UIElements.viewObjectAnimator(gradientScreenAnimationHero, "translationX", secondaryFragPosX, 0, 0, LinearInterpolator())
+                UIElements.viewVisibility(gradientScreenAnimationHero, View.VISIBLE, 0)
+                shrinkFrag(fragmentHolder, 0.9f, 0, LinearInterpolator())
+
+                UIElements.viewObjectAnimator(fragmentHolderSecondary, "translationX",
+                        0f, 0, 0, LinearInterpolator())
+
+                /** Animate SharedElement **/
+                UIElements.viewObjectAnimator(gradientScreenAnimationHero, "scaleX", 0.3f, 500, 0, DecelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(gradientScreenAnimationHero, "scaleY", 0.3f, 500, 0, DecelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(gradientScreenAnimationHero, "alpha", 0f, 300, 0, DecelerateInterpolator(3f))
+                UIElements.cardViewCornerRadiusAnimator(gradientScreenAnimationHero, Calculations.convertToDP(this, 20f), 600, 0, LinearInterpolator())
+                growFrag(fragmentHolder, 1f, 400, DecelerateInterpolator(3f))
+
+                /** Tells app sharedElement can be dismissed **/
+                Handler(Looper.getMainLooper()).postDelayed({
+                    UIElements.viewObjectAnimator(gradientScreenAnimationHero, "scaleX", 1f, 0, 0, LinearInterpolator())
+                    UIElements.viewObjectAnimator(gradientScreenAnimationHero, "scaleY", 1f, 0, 0, LinearInterpolator())
+                    UIElements.viewVisibility(gradientScreenAnimationHero, View.GONE, 0)
+                    UIElements.viewObjectAnimator(gradientScreenAnimationHero, "alpha", 1f, 0, 0, LinearInterpolator())
+                    Values.canDismissSharedElement = true
+                    Values.animatingSharedElement = false
+                }, 600)
+            } else {
+                /** RUNS IF EXITING SPLITSCREEN **/
+                UIElements.viewWidthAnimator(fragmentHolder, fragmentHolder.width.toFloat(),
+                        Calculations.screenMeasure(this, "width", window).toFloat(), 500, 0, DecelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(separator, "translationX", 0f, 500, 0, DecelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(fragmentHolderSecondary, "translationX", 0f, 500, 0, DecelerateInterpolator(3f))
+
+                /** Tells app it can reopen SplitScreen **/
+                Handler(Looper.getMainLooper()).postDelayed({
+                    Values.canDismissSharedElement = true
+                    Values.animatingSharedElement = false
+                }, 500)
+            }
+        }
     }
 
     override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
@@ -557,11 +526,11 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
                 when (position) {
                     0 -> {
                         //On
-                        Values.useSplitScreen = true
+                        Values.settingSplitScreen = true
                     }
                     1 -> {
                         //Off
-                        Values.useSplitScreen = false
+                        Values.settingSplitScreen = false
                     }
                 }
                 UIElement.popupDialogHider()
@@ -705,5 +674,34 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
 
     fun errorPopup() {
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Values.currentlySplitScreened = false
+            when (Values.currentActivity) {
+                "GradientScreen" -> {
+                    startGradientScreen(false)
+                }
+                "Search" -> {
+
+                }
+            }
+        } else {
+            Values.currentlySplitScreened = false
+            when (Values.currentActivity) {
+                "GradientScreen" -> {
+                    startGradientScreen(false)
+                }
+                "Search" -> {
+
+                }
+            }
+        }
+
+        if (Values.currentActivity == "GradientCreator") {
+            growFrag(fragmentHolder, 1f, 500, DecelerateInterpolator(3f))
+        }
     }
 }

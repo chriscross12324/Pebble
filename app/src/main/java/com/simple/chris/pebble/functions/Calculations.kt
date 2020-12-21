@@ -56,6 +56,10 @@ object Calculations {
         return 0
     }
 
+    fun splitScreenPossible(context: Context, window: Window): Boolean {
+        return Values.settingSplitScreen && pxToIn(context, window) >= 4
+    }
+
     fun pxToIn(context: Context, window: Window): Float {
         val displayMetrics = DisplayMetrics()
         window.windowManager.defaultDisplay.getMetrics(displayMetrics)

@@ -1,6 +1,7 @@
 package com.simple.chris.pebble.functions
 
 import android.content.Context
+import android.view.View
 
 /**
  * Stores all essential values, can be referenced and changed from Activities
@@ -11,10 +12,13 @@ object Values {
     var adMobInitialized = false
 
     //Vibrations
-    val notificationPattern = longArrayOf(0, 5, 5, 5)
+    val notificationPattern = longArrayOf(0, 25, 80, 40)
     val weakVibration = longArrayOf(0, 1)
     val mediumVibration = longArrayOf(0, 7)
     val strongVibration = longArrayOf(0, 20)
+
+    //Animations
+    const val sharedElementLength: Long = 500
 
     //Hidden Values
     var firstStart = true
@@ -32,15 +36,20 @@ object Values {
     var connectionOffline = false
     var screenHeight = 0
     var currentlySplitScreened = false
+    var animatingSharedElement = false
+    var canDismissSharedElement = true
+    var browseRecyclerScrollPos = -1
 
     //Gradient Details
     var gradientScreenName = ""
     var gradientScreenDesc = ""
     lateinit var gradientScreenColours: ArrayList<String>
+    var currentGradientScreenPos = -1
+    lateinit var currentGradientScreenView: View
 
     //Settings
     var useMobileData: String = "ask"
-    var useSplitScreen = true
+    var settingSplitScreen = true
     var settingThemes = "dark"
     var settingVibrations = true
     var settingsSpecialEffects = true

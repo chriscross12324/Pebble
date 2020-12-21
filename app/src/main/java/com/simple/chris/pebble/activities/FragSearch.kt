@@ -127,7 +127,7 @@ class FragSearch : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
     private fun searchByColourInitializer() {
         searchColourRecycler.setHasFixedSize(true)
         val buttonLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        val buttonAdapter = SearchColourRecyclerView(context, HashMaps.searchByColourButtons(), this)
+        val buttonAdapter = SearchColourRecyclerView(context, HashMaps.searchByColourButtons(), null, this)
 
         searchColourRecycler.layoutManager = buttonLayoutManager
         searchColourRecycler.adapter = buttonAdapter

@@ -6,14 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
-    <View
+    <androidx.cardview.widget.CardView
         android:id="@+id/gradientScreenAnimationHero"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:elevation="20dp"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/placeholder_gradient"/>
+        app:layout_constraintTop_toTopOf="parent">
+
+        <View
+            android:id="@+id/sharedElementGradientViewer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/placeholder_gradient" />
+
+    </androidx.cardview.widget.CardView>
+
 
     <com.jgabrielfreitas.core.BlurImageView
         android:id="@+id/wallpaperImageViewer"
@@ -32,10 +43,10 @@
         android:layout_width="150dp"
         android:layout_height="170dp"
         android:orientation="horizontal"
+        android:transitionName="gradientCreatorViewer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        android:transitionName="gradientCreatorViewer">
+        app:layout_constraintTop_toBottomOf="parent">
 
     </LinearLayout>
 
@@ -78,6 +89,8 @@
         android:name="com.simple.chris.pebble.activities.SearchFrag"
         android:layout_width="100dp"
         android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
         app:cardBackgroundColor="#00000000"
         app:cardCornerRadius="0dp"
         app:cardElevation="0dp"
@@ -187,13 +200,13 @@
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="32dp"
                 android:clipToPadding="false"
+                android:foregroundGravity="center"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ssDescription"
-                android:foregroundGravity="center"/>
+                app:layout_constraintTop_toBottomOf="@+id/ssDescription" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 

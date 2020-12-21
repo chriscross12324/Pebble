@@ -35,6 +35,7 @@ object RecyclerGrid {
         try {
             val gridLayoutManager = GridLayoutManager(context, 2)
             val gridLayoutAdapter = GradientRecyclerView(context, gradientJSON, onGradientListener, onGradientLongClickListener)
+            gridLayoutAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
             view.setHasFixedSize(true)
             view.layoutManager = gridLayoutManager
             view.adapter = gridLayoutAdapter
@@ -95,6 +96,7 @@ object RecyclerGrid {
         val gradientView = gradientPopup.gradientPreview as ImageView
         val gradientName = gradientPopup.gradientDialogGradientName as TextView
         val gradientDescription = gradientPopup.gradientDialogGradientDescription as TextView
+        val drawCaller = gradientPopup.drawCaller as ImageView
 
         val gradientInfo = gradientJSON[position]
         try {
@@ -116,6 +118,7 @@ object RecyclerGrid {
             UIElements.viewObjectAnimator(dialogMain, "scaleX", 1f, 350, 100, OvershootInterpolator())
             UIElements.viewObjectAnimator(dialogMain, "scaleY", 1f, 350, 100, OvershootInterpolator())
             UIElements.viewObjectAnimator(dialogMain, "alpha", 1f, 100, 100, LinearInterpolator())
+            UIElements.viewObjectAnimator(drawCaller, "scaleY", 2f, 60000, 0, LinearInterpolator())
         }
 
         /** Create blurView **/
@@ -128,7 +131,7 @@ object RecyclerGrid {
                         .setFrameClearDrawable(windowBackground)
                         .setBlurAlgorithm(RenderScriptBlur(context))
                         .setBlurRadius(20f)
-                        .setHasFixedTransformationMatrix(true)
+                        .setHasFixedTransformationMatrix(false)
                         .setBlurAutoUpdate(true)
                         .setOverlayColor(Color.parseColor("#33000000"))
             } catch (e: Exception) {

@@ -94,7 +94,7 @@
     <string name="question_go_online">Pebble is currently in offline mode, want to go online?</string>
     <string name="question_leave">Would you like to leave Pebble?</string>
     <string name="question_mobile_data">Would you like to use Mobile Data? Overage fees may apply…</string>
-    <string name="question_outdated_android">Your Android version is outdated and isn’t fully supported, set both Home &amp; Lock screen?</string>
+    <string name="question_outdated_android">Your device is running outdated software, apply wallpaper to <b>Home</b> &amp; <b>Lock</b> screen?</string>
     <string name="question_save_gradient">Would you like to save this gradient to your device?</string>
     <string name="question_set_wallpaper">Where do you want to apply this gradient?</string>
     <string name="question_setting_effects">Would you like to enable <b>Special Effects</b>?</string>
@@ -115,7 +115,7 @@
     <string name="sentence_dont_ask_again">Don\'t ask again</string>
     <string name="sentence_email_not_required">Providing an email is not required, it just helps us get in contact with you if we need anymore information.</string>
     <string name="sentence_enter_text_below">Enter text below</string>
-    <string name="sentence_enjoy_your_wallpaper">Enjoy your new wallpaper!</string>
+    <string name="sentence_enjoy_your_wallpaper">Enjoy your\nnew wallpaper!</string>
     <string name="sentence_feedback_missing_info">It looks like you\'re missing some required information, please make sure you filled out your name and included some feedback.</string>
     <string name="sentence_feedback_received">Your feedback has been received, we\'ll try to review it shortly.</string>
     <string name="sentence_feedback_submit_failed">The server took to long to respond, try submitting again.</string>

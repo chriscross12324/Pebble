@@ -206,9 +206,10 @@ object UIElement {
         val dialogRecycler = popupDialog.popupButtonRecycler
         val backgroundDimmer = popupDialog.backgroundDimmer
 
-        if (popupName.contains("setting")) {
+        if (popupName.contains("setting") && context.toString().contains("MainActivity")) {
             backgroundDimmer.setOnClickListener {
                 popupDialogHider()
+                Log.e("INFO", "$context")
             }
         }
 
@@ -372,7 +373,7 @@ object UIElement {
         }
     }
 
-    private fun showPopupQueueManager(dialog: Dialog) {
+    fun showPopupQueueManager(dialog: Dialog) {
         try {
             if (dialogsToShow.isEmpty()) {
                 dialog.show()

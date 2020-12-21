@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/backgroundDimmer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000" />
+
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/blurView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/popupHolder"
+                android:layout_width="wrap_content"
+                android:layout_height="190dp"
+                android:alpha="0"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                app:cardBackgroundColor="?BackgroundColour"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/colourPreview"
+                        android:layout_width="190dp"
+                        android:layout_height="190dp"
+                        android:background="@drawable/placeholder_colour"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ScrollView
+                        android:layout_width="190dp"
+                        android:layout_height="190dp"
+                        android:orientation="vertical"
+                        android:scrollbars="none"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/colourPreview"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:id="@+id/hexHolder"
+                                android:layout_width="0dp"
+                                android:layout_height="45dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginEnd="8dp"
+                                android:background="@drawable/background_gradient_screen_colour_text"
+                                android:backgroundTint="?ForegroundColour"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <TextView
+                                    android:id="@+id/hexText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:fontFamily="@font/googlesans_bold"
+                                    android:gravity="center"
+                                    android:text="#D03D74"
+                                    android:textColor="?PrimaryTextColour"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/hexHint"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:fontFamily="@font/googlesans_medium"
+                                android:text="HEX"
+                                android:textColor="?SecondaryTextColour"
+                                android:textSize="11sp"
+                                app:layout_constraintEnd_toEndOf="@+id/hexHolder"
+                                app:layout_constraintStart_toStartOf="@+id/hexHolder"
+                                app:layout_constraintTop_toBottomOf="@+id/hexHolder" />
+
+                            <LinearLayout
+                                android:id="@+id/rbgHolder"
+                                android:layout_width="0dp"
+                                android:layout_height="45dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginBottom="32dp"
+                                android:orientation="horizontal"
+                                android:weightSum="3"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/hexHint">
+
+                                <LinearLayout
+                                    android:id="@+id/rHolder"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginEnd="4dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/background_gradient_screen_colour_text"
+                                    android:backgroundTint="?ForegroundColour">
+
+                                    <TextView
+                                        android:id="@+id/rText"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/googlesans_bold"
+                                        android:gravity="center"
+                                        android:text="208"
+                                        android:textColor="?PrimaryTextColour"
+                                        android:textSize="14sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/gHolder"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/background_gradient_screen_colour_text"
+                                    android:backgroundTint="?ForegroundColour">
+
+                                    <TextView
+                                        android:id="@+id/gText"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/googlesans_bold"
+                                        android:gravity="center"
+                                        android:text="61"
+                                        android:textColor="?PrimaryTextColour"
+                                        android:textSize="14sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/bHolder"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/background_gradient_screen_colour_text"
+                                    android:backgroundTint="?ForegroundColour">
+
+                                    <TextView
+                                        android:id="@+id/bText"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/googlesans_bold"
+                                        android:gravity="center"
+                                        android:text="116"
+                                        android:textColor="?PrimaryTextColour"
+                                        android:textSize="14sp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/rgbHintHolder"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginBottom="16dp"
+                                android:orientation="horizontal"
+                                android:weightSum="3"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/rbgHolder">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginEnd="4dp"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/googlesans_bold"
+                                        android:gravity="center"
+                                        android:text="R"
+                                        android:textColor="?SecondaryTextColour"
+                                        android:textSize="11sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/googlesans_bold"
+                                        android:gravity="center"
+                                        android:text="G"
+                                        android:textColor="?SecondaryTextColour"
+                                        android:textSize="11sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/googlesans_bold"
+                                        android:gravity="center"
+                                        android:text="B"
+                                        android:textColor="?SecondaryTextColour"
+                                        android:textSize="11sp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/hsvHolder"
+                                android:layout_width="0dp"
+                                android:layout_height="45dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginBottom="32dp"
+                                android:orientation="horizontal"
+                                android:weightSum="3"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/rgbHintHolder">
+
+                                <LinearLayout
+                                    android:id="@+id/hHolder"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginEnd="4dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/background_gradient_screen_colour_text"
+                                    android:backgroundTint="?ForegroundColour">
+
+                                    <TextView
+                                        android:id="@+id/hText"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/googlesans_bold"
+                                        android:gravity="center"
+                                        android:text="208"
+                                        android:textColor="?PrimaryTextColour"
+                                        android:textSize="14sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/sHolder"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/background_gradient_screen_colour_text"
+                                    android:backgroundTint="?ForegroundColour">
+
+                                    <TextView
+                                        android:id="@+id/sText"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/googlesans_bold"
+                                        android:gravity="center"
+                                        android:text="61"
+                                        android:textColor="?PrimaryTextColour"
+                                        android:textSize="14sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/vHolder"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/background_gradient_screen_colour_text"
+                                    android:backgroundTint="?ForegroundColour">
+
+                                    <TextView
+                                        android:id="@+id/vText"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/googlesans_bold"
+                                        android:gravity="center"
+                                        android:text="116"
+                                        android:textColor="?PrimaryTextColour"
+                                        android:textSize="14sp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/hsvHintHolder"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginBottom="16dp"
+                                android:orientation="horizontal"
+                                android:weightSum="3"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/hsvHolder">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginEnd="4dp"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/googlesans_bold"
+                                        android:gravity="center"
+                                        android:text="H"
+                                        android:textColor="?SecondaryTextColour"
+                                        android:textSize="11sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/googlesans_bold"
+                                        android:gravity="center"
+                                        android:text="S"
+                                        android:textColor="?SecondaryTextColour"
+                                        android:textSize="11sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:fontFamily="@font/googlesans_bold"
+                                        android:gravity="center"
+                                        android:text="V"
+                                        android:textColor="?SecondaryTextColour"
+                                        android:textSize="11sp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </ScrollView>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </eightbitlab.com.blurview.BlurView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

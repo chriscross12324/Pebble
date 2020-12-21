@@ -12,7 +12,8 @@ import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.UIElement
 import kotlinx.android.synthetic.main.button_search_colour.view.*
 
-class SearchColourRecyclerView internal constructor(var context: Context, private val buttons: ArrayList<HashMap<String, String>>, onButtonListener: OnButtonListener): RecyclerView.Adapter<SearchColourRecyclerView.ViewHolder>() {
+class SearchColourRecyclerView internal constructor(var context: Context, private val buttons: ArrayList<HashMap<String, String>>?, private val buttonsArray: ArrayList<String>?,
+                                                    onButtonListener: OnButtonListener): RecyclerView.Adapter<SearchColourRecyclerView.ViewHolder>() {
     private var mOnButtonListener = onButtonListener
     private var layoutInflater = LayoutInflater.from(context)
 
@@ -24,13 +25,25 @@ class SearchColourRecyclerView internal constructor(var context: Context, privat
     }
 
     override fun getItemCount(): Int {
-        return buttons.size
+        if (buttons != null) {
+
+        } else if (buttonsArray != null) {
+            return buttonsArray.size
+        }
+        return 0
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
-            val details: HashMap<String, String> = buttons[position]
-            UIElement.gradientDrawable(context, holder.buttonBackground, Color.parseColor(details["buttonColour"]), Color.parseColor(details["buttonColour"]), 20f)
+            if (buttons != null) {
+                val details: HashMap<String, String> = buttons[position]
+                //Log.e("COLOUR", "${details["buttonColour"]}")
+                UIElement.gradientDrawable(context, holder.buttonBackground, Color.parseColor(details["buttonColour"]), Color.parseColor(details["buttonColour"]), 20f)
+            } else if (buttonsArray != null) {
+                val details: String = buttonsArray[position]
+                UIElement.gradientDrawable(context, holder.buttonBackground, Color.parseColor(details), Color.parseColor(details), 20f)
+            }
+
         } catch (e: Exception) {
             Log.e("ERR", "pebble.search_colour_recycler_view.on_bind_view_holder: ${e.localizedMessage}")
         }
@@ -46,7 +59,12 @@ class SearchColourRecyclerView internal constructor(var context: Context, privat
         }
 
         override fun onClick(v: View?) {
-            myOnButtonListener.onButtonClick(adapterPosition, v as View, buttons[adapterPosition]["buttonColour"] as String)
+            if (buttons != null) {
+                myOnButtonListener.onButtonClick(adapterPosition, v as View, buttons[adapterPosition]["buttonColour"] as String)
+            } else if (buttonsArray != null) {
+                myOnButtonListener.onButtonClick(adapterPosition, v as View, buttonsArray[adapterPosition])
+            }
+
         }
     }
 
