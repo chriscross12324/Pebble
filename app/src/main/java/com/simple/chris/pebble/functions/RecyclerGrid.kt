@@ -133,13 +133,13 @@ object RecyclerGrid {
                         .setBlurRadius(20f)
                         .setHasFixedTransformationMatrix(false)
                         .setBlurAutoUpdate(true)
-                        .setOverlayColor(Color.parseColor("#33000000"))
+                        .setOverlayColor(Color.parseColor(Values.dialogBackgroundTint))
             } catch (e: Exception) {
                 Log.e("ERR", "pebble.recycler_grid.gradient_grid_on_long_click_listener: ${e.localizedMessage}")
             }
         } else {
             val backgroundDimmer = gradientPopup.backgroundDimmer
-            backgroundDimmer.alpha = 0.75f
+            backgroundDimmer.alpha = Values.dialogBackgroundDimmer
         }
 
         gradientPopup.blurView.setOnClickListener {

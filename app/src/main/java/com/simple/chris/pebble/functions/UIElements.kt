@@ -25,19 +25,14 @@ import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.jgabrielfreitas.core.BlurImageView
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.functions.Calculations.convertToDP
 import eightbitlab.com.blurview.RenderScriptBlur
-import kotlinx.android.synthetic.main.dialog_gradient_screen_save.*
-import kotlinx.android.synthetic.main.dialog_gradients_screen_colour.*
-import kotlinx.android.synthetic.main.dialog_gradients_screen_colour.popupHolder
+import kotlinx.android.synthetic.main.dialog_save_gradient.*
 import kotlinx.android.synthetic.main.dialog_popup.backgroundDimmer
 import kotlinx.android.synthetic.main.dialog_popup.blurView
 import kotlin.math.roundToInt
@@ -172,102 +167,12 @@ object UIElements {
         return normalBitmap
     }
 
-    fun colourDialog(context: Context, hexString: String, decorView: View?) {
-
-        /** Creates popupDialog **/
-        val colourDialog = Dialog(context, R.style.dialogStyle)
-        colourDialog.setCancelable(false)
-        colourDialog.setContentView(R.layout.dialog_gradients_screen_colour)
-
-        val dialogWindow: Window = colourDialog.window!!
-        dialogWindow.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
-        dialogWindow.setDimAmount(0.1f)
-        dialogWindow.setGravity(Gravity.CENTER)
-
-        /** Calculate RGB & HSV values **/
-        val r = Integer.valueOf(hexString.substring(1, 3), 16)
-        val g = Integer.valueOf(hexString.substring(3, 5), 16)
-        val b = Integer.valueOf(hexString.substring(5, 7), 16)
-        val hsv = floatArrayOf(0f, 1f, 1f)
-        Color.colorToHSV(Color.parseColor(hexString), hsv)
-        val h = hsv[0].toInt()
-        val s = (hsv[1] * 100).toInt()
-        val v = (hsv[2] * 100).toInt()
-
-        /** Set popupDialog layout **/
-        val dialogMain = colourDialog.popupHolder
-        val colourPreview = colourDialog.colourPreview
-        val hexText = colourDialog.hexText
-        val rText = colourDialog.rText
-        val gText = colourDialog.gText
-        val bText = colourDialog.bText
-        val hText = colourDialog.hText
-        val sText = colourDialog.sText
-        val vText = colourDialog.vText
-        val backgroundDimmer = colourDialog.backgroundDimmer
-
-        colourPreview.setImageDrawable(colourDrawable(context, hexString, 20f))
-        hexText.text = hexString
-        rText.text = r.toString()
-        gText.text = g.toString()
-        bText.text = b.toString()
-        hText.text = h.toString()
-        sText.text = s.toString()
-        vText.text = v.toString()
-
-
-        colourDialog.show()
-
-        /** Animate popupLayout in **/
-        dialogMain.post {
-            viewObjectAnimator(dialogMain, "scaleX", 1f, 350, 100, OvershootInterpolator())
-            viewObjectAnimator(dialogMain, "scaleY", 1f, 350, 100, OvershootInterpolator())
-            viewObjectAnimator(dialogMain, "alpha", 1f, 150, 100, LinearInterpolator())
-        }
-
-        /** Dismisses Dialog **/
-        backgroundDimmer.setOnClickListener {
-            try {
-                viewObjectAnimator(dialogMain, "scaleX", 0.6f, 350, 0, AccelerateInterpolator(3f))
-                viewObjectAnimator(dialogMain, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
-                viewObjectAnimator(dialogMain, "alpha", 0f, 150, 200, LinearInterpolator())
-                Handler(Looper.getMainLooper()).postDelayed({
-                    colourDialog.dismiss()
-                }, 450)
-            } catch (e: Exception) {
-                Log.e("ERR", "pebble.ui_elements.colour_dialog: ${e.localizedMessage}")
-            }
-        }
-
-        /** Create blurView **/
-        if (decorView != null && Values.settingsSpecialEffects) {
-            try {
-                val rootView = decorView.findViewById<ViewGroup>(android.R.id.content)
-                val windowBackground = decorView.background
-
-                colourDialog.blurView.setupWith(rootView)
-                        .setFrameClearDrawable(windowBackground)
-                        .setBlurAlgorithm(RenderScriptBlur(context))
-                        .setBlurRadius(20f)
-                        .setHasFixedTransformationMatrix(true)
-                        .setOverlayColor(Color.parseColor("#33000000"))
-            } catch (e: Exception) {
-                Log.e("ERR", "pebble.ui_elements.popup_dialog: ${e.localizedMessage}")
-            }
-            val backgroundDimmer = colourDialog.backgroundDimmer
-            backgroundDimmer.alpha = 0.75f
-        } else {
-            val backgroundDimmer = colourDialog.backgroundDimmer
-            backgroundDimmer.alpha = 0.75f
-        }
-    }
-
     fun saveGradientDialog(context: Context, colourArray: ArrayList<String>, window: Window) {
 
         /** Creates popupDialog **/
         val saveGradientDialog = Dialog(context, R.style.dialogStyle)
         saveGradientDialog.setCancelable(false)
-        saveGradientDialog.setContentView(R.layout.dialog_gradient_screen_save)
+        saveGradientDialog.setContentView(R.layout.dialog_save_gradient)
 
         val dialogWindow: Window = saveGradientDialog.window!!
         dialogWindow.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
@@ -331,15 +236,15 @@ object UIElements {
                         .setBlurAlgorithm(RenderScriptBlur(context))
                         .setBlurRadius(20f)
                         .setHasFixedTransformationMatrix(true)
-                        .setOverlayColor(Color.parseColor("#33000000"))
+                        .setOverlayColor(Color.parseColor(Values.dialogBackgroundTint))
             } catch (e: Exception) {
                 Log.e("ERR", "pebble.ui_elements.popup_dialog: ${e.localizedMessage}")
             }
             val backgroundDimmer = saveGradientDialog.backgroundDimmer
-            backgroundDimmer.alpha = 0.75f
+            backgroundDimmer.alpha = Values.dialogBackgroundDimmer
         } else {
             val backgroundDimmer = saveGradientDialog.backgroundDimmer
-            backgroundDimmer.alpha = 0.75f
+            backgroundDimmer.alpha = Values.dialogBackgroundDimmer
         }
     }
 

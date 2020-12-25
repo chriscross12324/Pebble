@@ -8,7 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="190dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
@@ -22,6 +22,7 @@
 
         <ImageView
             android:id="@+id/buttonIcon"
+            android:layout_marginVertical="12dp"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="16dp"
@@ -29,7 +30,8 @@
             android:tint="?SecondaryTextColour"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UseAppTint" />
 
         <ImageView
             android:id="@+id/imageView9"
@@ -42,7 +44,8 @@
             android:tint="?ForegroundColour"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/buttonIcon"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UseAppTint" />
 
         <TextView
             android:id="@+id/buttonTitle"
@@ -51,6 +54,7 @@
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/googlesans_medium"
             android:text="Exit"
+            android:textAlignment="center"
             android:textColor="?PrimaryTextColour"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"

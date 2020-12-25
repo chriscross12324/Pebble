@@ -3,13 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="HardcodedText">
 
     <ImageView
         android:id="@+id/backgroundDimmer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?ForegroundColour"/>
+        android:background="?ForegroundColour"
+        android:contentDescription="Dims dialog background" />
+
+    <ImageView
+        android:id="@+id/drawCaller"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:alpha="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="Helps update blurView" />
 
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"
@@ -66,7 +77,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:tint="?PrimaryTextColour" />
+                        app:tint="?PrimaryTextColour"
+                        android:contentDescription="Popup icon" />
 
                     <TextView
                         android:id="@+id/permissionTitle"

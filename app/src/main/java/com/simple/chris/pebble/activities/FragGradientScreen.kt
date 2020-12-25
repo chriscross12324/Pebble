@@ -13,22 +13,18 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.widget.Toast
-import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
-import com.simple.chris.pebble.adapters_helpers.SaveGradientDialog
-import com.simple.chris.pebble.adapters_helpers.SearchColourRecyclerView
+import com.simple.chris.pebble.adapters_helpers.*
 import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.fragment_gradient_screen.*
 import kotlinx.android.synthetic.main.fragment_gradient_screen.actionsHolder
 import kotlinx.android.synthetic.main.fragment_gradient_screen.detailsHolder
 import kotlin.Exception
 
-class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), PopupDialogButtonRecycler.OnButtonListener, SearchColourRecyclerView.OnButtonListener {
+class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchColourRecyclerView.OnButtonListener {
     private lateinit var context: Activity
     private lateinit var gradientName: String
     private lateinit var gradientDescription: String
@@ -206,7 +202,7 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), PopupDia
         colourElementsRecycler.adapter = buttonAdapter
     }
 
-    private fun runNotification(icon: Int, text: Int) {
+    fun runNotification(icon: Int, text: Int) {
         /** Check that notification isn't already showing **/
         if (!notificationShowing) {
             /** Set initial UI Elements **/
@@ -216,19 +212,25 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), PopupDia
 
             /** Animates notification in **/
             Handler(Looper.getMainLooper()).postDelayed({
-                Vibration.notification(context)
-                notification.visibility = View.VISIBLE
-                UIElements.viewObjectAnimator(notification, "translationY", (notification.height + Calculations.cutoutHeight(context.window) +
-                        Calculations.convertToDP(context, 16f)), 500, 0, DecelerateInterpolator(3f))
-                Handler(Looper.getMainLooper()).postDelayed({
-                    UIElements.viewObjectAnimator(notification, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
+                try {
+                    Vibration.notification(context)
+                    notification.visibility = View.VISIBLE
+                    UIElements.viewObjectAnimator(notification, "translationY", (notification.height + Calculations.cutoutHeight(context.window) +
+                            Calculations.convertToDP(context, 16f)), 500, 0, DecelerateInterpolator(3f))
                     Handler(Looper.getMainLooper()).postDelayed({
-                        notification.visibility = View.INVISIBLE
-                        notificationShowing = false
-                    }, 500)
-                }, 4000)
-            }, 500)
+                        try {
+                            UIElements.viewObjectAnimator(notification, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                try {
+                                    notification.visibility = View.INVISIBLE
+                                    notificationShowing = false
+                                } catch (e: Exception){}
 
+                            }, 500)
+                        } catch (e: Exception) {}
+                    }, 4000)
+                } catch (e: Exception){}
+            }, 500)
         }
     }
 
@@ -294,18 +296,21 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), PopupDia
             Vibration.lowFeedback(context)
             //UIElements.saveGradientDialog(context, Values.gradientScreenColours, (activity as MainActivity).window)
             val fm = fragmentManager as FragmentManager
-            val saveGradientDialog = SaveGradientDialog.newInstance(Values.gradientScreenColours)
+            val saveGradientDialog = DialogSaveGradient.newInstance(Values.gradientScreenColours)
             saveGradientDialog.show(fm, "saveGradientDialog")
             //Save Gradient
         }
         buttonSetWallpaper.setOnClickListener {
+            val fm = (activity as MainActivity).supportFragmentManager
             Vibration.lowFeedback(context)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                UIElement.popupDialog(context, "setWallpaper", R.drawable.icon_wallpaper_new, R.string.dual_set_wallpaper,
-                        null, R.string.question_set_wallpaper, HashMaps.setWallpaperArrayList(), context.window.decorView, this)
+                Values.dialogPopup = DialogPopup.newDialog(HashMaps.setWallpaperArrayList(), "setWallpaper", R.drawable.icon_wallpaper_new, R.string.dual_set_wallpaper,
+                        null, R.string.question_set_wallpaper)
+                Values.dialogPopup.show(fm, "setWallpaper")
             } else {
-                UIElement.popupDialog(context, "setWallpaperOutdated", R.drawable.icon_warning, R.string.dual_outdated_android,
-                        null, R.string.question_outdated_android, HashMaps.arrayYesCancel(), context.window.decorView, this)
+                Values.dialogPopup = DialogPopup.newDialog(HashMaps.arrayYesCancel(), "setWallpaperOutdated", R.drawable.icon_warning, R.string.dual_outdated_android,
+                        null, R.string.question_outdated_android)
+                Values.dialogPopup.show(fm, "setWallpaperOutdated")
             }
             //Set Wallpaper
         }
@@ -339,7 +344,7 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), PopupDia
         }
     }
 
-    @SuppressLint("InlinedApi")
+    /*@SuppressLint("InlinedApi")
     override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
         when (popupName) {
             "setWallpaper" -> {
@@ -386,11 +391,12 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), PopupDia
                 }
             }
         }
-    }
+    }*/
 
     override fun onButtonClick(position: Int, view: View, buttonColour: String) {
-        //Toast.makeText(context, buttonColour, Toast.LENGTH_SHORT).show()
-        UIElements.colourDialog(context, buttonColour, context.window.decorView)
+        val fm = fragmentManager as FragmentManager
+        val colourInfoDialog = DialogColourInfo.newDialog(buttonColour)
+        colourInfoDialog.show(fm, "colourInfoDialog")
     }
 
 }

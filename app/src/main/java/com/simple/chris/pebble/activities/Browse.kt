@@ -47,13 +47,14 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
     /**
      * Browse Activity - Handles gradient RecyclerView, Gradient Creator Banner & Click events
      */
+    @SuppressLint("SyntheticAccessor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UIElement.setTheme(this)
         setContentView(R.layout.activity_browse)
         if (!Values.refreshTheme) {
             if (Values.gradientList.isEmpty()) {
-                checkConnection(this, window.decorView, this)
+                //checkConnection(this, this, window.decorView, this)
             } else {
                 Log.e("ERR", "Not empty")
             }
@@ -85,7 +86,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
         }
 
 
-        createButton.setOnClickListener {
+        /*createButton.setOnClickListener {
             Vibration.mediumFeedback(this)
 
             if (Values.connectionOffline) {
@@ -95,7 +96,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                 val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, gradientCreatorSharedElementView, "gradientCreatorViewer")
                 startActivity(Intent(this, GradientCreator::class.java), activityOptions.toBundle())
             }
-        }
+        }*/
     }
 
     override fun onAttachedToWindow() {
@@ -238,12 +239,12 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                         UIElements.viewObjectAnimator(browseGrid, "scaleY", 1f, 0, 0, LinearInterpolator())
                         UIElements.viewObjectAnimator(browseGrid, "alpha", 1f, 0, 0, LinearInterpolator())
                         RecyclerGrid.gradientGrid(this, browseGrid, Values.gradientList, this, this)
-                        resultsText.text = "${Values.gradientList.size} gradients"
+                        //resultsText.text = "${Values.gradientList.size} gradients"
                         browseGrid.scheduleLayoutAnimation()
                     }, 500)
                 } else {
                     RecyclerGrid.gradientGrid(this, browseGrid, Values.gradientList, this, this)
-                    resultsText.text = "${Values.gradientList.size} gradients"
+                    //resultsText.text = "${Values.gradientList.size} gradients"
                     UIElements.bottomSheetPeekHeightAnim(bottomSheetBehavior, bottomSheetPeekHeight, 750, 0, DecelerateInterpolator(3f))
                     browseGrid.scheduleLayoutAnimation()
                 }
@@ -332,7 +333,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                 hideMenu()
                 Handler(Looper.getMainLooper()).postDelayed({
                     Values.gradientList.clear()
-                    checkConnection(this, window.decorView, this)
+                    //checkConnection(this, this, window.decorView, this)
                     connectionChecker()
                 }, 400)
             }
@@ -340,7 +341,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
     }
 
     override fun onBackPressed() {
-        UIElement.popupDialog(this, "leave", R.drawable.icon_door, R.string.word_leave, null, R.string.question_leave, HashMaps.arrayYesCancel(), window.decorView, this)
+        //UIElement.popupDialog(this, "leave", R.drawable.icon_door, R.string.word_leave, null, R.string.question_leave, HashMaps.arrayYesCancel(), window.decorView, this)
     }
 
     override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
@@ -350,14 +351,14 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                     0 -> {
                         finish()
                     }
-                    1 -> UIElement.popupDialogHider()
+                    //1 -> UIElement.popupDialogHider()
                 }
             }
             "stillConnecting" -> {
                 when (position) {
                     0 -> {
-                        UIElement.popupDialog(this, "connecting", null, R.string.word_connecting, null, R.string.sentence_pebble_is_connecting, null, window.decorView, null)
-                        Connection.checkDownload(this, window.decorView, this)
+                        //UIElement.popupDialog(this, "connecting", null, R.string.word_connecting, null, R.string.sentence_pebble_is_connecting, null, window.decorView, null)
+                        //Connection.checkDownload(this, window.decorView, this)
                     }
                     1 -> {
                         Connection.cancelConnection()
@@ -365,25 +366,25 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                     }
                     2 -> {
                         Connection.cancelConnection()
-                        checkConnection(this, window.decorView, this)
+                        //checkConnection(this, this, window.decorView, this)
                     }
                 }
             }
             "askMobile" -> {
                 when (position) {
                     0 -> {
-                        getGradients(this, window.decorView, this)
-                        UIElement.popupDialogHider()
+                        //getGradients(this, window.decorView, this)
+                        //UIElement.popupDialogHider()
                     }
                     1 -> {
                         Values.useMobileData = "on"
-                        getGradients(this, window.decorView, this)
-                        UIElement.popupDialogHider()
+                        //getGradients(this, window.decorView, this)
+                        //UIElement.popupDialogHider()
                     }
                     2 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                         Handler(Looper.getMainLooper()).postDelayed({
-                            checkConnection(this, window.decorView, this)
+                            //checkConnection(this, this, window.decorView, this)
                         }, Values.dialogShowAgainTime)
                     }
                 }
@@ -391,10 +392,10 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             "gradientSaved" -> {
                 when (position) {
                     0 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                     }
                     1 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                     }
                 }
             }
@@ -402,13 +403,13 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             "noConnection" -> {
                 when (position) {
                     0 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                         Handler(Looper.getMainLooper()).postDelayed({
-                            checkConnection(this, window.decorView, this)
+                            //checkConnection(this, this, window.decorView, this)
                         }, Values.dialogShowAgainTime)
                     }
                     1 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                         connectionOffline(this)
                     }
                 }
@@ -417,13 +418,13 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             "offlineMode" -> {
                 when (position) {
                     0 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                         Handler(Looper.getMainLooper()).postDelayed({
-                            checkConnection(this, window.decorView, this)
+                            //checkConnection(this, this, window.decorView, this)
                         }, Values.dialogShowAgainTime)
                     }
                     1 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                         connectionOffline(this)
                     }
                 }
@@ -432,14 +433,14 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             "storagePermission" -> {
                 when (position) {
                     0 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
                     }
                     1 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                     }
                     2 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                         Values.dontAskStorage = true
                         Values.saveValues(this)
                     }

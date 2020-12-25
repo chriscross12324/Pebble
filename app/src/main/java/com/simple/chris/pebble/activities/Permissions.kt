@@ -24,18 +24,22 @@ class Permissions : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListe
         UIElement.setTheme(this)
         setContentView(R.layout.activity_permissions)
         UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha, window)
+        startActivity(Intent(this, MainActivity::class.java))
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        finish()
+
 
         getStarted.setOnClickListener {
-            UIElements.viewObjectAnimator(welcomeHolder, "alpha", 0f, 125, 0, LinearInterpolator())
+            /*UIElements.viewObjectAnimator(welcomeHolder, "alpha", 0f, 125, 0, LinearInterpolator())
             UIElement.popupDialog(this, "networkNotice", R.drawable.icon_wifi_full, R.string.word_network, null, R.string.sentence_permission_network,
-                    HashMaps.understandArray(), window.decorView, this)
+                    HashMaps.understandArray(), window.decorView, this)*/
         }
 
         if (Values.setupThemeChange) {
             Values.setupThemeChange = false
-            UIElements.viewObjectAnimator(welcomeHolder, "alpha", 0f, 0, 0, LinearInterpolator())
+            /*UIElements.viewObjectAnimator(welcomeHolder, "alpha", 0f, 0, 0, LinearInterpolator())
             UIElement.popupDialog(this, "settingSpecialEffects", R.drawable.icon_blur_on, R.string.dual_special_effects, null, R.string.question_setting_effects,
-                    HashMaps.onOff(), window.decorView, this)
+                    HashMaps.onOff(), window.decorView, this)*/
         }
     }
 
@@ -51,7 +55,7 @@ class Permissions : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListe
 
     override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
         when (popupName) {
-            "networkNotice" -> {
+            /*"networkNotice" -> {
                 UIElement.popupDialogHider()
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     UIElement.popupDialog(this, "settingVibration", R.drawable.icon_vibrate_on, R.string.word_vibration, null, R.string.question_setting_vibration,
@@ -127,7 +131,7 @@ class Permissions : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListe
                         finish()
                     }, 450)
                 }, Random.nextLong(2000, 5000))
-            }
+            }*/
         }
     }
 }

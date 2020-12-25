@@ -1,10 +1,14 @@
 package com.simple.chris.pebble.activities
 
+import android.annotation.SuppressLint
+import android.app.WallpaperManager
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.animation.*
 import android.widget.Toast
@@ -16,6 +20,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.*
 import com.simple.chris.pebble.R
+import com.simple.chris.pebble.adapters_helpers.DialogPopup
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.adapters_helpers.SettingsRecyclerView
 import com.simple.chris.pebble.functions.*
@@ -29,7 +34,7 @@ import kotlinx.android.synthetic.main.activity_main.wallpaperImageAlpha
 import kotlinx.android.synthetic.main.activity_main.wallpaperImageViewer
 import kotlinx.android.synthetic.main.module_browse_normal.view.*
 
-class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
+class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     private lateinit var mInterstitialAd: InterstitialAd
     var screenHeight = 0
     var bottomSheetPeekHeight = 0
@@ -60,7 +65,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
         setContentView(R.layout.activity_main)
         if (!Values.refreshTheme) {
             if (Values.gradientList.isEmpty()) {
-                Connection.checkConnection(this, window.decorView, this)
+                Connection.checkConnection(this, this)
                 connectionChecker()
             }
         } else {
@@ -194,8 +199,10 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
         shrinkFrag(fragmentHolder, 0.7f, 500, DecelerateInterpolator(3f))
         Handler(Looper.getMainLooper()).postDelayed({
             if (Values.connectionOffline) {
-                UIElement.popupDialog(this, "noConnection", R.drawable.icon_wifi_empty, R.string.dual_no_connection, null, R.string.sentence_needs_internet_connection,
-                        HashMaps.noConnectionArrayList(), window.decorView, this)
+                val fm = supportFragmentManager
+                Values.dialogPopup = DialogPopup.newDialog(HashMaps.noConnectionArrayList(), "noConnection", R.drawable.icon_wifi_empty,
+                        R.string.dual_no_connection, null, R.string.sentence_needs_internet_connection)
+                Values.dialogPopup.show(fm, "noConnection")
             } else {
                 val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, gradientCreatorSharedElementView, "gradientCreatorViewer")
                 startActivity(Intent(this, GradientCreator::class.java), activityOptions.toBundle())
@@ -241,41 +248,52 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
     }
 
     override fun onButtonClick(screenName: String, position: Int, view: View) {
+        val fm = supportFragmentManager
         when (screenName) {
             "settings" -> {
                 when (position) {
                     0 -> {
                         //Theme
-                        UIElement.popupDialog(this, "settingTheme", R.drawable.icon_brush, R.string.word_theme, null, R.string.question_setting_theme,
-                                HashMaps.lightDarkDarker(), window.decorView, this)
+                        Values.dialogPopup = DialogPopup.newDialog(HashMaps.lightDarkDarker(), "settingTheme", R.drawable.icon_brush, R.string.word_theme,
+                                null, R.string.question_setting_theme)
+                        Values.dialogPopup.show(fm, "settingTheme")
                     }
                     1 -> {
                         //Vibration
-                        UIElement.popupDialog(this, "settingVibration", R.drawable.icon_vibrate_on, R.string.word_vibration, null, R.string.question_setting_vibration,
-                                HashMaps.onOff(), window.decorView, this)
+                        Values.dialogPopup = DialogPopup.newDialog(HashMaps.onOff(), "settingVibration", R.drawable.icon_vibrate_on, R.string.word_vibration,
+                                null, R.string.question_setting_vibration)
+                        Values.dialogPopup.show(fm, "settingVibration")
                     }
                     2 -> {
                         //Special Effects
-                        UIElement.popupDialog(this, "settingSpecialEffects", R.drawable.icon_blur_on, R.string.dual_special_effects, null, R.string.question_setting_effects,
-                                HashMaps.onOff(), window.decorView, this)
+                        Values.dialogPopup = DialogPopup.newDialog(HashMaps.onOff(), "settingSpecialEffects", R.drawable.icon_blur_on, R.string.dual_special_effects,
+                                null, R.string.question_setting_effects)
+                        Values.dialogPopup.show(fm, "settingSpecialEffects")
                     }
                     3 -> {
-                        //Cellular Data
-                        UIElement.popupDialog(this, "settingSplitScreen", R.drawable.split_screen, R.string.dual_split_screen, null, R.string.question_setting_split_screen,
-                                HashMaps.onOff(), window.decorView, this)
+                        //Split Screen
+                        Values.dialogPopup = DialogPopup.newDialog(HashMaps.onOff(), "settingSplitScreen", R.drawable.split_screen, R.string.dual_split_screen,
+                                null, R.string.question_setting_split_screen)
+                        Values.dialogPopup.show(fm, "settingSplitScreen")
                     }
                     4 -> {
                         //Cellular Data
-                        UIElement.popupDialog(this, "settingNetwork", R.drawable.icon_cell_wifi, R.string.word_network, null, R.string.question_setting_network,
-                                HashMaps.onOffAsk(), window.decorView, this)
+                        Values.dialogPopup = DialogPopup.newDialog(HashMaps.onOffAsk(), "settingNetwork", R.drawable.icon_cell_wifi, R.string.word_network,
+                                null, R.string.question_setting_network)
+                        Values.dialogPopup.show(fm, "settingNetwork")
                     }
                 }
             }
             "donate" -> {
                 when (position) {
                     0 -> {
+                        Values.adLoading = true
                         mInterstitialAd.loadAd(AdRequest.Builder().build())
-                        UIElement.popupDialog(this, "loadingAd", null, R.string.dual_ad_loading, null, R.string.sentence_ad_loading, null, window.decorView, null)
+                        //UIElement.popupDialog(this, "loadingAd", null, R.string.dual_ad_loading, null, R.string.sentence_ad_loading, null, window.decorView, null)
+                        val fm = supportFragmentManager
+                        Values.dialogPopup = DialogPopup.newDialog(null, "loadingAd", null,
+                                R.string.dual_ad_loading, null, R.string.sentence_ad_loading)
+                        Values.dialogPopup.show(fm, "loadingAd")
                     }
                 }
             }
@@ -469,7 +487,200 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
         }
     }
 
-    override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
+    @SuppressLint("NewApi")
+    fun popupDialogHandler(dialogName: String, position: Int) {
+        val fm = supportFragmentManager
+        when (dialogName) {
+            "settingTheme" -> {
+                val current = Values.settingThemes
+                when (position) {
+                    0 -> {
+                        //Light
+                        Values.settingThemes = "light"
+                    }
+                    1 -> {
+                        //Dark
+                        Values.settingThemes = "dark"
+                    }
+                    2 -> {
+                        //Darker
+                        Values.settingThemes = "darker"
+                    }
+                }
+                dialogPopupHider()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    if (current != Values.settingThemes) {
+                        hideSmallScreen()
+                        refreshTheme()
+                    }
+                }, 450)
+            }
+            "settingVibration" -> {
+                when (position) {
+                    0 -> {
+                        //On
+                        Values.settingVibrations = true
+                    }
+                    1 -> {
+                        //Off
+                        Values.settingVibrations = false
+                    }
+                }
+                dialogPopupHider()
+            }
+            "settingSpecialEffects" -> {
+                when (position) {
+                    0 -> {
+                        //On
+                        Values.settingsSpecialEffects = true
+                    }
+                    1 -> {
+                        //Off
+                        Values.settingsSpecialEffects = false
+                    }
+                }
+                dialogPopupHider()
+                UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha, window)
+            }
+            "settingSplitScreen" -> {
+                when (position) {
+                    0 -> {
+                        //On
+                        Values.settingSplitScreen = true
+                    }
+                    1 -> {
+                        //Off
+                        Values.settingSplitScreen = false
+                    }
+                }
+                dialogPopupHider()
+            }
+            "settingNetwork" -> {
+                when (position) {
+                    0 -> {
+                        //On
+                        Values.useMobileData = "on"
+                    }
+                    1 -> {
+                        //Off
+                        Values.useMobileData = "off"
+                    }
+                    2 -> {
+                        //Ask Every-time
+                        Values.useMobileData = "ask"
+                    }
+                }
+                dialogPopupHider()
+            }
+            "leave" -> {
+                when (position) {
+                    0 -> {
+                        finishAndRemoveTask()
+                    }
+                    1 -> dialogPopupHider()
+                }
+            }
+            "stillConnecting" -> {
+                when (position) {
+                    0 -> {
+                        Values.dialogPopup = DialogPopup.newDialog(null, "connecting", null, R.string.word_connecting,
+                                null, R.string.sentence_pebble_is_connecting)
+                        Values.dialogPopup.show(fm, "connecting")
+                        Connection.checkDownload(this)
+                    }
+                    1 -> {
+                        Connection.cancelConnection()
+                        Connection.connectionOffline(this)
+                    }
+                    2 -> {
+                        Connection.cancelConnection()
+                        Connection.checkConnection(this, this)
+                    }
+                }
+            }
+            "askMobile" -> {
+                when (position) {
+                    0 -> {
+                        Connection.getGradients(this, this)
+                        //UIElement.popupDialogHider()
+                    }
+                    1 -> {
+                        Values.useMobileData = "on"
+                        Connection.getGradients(this, this)
+                        //UIElement.popupDialogHider()
+                    }
+                    2 -> {
+                        //UIElement.popupDialogHider()
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            Connection.checkConnection(this, this)
+                        }, Values.dialogShowAgainTime)
+                    }
+                }
+            }
+            "noConnection" -> {
+                when (position) {
+                    0 -> {
+                        //UIElement.popupDialogHider()
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            Connection.checkConnection(this, this)
+                        }, Values.dialogShowAgainTime)
+                    }
+                    1 -> {
+                        //UIElement.popupDialogHider()
+                        Connection.connectionOffline(this)
+                    }
+                }
+            }
+            "setWallpaper" -> {
+                val wallpaperManager = WallpaperManager.getInstance(this)
+                when (position) {
+                    0 -> {
+                        dialogPopupHider()
+                        try {
+                            wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(this, null, Values.gradientScreenColours, 0f) as Drawable,
+                                    Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)),
+                                    null, true, WallpaperManager.FLAG_SYSTEM)
+                            (gradientFragment as FragGradientScreen).runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
+                        } catch (e: Exception) {
+                            Log.e("ERR", "pebble.frag_gradient_screen.on_button_click_popup.set_wallpaper: ${e.localizedMessage}")
+                        }
+                    }
+                    1 -> {
+                        dialogPopupHider()
+                        try {
+                            wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(this, null, Values.gradientScreenColours, 0f) as Drawable,
+                                    Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)),
+                                    null, true, WallpaperManager.FLAG_LOCK)
+                            (gradientFragment as FragGradientScreen).runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
+                        } catch (e: Exception) {
+                            Log.e("ERR", "pebble.frag_gradient_screen.on_button_click_popup.set_wallpaper: ${e.localizedMessage}")
+                        }
+                    }
+                    2 -> dialogPopupHider()
+                }
+            }
+            "setWallpaperOutdated" -> {
+                val wallpaperManager = WallpaperManager.getInstance(this)
+                when (position) {
+                    0 -> {
+                        dialogPopupHider()
+                        try {
+                            wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(this, null, Values.gradientScreenColours, 0f) as Drawable,
+                                    Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)))
+                            (gradientFragment as FragGradientScreen).runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
+                        } catch (e: Exception) {
+                            Log.e("ERR", "pebble.frag_gradient_screen.on_button_click_popup.set_wallpaper_outdated: ${e.localizedMessage}")
+                        }
+                    }
+                    1 -> dialogPopupHider()
+                }
+            }
+        }
+        Values.saveValues(this)
+    }
+
+    /*override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
+        val fm = supportFragmentManager
         when (popupName) {
             "settingTheme" -> {
                 val current = Values.settingThemes
@@ -563,7 +774,9 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
             "stillConnecting" -> {
                 when (position) {
                     0 -> {
-                        UIElement.popupDialog(this, "connecting", null, R.string.word_connecting, null, R.string.sentence_pebble_is_connecting, null, window.decorView, null)
+                        Values.dialogPopup = DialogPopup.newDialog(null, "connecting", null, R.string.word_connecting,
+                                null, R.string.sentence_pebble_is_connecting)
+                        Values.dialogPopup.show(fm, "connecting")
                         Connection.checkDownload(this, window.decorView, this)
                     }
                     1 -> {
@@ -572,25 +785,25 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
                     }
                     2 -> {
                         Connection.cancelConnection()
-                        Connection.checkConnection(this, window.decorView, this)
+                        Connection.checkConnection(this, this, window.decorView, this)
                     }
                 }
             }
             "askMobile" -> {
                 when (position) {
                     0 -> {
-                        Connection.getGradients(this, window.decorView, this)
+                        Connection.getGradients(this, this, window.decorView, this)
                         UIElement.popupDialogHider()
                     }
                     1 -> {
                         Values.useMobileData = "on"
-                        Connection.getGradients(this, window.decorView, this)
+                        Connection.getGradients(this, this, window.decorView, this)
                         UIElement.popupDialogHider()
                     }
                     2 -> {
                         UIElement.popupDialogHider()
                         Handler(Looper.getMainLooper()).postDelayed({
-                            Connection.checkConnection(this, window.decorView, this)
+                            Connection.checkConnection(this, this, window.decorView, this)
                         }, Values.dialogShowAgainTime)
                     }
                 }
@@ -600,7 +813,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
                     0 -> {
                         UIElement.popupDialogHider()
                         Handler(Looper.getMainLooper()).postDelayed({
-                            Connection.checkConnection(this, window.decorView, this)
+                            Connection.checkConnection(this, this, window.decorView, this)
                         }, Values.dialogShowAgainTime)
                     }
                     1 -> {
@@ -611,7 +824,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
             }
         }
         Values.saveValues(this)
-    }
+    }*/
 
     private fun adMob() {
         MobileAds.initialize(this) { Values.adMobInitialized = true }
@@ -621,8 +834,9 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
         mInterstitialAd.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 //Hide popup
+                Values.adLoading = false
                 mInterstitialAd.show()
-                UIElement.popupDialogHider()
+                //UIElement.popupDialogHider()
                 //Show Ad
             }
 
@@ -648,9 +862,13 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
     }
 
     override fun onBackPressed() {
+        val fm = supportFragmentManager
+        Log.e("INFO", Values.currentActivity)
         when (Values.currentActivity) {
             "Browse" -> {
-                UIElement.popupDialog(this, "leave", R.drawable.icon_door, R.string.word_leave, null, R.string.question_leave, HashMaps.arrayYesCancel(), window.decorView, this)
+                Values.dialogPopup = DialogPopup.newDialog(HashMaps.arrayYesCancel(), "leave", R.drawable.icon_door, R.string.word_leave,
+                        null, R.string.question_leave)
+                Values.dialogPopup.show(fm, "leave")
             }
             "Search" -> {
                 //closeSecondary()
@@ -658,22 +876,14 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener, 
         }
     }
 
-    fun passThroughVariables(position: Int) {
-        val gradientInfo = Values.gradientList[position]
-
-        Values.gradientScreenName = gradientInfo["gradientName"] as String
-        Values.gradientScreenDesc = gradientInfo["gradientDescription"] as String
-        val gradientColours = gradientInfo["gradientColours"]!!.replace("[", "").replace("]", "")
-                .split(",").map { it.trim() }
-        Values.gradientScreenColours = ArrayList(gradientColours)
-    }
-
     fun getFragmentWidth(): Float {
         return fragmentHolderSecondary.measuredWidth.toFloat()
     }
 
-    fun errorPopup() {
-
+    fun dialogPopupHider() {
+        if (Values.dialogPopup.dialog != null) {
+            Values.dialogPopup.onDismiss(Values.dialogPopup.dialog!!)
+        }
     }
 
     override fun onResume() {

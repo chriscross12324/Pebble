@@ -3,13 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="ContentDescription">
 
     <ImageView
         android:id="@+id/backgroundDimmer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?ForegroundColour"/>
+
+    <ImageView
+        android:id="@+id/drawCaller"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:alpha="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"
@@ -68,7 +77,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:tint="?PrimaryTextColour" />
+                        android:tint="?PrimaryTextColour"
+                        tools:ignore="UseAppTint" />
 
                     <TextView
                         android:id="@+id/permissionTitle"
@@ -79,7 +89,7 @@
                         android:layout_marginEnd="32dp"
                         android:fontFamily="@font/googlesans_bold"
                         android:gravity="center"
-                        android:text="Success"
+                        android:text="@string/dual_gradient_saved"
                         android:textAlignment="center"
                         android:textColor="?PrimaryTextColour"
                         android:textSize="18sp"
@@ -96,7 +106,7 @@
                         android:layout_marginEnd="24dp"
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/googlesans_medium"
-                        android:text="The gradient has been successfully saved."
+                        android:text="@string/sentence_gradient_successfully_saved"
                         android:textAlignment="center"
                         android:textColor="?SecondaryTextColour"
                         android:textSize="12sp"

@@ -70,7 +70,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
             gradientArrayList = ArrayList(gradientColours)
             gradientDrawableNew(this, gradientViewStatic, gradientArrayList, Values.gradientCornerRadius)
         } catch (e: Exception) {
-            UIElement.popupDialog(this, "error", R.drawable.icon_attention, R.string.word_error, null,R.string.serious_error, HashMaps.okArray(), window.decorView, this)
+            //UIElement.popupDialog(this, "error", R.drawable.icon_attention, R.string.word_error, null,R.string.serious_error, HashMaps.okArray(), window.decorView, this)
         }
 
         gradientViewStatic.transitionName = gradientNameString
@@ -195,16 +195,16 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         saveGradientButton.setOnClickListener {
             Vibration.lowFeedback(this)
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                UIElement.popupDialog(this, "readWritePermission", R.drawable.icon_storage, R.string.word_storage, null, R.string.sentence_needs_storage_permission, HashMaps.readWritePermissionArrayList(), window.decorView, this)
+                //UIElement.popupDialog(this, "readWritePermission", R.drawable.icon_storage, R.string.word_storage, null, R.string.sentence_needs_storage_permission, HashMaps.readWritePermissionArrayList(), window.decorView, this)
             } else {
-                UIElement.popupDialog(this, "saveGradient", R.drawable.icon_save, R.string.dual_save_gradient, null, R.string.question_save_gradient,
-                        HashMaps.saveGradientArrayList(), window.decorView, this)
+                /*UIElement.popupDialog(this, "saveGradient", R.drawable.icon_save, R.string.dual_save_gradient, null, R.string.question_save_gradient,
+                        HashMaps.saveGradientArrayList(), window.decorView, this)*/
             }
         }
 
         setWallpaperButton.setOnClickListener {
             Vibration.lowFeedback(this)
-            UIElement.popupDialog(this, "setWallpaper", R.drawable.icon_wallpaper, R.string.dual_set_wallpaper, null, R.string.question_set_wallpaper, HashMaps.setWallpaperArrayList(), window.decorView, this)
+            //UIElement.popupDialog(this, "setWallpaper", R.drawable.icon_wallpaper, R.string.dual_set_wallpaper, null, R.string.question_set_wallpaper, HashMaps.setWallpaperArrayList(), window.decorView, this)
         }
     }
 
@@ -284,7 +284,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
 
         Vibration.mediumFeedback(this)
         UIElement.dialogsToShow.clear()
-        UIElement.popupDialogHider()
+        //UIElement.popupDialogHider()
 
         Handler(Looper.getMainLooper()).postDelayed({
             super@GradientDetails.onBackPressed()
@@ -304,15 +304,17 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         }
     }
 
+
+
     override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
         when (popupName) {
             "setWallpaper" -> {
                 val wallpaperManager = WallpaperManager.getInstance(this)
-                UIElement.popupDialogHider()
+                //UIElement.popupDialogHider()
                 when (position) {
                     0 -> {
                         try {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 wallpaperManager.setBitmap(Calculations.createBitmap(gradientDrawableNew(this, null, gradientArrayList, 0f) as Drawable,
                                         Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)), null, true, WallpaperManager.FLAG_SYSTEM)
                                 UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dual_wallpaper_set, null,
@@ -320,14 +322,14 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                             } else {
                                 UIElement.popupDialog(this, "outdatedAndroid", R.drawable.icon_warning, R.string.dual_outdated_android, null,
                                         R.string.question_outdated_android, HashMaps.arrayYesCancel(), window.decorView, this)
-                            }
+                            }*/
                         } catch (e: Exception) {
                             Log.e("ERR", "pebble.activity_gradient_details.buttons.setWallpaper: ${e.localizedMessage}")
                         }
                     }
                     1 -> {
                         try {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 wallpaperManager.setBitmap(Calculations.createBitmap(gradientDrawableNew(this, null, gradientArrayList, 0f) as Drawable,
                                         Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)), null, true, WallpaperManager.FLAG_LOCK)
                                 UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dual_wallpaper_set, null,
@@ -335,7 +337,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                             } else {
                                 UIElement.popupDialog(this, "outdatedAndroid", R.drawable.icon_warning, R.string.dual_outdated_android, null,
                                         R.string.question_outdated_android, HashMaps.arrayYesCancel(), window.decorView, this)
-                            }
+                            }*/
                         } catch (e: Exception) {
 
                         }
@@ -345,11 +347,11 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                 }
             }
             "readWritePermission" -> {
-                UIElement.popupDialogHider()
+                //UIElement.popupDialogHider()
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
             }
             "saveGradient" -> {
-                UIElement.popupDialogHider()
+                //UIElement.popupDialogHider()
                 when (position) {
                     0 -> {
                         /**
@@ -380,8 +382,8 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                             fileOutputStream.close()
 
                             Log.e("INFO", "Successfully Saved to $pebbleDir")
-                            UIElement.popupDialog(this, "gradientSaved", R.drawable.icon_check, R.string.dual_gradient_saved, null,
-                                    R.string.sentence_gradient_successfully_saved, HashMaps.gradientSavedArrayList(), window.decorView, this)
+                            /*UIElement.popupDialog(this, "gradientSaved", R.drawable.icon_check, R.string.dual_gradient_saved, null,
+                                    R.string.sentence_gradient_successfully_saved, HashMaps.gradientSavedArrayList(), window.decorView, this)*/
 
                         } catch (e: java.lang.Exception) {
                             Log.e("INFO", "Failed to save due to: ${e.localizedMessage}")
@@ -390,7 +392,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                 }
             }
             "gradientSaved" -> {
-                UIElement.popupDialogHider()
+                //UIElement.popupDialogHider()
                 when (position) {
                     0 -> {
                         val intent = Intent(Intent.ACTION_VIEW)
@@ -406,7 +408,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                 }
             }
             "wallpaperSet" -> {
-                UIElement.popupDialogHider()
+                //UIElement.popupDialogHider()
             }
             "outdatedAndroid" -> {
                 when (position) {
@@ -414,16 +416,16 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                         val wallpaperManager = WallpaperManager.getInstance(this)
                         wallpaperManager.setBitmap(Calculations.createBitmap(gradientDrawable(this, null, startColourInt, endColourInt, 0f) as Drawable,
                                 Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)))
-                        UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dual_wallpaper_set, null,
-                                R.string.sentence_enjoy_your_wallpaper, HashMaps.BAClose(), window.decorView, this)
+                        /*UIElement.popupDialog(this, "wallpaperSet", R.drawable.icon_check, R.string.dual_wallpaper_set, null,
+                                R.string.sentence_enjoy_your_wallpaper, HashMaps.BAClose(), window.decorView, this)*/
                     }
                     1 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                     }
                 }
             }
             "error" -> {
-                UIElement.popupDialogHider()
+                //UIElement.popupDialogHider()
                 Handler(Looper.getMainLooper()).postDelayed({
                     onBackPressed()
                 }, 450)

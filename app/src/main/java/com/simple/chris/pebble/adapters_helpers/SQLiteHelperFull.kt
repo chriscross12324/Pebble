@@ -1,3 +1,4 @@
+/*
 package com.simple.chris.pebble.adapters_helpers
 
 import android.content.ContentValues
@@ -22,17 +23,17 @@ class SQLiteHelperFull(val context: Context): SQLiteOpenHelper(context, DATABASE
         onCreate(p0)
     }
 
-    fun insertGradient(name: String, colours: String, desc: String) {
+    fun insertGradient(name: String, colours: ArrayList<String >, desc: String) {
         val db = this.writableDatabase
         val cv = ContentValues()
 
         cv.put(GRADIENT_NAME, name)
-        cv.put(GRADIENT_COLOURS, colours)
+        //cv.put(GRADIENT_COLOURS, colours)
         cv.put(GRADIENT_DESCRIPTION, desc)
         val result = db.insert(TABLE_NAME, null, cv)
 
         if (result == (-1).toLong()) {
-            //Toast.makeText(context, "SQLite Failed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "SQLite Failed", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -66,11 +67,11 @@ class SQLiteHelperFull(val context: Context): SQLiteOpenHelper(context, DATABASE
 
     companion object {
         const val DATABASE_VERSION = 1
-        const val DATABASE_NAME = "OfflineGradient.db"
-        const val TABLE_NAME = "offline_gradients"
+        const val DATABASE_NAME = "DownloadedGradients.db"
+        const val TABLE_NAME = "downloaded_gradients"
         const val GRADIENT_NAME = "NAME"
         const val GRADIENT_COLOURS = "COLOURS"
         const val GRADIENT_DESCRIPTION = "DESCRIPTION"
     }
 
-}
+}*/

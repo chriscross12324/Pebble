@@ -3,13 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="HardcodedText">
 
     <ImageView
         android:id="@+id/backgroundDimmer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000000" />
+        android:background="?ForegroundColour"
+        android:contentDescription="Dims dialog background" />
+
+    <ImageView
+        android:id="@+id/drawCaller"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:alpha="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="Helps update blurView" />
 
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"
@@ -22,8 +33,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/popupHolder"
-                android:layout_width="190dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="190dp"
                 android:alpha="0"
                 android:clickable="true"
                 android:focusable="true"
@@ -31,7 +42,7 @@
                 android:scaleY="0.8"
                 app:cardBackgroundColor="?BackgroundColour"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="8dp"
+                app:cardElevation="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -46,18 +57,18 @@
                         android:layout_width="190dp"
                         android:layout_height="190dp"
                         android:background="@drawable/placeholder_colour"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ScrollView
-                        android:layout_width="match_parent"
+                        android:layout_width="190dp"
                         android:layout_height="190dp"
                         android:orientation="vertical"
                         android:scrollbars="none"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/colourPreview">
+                        app:layout_constraintStart_toEndOf="@+id/colourPreview"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -99,7 +110,8 @@
                                 android:textSize="11sp"
                                 app:layout_constraintEnd_toEndOf="@+id/hexHolder"
                                 app:layout_constraintStart_toStartOf="@+id/hexHolder"
-                                app:layout_constraintTop_toBottomOf="@+id/hexHolder" />
+                                app:layout_constraintTop_toBottomOf="@+id/hexHolder"
+                                tools:ignore="SmallSp" />
 
                             <LinearLayout
                                 android:id="@+id/rbgHolder"
@@ -113,7 +125,8 @@
                                 android:weightSum="3"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/hexHint">
+                                app:layout_constraintTop_toBottomOf="@+id/hexHint"
+                                tools:ignore="DisableBaselineAlignment">
 
                                 <LinearLayout
                                     android:id="@+id/rHolder"
@@ -132,7 +145,8 @@
                                         android:gravity="center"
                                         android:text="208"
                                         android:textColor="?PrimaryTextColour"
-                                        android:textSize="14sp" />
+                                        android:textSize="14sp"
+                                        tools:ignore="TooDeepLayout" />
 
                                 </LinearLayout>
 
@@ -192,7 +206,8 @@
                                 android:weightSum="3"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/rbgHolder">
+                                app:layout_constraintTop_toBottomOf="@+id/rbgHolder"
+                                tools:ignore="DisableBaselineAlignment">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -207,7 +222,8 @@
                                         android:gravity="center"
                                         android:text="R"
                                         android:textColor="?SecondaryTextColour"
-                                        android:textSize="11sp" />
+                                        android:textSize="11sp"
+                                        tools:ignore="SmallSp" />
 
                                 </LinearLayout>
 
@@ -224,7 +240,8 @@
                                         android:gravity="center"
                                         android:text="G"
                                         android:textColor="?SecondaryTextColour"
-                                        android:textSize="11sp" />
+                                        android:textSize="11sp"
+                                        tools:ignore="SmallSp" />
 
                                 </LinearLayout>
 
@@ -241,7 +258,8 @@
                                         android:gravity="center"
                                         android:text="B"
                                         android:textColor="?SecondaryTextColour"
-                                        android:textSize="11sp" />
+                                        android:textSize="11sp"
+                                        tools:ignore="SmallSp" />
 
                                 </LinearLayout>
 
@@ -259,7 +277,8 @@
                                 android:weightSum="3"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/rgbHintHolder">
+                                app:layout_constraintTop_toBottomOf="@+id/rgbHintHolder"
+                                tools:ignore="DisableBaselineAlignment">
 
                                 <LinearLayout
                                     android:id="@+id/hHolder"
@@ -339,7 +358,8 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/hsvHolder">
+                                app:layout_constraintTop_toBottomOf="@+id/hsvHolder"
+                                tools:ignore="DisableBaselineAlignment">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -354,7 +374,8 @@
                                         android:gravity="center"
                                         android:text="H"
                                         android:textColor="?SecondaryTextColour"
-                                        android:textSize="11sp" />
+                                        android:textSize="11sp"
+                                        tools:ignore="SmallSp" />
 
                                 </LinearLayout>
 
@@ -371,7 +392,8 @@
                                         android:gravity="center"
                                         android:text="S"
                                         android:textColor="?SecondaryTextColour"
-                                        android:textSize="11sp" />
+                                        android:textSize="11sp"
+                                        tools:ignore="SmallSp" />
 
                                 </LinearLayout>
 
@@ -388,7 +410,8 @@
                                         android:gravity="center"
                                         android:text="V"
                                         android:textColor="?SecondaryTextColour"
-                                        android:textSize="11sp" />
+                                        android:textSize="11sp"
+                                        tools:ignore="SmallSp" />
 
                                 </LinearLayout>
 
@@ -398,9 +421,7 @@
 
                     </ScrollView>
 
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
 
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>

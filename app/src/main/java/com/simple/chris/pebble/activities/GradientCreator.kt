@@ -227,8 +227,8 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
          */
         if (!Values.hintCreateGradientDismissed) {
             Handler(Looper.getMainLooper()).postDelayed({
-                UIElement.popupDialog(this, "gradientCreator", R.drawable.icon_apps, R.string.dual_create_gradient, null, R.string.sentence_gradient_creator_welcome,
-                        HashMaps.createGradientArrayList(), window.decorView, this)
+                /*UIElement.popupDialog(this, "gradientCreator", R.drawable.icon_apps, R.string.dual_create_gradient, null, R.string.sentence_gradient_creator_welcome,
+                        HashMaps.createGradientArrayList(), window.decorView, this)*/
             }, 1000)
         }
     }
@@ -313,7 +313,8 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                         if (Values.gradientList[count]["endColour"].equals(Values.gradientCreatorEndColour)) {
                             //Gradient already exists
                             //popupDialog(R.drawable.icon_attention, "Gradient Exists", R.string.dialog_body_eng_exists, R.string.text_eng_ok, dialogExistsListener)
-                            UIElement.popupDialog(this, "gradientExists", R.drawable.icon_attention, R.string.dual_gradient_exists, null, R.string.sentence_colour_combination_exists, HashMaps.gradientExistsArrayList(), window.decorView, this)
+                                TODO("Add gradientExists Dialog")
+                            //UIElement.popupDialog(this, "gradientExists", R.drawable.icon_attention, R.string.dual_gradient_exists, null, R.string.sentence_colour_combination_exists, HashMaps.gradientExistsArrayList(), window.decorView, this)
                             gradientExists = true
                             break
                         }
@@ -322,7 +323,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                     /** Submits gradient if it doesn't already exist */
                     if (count + 1 == Values.gradientList.size && !gradientExists) {
                         //progressPopupDialog(R.string.dialog_title_eng_submitting, R.string.dialog_body_eng_uploading, null, null)
-                        UIElement.popupDialog(this, "submittingGradient", null, R.string.word_submitting, null, R.string.sentence_uploading_gradient, null, window.decorView, null)
+                        //UIElement.popupDialog(this, "submittingGradient", null, R.string.word_submitting, null, R.string.sentence_uploading_gradient, null, window.decorView, null)
                         gradientPush()
                     }
                 }
@@ -331,7 +332,8 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
             }
         } else {
             //popupDialog(R.drawable.icon_question, "Missing Info", R.string.dialog_body_eng_gradient_create_missing, R.string.text_eng_ok, dialogMissingListener)
-            UIElement.popupDialog(this, "missingInfo", R.drawable.icon_question, R.string.dual_missing_info, null, R.string.sentence_missing_gradient_name, HashMaps.missingInfoArrayList(), window.decorView, this)
+                TODO("Add missingInfoDialog")
+            //UIElement.popupDialog(this, "missingInfo", R.drawable.icon_question, R.string.dual_missing_info, null, R.string.sentence_missing_gradient_name, HashMaps.missingInfoArrayList(), window.decorView, this)
         }
     }
 
@@ -376,20 +378,21 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         Values.saveValues(this)
 
         //popupDialog(R.drawable.icon_check, gradientUID, R.string.dialog_body_eng_submitted, R.string.text_eng_exit, dialogCompleteListener)
-        UIElement.popupDialogHider()
-        UIElement.popupDialog(this, "gradientSubmitted", R.drawable.icon_check, null, gradientUID, R.string.sentence_gradient_unique_code, HashMaps.gradientSubmittedArrayList(), window.decorView, this)
+        //UIElement.popupDialogHider()
+        TODO("Add gradientSubmitted Dialog")
+        //UIElement.popupDialog(this, "gradientSubmitted", R.drawable.icon_check, null, gradientUID, R.string.sentence_gradient_unique_code, HashMaps.gradientSubmittedArrayList(), window.decorView, this)
     }
 
     private fun checkConnection() {
         when (Connection.getConnectionType(this)) {
             0 -> {
-                UIElement.popupDialog(this, "noConnection", R.drawable.icon_warning, R.string.dual_no_connection, null,
-                        R.string.sentence_needs_internet_connection, HashMaps.noConnectionArrayList(), window.decorView, this)
+                /*UIElement.popupDialog(this, "noConnection", R.drawable.icon_warning, R.string.dual_no_connection, null,
+                        R.string.sentence_needs_internet_connection, HashMaps.noConnectionArrayList(), window.decorView, this)*/
             }
             1, 2 -> {
                 if (Values.gradientList.isEmpty()) {
-                    UIElement.popupDialog(this, "gradientsNotDownloaded", R.drawable.icon_warning, R.string.dual_offline_mode, null,
-                            R.string.sentence_needs_updated_gradients, HashMaps.gradientArrayNotUpdated(), window.decorView, this)
+                    /*UIElement.popupDialog(this, "gradientsNotDownloaded", R.drawable.icon_warning, R.string.dual_offline_mode, null,
+                            R.string.sentence_needs_updated_gradients, HashMaps.gradientArrayNotUpdated(), window.decorView, this)*/
                 } else {
                     submitLogic()
                 }
@@ -430,12 +433,12 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
             "gradientCreator" -> {
                 when (position) {
                     0 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                         Values.hintCreateGradientDismissed = true
                         Values.saveValues(this)
                     }
                     1 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                         Handler(Looper.getMainLooper()).postDelayed({
                             firstStepExitAnim(true)
                             Handler(Looper.getMainLooper()).postDelayed({
@@ -446,11 +449,11 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                 }
             }
             "missingInfo" -> {
-                UIElement.popupDialogHider()
+                //UIElement.popupDialogHider()
                 nextStepButton.isEnabled = true
             }
             "gradientExists" -> {
-                UIElement.popupDialogHider()
+                //UIElement.popupDialogHider()
                 Handler(Looper.getMainLooper()).postDelayed({
                     lastStepExitAnim(false)
                     Handler(Looper.getMainLooper()).postDelayed({
@@ -468,7 +471,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                         clipboardManager.setPrimaryClip(clipData)
                     }
                     1 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                         Handler(Looper.getMainLooper()).postDelayed({
                             lastStepExitAnim(true)
                             Handler(Looper.getMainLooper()).postDelayed({
@@ -481,13 +484,13 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
             "noConnection" -> {
                 when (position) {
                     0 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                         Handler(Looper.getMainLooper()).postDelayed({
                             checkConnection()
                         }, Values.dialogShowAgainTime)
                     }
                     1 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                         nextStepButton.isEnabled = true
                     }
                 }
@@ -495,7 +498,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
             "gradientsNotDownloaded" -> {
                 when (position) {
                     0 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                         Values.justSubmitted = true
                         Handler(Looper.getMainLooper()).postDelayed({
                             lastStepExitAnim(true)
@@ -505,7 +508,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                         }, Values.dialogShowAgainTime)
                     }
                     1 -> {
-                        UIElement.popupDialogHider()
+                        //UIElement.popupDialogHider()
                         submitButton.isEnabled = true
                     }
                 }

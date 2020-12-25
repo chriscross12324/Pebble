@@ -4,6 +4,10 @@
     <string name="app_name">Pebble</string>
 
 
+    <!-- Variable strings -->
+    <string name="variable_gradients">%1$d gradientes</string>
+
+
     <!-- Single word strings -->
     <string name="word_ad">Anuncio</string>
     <string name="word_allow">Permitir</string>
@@ -15,6 +19,7 @@
     <string name="word_connecting">Conectando</string>
     <string name="word_continue">Continuar</string>
     <string name="word_copy">Copiar</string>
+    <string name="word_create">Crear</string>
     <string name="word_dark">Oscuro</string>
     <string name="word_darker">Más Oscuro</string>
     <string name="word_delete">Eliminar</string>
@@ -26,7 +31,6 @@
     <string name="word_failed">Fracasado</string>
     <string name="word_feedback">Comentario</string>
     <string name="word_finishing">Acabado</string>
-    <string name="__gradients">%1$d gradientes</string>
     <string name="word_leave">Dejar</string>
     <string name="word_light">Claro</string>
     <string name="word_network">Network</string>
@@ -34,8 +38,9 @@
     <string name="word_off">Fuera</string>
     <string name="word_offline">Offline</string>
     <string name="word_ok">OK</string>
-    <string name="word_on">On</string>
+    <string name="word_on">Encendida</string>
     <string name="word_open">Abrir</string>
+    <string name="word_options">Opciones</string>
     <string name="word_refresh">Refrescar</string>
     <string name="word_retry">Retry</string>
     <string name="word_search">Buscar</string>
@@ -57,36 +62,37 @@
     <!-- Dual word strings -->
     <string name="dual_ad_loading">Anuncio Cargando</string>
     <string name="dual_ask_everytime">Ask Every-time</string>
-    <string name="dual_copy_code">Copy Code</string>
-    <string name="dual_create_gradient">Create Gradient</string>
+    <string name="dual_copy_code">Copiar código</string>
+    <string name="dual_create_gradient">Crear gradiente</string>
     <string name="dual_customize_pebble">Personalizar Pebble</string>
     <string name="dual_feedback_submitted">Feedback Submitted</string>
+    <string name="dual_getting_gradients">Obteniendo Gradientes</string>
     <string name="dual_go_offline">Go Offline</string>
     <string name="dual_go_online">Go Online</string>
-    <string name="dual_gradient_exists">Gradientes Exists</string>
-    <string name="dual_gradient_saved">Gradient Saved</string>
-    <string name="dual_home_screen">Home Screen</string>
+    <string name="dual_gradient_exists">El gradiente existe</string>
+    <string name="dual_gradient_saved">Gradiente guardada</string>
+    <string name="dual_home_screen">Pantella\nde inicio</string>
     <string name="dual_i_understand">Entiendo</string>
-    <string name="dual_lock_screen">Lock Screen</string>
+    <string name="dual_lock_screen">Pantalla\nde bloqueo</string>
     <string name="dual_missing_info">Missing Info</string>
-    <string name="dual_my_gradients">My Gradients</string>
+    <string name="dual_my_gradients">Mi Gradientes</string>
     <string name="dual_no_connection">Sin Conexión</string>
-    <string name="dual_not_now">Not now</string>
+    <string name="dual_not_now">No ahora</string>
     <string name="dual_offline_mode">Offline Mode</string>
     <string name="dual_outdated_android">Outdated Android</string>
     <string name="dual_push_hold">Push &amp; Hold</string>
     <string name="dual_save_gradient">Save Gradient</string>
     <string name="dual_set_wallpaper">Set Wallpaper</string>
     <string name="dual_special_effects">Efectos Especiales</string>
-    <string name="dual_split_screen">Split Screen</string>
+    <string name="dual_split_screen">Pantalla dividida</string>
     <string name="dual_still_connecting">Still connecting</string>
     <string name="dual_take_tour">Take Tour</string>
     <string name="dual_tap_here">Pulse aquí</string>
-    <string name="dual_thank_you">Thank You</string>
+    <string name="dual_thank_you">Gracias</string>
     <string name="dual_to_return">para volver</string>
     <string name="dual_try_wifi">Try Wi-Fi</string>
     <string name="dual_use_data">Usar la red</string>
-    <string name="dual_use_forever">Use forever</string>
+    <string name="dual_use_forever">Usar para siempre</string>
     <string name="dual_wallpaper_set">Wallpaper Set</string>
 
 
@@ -141,8 +147,6 @@
     <string name="sentence_uploading_gradient">Uploading gradient to Pebble</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="word_create">Crear</string>
-    <string name="word_options">Opciones</string>
 
 
     <!-- Unorganized -->

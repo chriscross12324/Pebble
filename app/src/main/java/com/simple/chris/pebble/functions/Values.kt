@@ -2,6 +2,7 @@ package com.simple.chris.pebble.functions
 
 import android.content.Context
 import android.view.View
+import com.simple.chris.pebble.adapters_helpers.DialogPopup
 
 /**
  * Stores all essential values, can be referenced and changed from Activities
@@ -19,6 +20,17 @@ object Values {
 
     //Animations
     const val sharedElementLength: Long = 500
+    const val dialogBackgroundDimmer = 0.75f
+    const val dialogBackgroundTint = "#99000000"
+
+    //DialogFragment
+    lateinit var dialogPopup: DialogPopup
+    var adLoading = false
+
+    //Connection
+    var gradientList: ArrayList<HashMap<String, String>> = ArrayList()
+    var offlineMode = false
+    var connectingToServer = false
 
     //Hidden Values
     var firstStart = true
@@ -27,7 +39,7 @@ object Values {
     var hintPushHoldDismissed = false
     var hintCreateGradientDismissed = false
     var currentActivity: String = ""
-    var gradientList: ArrayList<HashMap<String, String>> = ArrayList()
+
     var dialogShowAgainTime: Long = 450
     var downloadingGradients = false
     var refreshTheme = false
@@ -112,5 +124,9 @@ object Values {
         gradientCreatorDescription = sharedPrefs.getString("gradientCreatorDescription", "")!!
         hintCreateGradientDismissed = sharedPrefs.getBoolean("hintCreateGradientDismissed", false)
         dontAskStorage = sharedPrefs.getBoolean("dontAskStorage", false)
+    }
+
+    fun dialogFrag(dialog: DialogPopup) {
+        dialogPopup = dialog
     }
 }

@@ -12,7 +12,6 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.widget.AbsListView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
@@ -23,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.BrowseMenuRecyclerView
-import com.simple.chris.pebble.adapters_helpers.GradientLongClickDialog
+import com.simple.chris.pebble.adapters_helpers.DialogGradientInfo
 import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.functions.*
@@ -39,7 +38,6 @@ import kotlinx.android.synthetic.main.fragment_browse.resultsText
 import kotlinx.android.synthetic.main.fragment_browse.titleHolder
 import kotlinx.android.synthetic.main.fragment_browse.touchBlocker
 import kotlinx.android.synthetic.main.fragment_browse.touchBlockerDark
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
 import java.lang.Exception
 
 class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGradientListener, GradientRecyclerView.OnGradientLongClickListener, BrowseMenuRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
@@ -188,7 +186,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                     UIElements.viewObjectAnimator(gradientGrid, "scaleY", 1f, 0, 0, LinearInterpolator())
                     UIElements.viewObjectAnimator(gradientGrid, "alpha", 1f, 0, 0, LinearInterpolator())
                     RecyclerGrid.gradientGrid((activity as MainActivity), gradientGrid, Values.gradientList, this, this)
-                    resultsText.text = "${Values.gradientList.size} gradientes"
+                    resultsText.text = getString(R.string.variable_gradients, Values.gradientList.size)
                     gradientGrid.scheduleLayoutAnimation()
                 } else {
                     showGradients()
@@ -237,7 +235,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
             gradientScaleY.reverse()
 
             val fm = fragmentManager as FragmentManager
-            val longClickGradientDialog = GradientLongClickDialog.newDialog(
+            val longClickGradientDialog = DialogGradientInfo.newDialog(
                     ArrayList(Values.gradientList[position]["gradientColours"]!!.replace("[", "").replace("]", "")
                             .split(",").map { it.trim() }),
                     Values.gradientList[position]["gradientName"]!!,
@@ -276,7 +274,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                 hideMenu()
                 Handler(Looper.getMainLooper()).postDelayed({
                     Values.gradientList.clear()
-                    Connection.checkConnection(context, context.window.decorView, this)
+                    Connection.checkConnection(context, context)
                     (activity as MainActivity).connectionChecker()
                 }, 400)
             }
@@ -289,12 +287,6 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
 
     fun gridToTop() {
         gradientGrid.smoothScrollToPosition(0)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        //Toast.makeText(context, "${gradientGrid.scrollY}", Toast.LENGTH_SHORT).show()
-        //Values.browseRecyclerScrollPos = gradientGrid.layoutManager.findFir
     }
 
     override fun onResume() {
