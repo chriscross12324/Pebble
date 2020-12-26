@@ -71,6 +71,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         }
 
         searchButton.setOnClickListener {
+            (activity as MainActivity).startSearch()
             //(activity as MainActivity).startSecondary((activity as MainActivity).returnSearchFragment())
         }
 
@@ -210,12 +211,14 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
 
     override fun onGradientClick(position: Int, view: View) {
         if (!Values.animatingSharedElement) {
+            Log.e("INFO", "Not Animating")
             Vibration.lowFeedback((activity as MainActivity))
-            Values.currentActivity = "GradientScreen"
             Values.currentGradientScreenView = view
             Values.animatingSharedElement = true
             Values.canDismissSharedElement = false
             (activity as MainActivity).sharedElement(position, view)
+        } else {
+            Log.e("INFO", "Animating")
         }
     }
 

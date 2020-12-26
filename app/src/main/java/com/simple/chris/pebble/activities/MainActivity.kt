@@ -237,7 +237,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         Values.currentActivity = "Browse"
     }
 
-    fun refreshTheme() {
+    private fun refreshTheme() {
         val fragment = supportFragmentManager.findFragmentById(R.id.fragmentHolder)
         (browseFragment as FragBrowse).gridToTop()
         Handler(Looper.getMainLooper()).postDelayed({
@@ -302,6 +302,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     }
 
     fun startGradientScreen(animateNew: Boolean) {
+        Log.e("INFO", "${Values.currentlySplitScreened}")
         if (!Values.currentlySplitScreened) {
             if (Calculations.splitScreenPossible(this, window)) {
                 openSplitScreen(true)
@@ -313,14 +314,47 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                     .commitAllowingStateLoss()
             (gradientFragment as FragGradientScreen).startSplitScreen()
         } else {
-            if (animateNew) {
+            Log.e("INFO", "${Values.currentActivity}")
+            if (Values.currentActivity != "GradientScreen") {
                 supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentHolderSecondary, gradientFragment)
                         .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                        .replace(R.id.fragmentHolderSecondary, gradientFragment)
                         .commitAllowingStateLoss()
                 (gradientFragment as FragGradientScreen).startSplitScreen()
             } else {
-                (gradientFragment as FragGradientScreen).continueSplitScreen()
+                if (animateNew) {
+                    supportFragmentManager.beginTransaction()
+                            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                            .replace(R.id.fragmentHolderSecondary, gradientFragment)
+                            .commitAllowingStateLoss()
+                    (gradientFragment as FragGradientScreen).startSplitScreen()
+                } else {
+                    (gradientFragment as FragGradientScreen).continueSplitScreen()
+                }
+            }
+        }
+    }
+
+    fun startSearch() {
+        Toast.makeText(this, "${Values.currentlySplitScreened} : ${Values.currentActivity}", Toast.LENGTH_SHORT).show()
+        if (!Values.currentlySplitScreened) {
+            if (Calculations.splitScreenPossible(this, window)) {
+                Toast.makeText(this, "Split", Toast.LENGTH_SHORT).show()
+                openSplitScreen(true)
+            } else {
+                Toast.makeText(this, "Fullscreen", Toast.LENGTH_SHORT).show()
+                openFullScreen(true)
+            }
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentHolderSecondary, searchFragment)
+                    .commitAllowingStateLoss()
+        } else {
+            if (Values.currentActivity != "Search") {
+                Toast.makeText(this, "Converting", Toast.LENGTH_SHORT).show()
+                supportFragmentManager.beginTransaction()
+                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                        .replace(R.id.fragmentHolderSecondary, searchFragment)
+                        .commitAllowingStateLoss()
             }
         }
     }
@@ -408,7 +442,16 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     fun openFullScreen(animation: Boolean) {
         separator.post {
             if (animation) {
-
+                fragmentHolderSecondary.layoutParams.width = Calculations.screenMeasure(this, "width", window)
+                moveFragLeft(fragmentHolder.width.toFloat(), fragmentHolder)
+                moveFragLeft((Calculations.screenMeasure(this, "width", window) + separator.width).toFloat(), fragmentHolderSecondary)
+                shrinkFrag(fragmentHolder, 0.9f, 100, DecelerateInterpolator(3f))
+                shrinkFrag(fragmentHolderSecondary, 0.9f, 100, DecelerateInterpolator(3f))
+                Handler(Looper.getMainLooper()).postDelayed({
+                    growFrag(fragmentHolder, 1f, 200, AccelerateInterpolator())
+                    growFrag(fragmentHolderSecondary, 1f, 200, AccelerateInterpolator())
+                    Values.currentActivity = "Search"
+                }, 200)
             } else {
                 shrinkFrag(fragmentHolder, 0.9f, 200, DecelerateInterpolator(3f))
                 UIElements.viewWidthAnimator(fragmentHolderSecondary, fragmentHolderSecondary.width.toFloat(),
@@ -420,11 +463,19 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     }
 
     fun hideFullScreen(animation: Boolean) {
-        Values.animatingSharedElement = true
         if (animation) {
-            Toast.makeText(this, "Hide Search", Toast.LENGTH_SHORT).show()
+            Values.currentActivity = "Browse"
+            UIElements.viewObjectAnimator(fragmentHolder, "translationX", 0f, 500, 0, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(fragmentHolderSecondary, "translationX", 0f, 500, 0, DecelerateInterpolator(3f))
+            shrinkFrag(fragmentHolder, 0.9f, 100, DecelerateInterpolator(3f))
+            shrinkFrag(fragmentHolderSecondary, 0.9f, 100, DecelerateInterpolator(3f))
+            Handler(Looper.getMainLooper()).postDelayed({
+                growFrag(fragmentHolder, 1f, 200, AccelerateInterpolator())
+                growFrag(fragmentHolderSecondary, 1f, 200, AccelerateInterpolator())
+            }, 100)
         } else {
             //Gradient Screen
+            Values.animatingSharedElement = true
             if (!Calculations.splitScreenPossible(this, window)) {
                 //Shared Element
                 /** Get scale/position of clicked Gradient **/
@@ -895,7 +946,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                     startGradientScreen(false)
                 }
                 "Search" -> {
-
+                    startSearch()
                 }
             }
         } else {
@@ -905,7 +956,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                     startGradientScreen(false)
                 }
                 "Search" -> {
-
+                    startSearch()
                 }
             }
         }

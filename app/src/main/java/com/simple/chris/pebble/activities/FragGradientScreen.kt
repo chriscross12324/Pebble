@@ -3,6 +3,7 @@ package com.simple.chris.pebble.activities
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.WallpaperManager
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -57,6 +59,7 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
         /** Wait for UI to populate **/
         Handler(Looper.getMainLooper()).postDelayed({
             if (detailsHolder != null) {
+                Log.e("INFO", "starting")
                 /** Set UI Elements **/
                 optionsExpanded = false
                 optionsHolder.visibility = View.INVISIBLE
@@ -93,6 +96,7 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
         /** Wait for UI to populate **/
         Handler(Looper.getMainLooper()).postDelayed({
             if (detailsHolder != null) {
+                Log.e("INFO", "continuing")
                 /** Animates away UI Elements **/
                 UIElements.viewObjectAnimator(detailsHolder, "translationY",
                         (90 * resources.displayMetrics.density) + detailsHolder.height,
@@ -132,9 +136,11 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
     }
 
     private fun tellMainReady() {
+        Log.e("INFO", "tellMain")
         Handler(Looper.getMainLooper()).postDelayed({
             if (Values.canDismissSharedElement) {
                 (activity as MainActivity).endSharedElement()
+                Values.currentActivity = "GradientScreen"
                 buttonFunctionality()
             } else {
                 tellMainReady()

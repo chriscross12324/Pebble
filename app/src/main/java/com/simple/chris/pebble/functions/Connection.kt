@@ -129,7 +129,7 @@ object Connection {
     fun checkDownload(context: Context) {
         Handler(Looper.getMainLooper()).postDelayed({
             if (Values.gradientList.isEmpty()) {
-                TODO("Add stillConnecting Dialog")
+                //TODO("Add stillConnecting Dialog")
                 //UIElement.popupDialog(context, "stillConnecting", R.drawable.icon_wifi_full, R.string.dual_still_connecting, null, R.string.question_still_connecting, HashMaps.arrayContinueOfflineRetry(), decorView, listener)
             }
         }, 20000)

@@ -44,7 +44,7 @@ class FragSearch : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
         context = (activity as MainActivity)
 
         backButton.setOnClickListener {
-            //(activity as MainActivity).closeSecondary()
+            (activity as MainActivity).hideFullScreen(true)
         }
 
         searchByColourButton.setOnClickListener {
@@ -62,7 +62,8 @@ class FragSearch : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
                 UIElements.viewVisibility(searchByColourCircle, View.GONE, 150)
                 UIElements.viewObjectAnimator(searchColourRecycler, "alpha", 1f, 150, 100, LinearInterpolator())
                 UIElements.viewVisibility(searchColourRecycler, View.VISIBLE, 150)
-            }
+            } else
+                Log.e("INFO", "Already expanded")
         }
 
         searchFieldHolder.setOnClickListener {
