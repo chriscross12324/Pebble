@@ -2,6 +2,8 @@ package com.simple.chris.pebble.functions
 
 import android.content.Context
 import android.view.View
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.simple.chris.pebble.adapters_helpers.DialogPopup
 
 /**
@@ -9,7 +11,9 @@ import com.simple.chris.pebble.adapters_helpers.DialogPopup
  */
 object Values {
     private const val SAVE = "SavedValues"
+    private lateinit var fireBase: FirebaseFirestore
     var valuesLoaded = false
+    var errorOccurred = false
     var adMobInitialized = false
 
     //Vibrations
@@ -21,7 +25,7 @@ object Values {
     //Animations
     const val sharedElementLength: Long = 500
     const val dialogBackgroundDimmer = 0.75f
-    const val dialogBackgroundTint = "#99000000"
+    const val dialogBackgroundTint = "#33000000"
 
     //DialogFragment
     lateinit var dialogPopup: DialogPopup
@@ -128,5 +132,13 @@ object Values {
 
     fun dialogFrag(dialog: DialogPopup) {
         dialogPopup = dialog
+    }
+
+    fun setFireStore(firebase: FirebaseFirestore) {
+        this.fireBase = firebase
+    }
+
+    fun getFireStore(): FirebaseFirestore {
+        return fireBase
     }
 }

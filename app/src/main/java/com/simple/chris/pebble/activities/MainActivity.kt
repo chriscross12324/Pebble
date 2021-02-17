@@ -19,6 +19,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.*
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.DialogPopup
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
@@ -63,6 +65,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         super.onCreate(savedInstanceState)
         UIElement.setTheme(this)
         setContentView(R.layout.activity_main)
+        Values.setFireStore(Firebase.firestore)
         if (!Values.refreshTheme) {
             if (Values.gradientList.isEmpty()) {
                 Connection.checkConnection(this, this)
@@ -70,6 +73,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             }
         } else {
             Values.refreshTheme = false
+            //connectionChecker()
         }
 
 
@@ -87,6 +91,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         }
 
         adMob()
+        appError()
     }
 
     override fun onAttachedToWindow() {
@@ -198,15 +203,16 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     fun startGradientCreator() {
         shrinkFrag(fragmentHolder, 0.7f, 500, DecelerateInterpolator(3f))
         Handler(Looper.getMainLooper()).postDelayed({
-            if (Values.connectionOffline) {
+            val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, gradientCreatorSharedElementView, "gradientCreatorViewer")
+            startActivity(Intent(this, GradientCreator::class.java), activityOptions.toBundle())
+            /*if (Values.connectionOffline) {
                 val fm = supportFragmentManager
                 Values.dialogPopup = DialogPopup.newDialog(HashMaps.noConnectionArrayList(), "noConnection", R.drawable.icon_wifi_empty,
                         R.string.dual_no_connection, null, R.string.sentence_needs_internet_connection)
                 Values.dialogPopup.show(fm, "noConnection")
             } else {
-                val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, gradientCreatorSharedElementView, "gradientCreatorViewer")
-                startActivity(Intent(this, GradientCreator::class.java), activityOptions.toBundle())
-            }
+
+            }*/
         }, 0)
     }
 
@@ -336,13 +342,13 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     }
 
     fun startSearch() {
-        Toast.makeText(this, "${Values.currentlySplitScreened} : ${Values.currentActivity}", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, "${Values.currentlySplitScreened} : ${Values.currentActivity}", Toast.LENGTH_SHORT).show()
         if (!Values.currentlySplitScreened) {
             if (Calculations.splitScreenPossible(this, window)) {
-                Toast.makeText(this, "Split", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, "Split", Toast.LENGTH_SHORT).show()
                 openSplitScreen(true)
             } else {
-                Toast.makeText(this, "Fullscreen", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, "Fullscreen", Toast.LENGTH_SHORT).show()
                 openFullScreen(true)
             }
             supportFragmentManager.beginTransaction()
@@ -451,7 +457,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                     growFrag(fragmentHolder, 1f, 200, AccelerateInterpolator())
                     growFrag(fragmentHolderSecondary, 1f, 200, AccelerateInterpolator())
                     Values.currentActivity = "Search"
-                }, 200)
+                }, 100)
             } else {
                 shrinkFrag(fragmentHolder, 0.9f, 200, DecelerateInterpolator(3f))
                 UIElements.viewWidthAnimator(fragmentHolderSecondary, fragmentHolderSecondary.width.toFloat(),
@@ -558,7 +564,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                         Values.settingThemes = "darker"
                     }
                 }
-                dialogPopupHider()
+                ////dialogPopupHider()
                 Handler(Looper.getMainLooper()).postDelayed({
                     if (current != Values.settingThemes) {
                         hideSmallScreen()
@@ -577,7 +583,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                         Values.settingVibrations = false
                     }
                 }
-                dialogPopupHider()
+                //dialogPopupHider()
             }
             "settingSpecialEffects" -> {
                 when (position) {
@@ -590,7 +596,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                         Values.settingsSpecialEffects = false
                     }
                 }
-                dialogPopupHider()
+                ////dialogPopupHider()
                 UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha, window)
             }
             "settingSplitScreen" -> {
@@ -604,7 +610,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                         Values.settingSplitScreen = false
                     }
                 }
-                dialogPopupHider()
+                //dialogPopupHider()
             }
             "settingNetwork" -> {
                 when (position) {
@@ -613,22 +619,18 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                         Values.useMobileData = "on"
                     }
                     1 -> {
-                        //Off
-                        Values.useMobileData = "off"
-                    }
-                    2 -> {
                         //Ask Every-time
                         Values.useMobileData = "ask"
                     }
                 }
-                dialogPopupHider()
+                //dialogPopupHider()
             }
             "leave" -> {
                 when (position) {
                     0 -> {
                         finishAndRemoveTask()
                     }
-                    1 -> dialogPopupHider()
+                    //1 -> //dialogPopupHider()
                 }
             }
             "stillConnecting" -> {
@@ -652,18 +654,23 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             "askMobile" -> {
                 when (position) {
                     0 -> {
-                        Connection.getGradients(this, this)
+                        //Values.dialogPopup.dismiss()
+                        Connection.getGradientsFireStore(this)
+                        Log.e("INFO", "0")
                         //UIElement.popupDialogHider()
                     }
                     1 -> {
                         Values.useMobileData = "on"
-                        Connection.getGradients(this, this)
+                        //Values.dialogPopup.dismiss()
+                        Connection.getGradientsFireStore(this)
+                        Log.e("INFO", "1")
                         //UIElement.popupDialogHider()
                     }
                     2 -> {
                         //UIElement.popupDialogHider()
                         Handler(Looper.getMainLooper()).postDelayed({
                             Connection.checkConnection(this, this)
+                            Log.e("INFO", "2")
                         }, Values.dialogShowAgainTime)
                     }
                 }
@@ -686,35 +693,39 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                 val wallpaperManager = WallpaperManager.getInstance(this)
                 when (position) {
                     0 -> {
-                        dialogPopupHider()
+                        //dialogPopupHider()
                         try {
-                            wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(this, null, Values.gradientScreenColours, 0f) as Drawable,
-                                    Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)),
-                                    null, true, WallpaperManager.FLAG_SYSTEM)
-                            (gradientFragment as FragGradientScreen).runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(this, null, Values.gradientScreenColours, 0f) as Drawable,
+                                        Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)),
+                                        null, true, WallpaperManager.FLAG_SYSTEM)
+                                (gradientFragment as FragGradientScreen).runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
+                            }, 250)
                         } catch (e: Exception) {
                             Log.e("ERR", "pebble.frag_gradient_screen.on_button_click_popup.set_wallpaper: ${e.localizedMessage}")
                         }
                     }
                     1 -> {
-                        dialogPopupHider()
+                        //dialogPopupHider()
                         try {
-                            wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(this, null, Values.gradientScreenColours, 0f) as Drawable,
-                                    Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)),
-                                    null, true, WallpaperManager.FLAG_LOCK)
-                            (gradientFragment as FragGradientScreen).runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(this, null, Values.gradientScreenColours, 0f) as Drawable,
+                                        Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)),
+                                        null, true, WallpaperManager.FLAG_LOCK)
+                                (gradientFragment as FragGradientScreen).runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
+                            }, 250)
                         } catch (e: Exception) {
                             Log.e("ERR", "pebble.frag_gradient_screen.on_button_click_popup.set_wallpaper: ${e.localizedMessage}")
                         }
                     }
-                    2 -> dialogPopupHider()
+                    //2 -> //dialogPopupHider()
                 }
             }
             "setWallpaperOutdated" -> {
                 val wallpaperManager = WallpaperManager.getInstance(this)
                 when (position) {
                     0 -> {
-                        dialogPopupHider()
+                        //dialogPopupHider()
                         try {
                             wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(this, null, Values.gradientScreenColours, 0f) as Drawable,
                                     Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)))
@@ -723,11 +734,34 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                             Log.e("ERR", "pebble.frag_gradient_screen.on_button_click_popup.set_wallpaper_outdated: ${e.localizedMessage}")
                         }
                     }
-                    1 -> dialogPopupHider()
+                    //1 -> //dialogPopupHider()
+                }
+            }
+            "appError" -> {
+                when (position) {
+                    0 -> {
+                        startActivity(Intent(this, SplashScreen::class.java))
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                        finish()
+                    }
                 }
             }
         }
         Values.saveValues(this)
+    }
+
+    fun appError() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (Values.errorOccurred) {
+                Values.errorOccurred = false
+                val fm = supportFragmentManager
+                Values.dialogPopup = DialogPopup.newDialog(HashMaps.restartArray(), "appError", R.drawable.icon_warning, R.string.word_error,
+                        null, R.string.sentence_app_error)
+                Values.dialogPopup.show(fm, "appError")
+            } else {
+                appError()
+            }
+        }, 100)
     }
 
     /*override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
@@ -909,7 +943,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             } else {
                 connectionChecker()
             }
-        }, 500)
+        }, 50)
     }
 
     override fun onBackPressed() {
@@ -939,30 +973,34 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
     override fun onResume() {
         super.onResume()
-        if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Values.currentlySplitScreened = false
-            when (Values.currentActivity) {
-                "GradientScreen" -> {
-                    startGradientScreen(false)
+        if (Values.valuesLoaded) {
+            if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                Values.currentlySplitScreened = false
+                when (Values.currentActivity) {
+                    "GradientScreen" -> {
+                        startGradientScreen(false)
+                    }
+                    "Search" -> {
+                        startSearch()
+                    }
                 }
-                "Search" -> {
-                    startSearch()
+            } else {
+                Values.currentlySplitScreened = false
+                when (Values.currentActivity) {
+                    "GradientScreen" -> {
+                        startGradientScreen(false)
+                    }
+                    "Search" -> {
+                        startSearch()
+                    }
                 }
+            }
+
+            if (Values.currentActivity == "GradientCreator") {
+                growFrag(fragmentHolder, 1f, 500, DecelerateInterpolator(3f))
             }
         } else {
-            Values.currentlySplitScreened = false
-            when (Values.currentActivity) {
-                "GradientScreen" -> {
-                    startGradientScreen(false)
-                }
-                "Search" -> {
-                    startSearch()
-                }
-            }
-        }
-
-        if (Values.currentActivity == "GradientCreator") {
-            growFrag(fragmentHolder, 1f, 500, DecelerateInterpolator(3f))
+            appError()
         }
     }
 }

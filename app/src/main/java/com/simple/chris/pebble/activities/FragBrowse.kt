@@ -9,7 +9,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.Toast
@@ -27,18 +26,7 @@ import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.fragment_browse.*
-import kotlinx.android.synthetic.main.fragment_browse.bottomSheet
-import kotlinx.android.synthetic.main.fragment_browse.browseMenu
-import kotlinx.android.synthetic.main.fragment_browse.buttonIcon
-import kotlinx.android.synthetic.main.fragment_browse.createButton
-import kotlinx.android.synthetic.main.fragment_browse.menu
-import kotlinx.android.synthetic.main.fragment_browse.menuArrow
-import kotlinx.android.synthetic.main.fragment_browse.menuButton
-import kotlinx.android.synthetic.main.fragment_browse.resultsText
-import kotlinx.android.synthetic.main.fragment_browse.titleHolder
-import kotlinx.android.synthetic.main.fragment_browse.touchBlocker
-import kotlinx.android.synthetic.main.fragment_browse.touchBlockerDark
-import java.lang.Exception
+import kotlinx.android.synthetic.main.module_browse_normal.view.*
 
 class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGradientListener, GradientRecyclerView.OnGradientLongClickListener, BrowseMenuRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
 
@@ -49,6 +37,9 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
     var createButtonWidth = 0
     var menuHeight = 0
     var menuWidth = 0
+
+    //Error Loops
+    var bottomSheetErrorLoop = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -96,51 +87,64 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
     }
 
     private fun bottomSheet() {
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-        bottomSheetBehavior.peekHeight = bottomSheetPeekHeight
+        try {
+            bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            bottomSheetBehavior.peekHeight = bottomSheetPeekHeight
 
-        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            bottomSheetPeekHeight = Calculations.screenMeasure(context, "height", context.window)
-        }
-
-        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
+            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                bottomSheetPeekHeight = Calculations.screenMeasure(context, "height", context.window)
             }
 
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                titleHolder.translationY = ((Values.screenHeight * (-0.333) * slideOffset + Values.screenHeight * (0.333) - (titleHolder.measuredHeight)) / 2).toFloat()
-                buttonIcon.translationY = ((Values.screenHeight * (-0.333) * slideOffset + Values.screenHeight * (0.333) - (titleHolder.measuredHeight)) / 8).toFloat()
-                val cornerRadius = ((slideOffset * -1) + 1) * Calculations.convertToDP((activity as MainActivity), 20f)
-                val bottomShe = view?.findViewById<CardView>(R.id.bottomSheet)
-                bottomShe?.radius = cornerRadius
-
-                if (slideOffset >= 0.4f) {
-                    if (createButtonExpanded) {
-                        UIElement.animateViewWidth("height", createButton, Calculations.convertToDP((activity as MainActivity), 35f).toInt(), 0, 250)
-                        UIElement.animateViewWidth("width", createButton, Calculations.convertToDP((activity as MainActivity), 50f).toInt(), 0, 250)
-                        createButtonExpanded = false
-                    }
-                } else {
-                    if (!createButtonExpanded) {
-                        UIElement.animateViewWidth("height", createButton, Calculations.convertToDP((activity as MainActivity), 60f).toInt(), 0, 250)
-                        UIElement.animateViewWidth("width", createButton, Calculations.viewWrapContent(createButton, "width") + Calculations.convertToDP((activity as MainActivity), 11f).toInt(), 0, 250)
-                        createButtonExpanded = true
-                    }
-
+            bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
                 }
 
-                //browseGrid.setPadding(browseGrid.paddingLeft, Calculations.convertToDP(this@Browse, ((Calculations.cutoutHeight(window) * slideOffset) + 16f)).toInt(), browseGrid.paddingRight, browseGrid.paddingBottom)
-                //Toast.makeText(this@Browse, "${browseGrid.paddingTop + Calculations.convertToDP(this@Browse, (Calculations.cutoutHeight(window) * slideOffset))}", Toast.LENGTH_SHORT).show()
-            }
-        })
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                    titleHolder.translationY = ((Values.screenHeight * (-0.333) * slideOffset + Values.screenHeight * (0.333) - (titleHolder.measuredHeight)) / 2).toFloat()
+                    buttonIcon.translationY = ((Values.screenHeight * (-0.333) * slideOffset + Values.screenHeight * (0.333) - (titleHolder.measuredHeight)) / 8).toFloat()
+                    val cornerRadius = ((slideOffset * -1) + 1) * Calculations.convertToDP((activity as MainActivity), 20f)
+                    val bottomShe = view?.findViewById<CardView>(R.id.bottomSheet)
+                    bottomShe?.radius = cornerRadius
 
-        gradientGrid.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                Values.browseRecyclerScrollPos = dy
-                //Toast.makeText(context, "$dy", Toast.LENGTH_SHORT).show()
-            }
-        })
+                    if (slideOffset >= 0.4f) {
+                        if (createButtonExpanded) {
+                            UIElement.animateViewWidth("height", createButton, Calculations.convertToDP((activity as MainActivity), 35f).toInt(), 0, 250)
+                            UIElement.animateViewWidth("width", createButton, Calculations.convertToDP((activity as MainActivity), 50f).toInt(), 0, 250)
+                            createButtonExpanded = false
+                        }
+                    } else {
+                        if (!createButtonExpanded) {
+                            UIElement.animateViewWidth("height", createButton, Calculations.convertToDP((activity as MainActivity), 60f).toInt(), 0, 250)
+                            UIElement.animateViewWidth("width", createButton, Calculations.viewWrapContent(createButton, "width") + Calculations.convertToDP((activity as MainActivity), 11f).toInt(), 0, 250)
+                            createButtonExpanded = true
+                        }
+
+                    }
+
+                    //browseGrid.setPadding(browseGrid.paddingLeft, Calculations.convertToDP(this@Browse, ((Calculations.cutoutHeight(window) * slideOffset) + 16f)).toInt(), browseGrid.paddingRight, browseGrid.paddingBottom)
+                    //Toast.makeText(this@Browse, "${browseGrid.paddingTop + Calculations.convertToDP(this@Browse, (Calculations.cutoutHeight(window) * slideOffset))}", Toast.LENGTH_SHORT).show()
+                }
+            })
+
+            gradientGrid.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    Values.browseRecyclerScrollPos = dy
+                    //Toast.makeText(context, "$dy", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } catch (e: Exception) {
+            Handler(Looper.getMainLooper()).postDelayed({
+                bottomSheetErrorLoop++
+                Log.e("ERR", "BottomSheet not available::Attempt $bottomSheetErrorLoop")
+                if (bottomSheetErrorLoop >= 10) {
+                    Values.errorOccurred = true
+                    Log.e("ERR", "A problem occurred and the app needs to be reset")
+                } else {
+                    bottomSheet()
+                }
+            }, 50)
+        }
     }
 
     private fun showMenu() {
@@ -177,20 +181,18 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
 
     fun showGradients() {
         try {
-            UIElements.viewObjectAnimator(gradientGrid, "scaleX", 0.6f, 350, 0, AccelerateInterpolator(3f))
-            UIElements.viewObjectAnimator(gradientGrid, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
+            Log.e("ERR", "Trying")
             UIElements.viewObjectAnimator(gradientGrid, "alpha", 0f, 150, 200, LinearInterpolator())
 
             Handler(Looper.getMainLooper()).postDelayed({
                 if (gradientGrid != null) {
-                    UIElements.viewObjectAnimator(gradientGrid, "scaleX", 1f, 0, 0, LinearInterpolator())
-                    UIElements.viewObjectAnimator(gradientGrid, "scaleY", 1f, 0, 0, LinearInterpolator())
                     UIElements.viewObjectAnimator(gradientGrid, "alpha", 1f, 0, 0, LinearInterpolator())
                     RecyclerGrid.gradientGrid((activity as MainActivity), gradientGrid, Values.gradientList, this, this)
                     resultsText.text = getString(R.string.variable_gradients, Values.gradientList.size)
                     gradientGrid.scheduleLayoutAnimation()
                 } else {
                     showGradients()
+                    Log.e("ERR", "Trying Again")
                 }
 
             }, 500)
@@ -201,12 +203,19 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
     }
 
     private fun browseMenuButtons() {
-        browseMenu.setHasFixedSize(true)
-        val buttonLayoutManager = LinearLayoutManager((activity as MainActivity), LinearLayoutManager.VERTICAL, false)
-        val buttonAdapter = BrowseMenuRecyclerView((activity as MainActivity), HashMaps.browseMenuArray(), this)
+        try {
+            browseMenu.setHasFixedSize(true)
+            val buttonLayoutManager = LinearLayoutManager((activity as MainActivity), LinearLayoutManager.VERTICAL, false)
+            val buttonAdapter = BrowseMenuRecyclerView((activity as MainActivity), HashMaps.browseMenuArray(), this)
 
-        browseMenu.layoutManager = buttonLayoutManager
-        browseMenu.adapter = buttonAdapter
+            browseMenu.layoutManager = buttonLayoutManager
+            browseMenu.adapter = buttonAdapter
+        } catch (e: Exception) {
+            Handler(Looper.getMainLooper()).postDelayed({
+                browseMenuButtons()
+            }, 50)
+
+        }
     }
 
     override fun onGradientClick(position: Int, view: View) {
@@ -236,13 +245,16 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         Handler(Looper.getMainLooper()).postDelayed({
             gradientScaleX.reverse()
             gradientScaleY.reverse()
+            val intArray = IntArray(2)
+            view.gradient.getLocationOnScreen(intArray)
 
             val fm = fragmentManager as FragmentManager
             val longClickGradientDialog = DialogGradientInfo.newDialog(
                     ArrayList(Values.gradientList[position]["gradientColours"]!!.replace("[", "").replace("]", "")
                             .split(",").map { it.trim() }),
                     Values.gradientList[position]["gradientName"]!!,
-                    Values.gradientList[position]["gradientDescription"]!!
+                    Values.gradientList[position]["gradientDescription"]!!,
+                    intArray
             )
             longClickGradientDialog.show(fm, "longClickGradientDialog")
 

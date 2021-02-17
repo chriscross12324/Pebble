@@ -1,6 +1,7 @@
 package com.simple.chris.pebble.functions
 
 import android.app.Activity
+import android.app.DownloadManager
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -16,6 +17,7 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.firebase.firestore.Query
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.activities.MainActivity
 import com.simple.chris.pebble.adapters_helpers.DialogPopup
@@ -50,6 +52,7 @@ object Connection {
     }
 
     fun checkConnection(context: Context, activity: Activity) {
+        fm = (activity as MainActivity).supportFragmentManager
         when (getConnectionType(context)) {
             0 -> {
                 Values.dialogPopup = DialogPopup.newDialog(HashMaps.noConnectionArrayList(), "noConnection", R.drawable.icon_warning, R.string.dual_no_connection,
@@ -57,12 +60,12 @@ object Connection {
                 Values.dialogPopup.show(fm, "noConnection")
             }
             1 -> {
-                getGradients(context, activity)
+                getGradientsFireStore(activity)
             }
             2 -> {
                 when (Values.useMobileData) {
                     "on" -> {
-                        getGradients(context, activity)
+                        getGradientsFireStore(activity)
                     }
                     "off" -> {
                         Toast.makeText(context, "Enable Data Usage in Settings", Toast.LENGTH_LONG).show()
@@ -75,6 +78,36 @@ object Connection {
                 }
             }
         }
+    }
+
+    fun getGradientsFireStore(activity: Activity) {
+        fm = (activity as MainActivity).supportFragmentManager
+        Values.dialogPopup = DialogPopup.newDialog(null, "connecting", null, R.string.word_connecting,
+                null, R.string.sentence_pebble_is_connecting)
+        Values.dialogPopup.show(fm, "connecting")
+
+        Values.downloadingGradients = true
+        Values.getFireStore().collection("gradientList")
+                .orderBy("gradientTimestamp", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener {
+                    val gradientList = ArrayList<HashMap<String, String>>()
+                    for (document in it) {
+                        val item = HashMap<String, String>()
+                        item["gradientName"] = document.data["gradientName"] as String
+                        item["gradientColours"] = document.data["gradientColours"] as String
+                        item["gradientDescription"] = document.data["gradientDescription"] as String
+
+                        gradientList.add(item)
+                        Values.gradientList = gradientList
+                    }
+                    Log.e("INFO", "Firestore: Done")
+                    connectionOnline()
+                    Values.connectionOffline = false
+                }
+                .addOnFailureListener {
+                    Log.e("INFO", "Firebase failure: $it")
+                }
     }
 
     fun getGradients(context: Context, activity: Activity) {

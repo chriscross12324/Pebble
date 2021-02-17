@@ -25,6 +25,7 @@ import com.simple.chris.pebble.activities.GradientDetails
 import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.dialog_long_press_gradients.*
+import kotlinx.android.synthetic.main.module_browse_normal.view.*
 import kotlin.Exception
 
 object RecyclerGrid {
@@ -62,7 +63,9 @@ object RecyclerGrid {
         }
     }
 
-    fun gradientGridOnLongClickListener(context: Activity, gradientJSON: ArrayList<HashMap<String, String>>, position: Int, window: Window?) {
+    fun gradientGridOnLongClickListener(context: Activity, gradientJSON: ArrayList<HashMap<String, String>>, position: Int, window: Window?, view: View) {
+        val gradientPos = IntArray(2)
+        view.gradient.getLocationOnScreen(gradientPos)
         /**
          * Checks if gradientPopup is visible; hides if it is
          */
@@ -98,6 +101,9 @@ object RecyclerGrid {
         val gradientDescription = gradientPopup.gradientDialogGradientDescription as TextView
         val drawCaller = gradientPopup.drawCaller as ImageView
 
+        Toast.makeText(context, "${gradientPos[0]} : ${gradientPos[1]}", Toast.LENGTH_SHORT).show()
+        UIElements.viewObjectAnimator(dialogMain, "translationX", gradientPos[0].toFloat(), 0, 0, LinearInterpolator())
+        UIElements.viewObjectAnimator(dialogMain, "translationY", gradientPos[1].toFloat(), 0, 0, LinearInterpolator())
         val gradientInfo = gradientJSON[position]
         try {
             val gradientColours = gradientInfo["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }

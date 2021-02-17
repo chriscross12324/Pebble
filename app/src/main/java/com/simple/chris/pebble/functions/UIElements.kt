@@ -32,9 +32,9 @@ import com.jgabrielfreitas.core.BlurImageView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.Calculations.convertToDP
 import eightbitlab.com.blurview.RenderScriptBlur
-import kotlinx.android.synthetic.main.dialog_save_gradient.*
 import kotlinx.android.synthetic.main.dialog_popup.backgroundDimmer
 import kotlinx.android.synthetic.main.dialog_popup.blurView
+import kotlinx.android.synthetic.main.dialog_save_gradient.*
 import kotlin.math.roundToInt
 
 object UIElements {

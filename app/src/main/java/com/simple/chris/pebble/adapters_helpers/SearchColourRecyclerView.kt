@@ -26,7 +26,7 @@ class SearchColourRecyclerView internal constructor(var context: Context, privat
 
     override fun getItemCount(): Int {
         if (buttons != null) {
-
+            return buttons.size
         } else if (buttonsArray != null) {
             return buttonsArray.size
         }
@@ -38,7 +38,7 @@ class SearchColourRecyclerView internal constructor(var context: Context, privat
             if (buttons != null) {
                 val details: HashMap<String, String> = buttons[position]
                 //Log.e("COLOUR", "${details["buttonColour"]}")
-                UIElement.gradientDrawable(context, holder.buttonBackground, Color.parseColor(details["buttonColour"]), Color.parseColor(details["buttonColour"]), 20f)
+                UIElement.gradientDrawable(context, holder.buttonBackground, Color.parseColor(details["buttonHex"]), Color.parseColor(details["buttonHex"]), 20f)
             } else if (buttonsArray != null) {
                 val details: String = buttonsArray[position]
                 UIElement.gradientDrawable(context, holder.buttonBackground, Color.parseColor(details), Color.parseColor(details), 20f)

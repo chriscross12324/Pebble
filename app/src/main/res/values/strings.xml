@@ -39,6 +39,7 @@
     <string name="word_open">Open</string>
     <string name="word_options">Options</string>
     <string name="word_refresh">Refresh</string>
+    <string name="word_restart">Restart</string>
     <string name="word_retry">Retry</string>
     <string name="word_search">Search</string>
     <string name="word_settings">Settings</string>
@@ -112,6 +113,7 @@
     <!-- Sentence Strings -->
     <string name="sentence_ad_loading">The ad will show once loaded…</string>
     <string name="sentence_ad_thanks">Thanks for the support!</string>
+    <string name="sentence_app_error">Pebble\'s recovery system tripped! This system did not cause the error, it protected you from it. Pebble needs to restart…</string>
     <string name="sentence_colour_combination_exists">That colour combination already exists, try some different colours…</string>
     <string name="sentence_copied_to_clipboard">Copied\nto Clipboard</string>
     <string name="sentence_customize_pebble">Make Pebble the way you like!</string>

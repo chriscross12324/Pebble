@@ -60,6 +60,16 @@ object HashMaps {
         return array
     }
 
+    fun restartArray() : ArrayList<HashMap<String, Int>> {
+        val array = ArrayList<HashMap<String, Int>>()
+        val one = HashMap<String, Int>()
+        one["buttonTitle"] = R.string.word_restart
+        one["buttonIcon"] = R.drawable.icon_reload
+        array.add(one)
+
+        return array
+    }
+
 
     /**
      * Dual Button HashMaps
@@ -275,78 +285,6 @@ object HashMaps {
         return readWritePermissionArray
     }
 
-    fun saveGradientArrayList() : ArrayList<HashMap<String, Int>> {
-        val saveGradientArray = ArrayList<HashMap<String, Int>>()
-        val saveGradientHash = HashMap<String, Int>()
-        saveGradientHash["buttonTitle"] = R.string.word_yes
-        saveGradientHash["buttonIcon"] = R.drawable.icon_download
-        saveGradientArray.add(saveGradientHash)
-
-        val cancelHash = HashMap<String, Int>()
-        cancelHash["buttonTitle"] = R.string.word_cancel
-        cancelHash["buttonIcon"] = R.drawable.icon_close
-        saveGradientArray.add(cancelHash)
-
-        return saveGradientArray
-    }
-
-    fun gradientSavedArrayList() : ArrayList<HashMap<String, Int>> {
-        val gradientSavedArray = ArrayList<HashMap<String, Int>>()
-        val openLocationHash = HashMap<String, Int>()
-        openLocationHash["buttonTitle"] = R.string.word_open
-        openLocationHash["buttonIcon"] = R.drawable.icon_open
-        gradientSavedArray.add(openLocationHash)
-
-        val closePopupHash = HashMap<String, Int>()
-        closePopupHash["buttonTitle"] = R.string.word_close
-        closePopupHash["buttonIcon"] = R.drawable.icon_close
-        gradientSavedArray.add(closePopupHash)
-
-        return gradientSavedArray
-    }
-
-    fun gradientArrayNotUpdated() : ArrayList<HashMap<String, Int>> {
-        val gradientSavedArray = ArrayList<HashMap<String, Int>>()
-        val openLocationHash = HashMap<String, Int>()
-        openLocationHash["buttonTitle"] = R.string.dual_go_online
-        openLocationHash["buttonIcon"] = R.drawable.icon_reload
-        gradientSavedArray.add(openLocationHash)
-
-        val closePopupHash = HashMap<String, Int>()
-        closePopupHash["buttonTitle"] = R.string.word_cancel
-        closePopupHash["buttonIcon"] = R.drawable.icon_close
-        gradientSavedArray.add(closePopupHash)
-
-        return gradientSavedArray
-    }
-
-    fun BAClose() : ArrayList<HashMap<String, Int>> {
-        val array = ArrayList<HashMap<String, Int>>()
-
-        val closePopupHash = HashMap<String, Int>()
-        closePopupHash["buttonTitle"] = R.string.word_close
-        closePopupHash["buttonIcon"] = R.drawable.icon_close
-        array.add(closePopupHash)
-
-        return array
-    }
-
-    fun BABackCancel() : ArrayList<HashMap<String, Int>> {
-        val array = ArrayList<HashMap<String, Int>>()
-
-        val one = HashMap<String, Int>()
-        one["buttonTitle"] = R.string.word_back
-        one["buttonIcon"] = R.drawable.icon_back
-        array.add(one)
-
-        val two = HashMap<String, Int>()
-        two["buttonTitle"] = R.string.word_cancel
-        two["buttonIcon"] = R.drawable.icon_close
-        array.add(two)
-
-        return array
-    }
-
     fun arrayYesCancel() : ArrayList<HashMap<String, Int>> {
         val array = ArrayList<HashMap<String, Int>>()
 
@@ -359,48 +297,6 @@ object HashMaps {
         two["buttonTitle"] = R.string.word_cancel
         two["buttonIcon"] = R.drawable.icon_close
         array.add(two)
-
-        return array
-    }
-
-    fun arrayContinueOfflineRetry() : ArrayList<HashMap<String, Int>> {
-        val array = ArrayList<HashMap<String, Int>>()
-
-        val one = HashMap<String, Int>()
-        one["buttonTitle"] = R.string.word_continue
-        one["buttonIcon"] = R.drawable.icon_arrow
-        array.add(one)
-
-        val two = HashMap<String, Int>()
-        two["buttonTitle"] = R.string.dual_go_offline
-        two["buttonIcon"] = R.drawable.icon_wifi_empty
-        array.add(two)
-
-        val three = HashMap<String, Int>()
-        three["buttonTitle"] = R.string.word_retry
-        three["buttonIcon"] = R.drawable.icon_reload
-        array.add(three)
-
-        return array
-    }
-
-    fun arraySureNotThisTimeDontAsk() : ArrayList<HashMap<String, Int>> {
-        val array = ArrayList<HashMap<String, Int>>()
-
-        val one = HashMap<String, Int>()
-        one["buttonTitle"] = R.string.word_sure
-        one["buttonIcon"] = R.drawable.icon_check
-        array.add(one)
-
-        val two = HashMap<String, Int>()
-        two["buttonTitle"] = R.string.dual_not_now
-        two["buttonIcon"] = R.drawable.icon_close
-        array.add(two)
-
-        val three = HashMap<String, Int>()
-        three["buttonTitle"] = R.string.sentence_dont_ask_again
-        three["buttonIcon"] = R.drawable.icon_close
-        array.add(three)
 
         return array
     }
@@ -475,11 +371,6 @@ object HashMaps {
         one["buttonIcon"] = R.drawable.icon_on
         array.add(one)
 
-        val two = HashMap<String, Int>()
-        two["buttonTitle"] = R.string.word_off
-        two["buttonIcon"] = R.drawable.icon_off
-        array.add(two)
-
         val three = HashMap<String, Int>()
         three["buttonTitle"] = R.string.dual_ask_everytime
         three["buttonIcon"] = R.drawable.icon_reload
@@ -488,113 +379,43 @@ object HashMaps {
         return array
     }
 
-
-    /**
-     * Support HashMap
-     */
-    fun supportHashMaps() : ArrayList<HashMap<String, String>> {
-        val array = ArrayList<HashMap<String, String>>()
-
-        val one = HashMap<String, String>()
-        one["buttonTitle"] = "Buy me a dollar"
-        one["buttonBody"] = "I'll cherish that dollar forever"
-        one["buttonAmount"] = "$1"
-        array.add(one)
-
-        val two = HashMap<String, String>()
-        two["buttonTitle"] = "Buy me two dollars"
-        two["buttonBody"] = "Double the cherishing than the option to the left"
-        two["buttonAmount"] = "$2"
-        array.add(two)
-
-        val three = HashMap<String, String>()
-        three["buttonTitle"] = "Buy me some chocolate"
-        three["buttonBody"] = "I might get something else, don't want to eat too much!"
-        three["buttonAmount"] = "$3"
-        array.add(three)
-
-        val four = HashMap<String, String>()
-        four["buttonTitle"] = "Buy me a mouse-pad"
-        four["buttonBody"] = "They go for about $4 at the dollar store"
-        four["buttonAmount"] = "$4"
-        array.add(four)
-
-        val five = HashMap<String, String>()
-        five["buttonTitle"] = "Buy me a coffee"
-        five["buttonBody"] = "Or something else, I don't drink coffee"
-        five["buttonAmount"] = "$5"
-        array.add(five)
-
-        val ten = HashMap<String, String>()
-        ten["buttonTitle"] = "Buy me motivation"
-        ten["buttonBody"] = "And I'll give you a cool feature!"
-        ten["buttonAmount"] = "$10"
-        array.add(ten)
-
-        val fifteen = HashMap<String, String>()
-        fifteen["buttonTitle"] = "Drop some money"
-        fifteen["buttonBody"] = "Sweet, just found $15 on the ground!"
-        fifteen["buttonAmount"] = "$15"
-        array.add(fifteen)
-
-        val twenty = HashMap<String, String>()
-        twenty["buttonTitle"] = "You're too kind"
-        twenty["buttonBody"] = "Now that's a kind donation"
-        twenty["buttonAmount"] = "$20"
-        array.add(twenty)
-
-        val twentyfive = HashMap<String, String>()
-        twentyfive["buttonTitle"] = "Buy me a starbucks coffee"
-        twentyfive["buttonBody"] = "Or are they $30? Either way I don't drink coffee, so I'll go for the smoothie instead..."
-        twentyfive["buttonAmount"] = "$25"
-        array.add(twentyfive)
-
-        val fifty = HashMap<String, String>()
-        fifty["buttonTitle"] = "Mis-click?"
-        fifty["buttonBody"] = "Did you accidentally consider this amount?"
-        fifty["buttonAmount"] = "$50"
-        array.add(fifty)
-
-        val onehundred = HashMap<String, String>()
-        onehundred["buttonTitle"] = "WOW!"
-        onehundred["buttonBody"] = "Imma cap it here, if you do give this amount... I am VERY grateful"
-        onehundred["buttonAmount"] = "$100"
-        array.add(onehundred)
-
-        return array
-    }
-
-
     /** Search By Colour Buttons **/
     fun searchByColourButtons() : ArrayList<HashMap<String, String>> {
         val array = ArrayList<HashMap<String, String>>()
 
         val redHash = HashMap<String, String>()
-        redHash["buttonColour"] = "#F44336"
+        redHash["buttonHex"] = "#F44336"
+        redHash["buttonColour"] = "red"
         array.add(redHash)
 
         val orangeHash = HashMap<String, String>()
-        orangeHash["buttonColour"] = "#FF9800"
+        orangeHash["buttonHex"] = "#FF9800"
+        orangeHash["buttonColour"] = "orange"
         array.add(orangeHash)
 
         val yellowHash = HashMap<String, String>()
-        yellowHash["buttonColour"] = "#FFEB3B"
+        yellowHash["buttonHex"] = "#FFEB3B"
+        yellowHash["buttonColour"] = "yellow"
         array.add(yellowHash)
 
         val greenHash = HashMap<String, String>()
-        greenHash["buttonColour"] = "#4CAF50"
+        greenHash["buttonHex"] = "#4CAF50"
+        greenHash["buttonColour"] = "green"
         array.add(greenHash)
 
         val blueHash = HashMap<String, String>()
-        blueHash["buttonColour"] = "#2196F3"
+        blueHash["buttonHex"] = "#2196F3"
+        blueHash["buttonColour"] = "blue"
         array.add(blueHash)
 
         val purpleHash = HashMap<String, String>()
-        purpleHash["buttonColour"] = "#9C27B0"
+        purpleHash["buttonHex"] = "#9C27B0"
+        purpleHash["buttonColour"] = "purple"
         array.add(purpleHash)
 
         val blackHash = HashMap<String, String>()
-        blackHash["buttonColour"] = "#1c1c1c"
+        blackHash["buttonHex"] = "#1c1c1c"
+        blackHash["buttonColour"] = "black"
         array.add(blackHash)
 
         /*val whiteHash = HashMap<String, String>()
@@ -608,31 +429,32 @@ object HashMaps {
         val array = ArrayList<HashMap<String, String>>()
 
         val redHash = HashMap<String, String>()
-        redHash["buttonColour"] = "#d48ec3"
+        redHash["buttonHex"] = "#d48ec3"
+        redHash["buttonColour"]
         array.add(redHash)
 
         val orangeHash = HashMap<String, String>()
-        orangeHash["buttonColour"] = "#bf96ff"
+        orangeHash["buttonHex"] = "#bf96ff"
         array.add(orangeHash)
 
         val yellowHash = HashMap<String, String>()
-        yellowHash["buttonColour"] = "#679fd6"
+        yellowHash["buttonHex"] = "#679fd6"
         array.add(yellowHash)
 
         val redash = HashMap<String, String>()
-        redash["buttonColour"] = "#8acf8a"
+        redash["buttonHex"] = "#8acf8a"
         array.add(redash)
 
         val orangeHsh = HashMap<String, String>()
-        orangeHsh["buttonColour"] = "#d6d05a"
+        orangeHsh["buttonHex"] = "#d6d05a"
         array.add(orangeHsh)
 
         val yellwHash = HashMap<String, String>()
-        yellwHash["buttonColour"] = "#ebab57"
+        yellwHash["buttonHex"] = "#ebab57"
         array.add(yellwHash)
 
         val yelwHash = HashMap<String, String>()
-        yelwHash["buttonColour"] = "#eb3d3d"
+        yelwHash["buttonHex"] = "#eb3d3d"
         array.add(yelwHash)
 
         return array

@@ -33,20 +33,21 @@
     <string name="word_finishing">Acabado</string>
     <string name="word_leave">Dejar</string>
     <string name="word_light">Claro</string>
-    <string name="word_network">Network</string>
+    <string name="word_network">Red</string>
     <string name="word_next">Siguiente</string>
     <string name="word_off">Fuera</string>
     <string name="word_offline">Offline</string>
-    <string name="word_ok">OK</string>
+    <string name="word_ok">Vale</string>
     <string name="word_on">Encendida</string>
     <string name="word_open">Abrir</string>
     <string name="word_options">Opciones</string>
     <string name="word_refresh">Refrescar</string>
+    <string name="word_restart">Restart</string>
     <string name="word_retry">Retry</string>
     <string name="word_search">Buscar</string>
     <string name="word_settings">Configuración</string>
     <string name="word_special_search">Buscar…</string>
-    <string name="word_storage">Storage</string>
+    <string name="word_storage">Almacenamiento</string>
     <string name="word_submit">Submit</string>
     <string name="word_submitting">Submitting</string>
     <string name="word_support">Support</string>
@@ -81,7 +82,7 @@
     <string name="dual_offline_mode">Offline Mode</string>
     <string name="dual_outdated_android">Outdated Android</string>
     <string name="dual_push_hold">Push &amp; Hold</string>
-    <string name="dual_save_gradient">Save Gradient</string>
+    <string name="dual_save_gradient">Guardar Gradientes</string>
     <string name="dual_set_wallpaper">Set Wallpaper</string>
     <string name="dual_special_effects">Efectos Especiales</string>
     <string name="dual_split_screen">Pantalla dividida</string>
@@ -106,7 +107,7 @@
     <string name="question_set_wallpaper">Where do you want to apply this gradient?</string>
     <string name="question_setting_effects">Would you like to enable <b>Special Effects</b>?</string>
     <string name="question_setting_network">Would you like to enable <b>Cellular Data</b> usage?</string>
-    <string name="question_setting_theme">¿Cuál <b>Tema</b>?</string>
+    <string name="question_setting_theme">¿Cuál <b>Tema</b> quieres usar?</string>
     <string name="question_setting_vibration">Would you like to enable <b>Vibrations</b>?</string>
     <string name="question_setting_split_screen">Would you like to enable <b>Split Screen</b> mode if your screen size is supported?</string>
     <string name="question_still_connecting">Pebble is taking a while to connect, what would you like to do?</string>
@@ -115,6 +116,7 @@
     <!-- Sentence Strings -->
     <string name="sentence_ad_loading">The ad will show once loaded…</string>
     <string name="sentence_ad_thanks">Thanks for the support!</string>
+    <string name="sentence_app_error">Pebble\'s recovery system tripped! This system did not cause the error, it protected you from it. Pebble needs to restart…</string>
     <string name="sentence_colour_combination_exists">That colour combination already exists, try some different colours…</string>
     <string name="sentence_copied_to_clipboard">Copiado al portapapeles</string>
     <string name="sentence_customize_pebble">Personalizar Pebble</string>

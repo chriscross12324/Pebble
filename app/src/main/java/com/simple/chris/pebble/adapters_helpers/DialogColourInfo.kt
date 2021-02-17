@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.fragment.app.DialogFragment
@@ -20,6 +21,12 @@ import com.simple.chris.pebble.functions.UIElements
 import com.simple.chris.pebble.functions.Values
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.dialog_colour_info.*
+import kotlinx.android.synthetic.main.dialog_colour_info.backgroundDimmer
+import kotlinx.android.synthetic.main.dialog_colour_info.blurView
+import kotlinx.android.synthetic.main.dialog_colour_info.drawCaller
+import kotlinx.android.synthetic.main.dialog_colour_info.popupHolder
+import kotlinx.android.synthetic.main.dialog_popup.*
+import kotlinx.android.synthetic.main.dialog_save_gradient.*
 import java.io.Serializable
 
 class DialogColourInfo : DialogFragment() {
@@ -81,7 +88,7 @@ class DialogColourInfo : DialogFragment() {
             UIElements.viewObjectAnimator(popupHolder, "scaleX", 1f, 350, 100, OvershootInterpolator())
             UIElements.viewObjectAnimator(popupHolder, "scaleY", 1f, 350, 100, OvershootInterpolator())
             UIElements.viewObjectAnimator(popupHolder, "alpha", 1f, 150, 100, LinearInterpolator())
-            UIElements.viewObjectAnimator(drawCaller, "scaleY", 2f, 60000, 0, LinearInterpolator())
+            UIElements.viewObjectAnimator(drawCaller, "scaleY", 2f, 2000, 0, LinearInterpolator())
         }
 
         blurView.setOnClickListener {
@@ -90,14 +97,14 @@ class DialogColourInfo : DialogFragment() {
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        UIElements.viewObjectAnimator(popupHolder, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(popupHolder, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(popupHolder, "alpha", 0f, 200, 200, LinearInterpolator())
+        UIElements.viewObjectAnimator(popupHolder, "scaleX", 1.15f, 200, 0, AccelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(popupHolder, "scaleY", 1.15f, 200, 0, AccelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(popupHolder, "alpha", 0f, 100, 100, LinearInterpolator())
 
         Handler(Looper.getMainLooper()).postDelayed({
             Log.e("INFO", "Here")
             super.onDismiss(dialog)
-        }, 450)
+        }, 250)
     }
 
     companion object {

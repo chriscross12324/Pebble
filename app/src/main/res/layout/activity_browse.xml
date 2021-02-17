@@ -114,6 +114,7 @@
                     android:paddingBottom="98dp"
                     android:requiresFadingEdge="none"
                     android:visibility="visible"
+                    android:alpha="0"
                     app:layout_anchor="@+id/bottomSheet"
                     app:layout_anchorGravity="center"
                     android:layoutAnimation="@anim/recycler_animation"/>

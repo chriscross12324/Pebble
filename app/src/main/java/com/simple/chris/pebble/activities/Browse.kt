@@ -295,7 +295,7 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
             gradientScaleX.reverse()
             gradientScaleY.reverse()
 
-            RecyclerGrid.gradientGridOnLongClickListener(this, Values.gradientList, position, window)
+            RecyclerGrid.gradientGridOnLongClickListener(this, Values.gradientList, position, window, view)
 
             Handler(Looper.getMainLooper()).postDelayed({
                 Vibration.mediumFeedback(this)

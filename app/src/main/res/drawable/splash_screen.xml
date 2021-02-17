@@ -6,7 +6,7 @@
         </shape>
     </item>
     <item android:gravity="center" android:width="150dp" android:height="180dp">
-        <bitmap android:src="@drawable/scorpion" />
+        <bitmap android:src="@drawable/icon_pebble_sunshine" />
     </item>
 
 </layer-list>

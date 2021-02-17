@@ -18,9 +18,9 @@
         android:layout_width="10dp"
         android:layout_height="10dp"
         android:alpha="0"
+        android:contentDescription="Helps update blurView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="Helps update blurView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"
@@ -36,10 +36,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
                 android:clickable="true"
                 android:focusable="true"
+                android:scaleX="1.1"
+                android:scaleY="1.1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -65,10 +65,10 @@
                             android:layout_width="190dp"
                             android:layout_height="190dp"
                             android:background="@drawable/placeholder_colour"
+                            android:contentDescription="Displays gradient"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:contentDescription="Displays gradient" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <ScrollView
                             android:layout_width="match_parent"
@@ -104,6 +104,8 @@
                                         android:fontFamily="@font/googlesans_bold"
                                         android:gravity="center"
                                         android:hint="1920"
+                                        android:inputType="number"
+                                        android:maxLength="4"
                                         android:textColor="?PrimaryTextColour"
                                         android:textColorHint="?SecondaryTextColour"
                                         android:textSize="16sp" />
@@ -144,6 +146,8 @@
                                         android:fontFamily="@font/googlesans_bold"
                                         android:gravity="center"
                                         android:hint="1080"
+                                        android:inputType="number"
+                                        android:maxLength="4"
                                         android:textColor="?PrimaryTextColour"
                                         android:textColorHint="?SecondaryTextColour"
                                         android:textSize="16sp" />

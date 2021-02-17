@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     tools:context=".activities.GradientCreator">
 
     <ImageView
@@ -11,9 +12,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/placeholder_gradient"
+        android:transitionName="gradientCreatorViewer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:transitionName="gradientCreatorViewer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,8 +35,8 @@
         android:id="@+id/backgroundFadeOut"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000000"
-        android:alpha="0"/>
+        android:alpha="0"
+        android:background="#000000" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/removeNotification"
@@ -80,31 +81,6 @@
             app:tint="?SecondaryTextColour" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/colourPickerHolder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/randomGradientButton"
-        app:layout_constraintEnd_toEndOf="@+id/randomGradientButton"
-        app:layout_constraintStart_toStartOf="@+id/randomGradientButton">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/colourButtonsRecycler"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:layout_marginBottom="58dp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toTopOf="@+id/randomGradientButton"
-            app:layout_constraintEnd_toEndOf="@+id/randomGradientButton"
-            app:layout_constraintStart_toStartOf="@+id/randomGradientButton" />
-
-    </androidx.cardview.widget.CardView>
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/gradientNameHolder"
@@ -116,6 +92,7 @@
         android:background="@drawable/details_background"
         android:backgroundTint="?BackgroundColour"
         android:elevation="8dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/gradientDescriptionHolder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -152,11 +129,12 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="16dp"
+        android:alpha="1"
         android:background="@drawable/details_background"
         android:backgroundTint="?BackgroundColour"
         android:elevation="8dp"
-        android:alpha="1"
-        app:layout_constraintBottom_toTopOf="@id/nextStepButton"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/buttonNext"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
@@ -186,8 +164,8 @@
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/googlesans_medium"
                 android:hint="Gradient Description"
-                android:inputType="textMultiLine|textCapSentences"
                 android:imeOptions="actionDone"
+                android:inputType="textMultiLine|textCapSentences"
                 android:maxHeight="160dp"
                 android:maxLength="200"
                 android:textAlignment="center"
@@ -200,83 +178,115 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/nextStepButton"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
+        android:id="@+id/creatorHolder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="24dp"
+        android:animateLayoutChanges="true"
         android:background="@drawable/details_background"
         android:elevation="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintEnd_toStartOf="@+id/buttonNext"
+        app:layout_constraintStart_toEndOf="@+id/lastStepButton"
+        app:layout_constraintWidth_max="150dp">
 
-        <TextView
-            android:id="@+id/nextStepText"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:fontFamily="@font/googlesans_medium"
-            android:gravity="center"
-            android:text="@string/word_next"
-            android:textColor="?PrimaryTextColour"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <LinearLayout
+            android:id="@+id/optionsHolder"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="6dp"
+            android:weightSum="3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:id="@+id/buttonRandomColours"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/addColour"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="16dp"
-        android:alpha="0.5"
-        android:background="@drawable/details_background"
-        android:elevation="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/colourPickerHolder"
-        app:layout_constraintEnd_toEndOf="@+id/colourPickerHolder"
-        app:layout_constraintStart_toStartOf="@+id/colourPickerHolder">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="12dp"
+                    android:src="@drawable/icon_shuffle"
+                    android:tint="?PrimaryTextColour" />
+            </LinearLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/buttonRemoveColour"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/icon_delete"
+                    android:tint="?PrimaryTextColour"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iconRemoveActive"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/icon_delete"
+                    android:tint="@android:color/holo_red_light"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/buttonAddColour"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"
+                    android:src="@drawable/icon_add"
+                    android:tint="?PrimaryTextColour" />
+            </LinearLayout>
+
+        </LinearLayout>
 
         <ImageView
-            android:id="@+id/addColourIcon"
+            android:id="@+id/dividerOptions"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="10dp"
-            android:rotation="45"
-            android:src="@drawable/icon_close"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="2dp"
+            android:layout_marginHorizontal="8dp"
+            android:background="@drawable/details_background"
+            android:backgroundTint="?ForegroundColour"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="?SecondaryTextColour" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintBottom_toTopOf="@id/optionsHolder" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/removeColour"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="8dp"
-        android:alpha="0.5"
-        android:background="@drawable/details_background"
-        android:elevation="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/addColour"
-        app:layout_constraintEnd_toEndOf="@+id/addColour"
-        app:layout_constraintStart_toStartOf="@+id/addColour">
-
-
-        <ImageView
-            android:id="@+id/removeColourIcon"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/colourOptionsRecycler"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/icon_delete"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="6dp"
+            android:layout_marginVertical="6dp"
+            android:overScrollMode="never"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="?SecondaryTextColour" />
+            app:layout_constraintBottom_toTopOf="@id/dividerOptions" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -358,28 +368,33 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:id="@+id/randomGradientButton"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttonNext"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="24dp"
         android:alpha="1"
-        android:gravity="center"
-        android:elevation="12dp"
-        android:orientation="horizontal"
         android:background="@drawable/details_background"
         android:backgroundTint="?BackgroundColour"
+        android:elevation="12dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
             android:id="@+id/randomGradientIcon"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/icon_shuffle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/icon_arrow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:tint="?SecondaryTextColour" />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/touchBlocker"

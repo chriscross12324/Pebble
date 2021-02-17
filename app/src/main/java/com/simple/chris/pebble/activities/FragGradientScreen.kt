@@ -44,7 +44,7 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
     }
 
     fun startSplitScreen() {
-        /** Called if SplitScreen started from fresh, or if fullscreen**/
+        /** Called if SplitScreen started from fresh, or if fullscreen **/
         try {
             gradientViewer.background = null
             backgroundDimmer.alpha = 0f
@@ -59,7 +59,6 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
         /** Wait for UI to populate **/
         Handler(Looper.getMainLooper()).postDelayed({
             if (detailsHolder != null) {
-                Log.e("INFO", "starting")
                 /** Set UI Elements **/
                 optionsExpanded = false
                 optionsHolder.visibility = View.INVISIBLE

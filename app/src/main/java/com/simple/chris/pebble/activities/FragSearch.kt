@@ -17,17 +17,23 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.firebase.firestore.Query
 import com.simple.chris.pebble.R
+import com.simple.chris.pebble.adapters_helpers.DialogPopup
 import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.adapters_helpers.SearchColourRecyclerView
 import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.fragment_search.*
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.math.abs
 
 class FragSearch : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGradientListener, GradientRecyclerView.OnGradientLongClickListener, SearchColourRecyclerView.OnButtonListener, PopupDialogButtonRecycler.OnButtonListener {
@@ -84,6 +90,7 @@ class FragSearch : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
         }
 
         bottomSheet.post {
+            Log.e("INFO", "Bottom sheet")
             getHeights()
             bottomSheet()
             searchLogic()
@@ -126,6 +133,7 @@ class FragSearch : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
     }
 
     private fun searchByColourInitializer() {
+        Log.e("INFO", "searchByColour")
         searchColourRecycler.setHasFixedSize(true)
         val buttonLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         val buttonAdapter = SearchColourRecyclerView(context, HashMaps.searchByColourButtons(), null, this)
@@ -165,13 +173,13 @@ class FragSearch : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
     private fun searchByName() {
         searchResults.clear()
         var foundGradients = 0
-        val stringForCode = searchField.text.toString().replace(" ", "").toLowerCase()
+        val stringForCode = searchField.text.toString().replace(" ", "").toLowerCase(Locale.getDefault())
 
         /** Find Gradient by Name **/
         if (stringForCode != "") {
             try {
                 for (count in 0 until Values.gradientList.size) {
-                    if (Values.gradientList[count]["gradientName"]!!.replace(" ", "").toLowerCase().contains(stringForCode)) {
+                    if (Values.gradientList[count]["gradientName"]!!.replace(" ", "").toLowerCase(Locale.getDefault()).contains(stringForCode)) {
                         val found = HashMap<String, String>()
 
                         found["gradientName"] = Values.gradientList[count]["gradientName"] as String
@@ -226,7 +234,7 @@ class FragSearch : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
             gradientScaleX.reverse()
             gradientScaleY.reverse()
 
-            RecyclerGrid.gradientGridOnLongClickListener((activity as MainActivity), searchResults, position, context.window)
+            RecyclerGrid.gradientGridOnLongClickListener((activity as MainActivity), searchResults, position, context.window, view)
 
             Handler(Looper.getMainLooper()).postDelayed({
                 Vibration.mediumFeedback((activity as MainActivity))
@@ -269,9 +277,44 @@ class FragSearch : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
             UIElements.viewObjectAnimator(searchResultsRecycler, "scaleX", 1f, 0, 0, LinearInterpolator())
             UIElements.viewObjectAnimator(searchResultsRecycler, "scaleY", 1f, 0, 0, LinearInterpolator())
             UIElements.viewObjectAnimator(searchResultsRecycler, "alpha", 1f, 0, 0, LinearInterpolator())
-            searchByDomColour(buttonColour)
+            searchColour(buttonColour)
             searchResultsRecycler.scheduleLayoutAnimation()
         }, 400)
+    }
+
+    private fun searchColour(colour: String) {
+        Toast.makeText((activity as MainActivity), colour, Toast.LENGTH_SHORT).show()
+        searchResults.clear()
+        /*val fm = (activity as MainActivity).supportFragmentManager
+        Values.dialogPopup = DialogPopup.newDialog(null, "connecting", null, R.string.word_connecting,
+                null, R.string.sentence_pebble_is_connecting)
+        Values.dialogPopup.show(fm, "connecting")*/
+
+        Values.downloadingGradients = true
+        Values.getFireStore().collection("gradientList")
+                .whereArrayContains("gradientCategories", colour)
+                /*.orderBy("gradientTimestamp", Query.Direction.DESCENDING)*/
+                .get()
+                .addOnSuccessListener {
+                    val gradientList = java.util.ArrayList<java.util.HashMap<String, String>>()
+                    for (document in it) {
+                        val item = java.util.HashMap<String, String>()
+                        item["gradientName"] = document.data["gradientName"] as String
+                        item["gradientColours"] = document.data["gradientColours"] as String
+                        item["gradientDescription"] = document.data["gradientDescription"] as String
+
+                        gradientList.add(item)
+                        searchResults = gradientList
+                    }
+                    Log.e("INFO", "Firestore: Done")
+                    Values.downloadingGradients = true
+                    Values.connectionOffline = false
+                    resultsText.text = "${searchResults.size} gradientes found"
+                    RecyclerGrid.gradientGrid(context, searchResultsRecycler, searchResults, this, this)
+                }
+                .addOnFailureListener {
+                    Log.e("INFO", "Firebase failure: $it")
+                }
     }
 
     private fun searchByDomColour(baseColour: String) {

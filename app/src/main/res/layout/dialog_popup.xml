@@ -10,7 +10,7 @@
         android:id="@+id/backgroundDimmer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?ForegroundColour"/>
+        android:background="?SecondaryTextColour"/>
 
     <ImageView
         android:id="@+id/drawCaller"
@@ -30,11 +30,15 @@
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dialogHolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clipChildren="false"
                 android:elevation="1dp"
                 android:orientation="vertical"
+                android:alpha="0"
+                android:scaleY="1.1"
+                android:scaleX="1.1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -45,11 +49,8 @@
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:alpha="0"
                     android:background="@drawable/details_background"
                     android:backgroundTint="?BackgroundColour"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8"
                     app:layout_constraintBottom_toTopOf="@id/popupButtonRecycler"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -121,9 +122,6 @@
                     android:id="@+id/popupButtonRecycler"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:alpha="0"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8"
                     android:layoutAnimation="@anim/recycler_animation"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/holder"

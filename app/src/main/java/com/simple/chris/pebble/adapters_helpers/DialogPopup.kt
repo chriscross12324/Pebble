@@ -17,6 +17,7 @@ import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.activities.GradientCreator
@@ -44,6 +45,7 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
         dialog!!.window!!.setBackgroundDrawableResource(android.R.color.transparent)
         dialog!!.window!!.setDimAmount(0f)
         Values.dialogPopup = this
+        Log.e("ERR", "Showing Dialog")
         if (arguments!!.getString("dialogName") == "connecting") {
             testConnection()
         }
@@ -81,16 +83,16 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
         permissionDescription.setText(arguments!!.getInt("description"))
 
         holder.post {
-            UIElements.viewObjectAnimator(holder, "scaleX", 1f, 350, 100, OvershootInterpolator())
-            UIElements.viewObjectAnimator(holder, "scaleY", 1f, 350, 100, OvershootInterpolator())
-            UIElements.viewObjectAnimator(holder, "alpha", 1f, 100, 100, LinearInterpolator())
+            UIElements.viewObjectAnimator(dialogHolder, "scaleX", 1f, 550, 150, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(dialogHolder, "scaleY", 1f, 550, 150, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(dialogHolder, "alpha", 1f, 100, 150, LinearInterpolator())
             UIElements.viewObjectAnimator(drawCaller, "scaleY", 2f, 60000, 0, LinearInterpolator())
 
-            if (arguments!!.getSerializable("array") != null) {
+            /*if (arguments!!.getSerializable("array") != null) {
                 UIElements.viewObjectAnimator(popupButtonRecycler, "scaleX", 1f, 350, 100, DecelerateInterpolator(3f))
                 UIElements.viewObjectAnimator(popupButtonRecycler, "scaleY", 1f, 350, 100, DecelerateInterpolator(3f))
                 UIElements.viewObjectAnimator(popupButtonRecycler, "alpha", 1f, 150, 100, LinearInterpolator())
-            }
+            }*/
         }
 
         blurView.setOnClickListener {
@@ -113,38 +115,48 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
         }
     }
 
+    override fun show(manager: FragmentManager, tag: String?) {
+        try {
+            val ft = manager.beginTransaction()
+            ft.add(this, tag)
+            ft.commit()
+        } catch (e: Exception) {
+            Log.e("ERR", "pebble.dialog_popup.show: ${e.localizedMessage}")
+        }
+    }
+
     private fun testConnection() {
         Handler(Looper.getMainLooper()).postDelayed({
-            if (Values.gradientList.isNotEmpty()) {
-                onDismiss(Values.dialogPopup.dialog!!)
-                Log.e("INFO", "Trying to dismiss")
-            } else {
-                testConnection()
-                Log.e("INFO", "Looping")
-            }
+            Handler(Looper.getMainLooper()).postDelayed({
+                if (!Values.downloadingGradients) {
+                    onDismiss(Values.dialogPopup.dialog!!)
+                    Log.e("INFO", "Trying to dismiss")
+                } else {
+                    testConnection()
+                    //Log.e("INFO", "Looping")
+                }
+            }, 200)
         }, 200)
     }
 
     override fun onDismiss(dialog: DialogInterface) {
         try {
             if (holder != null) {
-                UIElements.viewObjectAnimator(holder, "scaleX", 0.5f, 400, 0, AccelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(holder, "scaleY", 0.5f, 400, 0, AccelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(holder, "alpha", 0f, 200, 200, LinearInterpolator())
+                UIElements.viewObjectAnimator(dialogHolder, "scaleX", 1.15f, 200, 0, AccelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(dialogHolder, "scaleY", 1.15f, 200, 0, AccelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(dialogHolder, "alpha", 0f, 100, 100, LinearInterpolator())
 
-                UIElements.viewObjectAnimator(popupButtonRecycler, "scaleX", 0.6f, 350, 0, AccelerateInterpolator(3f))
+                /*UIElements.viewObjectAnimator(popupButtonRecycler, "scaleX", 0.6f, 350, 0, AccelerateInterpolator(3f))
                 UIElements.viewObjectAnimator(popupButtonRecycler, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(popupButtonRecycler, "alpha", 0f, 150, 200, LinearInterpolator())
+                UIElements.viewObjectAnimator(popupButtonRecycler, "alpha", 0f, 150, 200, LinearInterpolator())*/
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     super.onDismiss(dialog)
-                }, 450)
+                }, 250)
             }
         } catch (e: Exception) {
             onDismiss(Values.dialogPopup.dialog!!)
         }
-
-
     }
 
     companion object {
@@ -173,6 +185,7 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
 
     override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
         Values.dialogPopup = this
+        onDismiss(dialog!!)
         when (activity) {
             (activity as MainActivity) -> (activity as MainActivity).popupDialogHandler(popupName, position)
             (activity as GradientCreator) -> Log.e("INFO", "GradientCreator")

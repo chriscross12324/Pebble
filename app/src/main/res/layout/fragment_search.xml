@@ -192,8 +192,8 @@
 
             <ImageView
                 android:id="@+id/searchByColourCircle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="21dp"
+                android:layout_height="18dp"
                 android:layout_margin="13dp"
                 android:src="@drawable/icon_colour_wheel_new"
                 app:layout_constraintBottom_toBottomOf="parent"
