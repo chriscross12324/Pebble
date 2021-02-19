@@ -10,7 +10,7 @@
         android:id="@+id/backgroundDimmer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?ForegroundColour"
+        android:background="?PrimaryTextColour"
         android:contentDescription="Dims dialog background" />
 
     <ImageView
@@ -35,6 +35,7 @@
                 android:id="@+id/holder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxHeight="220dp"
                 android:alpha="1"
                 android:background="@drawable/details_background"
                 android:backgroundTint="?ForegroundColour"
@@ -75,22 +76,34 @@
                     app:layout_constraintStart_toEndOf="@+id/gradientPreview"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/gradientDialogGradientDescription"
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="6dp"
                     android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="16dp"
-                    android:fontFamily="@font/googlesans_medium"
-                    android:text="A lake where you can see the bottom through the clear water"
-                    android:textAlignment="center"
-                    android:textColor="?SecondaryTextColour"
-                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/gradientPreview"
-                    app:layout_constraintTop_toBottomOf="@+id/gradientDialogGradientName" />
+                    app:layout_constraintTop_toBottomOf="@+id/gradientDialogGradientName">
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clipToPadding="false"
+                        android:paddingBottom="16dp">
+
+                        <TextView
+                            android:id="@+id/gradientDialogGradientDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/googlesans_medium"
+                            android:text="A lake where you can see the bottom through the clear water"
+                            android:textAlignment="center"
+                            android:textColor="?SecondaryTextColour"
+                            android:textSize="12sp" />
+                    </ScrollView>
+                </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

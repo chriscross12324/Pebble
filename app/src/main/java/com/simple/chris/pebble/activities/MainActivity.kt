@@ -23,7 +23,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.DialogPopup
-import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.adapters_helpers.SettingsRecyclerView
 import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -123,6 +122,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
             ssRecycler.layoutManager = buttonLayoutManager
             ssRecycler.adapter = buttonAdapter
+            smallScreenScrollBar()
         }
         ssRecycler.post {
             showSmallScreen(smallScreenFragHolder.measuredHeight.toFloat())
@@ -142,9 +142,26 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
             ssRecycler.layoutManager = buttonLayoutManager
             ssRecycler.adapter = buttonAdapter
+            smallScreenScrollBar()
         }
         ssRecycler.post {
             showSmallScreen(smallScreenFragHolder.measuredHeight.toFloat())
+        }
+    }
+
+    fun smallScreenScrollBar() {
+        val holderWidth = smallScreenFragHolder.measuredWidth - Calculations.convertToDP(this, 70f)
+        //UIElements.viewWidthAnimator(ssScrollbar, ssScrollbar.width.toFloat(), 0)
+        val scrollArea = holderWidth - (2 * (ssScrollbar.measuredWidth / 2))
+        UIElements.viewWidthAnimator(ssScrollbarBG, ssScrollbar.width.toFloat(), scrollArea, 0, 0, LinearInterpolator())
+        val rangeStart = 0
+        val rangeEnd = scrollArea
+        ssRecycler.setOnScrollChangeListener { view, i, i2, i3, i4 ->
+            val offset = ssRecycler.computeHorizontalScrollOffset()
+            val extent = ssRecycler.computeHorizontalScrollExtent()
+            val range = ssRecycler.computeHorizontalScrollRange()
+            val percent = (100f * offset / (range - extent))
+            ssScrollbar.translationX = (rangeStart + ((rangeEnd - rangeStart) / (100 - 0)) * (percent - 0))
         }
     }
 
@@ -261,31 +278,31 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                     0 -> {
                         //Theme
                         Values.dialogPopup = DialogPopup.newDialog(HashMaps.lightDarkDarker(), "settingTheme", R.drawable.icon_brush, R.string.word_theme,
-                                null, R.string.question_setting_theme)
+                                null, R.string.question_setting_theme, null)
                         Values.dialogPopup.show(fm, "settingTheme")
                     }
                     1 -> {
                         //Vibration
                         Values.dialogPopup = DialogPopup.newDialog(HashMaps.onOff(), "settingVibration", R.drawable.icon_vibrate_on, R.string.word_vibration,
-                                null, R.string.question_setting_vibration)
+                                null, R.string.question_setting_vibration, null)
                         Values.dialogPopup.show(fm, "settingVibration")
                     }
                     2 -> {
                         //Special Effects
                         Values.dialogPopup = DialogPopup.newDialog(HashMaps.onOff(), "settingSpecialEffects", R.drawable.icon_blur_on, R.string.dual_special_effects,
-                                null, R.string.question_setting_effects)
+                                null, R.string.question_setting_blur, null)
                         Values.dialogPopup.show(fm, "settingSpecialEffects")
                     }
                     3 -> {
                         //Split Screen
                         Values.dialogPopup = DialogPopup.newDialog(HashMaps.onOff(), "settingSplitScreen", R.drawable.split_screen, R.string.dual_split_screen,
-                                null, R.string.question_setting_split_screen)
+                                null, R.string.question_setting_split_screen, null)
                         Values.dialogPopup.show(fm, "settingSplitScreen")
                     }
                     4 -> {
                         //Cellular Data
                         Values.dialogPopup = DialogPopup.newDialog(HashMaps.onOffAsk(), "settingNetwork", R.drawable.icon_cell_wifi, R.string.word_network,
-                                null, R.string.question_setting_network)
+                                null, R.string.question_setting_network, null)
                         Values.dialogPopup.show(fm, "settingNetwork")
                     }
                 }
@@ -298,7 +315,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                         //UIElement.popupDialog(this, "loadingAd", null, R.string.dual_ad_loading, null, R.string.sentence_ad_loading, null, window.decorView, null)
                         val fm = supportFragmentManager
                         Values.dialogPopup = DialogPopup.newDialog(null, "loadingAd", null,
-                                R.string.dual_ad_loading, null, R.string.sentence_ad_loading)
+                                R.string.dual_ad_loading, null, R.string.sentence_ad_loading, null)
                         Values.dialogPopup.show(fm, "loadingAd")
                     }
                 }
@@ -637,7 +654,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                 when (position) {
                     0 -> {
                         Values.dialogPopup = DialogPopup.newDialog(null, "connecting", null, R.string.word_connecting,
-                                null, R.string.sentence_pebble_is_connecting)
+                                null, R.string.sentence_pebble_is_connecting, null)
                         Values.dialogPopup.show(fm, "connecting")
                         Connection.checkDownload(this)
                     }
@@ -746,6 +763,19 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                     }
                 }
             }
+            "serverError" -> {
+                when (position) {
+                    0 -> {
+                        Connection.checkConnection(this, this)
+                        connectionChecker()
+                    }
+                    1 -> {
+                        if (Values.gradientList.isEmpty()) {
+                            finish()
+                        }
+                    }
+                }
+            }
         }
         Values.saveValues(this)
     }
@@ -756,7 +786,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                 Values.errorOccurred = false
                 val fm = supportFragmentManager
                 Values.dialogPopup = DialogPopup.newDialog(HashMaps.restartArray(), "appError", R.drawable.icon_warning, R.string.word_error,
-                        null, R.string.sentence_app_error)
+                        null, R.string.sentence_app_error, null)
                 Values.dialogPopup.show(fm, "appError")
             } else {
                 appError()
@@ -952,7 +982,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         when (Values.currentActivity) {
             "Browse" -> {
                 Values.dialogPopup = DialogPopup.newDialog(HashMaps.arrayYesCancel(), "leave", R.drawable.icon_door, R.string.word_leave,
-                        null, R.string.question_leave)
+                        null, R.string.question_leave, null)
                 Values.dialogPopup.show(fm, "leave")
             }
             "Search" -> {

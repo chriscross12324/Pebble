@@ -12,6 +12,7 @@
     <string name="word_ad">Anuncio</string>
     <string name="word_allow">Permitir</string>
     <string name="word_back">Vuelto</string>
+    <string name="word_blur">Blur</string>
     <string name="word_browse">Explorar</string>
     <string name="word_cancel">Cancelar</string>
     <string name="word_changelog">Changelog</string>
@@ -83,6 +84,7 @@
     <string name="dual_outdated_android">Outdated Android</string>
     <string name="dual_push_hold">Push &amp; Hold</string>
     <string name="dual_save_gradient">Guardar Gradientes</string>
+    <string name="dual_server_error">Server Error</string>
     <string name="dual_set_wallpaper">Set Wallpaper</string>
     <string name="dual_special_effects">Efectos Especiales</string>
     <string name="dual_split_screen">Pantalla dividida</string>
@@ -105,7 +107,7 @@
     <string name="question_outdated_android">Your device is running outdated software, apply wallpaper to <b>Home</b> &amp; <b>Lock</b> screen?</string>
     <string name="question_save_gradient">Would you like to save this gradient to your device?</string>
     <string name="question_set_wallpaper">Where do you want to apply this gradient?</string>
-    <string name="question_setting_effects">Would you like to enable <b>Special Effects</b>?</string>
+    <string name="question_setting_blur">Would you like to enable the <b>Blur</b> effect?</string>
     <string name="question_setting_network">Would you like to enable <b>Cellular Data</b> usage?</string>
     <string name="question_setting_theme">¿Cuál <b>Tema</b> quieres usar?</string>
     <string name="question_setting_vibration">Would you like to enable <b>Vibrations</b>?</string>
@@ -144,7 +146,8 @@
     <string name="sentence_pebble_is_connecting">Pebble se está conectando al servidor, por favor espera…</string>
     <string name="sentence_permission_network">Pebble needs an active internet connecting to download and submit gradients, by default you will be warned when trying to use Mobile Data.\n\nNobody but yourself is responsible for exceeding any limit!</string>
     <string name="sentence_push_hold">Touch the gradient to hide its details and expand the gradient fullscreen. Release to show its details again.</string>
-    <string name="serious_error">A serious error has occurred and was caught before Pebble crashed, returning to <b>Browse</b> screen.</string>
+    <string name="sentence_serious_error">A serious error has occurred and was caught before Pebble crashed, returning to <b>Browse</b> screen.</string>
+    <string name="sentence_server_error">An error occurred when trying to access the Pebble servers: %1$s</string>
     <string name="sentence_trying_mobile_data">Trying to use Mobile Data</string>
     <string name="sentence_uploading_gradient">Uploading gradient to Pebble</string>
     <!-- TODO: Remove or change this placeholder text -->

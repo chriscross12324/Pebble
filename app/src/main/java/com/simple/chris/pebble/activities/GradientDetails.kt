@@ -70,7 +70,7 @@ class GradientDetails : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
             gradientArrayList = ArrayList(gradientColours)
             gradientDrawableNew(this, gradientViewStatic, gradientArrayList, Values.gradientCornerRadius)
         } catch (e: Exception) {
-            //UIElement.popupDialog(this, "error", R.drawable.icon_attention, R.string.word_error, null,R.string.serious_error, HashMaps.okArray(), window.decorView, this)
+            //UIElement.popupDialog(this, "error", R.drawable.icon_attention, R.string.word_error, null,R.string.sentence_serious_error, HashMaps.okArray(), window.decorView, this)
         }
 
         gradientViewStatic.transitionName = gradientNameString

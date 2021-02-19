@@ -181,7 +181,6 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
 
     fun showGradients() {
         try {
-            Log.e("ERR", "Trying")
             UIElements.viewObjectAnimator(gradientGrid, "alpha", 0f, 150, 200, LinearInterpolator())
 
             Handler(Looper.getMainLooper()).postDelayed({
@@ -192,7 +191,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                     gradientGrid.scheduleLayoutAnimation()
                 } else {
                     showGradients()
-                    Log.e("ERR", "Trying Again")
+                    Log.d("DEBUG", "Trying Dismiss Again")
                 }
 
             }, 500)
@@ -220,14 +219,14 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
 
     override fun onGradientClick(position: Int, view: View) {
         if (!Values.animatingSharedElement) {
-            Log.e("INFO", "Not Animating")
+            Log.d("DEBUG", "Not Animating")
             Vibration.lowFeedback((activity as MainActivity))
             Values.currentGradientScreenView = view
             Values.animatingSharedElement = true
             Values.canDismissSharedElement = false
             (activity as MainActivity).sharedElement(position, view)
         } else {
-            Log.e("INFO", "Animating")
+            Log.d("DEBUG", "Animating")
         }
     }
 
@@ -266,29 +265,28 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
 
     override fun onButtonClick(position: Int, view: View) {
         when (position) {
-            0 -> {
+            /*0 -> {
                 hideMenu()
                 Handler(Looper.getMainLooper()).postDelayed({
                     startActivity(Intent((activity as MainActivity), Feedback::class.java))
                     (activity as MainActivity).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }, 400)
-            }
-            1 -> {
+            }*/
+            0 -> {
                 hideMenu()
                 Handler(Looper.getMainLooper()).postDelayed({
                     (activity as MainActivity).startDonating()
                 }, 250)
             }
-            2 -> {
+            1 -> {
                 hideMenu()
                 Handler(Looper.getMainLooper()).postDelayed({
                     (activity as MainActivity).startSettings()
                 }, 250)
             }
-            3 -> {
+            2 -> {
                 hideMenu()
                 Handler(Looper.getMainLooper()).postDelayed({
-                    Values.gradientList.clear()
                     Connection.checkConnection(context, context)
                     (activity as MainActivity).connectionChecker()
                 }, 400)

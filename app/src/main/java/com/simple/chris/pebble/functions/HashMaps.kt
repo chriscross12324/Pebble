@@ -14,10 +14,10 @@ object HashMaps {
         myGradients["buttonText"] = R.string.dual_my_gradients
         menuArray.add(myGradients)*/
 
-        val feedback = HashMap<String, Int>()
+        /*val feedback = HashMap<String, Int>()
         feedback["buttonIcon"] = R.drawable.icon_feedback
         feedback["buttonText"] = R.string.word_feedback
-        menuArray.add(feedback)
+        menuArray.add(feedback)*/
 
         val support = HashMap<String, Int>()
         support["buttonIcon"] = R.drawable.icon_money
@@ -315,7 +315,7 @@ object HashMaps {
         array.add(two)
 
         val three = HashMap<String, Int>()
-        three["buttonTitle"] = R.string.dual_special_effects
+        three["buttonTitle"] = R.string.word_blur
         three["buttonIcon"] = R.drawable.icon_blur_on
         array.add(three)
 
@@ -358,6 +358,21 @@ object HashMaps {
         val ten = HashMap<String, Int>()
         ten["buttonIcon"] = R.drawable.icon_dollar_10
         ten["buttonTitle"] = R.string.word_usd
+        array.add(ten)
+
+        val three = HashMap<String, Int>()
+        three["buttonIcon"] = R.drawable.icon_dollar_2
+        three["buttonTitle"] = R.string.word_usd
+        array.add(three)
+
+        val four = HashMap<String, Int>()
+        four["buttonIcon"] = R.drawable.icon_dollar_5
+        four["buttonTitle"] = R.string.word_usd
+        array.add(four)
+
+        val six = HashMap<String, Int>()
+        six["buttonIcon"] = R.drawable.icon_dollar_10
+        six["buttonTitle"] = R.string.word_usd
         array.add(ten)
 
         return array

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.WallpaperManager
 import android.content.Context
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -17,6 +18,7 @@ import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.*
@@ -95,7 +97,7 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
         /** Wait for UI to populate **/
         Handler(Looper.getMainLooper()).postDelayed({
             if (detailsHolder != null) {
-                Log.e("INFO", "continuing")
+                Log.d("DEBUG", "Continuing")
                 /** Animates away UI Elements **/
                 UIElements.viewObjectAnimator(detailsHolder, "translationY",
                         (90 * resources.displayMetrics.density) + detailsHolder.height,
@@ -135,7 +137,6 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
     }
 
     private fun tellMainReady() {
-        Log.e("INFO", "tellMain")
         Handler(Looper.getMainLooper()).postDelayed({
             if (Values.canDismissSharedElement) {
                 (activity as MainActivity).endSharedElement()
@@ -205,6 +206,79 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
 
         colourElementsRecycler.layoutManager = buttonLayoutManager
         colourElementsRecycler.adapter = buttonAdapter
+
+        val arrayList = ArrayList<String>()
+        /*Palette.Builder(Calculations.createBitmap(UIElement.gradientDrawableNew((activity as MainActivity), null, Values.gradientScreenColours, 0f)!!,
+            100, 100)).maximumColorCount(6).generate {
+                it?.let {
+                    for (i in 0 until 5) {
+                        //Log.e("INFO", "#${Integer.toHexString(it.swatches[i].rgb).removeRange(0, 2)}")
+                        arrayList.add("#${Integer.toHexString(it.swatches[i].rgb).removeRange(0, 2)}")
+                        categorizeColour("#${Integer.toHexString(it.swatches[i].rgb).removeRange(0, 2)}")
+                    }
+                    val buttonAdapter = SearchColourRecyclerView(context, null, arrayList, this)
+
+                    colourElementsRecycler.layoutManager = buttonLayoutManager
+                    colourElementsRecycler.adapter = buttonAdapter
+                }
+        }*/
+    }
+
+    fun categorizeColour(colour: String): ArrayList<String> {
+        val array = arrayListOf<String>()
+        val hexValue = Color.parseColor(colour)
+        val hsv = floatArrayOf(0f, 1f, 1f)
+        Color.colorToHSV(hexValue, hsv)
+
+        val hueValue = hsv[0].toInt()
+        val satValue = (hsv[1] * 100).toInt()
+        val valValue = (hsv[2] * 100).toInt()
+
+        if (hueValue <= 18 || hueValue >= 300) {
+            if (satValue >= 15 && valValue >= 10) {
+                //Add Red
+                array.add("red")
+            }
+        }
+        if (hueValue in 5..40) {
+            if (satValue >= 20 && valValue >= 10) {
+                //Add Orange
+                array.add("orange")
+            }
+        }
+        if (hueValue in 35..80) {
+            if (satValue >= 20 && valValue >= 10) {
+                //Add Yellow
+                array.add("yellow")
+            }
+        }
+        if (hueValue in 70..160) {
+            if (satValue >= 20 && valValue >= 10) {
+                //Add Green
+                array.add("green")
+            }
+        }
+        if (hueValue in 160..250) {
+            if (satValue >= 20 && valValue >= 10) {
+                //Add Blue
+                array.add("blue")
+            }
+        }
+        if (hueValue in 250..330) {
+            if (satValue >= 15 && valValue >= 10) {
+                //Add Purple
+                array.add("purple")
+            }
+        }
+        if (satValue <= 30 && valValue >= 80) {
+            //Add White
+            array.add("white")
+        }
+        if (valValue <= 20) {
+            //Add Black
+            array.add("black")
+        }
+        return array
     }
 
     fun runNotification(icon: Int, text: Int) {
@@ -310,11 +384,11 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
             Vibration.lowFeedback(context)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Values.dialogPopup = DialogPopup.newDialog(HashMaps.setWallpaperArrayList(), "setWallpaper", R.drawable.icon_wallpaper_new, R.string.dual_set_wallpaper,
-                        null, R.string.question_set_wallpaper)
+                        null, R.string.question_set_wallpaper, null)
                 Values.dialogPopup.show(fm, "setWallpaper")
             } else {
                 Values.dialogPopup = DialogPopup.newDialog(HashMaps.arrayYesCancel(), "setWallpaperOutdated", R.drawable.icon_warning, R.string.dual_outdated_android,
-                        null, R.string.question_outdated_android)
+                        null, R.string.question_outdated_android, null)
                 Values.dialogPopup.show(fm, "setWallpaperOutdated")
             }
             //Set Wallpaper

@@ -1,5 +1,6 @@
 package com.simple.chris.pebble.functions
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DownloadManager
 import android.content.Context
@@ -56,7 +57,7 @@ object Connection {
         when (getConnectionType(context)) {
             0 -> {
                 Values.dialogPopup = DialogPopup.newDialog(HashMaps.noConnectionArrayList(), "noConnection", R.drawable.icon_warning, R.string.dual_no_connection,
-                        null, R.string.sentence_needs_internet_connection)
+                        null, R.string.sentence_needs_internet_connection, null)
                 Values.dialogPopup.show(fm, "noConnection")
             }
             1 -> {
@@ -72,7 +73,7 @@ object Connection {
                     }
                     "ask" -> {
                         Values.dialogPopup = DialogPopup.newDialog(HashMaps.dataWarningArrayList(), "askMobile", R.drawable.icon_warning, R.string.sentence_trying_mobile_data,
-                                null, R.string.question_mobile_data)
+                                null, R.string.question_mobile_data, null)
                         Values.dialogPopup.show(fm, "askMobile")
                     }
                 }
@@ -80,10 +81,11 @@ object Connection {
         }
     }
 
+    @SuppressLint("StringFormatMatches")
     fun getGradientsFireStore(activity: Activity) {
         fm = (activity as MainActivity).supportFragmentManager
         Values.dialogPopup = DialogPopup.newDialog(null, "connecting", null, R.string.word_connecting,
-                null, R.string.sentence_pebble_is_connecting)
+                null, R.string.sentence_pebble_is_connecting, null)
         Values.dialogPopup.show(fm, "connecting")
 
         Values.downloadingGradients = true
@@ -91,6 +93,7 @@ object Connection {
                 .orderBy("gradientTimestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener {
+                    Values.gradientList.clear()
                     val gradientList = ArrayList<HashMap<String, String>>()
                     for (document in it) {
                         val item = HashMap<String, String>()
@@ -101,12 +104,16 @@ object Connection {
                         gradientList.add(item)
                         Values.gradientList = gradientList
                     }
-                    Log.e("INFO", "Firestore: Done")
+                    Log.d("DEBUG", "Firestore: Done")
                     connectionOnline()
                     Values.connectionOffline = false
                 }
                 .addOnFailureListener {
                     Log.e("INFO", "Firebase failure: $it")
+                    Values.downloadingGradients = false
+                    Values.dialogPopup = DialogPopup.newDialog(HashMaps.noConnectionArrayList(), "serverError", R.drawable.icon_wifi_empty, R.string.dual_server_error,
+                            null, null, activity.getString(R.string.sentence_server_error, it.localizedMessage))
+                    Values.dialogPopup.show(fm, "serverError")
                 }
     }
 
@@ -115,7 +122,7 @@ object Connection {
         //UIElement.popupDialog(context, "connecting", null, R.string.word_connecting, null, R.string.sentence_pebble_is_connecting, null, decorView, null)
         fm = (activity as MainActivity).supportFragmentManager
         Values.dialogPopup = DialogPopup.newDialog(null, "connecting", null, R.string.word_connecting,
-                null, R.string.sentence_pebble_is_connecting)
+                null, R.string.sentence_pebble_is_connecting, null)
         Values.dialogPopup.show(fm, "connecting")
 
         /** Start gradient database download **/

@@ -82,7 +82,7 @@
             android:layout_height="match_parent"
             android:background="?BackgroundColour"
             android:transitionName="cardView"
-            app:cardBackgroundColor="?ForegroundColour"
+            app:cardBackgroundColor="?BackgroundColour"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
@@ -140,7 +140,7 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:background="@drawable/details_background"
-        android:backgroundTint="?BackgroundColour"
+        android:backgroundTint="?ForegroundColour"
         android:clickable="true"
         android:elevation="10dp"
         android:focusable="true"

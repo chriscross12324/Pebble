@@ -10,7 +10,7 @@
         android:id="@+id/backgroundDimmer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?ForegroundColour"
+        android:background="?PrimaryTextColour"
         android:contentDescription="Dims dialog background" />
 
     <ImageView
@@ -18,9 +18,9 @@
         android:layout_width="10dp"
         android:layout_height="10dp"
         android:alpha="0"
-        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="Helps update blurView"
         app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="Helps update blurView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"
@@ -43,12 +43,12 @@
                 android:alpha="1"
                 android:background="@drawable/details_background"
                 android:backgroundTint="?ForegroundColour"
+                android:clickable="true"
+                android:focusable="true"
                 android:scaleX="0.8"
                 android:scaleY="0.8"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:clickable="true"
-                android:focusable="true">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/gradientPreview"
@@ -57,10 +57,10 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
+                    android:contentDescription="Displays gradient"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="Displays gradient" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/gradientDialogGradientName"
@@ -79,23 +79,36 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/gradientPreview" />
 
-                <TextView
-                    android:id="@+id/gradientDialogGradientDescription"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="6dp"
                     android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="16dp"
-                    android:fontFamily="@font/googlesans_medium"
-                    android:text="A lake where you can see the bottom through the clear water"
-                    android:textAlignment="center"
-                    android:textColor="?SecondaryTextColour"
-                    android:textSize="12sp"
+                    app:layout_constraintHeight_max="200dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/gradientDialogGradientName" />
+                    app:layout_constraintTop_toBottomOf="@+id/gradientDialogGradientName">
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingBottom="16dp"
+                        android:clipToPadding="false">
+
+                        <TextView
+                            android:id="@+id/gradientDialogGradientDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/googlesans_medium"
+                            android:text="A lake where you can see the bottom through the clear water"
+                            android:textAlignment="center"
+                            android:textColor="?SecondaryTextColour"
+                            android:textSize="12sp" />
+                    </ScrollView>
+                </LinearLayout>
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

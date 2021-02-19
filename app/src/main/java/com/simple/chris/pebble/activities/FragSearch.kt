@@ -20,17 +20,16 @@ import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.firestore.Query
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.adapters_helpers.DialogPopup
-import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
-import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
-import com.simple.chris.pebble.adapters_helpers.SearchColourRecyclerView
+import com.simple.chris.pebble.adapters_helpers.*
 import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.fragment_search.*
+import kotlinx.android.synthetic.main.module_browse_normal.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -233,8 +232,18 @@ class FragSearch : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
         Handler(Looper.getMainLooper()).postDelayed({
             gradientScaleX.reverse()
             gradientScaleY.reverse()
+            val intArray = IntArray(2)
+            view.gradient.getLocationOnScreen(intArray)
 
-            RecyclerGrid.gradientGridOnLongClickListener((activity as MainActivity), searchResults, position, context.window, view)
+            val fm = fragmentManager as FragmentManager
+            val longClickGradientDialog = DialogGradientInfo.newDialog(
+                    ArrayList(searchResults[position]["gradientColours"]!!.replace("[", "").replace("]", "")
+                            .split(",").map { it.trim() }),
+                    searchResults[position]["gradientName"]!!,
+                    searchResults[position]["gradientDescription"]!!,
+                    intArray
+            )
+            longClickGradientDialog.show(fm, "longClickGradientDialog")
 
             Handler(Looper.getMainLooper()).postDelayed({
                 Vibration.mediumFeedback((activity as MainActivity))
@@ -283,7 +292,6 @@ class FragSearch : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
     }
 
     private fun searchColour(colour: String) {
-        Toast.makeText((activity as MainActivity), colour, Toast.LENGTH_SHORT).show()
         searchResults.clear()
         /*val fm = (activity as MainActivity).supportFragmentManager
         Values.dialogPopup = DialogPopup.newDialog(null, "connecting", null, R.string.word_connecting,
@@ -306,7 +314,7 @@ class FragSearch : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
                         gradientList.add(item)
                         searchResults = gradientList
                     }
-                    Log.e("INFO", "Firestore: Done")
+                    Log.d("DEBUG", "Firestore: Done")
                     Values.downloadingGradients = true
                     Values.connectionOffline = false
                     resultsText.text = "${searchResults.size} gradientes found"

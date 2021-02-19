@@ -45,7 +45,7 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
         dialog!!.window!!.setBackgroundDrawableResource(android.R.color.transparent)
         dialog!!.window!!.setDimAmount(0f)
         Values.dialogPopup = this
-        Log.e("ERR", "Showing Dialog")
+        Log.d("DEBUG", "Showing Dialog")
         if (arguments!!.getString("dialogName") == "connecting") {
             testConnection()
         }
@@ -74,25 +74,23 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
             progressCircle.visibility = View.VISIBLE
         }
 
-        if (arguments!!.getInt("title") != null) {
+        if (arguments!!.getInt("title") != 0) {
             permissionTitle.setText(arguments!!.getInt("title"))
         } else {
             permissionTitle.text = arguments!!.getString("titleString")
         }
 
-        permissionDescription.setText(arguments!!.getInt("description"))
+        if (arguments!!.getInt("description") != 0) {
+            permissionDescription.setText(arguments!!.getInt("description"))
+        } else {
+            permissionDescription.text = arguments!!.getString("descriptionString")
+        }
 
         holder.post {
             UIElements.viewObjectAnimator(dialogHolder, "scaleX", 1f, 550, 150, DecelerateInterpolator(3f))
             UIElements.viewObjectAnimator(dialogHolder, "scaleY", 1f, 550, 150, DecelerateInterpolator(3f))
             UIElements.viewObjectAnimator(dialogHolder, "alpha", 1f, 100, 150, LinearInterpolator())
             UIElements.viewObjectAnimator(drawCaller, "scaleY", 2f, 60000, 0, LinearInterpolator())
-
-            /*if (arguments!!.getSerializable("array") != null) {
-                UIElements.viewObjectAnimator(popupButtonRecycler, "scaleX", 1f, 350, 100, DecelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(popupButtonRecycler, "scaleY", 1f, 350, 100, DecelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(popupButtonRecycler, "alpha", 1f, 150, 100, LinearInterpolator())
-            }*/
         }
 
         blurView.setOnClickListener {
@@ -130,10 +128,8 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
             Handler(Looper.getMainLooper()).postDelayed({
                 if (!Values.downloadingGradients) {
                     onDismiss(Values.dialogPopup.dialog!!)
-                    Log.e("INFO", "Trying to dismiss")
                 } else {
                     testConnection()
-                    //Log.e("INFO", "Looping")
                 }
             }, 200)
         }, 200)
@@ -160,11 +156,10 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
     }
 
     companion object {
-        fun newDialog(buttonArray: ArrayList<HashMap<String, Int>>?, dialogName: String, icon: Int?, title: Int?, titleString: String?, description: Int): DialogPopup {
+        fun newDialog(buttonArray: ArrayList<HashMap<String, Int>>?, dialogName: String, icon: Int?, title: Int?, titleString: String?, description: Int?, descriptionString: String?): DialogPopup {
             val frag = DialogPopup()
             val args = Bundle()
             args.putString("dialogName", dialogName)
-            args.putInt("description", description)
             if (buttonArray != null) {
                 args.putSerializable("array", buttonArray)
             }
@@ -176,6 +171,12 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
             }
             if (titleString != null) {
                 args.putString("titleString", titleString)
+            }
+            if (description != null) {
+                args.putInt("description", description)
+            }
+            if (descriptionString != null) {
+                args.putString("descriptionString", descriptionString)
             }
             frag.arguments = args
 
