@@ -26,7 +26,6 @@ import java.util.*
 
 object Connection {
 
-    lateinit var request: JsonObjectRequest
     private lateinit var fm: FragmentManager
 
     fun getConnectionType(context: Context) : Int {
@@ -115,70 +114,6 @@ object Connection {
                             null, null, activity.getString(R.string.sentence_server_error, it.localizedMessage))
                     Values.dialogPopup.show(fm, "serverError")
                 }
-    }
-
-    fun getGradients(context: Context, activity: Activity) {
-        /** Start connecting animation **/
-        //UIElement.popupDialog(context, "connecting", null, R.string.word_connecting, null, R.string.sentence_pebble_is_connecting, null, decorView, null)
-        fm = (activity as MainActivity).supportFragmentManager
-        Values.dialogPopup = DialogPopup.newDialog(null, "connecting", null, R.string.word_connecting,
-                null, R.string.sentence_pebble_is_connecting, null)
-        Values.dialogPopup.show(fm, "connecting")
-
-        /** Start gradient database download **/
-        Values.downloadingGradients = true
-        val mQueue: RequestQueue = Volley.newRequestQueue(context)
-        val gradientDatabaseURL = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec?action=getGradientsV3"
-        //SQLiteHelperFull(context).clearGradients()
-
-        request = JsonObjectRequest(Request.Method.GET, gradientDatabaseURL, null,
-                { response ->
-                    try {
-                        val gradientArray = response.getJSONArray("items")
-                        val gradientList = ArrayList<HashMap<String, String>>()
-
-                        for (i in gradientArray.length() - 1 downTo 0) {
-                            val downloadedItem = gradientArray.getJSONObject(i)
-
-                            val item = HashMap<String, String>()
-                            item["gradientName"] = downloadedItem.getString("gradientName")
-                            item["gradientColours"] = downloadedItem.getString("gradientColours")
-                            item["gradientDescription"] = downloadedItem.getString("gradientDescription")
-
-                            gradientList.add(item)
-                            Values.gradientList = gradientList
-                            /** Insert Gradient into "My Gradients" database **/
-                            //val db = SQLiteHelperFull(context)
-                            //db.insertGradient(item["gradientName"]!!, item["gradientColours"]!!, item["gradientDescription"]!!)
-                        }
-                        connectionOnline()
-                        Values.connectionOffline = false
-                    } catch (e: Exception) {
-                        Log.e("ERR", "pebble.main_menu.get_gradients: ${e.localizedMessage}")
-                    }
-                },
-                {
-                    Log.e("ERR", "pebble.main_menu.get_gradients.request.error_listener: ${it.networkResponse}")
-                })
-        mQueue.add(request)
-        request.retryPolicy = DefaultRetryPolicy(20000, 5, 1.25f)
-
-        checkDownload(context)
-    }
-
-    fun checkDownload(context: Context) {
-        Handler(Looper.getMainLooper()).postDelayed({
-            if (Values.gradientList.isEmpty()) {
-                //TODO("Add stillConnecting Dialog")
-                //UIElement.popupDialog(context, "stillConnecting", R.drawable.icon_wifi_full, R.string.dual_still_connecting, null, R.string.question_still_connecting, HashMaps.arrayContinueOfflineRetry(), decorView, listener)
-            }
-        }, 20000)
-    }
-
-    fun cancelConnection() {
-        request.cancel()
-        //UIElement.popupDialogHider()
-        Values.connectionOffline = true
     }
 
     private fun connectionOnline() {

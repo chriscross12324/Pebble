@@ -15,6 +15,8 @@ object Values {
     var valuesLoaded = false
     var errorOccurred = false
     var adMobInitialized = false
+    var recyclerBrowseAtTop = true
+    var isSearchMode = false
 
     //Vibrations
     val notificationPattern = longArrayOf(0, 25, 80, 40)
@@ -33,6 +35,7 @@ object Values {
 
     //Connection
     var gradientList: ArrayList<HashMap<String, String>> = ArrayList()
+    var searchList: ArrayList<HashMap<String, String>> = ArrayList()
     var offlineMode = false
     var connectingToServer = false
 

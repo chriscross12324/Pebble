@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.*
 import android.widget.Toast
@@ -34,6 +35,7 @@ import kotlinx.android.synthetic.main.activity_main.ssTitle
 import kotlinx.android.synthetic.main.activity_main.wallpaperImageAlpha
 import kotlinx.android.synthetic.main.activity_main.wallpaperImageViewer
 import kotlinx.android.synthetic.main.module_browse_normal.view.*
+import kotlin.math.roundToInt
 
 class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     private lateinit var mInterstitialAd: InterstitialAd
@@ -53,6 +55,12 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     var secondaryFragScaleX = 0f
     var secondaryFragScaleY = 0f
     var secondaryFragPosX = 0f
+
+    private var ssScrollbarWidth = 0f
+    private var ssScrollbarArea = 0f
+    var ssScrollbarOffset = 0
+    var ssScrollbarExtent = 0
+    var ssScrollbarRange = 0
 
     /**
      * gradientsDownload
@@ -101,13 +109,13 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         }
     }
 
-    private fun gradientsDownloaded() {
+    /*private fun gradientsDownloaded() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (Values.gradientList.isNotEmpty()) {
                 (browseFragment as FragBrowse).showGradients()
             }
         }, 500)
-    }
+    }*/
 
     fun startSettings() {
         if (currentSmallScreen != "settings") {
@@ -122,7 +130,9 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
             ssRecycler.layoutManager = buttonLayoutManager
             ssRecycler.adapter = buttonAdapter
-            smallScreenScrollBar()
+            smallScreenScrollBar(buttonLayoutManager)
+
+            //buttonLayoutManager.scrollToPositionWithOffset(1, 50)
         }
         ssRecycler.post {
             showSmallScreen(smallScreenFragHolder.measuredHeight.toFloat())
@@ -142,27 +152,66 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
             ssRecycler.layoutManager = buttonLayoutManager
             ssRecycler.adapter = buttonAdapter
-            smallScreenScrollBar()
+            smallScreenScrollBar(buttonLayoutManager)
         }
         ssRecycler.post {
             showSmallScreen(smallScreenFragHolder.measuredHeight.toFloat())
         }
     }
 
-    fun smallScreenScrollBar() {
-        val holderWidth = smallScreenFragHolder.measuredWidth - Calculations.convertToDP(this, 70f)
-        //UIElements.viewWidthAnimator(ssScrollbar, ssScrollbar.width.toFloat(), 0)
-        val scrollArea = holderWidth - (2 * (ssScrollbar.measuredWidth / 2))
-        UIElements.viewWidthAnimator(ssScrollbarBG, ssScrollbar.width.toFloat(), scrollArea, 0, 0, LinearInterpolator())
-        val rangeStart = 0
-        val rangeEnd = scrollArea
+    @SuppressLint("ClickableViewAccessibility")
+    fun smallScreenScrollBar(layoutManager: LinearLayoutManager) {
+        ssScrollbarWidth = smallScreenFragHolder.measuredWidth - Calculations.convertToDP(this, 70f)
+        ssScrollbarArea = ssScrollbarWidth - ssScrollbar.measuredWidth
+        ssScrollbarOffset = 0
         ssRecycler.setOnScrollChangeListener { view, i, i2, i3, i4 ->
-            val offset = ssRecycler.computeHorizontalScrollOffset()
-            val extent = ssRecycler.computeHorizontalScrollExtent()
-            val range = ssRecycler.computeHorizontalScrollRange()
-            val percent = (100f * offset / (range - extent))
-            ssScrollbar.translationX = (rangeStart + ((rangeEnd - rangeStart) / (100 - 0)) * (percent - 0))
+            ssScrollbarExtent = ssRecycler.computeHorizontalScrollExtent()
+            ssScrollbarRange = ssRecycler.computeHorizontalScrollRange()
+            scrollbarTranslationCalculator()
         }
+
+        val handler = Handler(Looper.getMainLooper())
+        val runnable = Runnable {
+            Vibration.lowFeedback(this)
+            UIElements.viewHeightAnimator(ssScrollbar, Calculations.convertToDP(this, 5f), Calculations.convertToDP(this, 2.55f), 500, 0, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(ssScrollbar, "translationY", Calculations.convertToDP(this, 8f), 500, 0, DecelerateInterpolator(3f))
+        }
+
+        ssScrollbarTrigger.setOnTouchListener { _, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    Log.e("INFO", "Down")
+                    Vibration.mediumFeedback(this)
+                    handler.removeCallbacks(runnable)
+                    UIElements.viewHeightAnimator(ssScrollbar, ssScrollbar.measuredHeight.toFloat(), Calculations.convertToDP(this, 5f), 500, 0, DecelerateInterpolator(3f))
+                    UIElements.viewObjectAnimator(ssScrollbar, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    Log.e("INFO", "Up")
+                    Vibration.mediumFeedback(this)
+                    handler.postDelayed(runnable, 1000)
+                    true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val x = motionEvent.x
+                    val xIntStart = Calculations.convertToDP(this, 57.5f)
+                    val xIntEnd = Calculations.screenMeasure(this, "width", window) - xIntStart
+                    val xProgress = 0f.coerceAtLeast(100f.coerceAtMost((100 / (xIntEnd - xIntStart)) * (x - xIntStart)))
+                    val xOffset = (xProgress / 100) * (ssScrollbarRange - ssScrollbarExtent)
+                    layoutManager.scrollToPositionWithOffset(0, -xOffset.roundToInt())
+                    scrollbarTranslationCalculator()
+                    true
+                }
+                else -> true
+            }
+        }
+    }
+
+    private fun scrollbarTranslationCalculator() {
+        ssScrollbarOffset = ssRecycler.computeHorizontalScrollOffset()
+        val percent = (100f * ssScrollbarOffset / (ssScrollbarRange - ssScrollbarExtent))
+        ssScrollbar.translationX = (ssScrollbarArea / 100) * percent
     }
 
     fun shrinkFrag(fragment: CardView, scale: Float, duration: Long, interpolator: Interpolator) {
@@ -360,6 +409,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
     fun startSearch() {
         //Toast.makeText(this, "${Values.currentlySplitScreened} : ${Values.currentActivity}", Toast.LENGTH_SHORT).show()
+        Values.currentGradientScreenPos = -1
         if (!Values.currentlySplitScreened) {
             if (Calculations.splitScreenPossible(this, window)) {
                 //Toast.makeText(this, "Split", Toast.LENGTH_SHORT).show()
@@ -648,24 +698,6 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                         finishAndRemoveTask()
                     }
                     //1 -> //dialogPopupHider()
-                }
-            }
-            "stillConnecting" -> {
-                when (position) {
-                    0 -> {
-                        Values.dialogPopup = DialogPopup.newDialog(null, "connecting", null, R.string.word_connecting,
-                                null, R.string.sentence_pebble_is_connecting, null)
-                        Values.dialogPopup.show(fm, "connecting")
-                        Connection.checkDownload(this)
-                    }
-                    1 -> {
-                        Connection.cancelConnection()
-                        Connection.connectionOffline(this)
-                    }
-                    2 -> {
-                        Connection.cancelConnection()
-                        Connection.checkConnection(this, this)
-                    }
                 }
             }
             "askMobile" -> {
@@ -992,7 +1024,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     }
 
     fun getFragmentWidth(): Float {
-        return fragmentHolderSecondary.measuredWidth.toFloat()
+        return fragmentHolder.measuredWidth.toFloat()
     }
 
     fun dialogPopupHider() {

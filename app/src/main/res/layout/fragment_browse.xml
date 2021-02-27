@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activities.FragBrowse"
     tools:ignore="UseAppTint">
 
@@ -13,24 +13,24 @@
         android:layout_height="400dp"
         android:alpha="0.1"
         android:src="@drawable/icon_browse"
+        android:tint="?SecondaryTextColour"
         android:transitionName="buttonIcon"
         android:translationX="50dp"
         android:translationY="50dp"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:tint="?SecondaryTextColour" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/gradientCreatorSharedElementView"
         android:layout_width="150dp"
         android:layout_height="170dp"
         android:orientation="horizontal"
+        android:transitionName="gradientCreatorViewer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        android:transitionName="gradientCreatorViewer"/>
+        app:layout_constraintTop_toBottomOf="parent" />
 
     <LinearLayout
         android:id="@+id/titleHolder"
@@ -85,28 +85,56 @@
             app:cardBackgroundColor="?BackgroundColour"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+            app:layout_behavior=".adapters_helpers.LockableBottomSheet">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:layout_height="match_parent">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/gradientGrid"
+                <LinearLayout
+                    android:id="@+id/linearLayout5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:clipToPadding="false"
-                    android:fadingEdge="none"
-                    android:alpha="0"
-                    android:layoutAnimation="@anim/recycler_animation"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="98dp"
-                    android:requiresFadingEdge="none"
-                    android:visibility="visible" />
-            </LinearLayout>
+                    android:orientation="vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/gradientGrid"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0"
+                        android:clipToPadding="false"
+                        android:fadingEdge="none"
+                        android:layoutAnimation="@anim/recycler_animation"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="98dp"
+                        android:requiresFadingEdge="none"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/browseScrollbarTrigger"
+                    android:layout_width="29dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/browseScrollbar"
+                        android:layout_width="5dp"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="25dp"
+                        android:background="@drawable/details_background"
+                        android:backgroundTint="?SecondaryTextColour"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
 
@@ -173,6 +201,33 @@
             android:textSize="18sp" />
     </LinearLayout>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/searchByColourHolder"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
+        android:alpha="0"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="?ForegroundColour"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchByColourRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.cardview.widget.CardView>
+
     <LinearLayout
         android:id="@+id/searchButton"
         android:layout_width="50dp"
@@ -188,6 +243,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
+            android:id="@+id/iconSearch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
@@ -208,12 +264,12 @@
         android:id="@+id/touchBlockerDark"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:alpha="0"
         android:background="#80000000"
         android:clickable="true"
         android:elevation="21dp"
         android:focusable="true"
-        android:visibility="gone"
-        android:alpha="0"/>
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/menuArrow"
@@ -224,8 +280,8 @@
         android:backgroundTint="?ForegroundColour"
         android:elevation="21dp"
         android:rotation="45"
-        android:visibility="gone"
         android:translationY="-25dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/menuButton"
         app:layout_constraintEnd_toEndOf="@+id/menuButton"
         app:layout_constraintStart_toStartOf="@+id/menuButton" />
@@ -253,10 +309,10 @@
             android:id="@+id/browseMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </LinearLayout>
 

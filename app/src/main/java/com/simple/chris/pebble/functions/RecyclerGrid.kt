@@ -1,6 +1,5 @@
 package com.simple.chris.pebble.functions
 
-import GridAutofitLayoutManager
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
@@ -23,8 +22,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.activities.GradientDetails
 import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
+import com.simple.chris.pebble.adapters_helpers.LockableBottomSheet
+import com.simple.chris.pebble.functions.RecyclerGrid.gradientGrid
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.dialog_long_press_gradients.*
+import kotlinx.android.synthetic.main.fragment_browse.*
 import kotlinx.android.synthetic.main.module_browse_normal.view.*
 import kotlin.Exception
 
@@ -36,13 +38,28 @@ object RecyclerGrid {
         try {
             val gridLayoutManager = GridLayoutManager(context, 2)
             val gridLayoutAdapter = GradientRecyclerView(context, gradientJSON, onGradientListener, onGradientLongClickListener)
-            gridLayoutAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
+            //gridLayoutAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
             view.setHasFixedSize(true)
             view.layoutManager = gridLayoutManager
             view.adapter = gridLayoutAdapter
+
+            var x: Int
+            var y = 0
+            view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    Values.browseRecyclerScrollPos = dy
+                    x = y
+                    y = gridLayoutManager.findFirstCompletelyVisibleItemPosition()
+
+                    Log.e("INFO", "$x : $y")
+                    //Log.e("INFO", "${gridLayoutManager.findFirstCompletelyVisibleItemPosition()}")
+                    //Values.recyclerBrowseAtTop = gridLayoutManager.findFirstCompletelyVisibleItemPosition() == 0
+                    //Toast.makeText(context, "$dy", Toast.LENGTH_SHORT).show()
+                }
+            })
         } catch (e: Exception) {
             Log.e("ERR", "pebble.recycler_grid.gradient_grid: ${e.localizedMessage}")
-
         }
     }
 

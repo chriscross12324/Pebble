@@ -85,9 +85,9 @@ class DialogColourInfo : DialogFragment() {
 
         /** Animate popupLayout in **/
         popupHolder.post {
-            UIElements.viewObjectAnimator(popupHolder, "scaleX", 1f, 350, 100, OvershootInterpolator())
-            UIElements.viewObjectAnimator(popupHolder, "scaleY", 1f, 350, 100, OvershootInterpolator())
-            UIElements.viewObjectAnimator(popupHolder, "alpha", 1f, 150, 100, LinearInterpolator())
+            UIElements.viewObjectAnimator(popupHolder, "scaleX", 1f, 550, 150, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(popupHolder, "scaleY", 1f, 550, 150, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(popupHolder, "alpha", 1f, 100, 150, LinearInterpolator())
             UIElements.viewObjectAnimator(drawCaller, "scaleY", 2f, 2000, 0, LinearInterpolator())
         }
 

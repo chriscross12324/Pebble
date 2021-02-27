@@ -19,10 +19,7 @@ import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
 import android.util.Log
 import android.view.*
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.DecelerateInterpolator
-import android.view.animation.LinearInterpolator
-import android.view.animation.OvershootInterpolator
+import android.view.animation.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -59,16 +56,20 @@ object UIElements {
 
     fun viewWidthAnimator(layout: View, startValue: Float, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
         Handler(Looper.getMainLooper()).postDelayed({
-            val valueAnimator = ValueAnimator.ofInt(startValue.roundToInt(), endValue.roundToInt())
-            valueAnimator.addUpdateListener {
-                val value = it.animatedValue as Int
-                val layoutParams = layout.layoutParams
-                layoutParams.width = value
-                layout.layoutParams = layoutParams
+            try {
+                val valueAnimator = ValueAnimator.ofInt(startValue.roundToInt(), endValue.roundToInt())
+                valueAnimator.addUpdateListener {
+                    val value = it.animatedValue as Int
+                    val layoutParams = layout.layoutParams
+                    layoutParams.width = value
+                    layout.layoutParams = layoutParams
+                }
+                valueAnimator.interpolator = interpolator
+                valueAnimator.duration = duration
+                valueAnimator.start()
+            } catch (e: Exception) {
+                Log.e("ERR", "pebble.ui_elements.view_width_animator: ${e.localizedMessage}")
             }
-            valueAnimator.interpolator = interpolator
-            valueAnimator.duration = duration
-            valueAnimator.start()
         }, delay)
     }
 
@@ -146,6 +147,48 @@ object UIElements {
                 viewObjectAnimator(alphaLayer, "alpha", 1f, 150, 0, LinearInterpolator())
             }
         }
+    }
+
+    fun setImageViewSRC(view: ImageView, src: Int, duration: Long, delay: Long) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            val animOut = AlphaAnimation(1.0f, 0.0f)
+            animOut.duration = duration
+            val animIn = AlphaAnimation(0.0f, 1.0f)
+            animIn.duration = duration
+
+            view.startAnimation(animOut)
+            animOut.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(p0: Animation?) {}
+
+                override fun onAnimationEnd(p0: Animation?) {
+                    view.setImageResource(src)
+                    view.startAnimation(animIn)
+                }
+
+                override fun onAnimationRepeat(p0: Animation?) {}
+            })
+        }, delay)
+    }
+
+    fun setTextViewText(view: TextView, text: Int, duration: Long, delay: Long) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            val animOut = AlphaAnimation(1.0f, 0.0f)
+            animOut.duration = duration
+            val animIn = AlphaAnimation(0.0f, 1.0f)
+            animIn.duration = duration
+
+            view.startAnimation(animOut)
+            animOut.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(p0: Animation?) {}
+
+                override fun onAnimationEnd(p0: Animation?) {
+                    view.setText(text)
+                    view.startAnimation(animIn)
+                }
+
+                override fun onAnimationRepeat(p0: Animation?) {}
+            })
+        }, delay)
     }
 
     private fun blurRenderScript(context: Context, bitmap: Bitmap, radius: Float): Bitmap {

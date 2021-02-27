@@ -162,11 +162,42 @@ class FragSearch : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
                     fieldChange = false
                     UIElement.hideSoftKeyboard(context)
                     view.clearFocus()
-                    searchByName()
+                    //searchByNameNew()
                 }
             }
             false
         }
+    }
+
+    private fun searchByNameNew() {
+        searchResultsRecycler.suppressLayout(true)
+        searchResults.clear()
+
+        Values.downloadingGradients = true
+        Values.getFireStore().collection("gradientList")
+                //.where("gradientName", searchField.text.toString())
+                .orderBy("gradientTimestamp", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener {
+                    val gradientList = java.util.ArrayList<java.util.HashMap<String, String>>()
+                    for (document in it) {
+                        val item = java.util.HashMap<String, String>()
+                        item["gradientName"] = document.data["gradientName"] as String
+                        item["gradientColours"] = document.data["gradientColours"] as String
+                        item["gradientDescription"] = document.data["gradientDescription"] as String
+
+                        gradientList.add(item)
+                        searchResults = gradientList
+                    }
+                    Log.d("DEBUG", "Firestore: Done")
+                    Values.downloadingGradients = true
+                    Values.connectionOffline = false
+                    resultsText.text = "${searchResults.size} gradientes found"
+                    RecyclerGrid.gradientGrid(context, searchResultsRecycler, searchResults, this, this)
+                }
+                .addOnFailureListener {
+                    Log.e("INFO", "Firebase failure: $it")
+                }
     }
 
     private fun searchByName() {
@@ -292,16 +323,13 @@ class FragSearch : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
     }
 
     private fun searchColour(colour: String) {
+        searchResultsRecycler.suppressLayout(true)
         searchResults.clear()
-        /*val fm = (activity as MainActivity).supportFragmentManager
-        Values.dialogPopup = DialogPopup.newDialog(null, "connecting", null, R.string.word_connecting,
-                null, R.string.sentence_pebble_is_connecting)
-        Values.dialogPopup.show(fm, "connecting")*/
 
         Values.downloadingGradients = true
         Values.getFireStore().collection("gradientList")
                 .whereArrayContains("gradientCategories", colour)
-                /*.orderBy("gradientTimestamp", Query.Direction.DESCENDING)*/
+                .orderBy("gradientTimestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener {
                     val gradientList = java.util.ArrayList<java.util.HashMap<String, String>>()
@@ -324,109 +352,4 @@ class FragSearch : Fragment(R.layout.fragment_search), GradientRecyclerView.OnGr
                     Log.e("INFO", "Firebase failure: $it")
                 }
     }
-
-    private fun searchByDomColour(baseColour: String) {
-        //UIElement.popupDialog(context, "searching", null, R.string.word_connecting, null, R.string.sentence_pebble_is_connecting, null, context.window.decorView, null)
-        searchResults.clear()
-        var foundGradients = 0
-
-        try {
-            for (count in 0 until Values.gradientList.size) {
-                val colourList = Values.gradientList[count]["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }
-                val nl = ArrayList<String>(colourList)
-                val bitmap = Calculations.createBitmap(UIElement.gradientDrawableNew(context, null, nl, 0f) as Drawable,
-                        10, 10)
-                Palette.Builder(bitmap).generate {
-                    it?.let { palette ->
-                        val colour = palette.getDominantColor(Color.parseColor("#ffffff"))
-                        val colourHEX = "#" + Integer.toHexString(colour).substring(2)
-                        if (searchByColourSystem(baseColour, colourHEX)) {
-                            val found = HashMap<String, String>()
-
-                            found["gradientName"] = Values.gradientList[count]["gradientName"] as String
-                            found["gradientColours"] = Values.gradientList[count]["gradientColours"] as String
-                            found["gradientDescription"] = Values.gradientList[count]["gradientDescription"] as String
-
-                            searchResults.add(found)
-                            foundGradients++
-                            resultsText.text = "$foundGradients results found"
-                        }
-                    }
-                }
-            }
-
-            /** Set View **/
-            //UIElement.popupDialogHider()
-            RecyclerGrid.gradientGrid(context, searchResultsRecycler, searchResults, this, this)
-        } catch (e: Exception) {
-            Log.e("ERR", "pebble.activities.search_frag.search_by_dom_colour: ${e.localizedMessage}")
-        }
-    }
-
-    private fun searchByColour(baseColour: String) {
-        searchResults.clear()
-        var foundGradients = 0
-
-        try {
-            for (count in 0 until Values.gradientList.size) {
-                val colourList = Values.gradientList[count]["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }
-                val nl = ArrayList<String>(colourList)
-
-                for (countNL in 0 until nl.size) {
-                    if (searchByColourSystem(baseColour, nl[countNL])) {
-                        val found = HashMap<String, String>()
-
-                        found["gradientName"] = Values.gradientList[count]["gradientName"] as String
-                        found["gradientColours"] = Values.gradientList[count]["gradientColours"] as String
-                        found["gradientDescription"] = Values.gradientList[count]["gradientDescription"] as String
-
-                        searchResults.add(found)
-                        foundGradients++
-                        break
-                    }
-                }
-            }
-
-            /** Set View **/
-            RecyclerGrid.gradientGrid(context, searchResultsRecycler, searchResults, this, this)
-            resultsText.text = "$foundGradients results found"
-
-        } catch (e: Exception) {
-            Log.e("ERR", "pebble.search_activity.search_system: ${e.localizedMessage}")
-        }
-    }
-
-    private fun searchByColourSystem(baseHex: String, colour: String): Boolean {
-        try {
-            //Remove # from hex
-            val base = baseHex.replace("#", "")
-            val given = colour.replace("#", "")
-
-            //Get RGB in values of baseHex
-            val baseR = Integer.valueOf(base.substring(0, 2), 16)
-            val baseG = Integer.valueOf(base.substring(2, 4), 16)
-            val baseB = Integer.valueOf(base.substring(4, 6), 16)
-
-            //Get RGB in values of colourGiven
-            val givenR = Integer.valueOf(given.substring(0, 2), 16)
-            val givenG = Integer.valueOf(given.substring(2, 4), 16)
-            val givenB = Integer.valueOf(given.substring(4, 6), 16)
-
-            //Calculate different between base & given
-            var diffR: Double = 255 - abs(baseR - givenR).toDouble()
-            var diffG: Double = 255 - abs(baseG - givenG).toDouble()
-            var diffB: Double = 255 - abs(baseB - givenB).toDouble()
-
-            //Limit RGB values between 0 & 1
-            diffR /= 255
-            diffG /= 255
-            diffB /= 255
-
-            return ((diffR + diffG + diffB) / 3) > 0.8
-        } catch (e: Exception) {
-            Log.e("ERR", "pebble.activities.search.search_by_colour_system: ${e.localizedMessage}")
-        }
-        return false
-    }
-
 }

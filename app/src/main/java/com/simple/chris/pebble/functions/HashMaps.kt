@@ -428,10 +428,15 @@ object HashMaps {
         purpleHash["buttonColour"] = "purple"
         array.add(purpleHash)
 
-        val blackHash = HashMap<String, String>()
-        blackHash["buttonHex"] = "#1c1c1c"
-        blackHash["buttonColour"] = "black"
-        array.add(blackHash)
+        val darkHash = HashMap<String, String>()
+        darkHash["buttonHex"] = "#1c1c1c"
+        darkHash["buttonColour"] = "dark"
+        array.add(darkHash)
+
+        val lightHash = HashMap<String, String>()
+        lightHash["buttonHex"] = "#f5f5f5"
+        lightHash["buttonColour"] = "light"
+        array.add(lightHash)
 
         /*val whiteHash = HashMap<String, String>()
         whiteHash["buttonColour"] = "#f5f5f5"

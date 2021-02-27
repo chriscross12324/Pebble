@@ -18,7 +18,6 @@ import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
@@ -27,9 +26,7 @@ import com.simple.chris.pebble.adapters_helpers.BrowseMenuRecyclerView
 import com.simple.chris.pebble.adapters_helpers.GradientRecyclerView
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.functions.*
-import com.simple.chris.pebble.functions.Connection.checkConnection
 import com.simple.chris.pebble.functions.Connection.connectionOffline
-import com.simple.chris.pebble.functions.Connection.getGradients
 import kotlinx.android.synthetic.main.activity_browse.*
 
 
@@ -352,22 +349,6 @@ class Browse : AppCompatActivity(), GradientRecyclerView.OnGradientListener, Gra
                         finish()
                     }
                     //1 -> UIElement.popupDialogHider()
-                }
-            }
-            "stillConnecting" -> {
-                when (position) {
-                    0 -> {
-                        //UIElement.popupDialog(this, "connecting", null, R.string.word_connecting, null, R.string.sentence_pebble_is_connecting, null, window.decorView, null)
-                        //Connection.checkDownload(this, window.decorView, this)
-                    }
-                    1 -> {
-                        Connection.cancelConnection()
-                        connectionOffline(this)
-                    }
-                    2 -> {
-                        Connection.cancelConnection()
-                        //checkConnection(this, this, window.decorView, this)
-                    }
                 }
             }
             "askMobile" -> {
