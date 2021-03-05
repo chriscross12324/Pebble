@@ -148,6 +148,7 @@
     <string name="sentence_push_hold">Touch the gradient to hide its details and expand the gradient fullscreen. Release to show its details again.</string>
     <string name="sentence_serious_error">A serious error has occurred and was caught before Pebble crashed, returning to <b>Browse</b> screen.</string>
     <string name="sentence_server_error">An error occurred when trying to access the Pebble servers: %1$s</string>
+    <string name="sentence_tap_to_remove">Tap colour\nto Remove</string>
     <string name="sentence_trying_mobile_data">Trying to use Mobile Data</string>
     <string name="sentence_uploading_gradient">Uploading gradient to Pebble</string>
     <!-- TODO: Remove or change this placeholder text -->

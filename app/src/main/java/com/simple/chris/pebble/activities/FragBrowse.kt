@@ -189,7 +189,8 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
     private fun browseScrollBar(layoutManager: LinearLayoutManager) {
         browseScrollbarHeight = bottomSheet.measuredHeight - Calculations.convertToDP((activity as MainActivity), 50f)
         browseScrollbarArea = browseScrollbarHeight - browseScrollbar.measuredHeight
-        Log.e("INFO", "$browseScrollbarArea")
+        UIElements.viewWidthAnimator(browseScrollbar, browseScrollbar.measuredWidth.toFloat(), Calculations.convertToDP((activity as MainActivity), 2.5f), 500, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(browseScrollbar, "translationX", Calculations.convertToDP((activity as MainActivity), 8f), 500, 0, DecelerateInterpolator(3f))
         browseScrollbarOffset = 0
         gradientGrid.setOnScrollChangeListener { view, i, i2, i3, i4 ->
             browseScrollbarExtent = gradientGrid.computeVerticalScrollExtent()
@@ -349,7 +350,11 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                         }
                     })
 
-                    resultsText.text = getString(R.string.variable_gradients, Values.gradientList.size)
+                    if (Values.isSearchMode) {
+                        resultsText.text = getString(R.string.variable_gradients, Values.searchList.size)
+                    } else {
+                        resultsText.text = getString(R.string.variable_gradients, Values.gradientList.size)
+                    }
                     gradientGrid.scheduleLayoutAnimation()
                     browseScrollBar(gridLayoutManager)
                 } else {
@@ -412,10 +417,24 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
 
             val fm = fragmentManager as FragmentManager
             val longClickGradientDialog = DialogGradientInfo.newDialog(
-                    ArrayList(Values.gradientList[position]["gradientColours"]!!.replace("[", "").replace("]", "")
-                            .split(",").map { it.trim() }),
-                    Values.gradientList[position]["gradientName"]!!,
-                    Values.gradientList[position]["gradientDescription"]!!,
+                    if (Values.isSearchMode) {
+                        ArrayList(Values.searchList[position]["gradientColours"]!!.replace("[", "").replace("]", "")
+                                .split(",").map { it.trim() })
+                    } else {
+                        ArrayList(Values.gradientList[position]["gradientColours"]!!.replace("[", "").replace("]", "")
+                                .split(",").map { it.trim() })
+                    }
+                    ,
+                    if (Values.isSearchMode) {
+                        Values.searchList[position]["gradientName"]!!
+                    } else {
+                        Values.gradientList[position]["gradientName"]!!
+                    },
+                    if (Values.isSearchMode) {
+                        Values.searchList[position]["gradientDescription"]!!
+                    } else {
+                        Values.gradientList[position]["gradientDescription"]!!
+                    },
                     intArray
             )
             longClickGradientDialog.show(fm, "longClickGradientDialog")
@@ -484,11 +503,23 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                 84f), hideAnimationDur, 50, DecelerateInterpolator(3f))
 
         /** SearchByColour Reveal **/
-        UIElements.viewObjectAnimator(searchByColourHolder, "alpha", 1f, 150, 0, LinearInterpolator())
-        UIElements.viewObjectAnimator(searchByColourHolder, "translationX",
-                -Calculations.convertToDP((activity as MainActivity), 58f), hideAnimationDur, 0, DecelerateInterpolator(3f))
-        UIElements.viewWidthAnimator(searchByColourHolder, searchByColourHolder.measuredWidth.toFloat(), (activity as MainActivity).getFragmentWidth() - Calculations.convertToDP((activity as MainActivity), 122f), hideAnimationDur * 2, 0, DecelerateInterpolator(3f))
         UIElements.setImageViewSRC(iconSearch, R.drawable.icon_close, hideAnimationDur, 0)
+        if (searchByColourRecycler != null) {
+            searchByColourRecycler.post {
+                setSBCRecyclerWidth(animated)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    if (searchByColourRecycler != null) {
+                        UIElements.viewObjectAnimator(searchByColourHolder, "alpha", 1f, 150, -hideAnimationDur + 250, LinearInterpolator())
+                        UIElements.viewObjectAnimator(searchByColourHolder, "translationX",
+                                -Calculations.convertToDP((activity as MainActivity), 58f), hideAnimationDur, -hideAnimationDur + 250, DecelerateInterpolator(3f))
+                    } else {
+                        Log.e("ERR", "Critical Error Caught: startSearch - @view == null")
+                    }
+                }, 500)
+            }
+        } else {
+            startSearch(animated)
+        }
     }
 
     fun endSearch() {
@@ -515,6 +546,19 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
 
         searchByColourRecycler.layoutManager = buttonLayoutManager
         searchByColourRecycler.adapter = buttonAdapter
+    }
+
+    fun setSBCRecyclerWidth(animated: Boolean) {
+        val hideAnimationDur: Long = if (animated) 250 else 0
+        searchByColourRecycler.post {
+            Handler(Looper.getMainLooper()).postDelayed({
+                if (searchByColourHolder != null) {
+                    UIElements.viewWidthAnimator(searchByColourHolder, searchByColourHolder.measuredWidth.toFloat(), (activity as MainActivity).getFragmentWidth() - Calculations.convertToDP((activity as MainActivity), 122f), hideAnimationDur * 2, -hideAnimationDur + 250, DecelerateInterpolator(3f))
+                } else {
+                    Log.e("ERR", "Critical Error Caught: setSBCRecyclerWidth - @view == null")
+                }
+            }, 500)
+        }
     }
 
     fun gridToTop() {
@@ -568,7 +612,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                     Log.d("DEBUG", "Firestore: Done")
                     Values.downloadingGradients = true
                     Values.connectionOffline = false
-                    resultsText.text = "${Values.searchList.size} gradientes found"
+                    resultsText.text = getString(R.string.variable_gradients, Values.searchList.size)
                     showGradients()
                 }
                 .addOnFailureListener {

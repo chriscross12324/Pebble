@@ -75,6 +75,7 @@ object Values {
     var settingsForegroundOpacity = true
 
     //Gradient Creator
+    var gradientScreenReady = false
     var gradientCreatorGradientName = ""
     var gradientCreatorStartColour = ""
     var gradientCreatorEndColour = ""

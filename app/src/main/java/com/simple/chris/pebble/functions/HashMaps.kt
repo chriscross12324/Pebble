@@ -360,21 +360,6 @@ object HashMaps {
         ten["buttonTitle"] = R.string.word_usd
         array.add(ten)
 
-        val three = HashMap<String, Int>()
-        three["buttonIcon"] = R.drawable.icon_dollar_2
-        three["buttonTitle"] = R.string.word_usd
-        array.add(three)
-
-        val four = HashMap<String, Int>()
-        four["buttonIcon"] = R.drawable.icon_dollar_5
-        four["buttonTitle"] = R.string.word_usd
-        array.add(four)
-
-        val six = HashMap<String, Int>()
-        six["buttonIcon"] = R.drawable.icon_dollar_10
-        six["buttonTitle"] = R.string.word_usd
-        array.add(ten)
-
         return array
     }
 

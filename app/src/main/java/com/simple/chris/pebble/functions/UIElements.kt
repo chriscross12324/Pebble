@@ -47,10 +47,18 @@ object UIElements {
 
     fun viewObjectAnimator(view: View, propertyName: String, endValue: Float, duration: Long, delay: Long, interpolator: TimeInterpolator) {
         Handler(Looper.getMainLooper()).postDelayed({
-            val objectAnimator = ObjectAnimator.ofFloat(view, propertyName, endValue)
-            objectAnimator.duration = duration
-            objectAnimator.interpolator = interpolator
-            objectAnimator.start()
+            if (view != null) {
+                try {
+                    val objectAnimator = ObjectAnimator.ofFloat(view, propertyName, endValue)
+                    objectAnimator.duration = duration
+                    objectAnimator.interpolator = interpolator
+                    objectAnimator.start()
+                } catch (e: Exception) {
+                    Log.e("ERR", "pebble.ui_elements.view_object_animator: ${e.localizedMessage}")
+                }
+            } else {
+                Log.e("ERR", "Critical Error Caught: viewObjectAnimator - @view == null")
+            }
         }, delay)
     }
 

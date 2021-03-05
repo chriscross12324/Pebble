@@ -1,31 +1,30 @@
 package com.simple.chris.pebble.activities
 
-import android.app.ActionBar
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.android.volley.DefaultRetryPolicy
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
-import com.google.firebase.firestore.FieldValue
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.GradientCreatorRecycler
 import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.activity_gradient_create.*
 import kotlinx.android.synthetic.main.activity_gradient_create.buttonAddColour
 import kotlinx.android.synthetic.main.activity_gradient_create.buttonNext
+import kotlinx.android.synthetic.main.activity_gradient_create.buttonRemoveColour
 import kotlinx.android.synthetic.main.activity_gradient_create.iconRemoveActive
 import kotlinx.android.synthetic.main.activity_gradient_creator.*
-import org.apache.commons.lang3.RandomStringUtils
+import java.util.*
 import kotlin.random.Random
 
 class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonListener {
@@ -33,73 +32,31 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
     lateinit var buttonAdapter: GradientCreatorRecycler
     var modeColourDelete = false
     var modeSubmitGradient = false
+    var generatingGradient = false
+    var colourMenuHolderHeight = 0
+    var recyclerGradientColoursHeight = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UIElement.setTheme(this)
         setContentView(R.layout.activity_gradient_create)
         Values.currentActivity = "GradientCreator"
-
         startCreator()
-
-        val gradient = hashMapOf(
-                "gradientName" to "Test",
-                "gradientColours" to Values.gradientCreatorColours.toString().replace(" ", ""),
-                "gradientDescription" to "Test Description",
-                "gradientCategories" to arrayListOf("empty"),
-                "gradientTimestamp" to FieldValue.serverTimestamp()
-        )
-        Values.getFireStore().collection("gradientList")
-                .add(gradient)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Successfully pushed", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Error logged", Toast.LENGTH_SHORT).show()
-                    Log.e("ERR", it.toString())
-                }
-        //push()
+        setGradientDrawable()
     }
 
-    fun push() {
-        val gradientDatabaseURL = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec"
-
-        val stringRequest: StringRequest = object : StringRequest(Method.POST, gradientDatabaseURL,
-                Response.Listener { Log.e("INFO", "Done") },
-                Response.ErrorListener {
-                    /** Set Error Listener **/
-                }) {
-            override fun getParams(): MutableMap<String, String> {
-                val details: MutableMap<String, String> = HashMap()
-                details["action"] = "addGradientV3"
-                details["gradientName"] = "Here"
-                details["gradientColours"] = Values.gradientCreatorColours.toString().replace(" ", "")
-                details["gradientDescription"] = "Descr"
-                return details
-            }
-        }
-
-        val retryPolicy = DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
-        stringRequest.retryPolicy = retryPolicy
-
-        val queue = Volley.newRequestQueue(this)
-        queue.add(stringRequest)
-    }
-
-    fun startCreator() {
+    private fun startCreator() {
         /** Wait for UI to populate **/
         Handler(Looper.getMainLooper()).postDelayed({
             if (recyclerGradientColours != null) {
                 /** Set UI Elements **/
-                if (Values.gradientCreatorColours.isEmpty()) {
-                    Values.gradientCreatorColours.add("#${Integer.toHexString(Color.rgb(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))).substring(2)}")
-                    Values.gradientCreatorColours.add("#${Integer.toHexString(Color.rgb(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))).substring(2)}")
-                }
+                buildColourRecycler()
                 recyclerGradientColours()
                 setViewStartingLocations()
                 buttonFunctionality()
+            } else {
+                startCreator()
             }
-
         }, 50)
     }
 
@@ -108,9 +65,7 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
             Vibration.lowFeedback(this)
             if (!modeSubmitGradient) {
                 //Exit
-                Handler(Looper.getMainLooper()).postDelayed({
-                    onBackPressed()
-                }, 0)
+                firstStepExitAnim(true)
             } else {
                 //Back
                 modeSubmitGradient = false
@@ -125,9 +80,80 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
 
             }
         }
+
+        buttonAddColour.setOnClickListener {
+            buttonRemoveColour.alpha = 1f
+            if (Values.gradientCreatorColours.size < 6) {
+                val startRNDM = Random
+                Values.gradientCreatorColours.add(Values.gradientCreatorColours.size, "#" + Integer.toHexString(Color.rgb(startRNDM.nextInt(256), startRNDM.nextInt(256), startRNDM.nextInt(256))).substring(2))
+                buildColourRecycler()
+                setGradientDrawable()
+                if (Values.gradientCreatorColours.size == 6) {
+                    it.alpha = 0.5f
+                }
+            } else {
+                Vibration.notification(this)
+                it.alpha = 0.5f
+            }
+        }
+
+        buttonRemoveColour.setOnClickListener {
+            if (modeColourDelete) {
+                modeColourDelete = false
+                iconRemoveActive.visibility = View.INVISIBLE
+                UIElements.viewVisibility(notification, View.INVISIBLE, 250)
+                UIElements.viewObjectAnimator(notification, "translationY", 0f, 250, 0, DecelerateInterpolator(3f))
+            } else {
+                if (Values.gradientCreatorColours.size != 1) {
+                    modeColourDelete = true
+                    iconRemoveActive.visibility = View.VISIBLE
+                    UIElements.viewVisibility(notification, View.VISIBLE, 0)
+                    UIElements.viewObjectAnimator(notification, "translationY", Calculations.convertToDP(this, -8f) - notification.measuredHeight,
+                            250, 0, DecelerateInterpolator(3f))
+                } else {
+                    Vibration.notification(this)
+                    it.alpha = 0.5f
+                }
+            }
+        }
+
+        buttonRandomGradient.setOnClickListener {
+            if (!generatingGradient) {
+                generatingGradient = true
+                Vibration.lowFeedback(this)
+                it.alpha = 0.5f
+                buttonAddColour.alpha = 0.5f
+                buttonRemoveColour.alpha = 0.5f
+                val colourCount = Values.gradientCreatorColours.size
+                Values.gradientCreatorColours.clear()
+
+                UIElements.viewObjectAnimator(recyclerGradientColours, "alpha", 0f, 250, 0, LinearInterpolator())
+                UIElements.viewObjectAnimator(gradientTransition, "alpha", 1f, 400, 0, LinearInterpolator())
+                Handler(Looper.getMainLooper()).postDelayed({
+                    repeat(colourCount) {
+                        val startRNDM = Random
+                        Values.gradientCreatorColours.add("#" + Integer.toHexString(Color.rgb(startRNDM.nextInt(256), startRNDM.nextInt(256), startRNDM.nextInt(256))).substring(2))
+                    }
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        setGradientDrawable()
+                        buildColourRecycler()
+                        UIElements.viewObjectAnimator(recyclerGradientColours, "alpha", 1f, 250, 100, LinearInterpolator())
+                        UIElements.viewObjectAnimator(gradientTransition, "alpha", 0f, 400, 0, LinearInterpolator())
+
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            it.alpha = 1f
+                            buttonAddColour.alpha = 1f
+                            buttonRemoveColour.alpha = 1f
+                            generatingGradient = false
+                        }, 500)
+                    }, 450)
+                }, 500)
+            }
+        }
     }
 
-    private fun recyclerGradientColours() {
+    private fun buildColourRecycler() {
         /** Builds functionality of recyclerView **/
         buttonAdapter = GradientCreatorRecycler(this, Values.gradientCreatorColours, this)
         recyclerGradientColours.apply {
@@ -137,6 +163,47 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
         }
     }
 
+    private fun recyclerGradientColours() {
+        /** Touch Events **/
+        val itemTouchHelper = object : ItemTouchHelper.Callback() {
+            override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+                Vibration.strongFeedback(this@GradientCreate)
+                return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG,
+                        ItemTouchHelper.DOWN or ItemTouchHelper.UP or ItemTouchHelper.START or ItemTouchHelper.END)
+                //Log.e("INFO", "Moving")
+            }
+
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                if (viewHolder.adapterPosition < target.adapterPosition) {
+                    Log.e("INFO", "Moved up")
+                    for (i in viewHolder.adapterPosition until target.adapterPosition) {
+                        Collections.swap(Values.gradientCreatorColours, i, i + 1)
+                    }
+                } else {
+                    Log.e("INFO", "Moved down")
+                    for (i in viewHolder.adapterPosition downTo target.adapterPosition + 1) {
+                        Collections.swap(Values.gradientCreatorColours, i, i - 1)
+                    }
+                }
+                buttonAdapter.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
+                Vibration.lowFeedback(this@GradientCreate)
+                setGradientDrawable()
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+            }
+
+            override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+                super.clearView(recyclerView, viewHolder)
+                buildColourRecycler()
+            }
+        }
+        val ith = ItemTouchHelper(itemTouchHelper)
+        ith.attachToRecyclerView(recyclerGradientColours)
+    }
+
     private fun setViewStartingLocations() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (buttonAdapter != null) {
@@ -144,14 +211,31 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
                 buttonNext.translationY = buttonNext.measuredHeight + Calculations.convertToDP(this, 24f)
                 colourMenuHolder.translationY = colourMenuHolder.measuredHeight + Calculations.convertToDP(this, 24f)
 
-                animateViewEnterLocations()
+                firstStepEnterAnim()
             } else {
                 setViewStartingLocations()
             }
         }, 50)
     }
 
-    private fun animateViewEnterLocations() {
+    private fun firstStepExitAnim(mainMenu: Boolean) {
+        /**
+         * Animates all views out for firstStep
+         */
+        UIElements.viewObjectAnimator(colourMenuHolder, "translationY",
+                colourMenuHolder.measuredHeight.toFloat() + Calculations.convertToDP(this, 24f), 700, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(buttonBack, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(buttonNext, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (mainMenu) {
+                onBackPressed()
+                overridePendingTransition(0, 0)
+            }
+        }, 800)
+    }
+
+    private fun firstStepEnterAnim() {
         /** Sets views to VISIBLE **/
         buttonBack.visibility = View.VISIBLE
         colourMenuHolder.visibility = View.VISIBLE
@@ -167,21 +251,44 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
         iconNext.setImageResource(R.drawable.icon_arrow)
     }
 
+    internal fun setGradientDrawable() {
+        /** Draw GradientDrawable **/
+        UIElement.gradientDrawableNew(this, gradientViewer, Values.gradientCreatorColours, 0f)
+    }
+
     override fun onButtonClick(position: Int, view: View) {
         if (!modeColourDelete) {
-
+            firstStepExitAnim(false)
+            Handler(Looper.getMainLooper()).postDelayed({
+                Values.editingColourAtPos = position
+                startActivity(Intent(this, ColourPickerNew::class.java))
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }, 600)
         } else {
             /** Delete Colour **/
             if (Values.gradientCreatorColours.size != 1) {
                 Values.gradientCreatorColours.removeAt(position)
-                recyclerGradientColours()
+                buildColourRecycler()
                 if (Values.gradientCreatorColours.size < 6) {
-                    buttonAddColour.visibility = View.VISIBLE
+                    buttonAddColour.alpha = 1f
+                }
+                if (Values.gradientCreatorColours.size == 1) {
+                    modeColourDelete = false
+                    iconRemoveActive.visibility = View.INVISIBLE
+                    UIElements.viewVisibility(notification, View.INVISIBLE, 250)
+                    UIElements.viewObjectAnimator(notification, "translationY", 0f,
+                            250, 0, DecelerateInterpolator(3f))
+                    buttonRemoveColour.alpha = 0.5f
                 }
             } else {
                 modeColourDelete = false
                 iconRemoveActive.visibility = View.INVISIBLE
+                UIElements.viewVisibility(notification, View.INVISIBLE, 250)
+                UIElements.viewObjectAnimator(notification, "translationY", 0f,
+                        250, 0, DecelerateInterpolator(3f))
+                buttonRemoveColour.alpha = 0.5f
             }
+            setGradientDrawable()
         }
     }
 
@@ -197,7 +304,10 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
         /** Check if resuming from colourPicker **/
         if (Values.currentActivity == "ColourPicker") {
             Values.currentActivity = "GradientCreator"
+            buildColourRecycler()
             recyclerGradientColours()
+            firstStepEnterAnim()
+            setGradientDrawable()
         }
     }
 }
