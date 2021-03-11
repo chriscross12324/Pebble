@@ -79,7 +79,6 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
 
         browseFragment = FragBrowse()
-        searchFragment = FragSearch()
         gradientFragment = FragGradientScreen()
 
         supportFragmentManager.beginTransaction().apply {
@@ -358,7 +357,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                     }
                     1 -> {
                         //Vibration
-                        Values.dialogPopup = DialogPopup.newDialog(HashMaps.onOff(), "settingVibration", R.drawable.icon_vibrate_on, R.string.word_vibration,
+                        Values.dialogPopup = DialogPopup.newDialog(HashMaps.onOff(), "settingVibration", R.drawable.icon_vibrate, R.string.word_vibration,
                                 null, R.string.question_setting_vibration, null)
                         Values.dialogPopup.show(fm, "settingVibration")
                     }
@@ -370,7 +369,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                     }
                     3 -> {
                         //Split Screen
-                        Values.dialogPopup = DialogPopup.newDialog(HashMaps.onOff(), "settingSplitScreen", R.drawable.split_screen, R.string.dual_split_screen,
+                        Values.dialogPopup = DialogPopup.newDialog(HashMaps.onOff(), "settingSplitScreen", R.drawable.icon_split_screen, R.string.dual_split_screen,
                                 null, R.string.question_setting_split_screen, null)
                         Values.dialogPopup.show(fm, "settingSplitScreen")
                     }
@@ -819,7 +818,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                                 wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(this, null, Values.gradientScreenColours, 0f) as Drawable,
                                         Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)),
                                         null, true, WallpaperManager.FLAG_SYSTEM)
-                                (gradientFragment as FragGradientScreen).runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
+                                (gradientFragment as FragGradientScreen).runNotification(R.drawable.icon_wallpaper, R.string.sentence_enjoy_your_wallpaper)
                             }, 250)
                         } catch (e: Exception) {
                             Log.e("ERR", "pebble.frag_gradient_screen.on_button_click_popup.set_wallpaper: ${e.localizedMessage}")
@@ -832,7 +831,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                                 wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(this, null, Values.gradientScreenColours, 0f) as Drawable,
                                         Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)),
                                         null, true, WallpaperManager.FLAG_LOCK)
-                                (gradientFragment as FragGradientScreen).runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
+                                (gradientFragment as FragGradientScreen).runNotification(R.drawable.icon_wallpaper, R.string.sentence_enjoy_your_wallpaper)
                             }, 250)
                         } catch (e: Exception) {
                             Log.e("ERR", "pebble.frag_gradient_screen.on_button_click_popup.set_wallpaper: ${e.localizedMessage}")
@@ -849,7 +848,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                         try {
                             wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(this, null, Values.gradientScreenColours, 0f) as Drawable,
                                     Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)))
-                            (gradientFragment as FragGradientScreen).runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
+                            (gradientFragment as FragGradientScreen).runNotification(R.drawable.icon_wallpaper, R.string.sentence_enjoy_your_wallpaper)
                         } catch (e: Exception) {
                             Log.e("ERR", "pebble.frag_gradient_screen.on_button_click_popup.set_wallpaper_outdated: ${e.localizedMessage}")
                         }
@@ -1129,6 +1128,10 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                 growFrag(fragmentHolder, 1f, 500, DecelerateInterpolator(3f))
                 hideGradientCreator()
                 Values.currentActivity = "Browse"
+
+                if (!(browseFragment as FragBrowse).areGradientsShowing()) {
+                    (browseFragment as FragBrowse).showGradients()
+                }
             } else {
                 (browseFragment as FragBrowse).showGradients()
             }

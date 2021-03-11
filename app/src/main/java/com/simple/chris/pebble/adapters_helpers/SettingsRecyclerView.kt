@@ -10,10 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.Vibration
-import kotlinx.android.synthetic.main.button_menu_options.view.*
-import kotlinx.android.synthetic.main.button_menu_options.view.buttonIcon
-import kotlinx.android.synthetic.main.button_menu_options.view.buttonText
-import kotlinx.android.synthetic.main.button_settings_options.view.*
+import kotlinx.android.synthetic.main.button_settings_screen.view.*
 
 class SettingsRecyclerView internal constructor(var context: Context, var screenName: String, private val buttons: ArrayList<HashMap<String, Int>>, onButtonListener: OnButtonListener): RecyclerView.Adapter<SettingsRecyclerView.ViewHolder>() {
     private var mOnButtonListener = onButtonListener
@@ -23,7 +20,11 @@ class SettingsRecyclerView internal constructor(var context: Context, var screen
      * @return Populated module to display in RecyclerView
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(layoutInflater.inflate(R.layout.button_settings_options, parent, false), mOnButtonListener)
+        return if (screenName == "settings") {
+            ViewHolder(layoutInflater.inflate(R.layout.button_settings_screen, parent, false), mOnButtonListener)
+        } else {
+            ViewHolder(layoutInflater.inflate(R.layout.button_donate_screen, parent, false), mOnButtonListener)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -36,6 +37,9 @@ class SettingsRecyclerView internal constructor(var context: Context, var screen
             //UIElement.gradientDrawable(context, holder.buttonBackground, Color.parseColor(details["buttonColour"]), Color.parseColor(details["buttonColour"]), 20f)
             holder.buttonImage.setImageResource(details["buttonIcon"]!!.toInt())
             holder.buttonText.text = context.getString(details["buttonTitle"] as Int)
+            if (screenName == "donate" && position != 0) {
+                holder.buttonImage.imageTintList = null
+            }
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse_menu_recycler_view.on_bind_view_holder: ${e.localizedMessage}")
         }

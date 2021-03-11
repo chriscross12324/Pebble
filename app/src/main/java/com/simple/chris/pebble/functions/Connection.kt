@@ -2,22 +2,14 @@ package com.simple.chris.pebble.functions
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.DownloadManager
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
-import com.android.volley.DefaultRetryPolicy
-import com.android.volley.Request
-import com.android.volley.RequestQueue
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.google.firebase.firestore.Query
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.activities.MainActivity
@@ -123,13 +115,7 @@ object Connection {
     fun connectionOffline(context: Activity) {
         Values.downloadingGradients = false
         Values.connectionOffline = true
-        //UIElement.popupDialogHider()
         context.findViewById<TextView>(R.id.screenTitle).setText(R.string.word_offline)
         context.findViewById<TextView>(R.id.resultsText).setText(R.string.sentence_online_for_gradients)
-
-        /*if (SQLiteHelperFull(context).readGradients().isNotEmpty()) {
-            Values.gradientList = SQLiteHelperFull(context).readGradients()
-            connectionOnline()
-        }*/
     }
 }

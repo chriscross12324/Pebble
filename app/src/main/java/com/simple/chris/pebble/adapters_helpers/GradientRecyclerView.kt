@@ -1,8 +1,8 @@
 package com.simple.chris.pebble.adapters_helpers
 
+//import com.sinaseyfi.advancedcardview.AdvancedCardView
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,15 +10,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.module_browse_normal.view.*
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.functions.Calculations
 import com.simple.chris.pebble.functions.UIElement
 import com.simple.chris.pebble.functions.Values
-import com.sinaseyfi.advancedcardview.AdvancedCardView
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+import kotlinx.android.synthetic.main.module_browse_normal.view.*
 
 /**
  * Creates a gradient modules for each gradient

@@ -9,15 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.Calculations
-import com.simple.chris.pebble.functions.Values
 import com.simple.chris.pebble.functions.Vibration
-import kotlinx.android.synthetic.main.activity_gradient_creator.*
 import kotlinx.android.synthetic.main.button_colour_picker.view.*
-import kotlinx.android.synthetic.main.button_menu_options.view.*
 import kotlin.math.roundToInt
 
 class GradientCreatorRecycler internal constructor(var context: Context, private val colours: ArrayList<String>, onButtonListener: OnButtonListener): RecyclerView.Adapter<GradientCreatorRecycler.ViewHolder>() {

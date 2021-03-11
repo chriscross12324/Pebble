@@ -2,10 +2,7 @@ package com.simple.chris.pebble.activities
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.WallpaperManager
-import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -15,10 +12,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.*
@@ -383,7 +378,7 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
             val fm = (activity as MainActivity).supportFragmentManager
             Vibration.lowFeedback(context)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Values.dialogPopup = DialogPopup.newDialog(HashMaps.setWallpaperArrayList(), "setWallpaper", R.drawable.icon_wallpaper_new, R.string.dual_set_wallpaper,
+                Values.dialogPopup = DialogPopup.newDialog(HashMaps.setWallpaperArrayList(), "setWallpaper", R.drawable.icon_wallpaper, R.string.dual_set_wallpaper,
                         null, R.string.question_set_wallpaper, null)
                 Values.dialogPopup.show(fm, "setWallpaper")
             } else {

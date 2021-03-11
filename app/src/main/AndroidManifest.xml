@@ -27,12 +27,8 @@
             android:value="ca-app-pub-3224190453693148~1184570101" />
 
         <activity android:name=".activities.MainActivity" />
-        <activity android:name=".activities.Feedback" />
         <activity android:name=".activities.ColourPickerNew" />
         <activity android:name=".activities.GradientCreator" />
-        <activity
-            android:name=".activities.GradientDetails"
-            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activities.SplashScreen"
             android:screenOrientation="portrait"
@@ -44,10 +40,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.Browse"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activities.Permissions"
             tools:ignore="LockedOrientationActivity" />

@@ -7,10 +7,8 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -22,6 +20,8 @@ import kotlinx.android.synthetic.main.activity_gradient_create.*
 import kotlinx.android.synthetic.main.activity_gradient_create.buttonAddColour
 import kotlinx.android.synthetic.main.activity_gradient_create.buttonNext
 import kotlinx.android.synthetic.main.activity_gradient_create.buttonRemoveColour
+import kotlinx.android.synthetic.main.activity_gradient_create.gradientDescriptionHolder
+import kotlinx.android.synthetic.main.activity_gradient_create.gradientNameHolder
 import kotlinx.android.synthetic.main.activity_gradient_create.iconRemoveActive
 import kotlinx.android.synthetic.main.activity_gradient_creator.*
 import java.util.*
@@ -69,6 +69,7 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
             } else {
                 //Back
                 modeSubmitGradient = false
+                secondStepAnimOut()
             }
         }
 
@@ -76,6 +77,7 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
             Vibration.lowFeedback(this)
             if (!modeSubmitGradient) {
                 modeSubmitGradient = true
+                secondStepAnimIn(true)
             } else {
 
             }
@@ -153,7 +155,7 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
         }
     }
 
-    private fun buildColourRecycler() {
+    internal fun buildColourRecycler() {
         /** Builds functionality of recyclerView **/
         buttonAdapter = GradientCreatorRecycler(this, Values.gradientCreatorColours, this)
         recyclerGradientColours.apply {
@@ -210,6 +212,8 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
                 buttonBack.translationY = buttonBack.measuredHeight + Calculations.convertToDP(this, 24f)
                 buttonNext.translationY = buttonNext.measuredHeight + Calculations.convertToDP(this, 24f)
                 colourMenuHolder.translationY = colourMenuHolder.measuredHeight + Calculations.convertToDP(this, 24f)
+                UIElements.viewObjectAnimator(gradientDescriptionHolder, "translationY", Calculations.convertToDP(this, 90f) + gradientDescriptionHolder.height, 0, 0, LinearInterpolator())
+                UIElements.viewObjectAnimator(gradientNameHolder, "translationY", Calculations.convertToDP(this, 106f) + gradientDescriptionHolder.height + gradientNameHolder.height, 0, 0, LinearInterpolator())
 
                 firstStepEnterAnim()
             } else {
@@ -248,7 +252,39 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
 
         /** Sets imageView src **/
         iconBack.setImageResource(R.drawable.icon_close)
-        iconNext.setImageResource(R.drawable.icon_arrow)
+        iconNext.setImageResource(R.drawable.icon_arrow_right)
+    }
+
+    private fun secondStepAnimIn(animate: Boolean) {
+        val duration = if (animate) 500 else 0
+
+        UIElements.viewObjectAnimator(colourMenuHolder, "translationY",
+                colourMenuHolder.measuredHeight + Calculations.convertToDP(this, 24f), 500, 0, DecelerateInterpolator(3f))
+        UIElements.setImageViewSRC(iconBack, R.drawable.icon_arrow_left, duration.toLong()/2, 0)
+        UIElements.setImageViewSRC(iconNext, R.drawable.icon_upload, duration.toLong()/2, 0)
+        UIElements.viewObjectAnimator(gradientDescriptionHolder, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(gradientNameHolder, "translationY", 0f, 700, 400, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(buttonBack, "translationX", -(buttonBack.measuredWidth + Calculations.convertToDP(this, 8f)), 250, 250, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(buttonNext, "translationX", buttonNext.measuredWidth + Calculations.convertToDP(this, 8f), 250, 250, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(buttonBack, "translationX", 0f, 250, 750, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(buttonNext, "translationX", 0f, 250, 750, DecelerateInterpolator(3f))
+        UIElements.viewVisibility(gradientDescriptionHolder, View.VISIBLE, 0)
+        UIElements.viewVisibility(gradientNameHolder, View.VISIBLE, 0)
+    }
+
+    private fun secondStepAnimOut() {
+        UIElements.viewObjectAnimator(colourMenuHolder, "translationY",
+                0f, 750, 750, DecelerateInterpolator(3f))
+        UIElements.setImageViewSRC(iconBack, R.drawable.icon_close, 500, 0)
+        UIElements.setImageViewSRC(iconNext, R.drawable.icon_arrow_right, 500, 0)
+        UIElements.viewObjectAnimator(gradientDescriptionHolder, "translationY", Calculations.convertToDP(this, 90f) + gradientDescriptionHolder.height, 700, 200, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(gradientNameHolder, "translationY", Calculations.convertToDP(this, 106f) + gradientDescriptionHolder.height + gradientNameHolder.height, 700, 250, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(buttonBack, "translationX", -(buttonBack.measuredWidth + Calculations.convertToDP(this, 8f)), 250, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(buttonNext, "translationX", buttonNext.measuredWidth + Calculations.convertToDP(this, 8f), 250, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(buttonBack, "translationX", 0f, 250, 450, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(buttonNext, "translationX", 0f, 250, 450, DecelerateInterpolator(3f))
+        UIElements.viewVisibility(gradientDescriptionHolder, View.INVISIBLE, 950)
+        UIElements.viewVisibility(gradientNameHolder, View.INVISIBLE, 950)
     }
 
     internal fun setGradientDrawable() {

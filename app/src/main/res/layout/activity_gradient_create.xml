@@ -212,8 +212,103 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="12dp"
-            android:src="@drawable/icon_arrow"
+            android:src="@drawable/icon_arrow_right"
             android:tint="?PrimaryTextColour" />
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/gradientNameHolder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/details_background"
+        android:backgroundTint="?BackgroundColour"
+        android:elevation="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/gradientDescriptionHolder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/gradientCreatorGradientName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="4dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/googlesans_bold"
+            android:hint="Gradient Name"
+            android:inputType="textCapWords"
+            android:maxLength="70"
+            android:singleLine="true"
+            android:textAlignment="center"
+            android:textColor="?PrimaryTextColour"
+            android:textColorHint="?SecondaryTextColour"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/gradientDescriptionHolder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:alpha="1"
+        android:background="@drawable/details_background"
+        android:backgroundTint="?BackgroundColour"
+        android:elevation="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/buttonNext"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/details_background"
+            android:backgroundTint="?BackgroundColour"
+            android:paddingStart="8dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/gradientCreatorGradientDescription"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/googlesans_medium"
+                android:hint="Gradient Description"
+                android:imeOptions="actionDone"
+                android:inputType="textMultiLine|textCapSentences"
+                android:maxHeight="160dp"
+                android:maxLength="200"
+                android:textAlignment="center"
+                android:textColor="?SecondaryTextColour"
+                android:textColorHint="?SecondaryTextColour"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

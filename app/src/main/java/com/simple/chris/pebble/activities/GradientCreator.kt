@@ -1,4 +1,4 @@
- package com.simple.chris.pebble.activities
+package com.simple.chris.pebble.activities
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -19,17 +19,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.DefaultRetryPolicy
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.simple.chris.pebble.*
 import com.simple.chris.pebble.adapters_helpers.GradientCreatorRecycler
 import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
 import com.simple.chris.pebble.functions.*
 import com.simple.chris.pebble.functions.Calculations.convertToDP
 import com.simple.chris.pebble.functions.UIElements.viewObjectAnimator
-import kotlinx.android.synthetic.main.activity_feedback.*
 import kotlinx.android.synthetic.main.activity_gradient_creator.*
 import org.apache.commons.lang3.RandomStringUtils
 import java.util.*
@@ -318,7 +313,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         /**
          * Sets icon/text for lastStep
          */
-        lastStepIcon.setImageResource(R.drawable.icon_back)
+        lastStepIcon.setImageResource(R.drawable.icon_arrow_left)
         //nextStepText.setText(R.string.word_submit)
     }
 
@@ -381,10 +376,10 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         gradientUID = RandomStringUtils.randomAlphabetic(5)
         val gradientDatabaseURL = "https://script.google.com/macros/s/AKfycbwFkoSBTbmeB6l9iIiZWGczp9sDEjqX0jiYeglczbLKFAXsmtB1/exec"
 
-        val stringRequest: StringRequest = object : StringRequest(Method.POST, gradientDatabaseURL,
+        /*val stringRequest: StringRequest = object : StringRequest(Method.POST, gradientDatabaseURL,
                 Response.Listener { gradientPushComplete() },
                 Response.ErrorListener {
-                    /** Set Error Listener **/
+                    *//** Set Error Listener **//*
                 }) {
             override fun getParams(): MutableMap<String, String> {
                 val details: MutableMap<String, String> = HashMap()
@@ -398,10 +393,10 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
         }
 
         val retryPolicy = DefaultRetryPolicy(10000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
-        stringRequest.retryPolicy = retryPolicy
+        stringRequest.retryPolicy = retryPolicy*/
 
-        val queue = Volley.newRequestQueue(this)
-        queue.add(stringRequest)
+        //val queue = Volley.newRequestQueue(this)
+        //queue.add(stringRequest)
     }
 
     private fun gradientPushComplete() {
@@ -547,7 +542,7 @@ class GradientCreator : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonL
                     }
                     1 -> {
                         //UIElement.popupDialogHider()
-                        submitButton.isEnabled = true
+                        //submitButton.isEnabled = true
                     }
                 }
             }

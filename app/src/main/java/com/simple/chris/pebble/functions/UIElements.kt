@@ -299,53 +299,6 @@ object UIElements {
         }
     }
 
-    fun oneButtonDialog(context: Context, icon: Int, title: Int, body: Int, buttonText: Int, listener: View.OnClickListener) {
-        dialogOneButton = Dialog(context, R.style.dialogStyle)
-        dialogOneButton.setCancelable(false)
-        dialogOneButton.setContentView(R.layout.dialog_one_button)
-
-        val dialogMainHolder = dialogOneButton.findViewById<ConstraintLayout>(R.id.dialogMainHolder)
-        val dialogIcon = dialogOneButton.findViewById<ImageView>(R.id.dialogIcon)
-        val dialogTitle = dialogOneButton.findViewById<TextView>(R.id.dialogTitle)
-        val dialogBody = dialogOneButton.findViewById<TextView>(R.id.dialogBody)
-        val dialogButton = dialogOneButton.findViewById<ConstraintLayout>(R.id.dialogButton1)
-        val dialogButtonText = dialogOneButton.findViewById<TextView>(R.id.dialogButton1Text)
-
-        dialogIcon.setImageResource(icon)
-        dialogTitle.setText(title)
-        dialogBody.setText(body)
-        dialogButtonText.setText(buttonText)
-
-        dialogButton.setOnClickListener(listener)
-
-        val dialogWindow = dialogOneButton.window
-        dialogWindow!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
-        dialogWindow.setDimAmount(0.5f)
-        dialogWindow.setGravity(Gravity.BOTTOM)
-        dialogOneButton.show()
-
-        dialogMainHolder.post {
-            dialogButton.translationY = dialogButton.height + convertToDP(context, 24f)
-            dialogMainHolder.translationY = dialogMainHolder.height + dialogButton.height + convertToDP(context, 40f)
-            dialogMainHolder.visibility = View.VISIBLE
-
-            viewObjectAnimator(dialogMainHolder, "translationY", 0f, 700, 0, DecelerateInterpolator(3f))
-            viewObjectAnimator(dialogButton, "translationY", 0f, 700, 200, DecelerateInterpolator(3f))
-        }
-    }
-
-    fun oneButtonHider(context: Context) {
-        val dialogMainHolder = dialogOneButton.findViewById<ConstraintLayout>(R.id.dialogMainHolder)
-        val dialogButton = dialogOneButton.findViewById<ConstraintLayout>(R.id.dialogButton1)
-
-        viewObjectAnimator(dialogButton, "translationY", dialogButton.height + convertToDP(context, 24f), 700, 0, DecelerateInterpolator(3f))
-        viewObjectAnimator(dialogMainHolder, "translationY", dialogMainHolder.height + dialogButton.height + convertToDP(context, 40f), 700, 100, DecelerateInterpolator(3f))
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            dialogOneButton.dismiss()
-        }, 800)
-    }
-
     fun colourDrawable(context: Context, hexString: String, cornerRadius: Float): Drawable {
         val colourDrawable = GradientDrawable(
                 GradientDrawable.Orientation.TL_BR,

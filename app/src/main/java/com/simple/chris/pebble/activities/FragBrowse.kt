@@ -16,7 +16,6 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
@@ -28,20 +27,6 @@ import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.*
 import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.fragment_browse.*
-import kotlinx.android.synthetic.main.fragment_browse.bottomSheet
-import kotlinx.android.synthetic.main.fragment_browse.browseMenu
-import kotlinx.android.synthetic.main.fragment_browse.buttonIcon
-import kotlinx.android.synthetic.main.fragment_browse.createButton
-import kotlinx.android.synthetic.main.fragment_browse.menu
-import kotlinx.android.synthetic.main.fragment_browse.menuArrow
-import kotlinx.android.synthetic.main.fragment_browse.menuButton
-import kotlinx.android.synthetic.main.fragment_browse.resultsText
-import kotlinx.android.synthetic.main.fragment_browse.screenTitle
-import kotlinx.android.synthetic.main.fragment_browse.searchButton
-import kotlinx.android.synthetic.main.fragment_browse.titleHolder
-import kotlinx.android.synthetic.main.fragment_browse.touchBlocker
-import kotlinx.android.synthetic.main.fragment_browse.touchBlockerDark
-import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.module_browse_normal.view.*
 import kotlin.math.roundToInt
 
@@ -192,7 +177,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         UIElements.viewWidthAnimator(browseScrollbar, browseScrollbar.measuredWidth.toFloat(), Calculations.convertToDP((activity as MainActivity), 2.5f), 500, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(browseScrollbar, "translationX", Calculations.convertToDP((activity as MainActivity), 8f), 500, 0, DecelerateInterpolator(3f))
         browseScrollbarOffset = 0
-        gradientGrid.setOnScrollChangeListener { view, i, i2, i3, i4 ->
+        gradientGrid.setOnScrollChangeListener { _, _, _, _, _ ->
             browseScrollbarExtent = gradientGrid.computeVerticalScrollExtent()
             browseScrollbarRange = gradientGrid.computeVerticalScrollRange()
             Log.e("INFO", "$browseScrollbarOffset")
@@ -563,6 +548,10 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
 
     fun gridToTop() {
         gradientGrid.smoothScrollToPosition(0)
+    }
+
+    fun areGradientsShowing(): Boolean {
+        return gradientGrid.adapter != null
     }
 
     override fun onResume() {

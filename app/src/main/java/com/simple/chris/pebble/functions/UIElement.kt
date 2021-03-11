@@ -5,39 +5,23 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
-import android.app.WallpaperManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.*
-import android.view.animation.AccelerateInterpolator
+import android.view.View
 import android.view.animation.DecelerateInterpolator
-import android.view.animation.LinearInterpolator
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.jgabrielfreitas.core.BlurImageView
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.adapters_helpers.PopupDialogButtonRecycler
-import eightbitlab.com.blurview.RenderScriptBlur
-import kotlinx.android.synthetic.main.dialog_one_button.*
-import kotlinx.android.synthetic.main.dialog_popup.*
 import java.util.concurrent.LinkedBlockingDeque
-import com.sinaseyfi.advancedcardview.AdvancedCardView
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 import kotlin.math.roundToInt
 
+@SuppressLint("StaticFieldLeak")
 object UIElement {
 
     lateinit var popupDialog: Dialog

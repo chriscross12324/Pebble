@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.Vibration
-import kotlinx.android.synthetic.main.button_menu_options.view.*
+import kotlinx.android.synthetic.main.button_menu.view.*
 
 class BrowseMenuRecyclerView internal constructor(var context: Context, private val buttons: ArrayList<HashMap<String, Int>>, onButtonListener: OnButtonListener): RecyclerView.Adapter<BrowseMenuRecyclerView.ViewHolder>() {
     private var mOnButtonListener = onButtonListener
@@ -20,7 +20,7 @@ class BrowseMenuRecyclerView internal constructor(var context: Context, private 
      * @return Populated module to display in RecyclerView
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(layoutInflater.inflate(R.layout.button_menu_options, parent, false), mOnButtonListener)
+        return ViewHolder(layoutInflater.inflate(R.layout.button_menu, parent, false), mOnButtonListener)
     }
 
     override fun getItemCount(): Int {
