@@ -17,6 +17,7 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.Calculations
@@ -98,27 +99,32 @@ class DialogSaveGradient : DialogFragment() {
 
         saveGradientButton.setOnClickListener {
             if (context != null) {
-                var outputStream: OutputStream
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    /** Android 10+ **/
-                    val resolver = context!!.contentResolver
-                    val contentValues = ContentValues()
-                    contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, (Values.gradientScreenName + ".png").replace(" ", "_").toLowerCase(Locale.getDefault()))
-                    contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
-                    contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/Pebble")
-                    val imageURI = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-                    outputStream = resolver.openOutputStream(Objects.requireNonNull(imageURI) as Uri) as OutputStream
-                } else {
-                    /** Android 9- **/
-                    val imagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
-                    val imageDir = File(imagePath, "/Pebble")
-                    val dirFlag = imageDir.mkdirs()
-                    val fileImage = File(imageDir, (Values.gradientScreenName + ".png").replace(" ", "_").toLowerCase(Locale.getDefault()))
-                    outputStream = FileOutputStream(fileImage)
+                try {
+                    var outputStream: OutputStream
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        /** Android 10+ **/
+                        val resolver = context!!.contentResolver
+                        val contentValues = ContentValues()
+                        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, (Values.gradientScreenName + ".png").replace(" ", "_").toLowerCase(Locale.getDefault()))
+                        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
+                        contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/Pebble")
+                        val imageURI = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+                        outputStream = resolver.openOutputStream(Objects.requireNonNull(imageURI) as Uri) as OutputStream
+                    } else {
+                        /** Android 9- **/
+                        val imagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()
+                        val imageDir = File(imagePath, "/Pebble")
+                        val dirFlag = imageDir.mkdirs()
+                        val fileImage = File(imageDir, (Values.gradientScreenName + ".png").replace(" ", "_").toLowerCase(Locale.getDefault()))
+                        outputStream = FileOutputStream(fileImage)
+                    }
+                    Calculations.createBitmap(UIElement.gradientDrawableNew(activity as Context, null, Values.gradientScreenColours, 0f) as Drawable,
+                            widthText.text.toString().toInt(), heightText.text.toString().toInt()).compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                    Objects.requireNonNull(outputStream).close()
+                    onDismiss(dialog!!)
+                } catch (e: Exception) {
+                    Toast.makeText(this.context, "Error: Have you granted storage permissions?", Toast.LENGTH_SHORT).show()
                 }
-                Calculations.createBitmap(UIElement.gradientDrawableNew(activity as Context, null, Values.gradientScreenColours, 0f) as Drawable,
-                        widthText.text.toString().toInt(), heightText.text.toString().toInt()).compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-                Objects.requireNonNull(outputStream).close()
             } else {
                 Log.e("ERR", "pebble.dialog_save_gradient.save_gradient: Context is null")
             }

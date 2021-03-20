@@ -18,8 +18,8 @@
         android:id="@+id/gradientTransition"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?BackgroundColour"
         android:alpha="0"
+        android:background="?BackgroundColour"
         android:visibility="visible" />
 
     <LinearLayout
@@ -30,6 +30,7 @@
         android:layout_marginBottom="24dp"
         android:background="@drawable/details_background"
         android:backgroundTint="?BackgroundColour"
+        android:elevation="8dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -47,12 +48,12 @@
         android:id="@+id/notification"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-
+        android:elevation="8dp"
         android:background="@drawable/details_background"
         android:visibility="invisible"
-        app:layout_constraintTop_toTopOf="@+id/colourMenuHolder"
         app:layout_constraintEnd_toEndOf="@+id/colourMenuHolder"
-        app:layout_constraintStart_toStartOf="@+id/colourMenuHolder">
+        app:layout_constraintStart_toStartOf="@+id/colourMenuHolder"
+        app:layout_constraintTop_toTopOf="@+id/colourMenuHolder">
 
         <ImageView
             android:id="@+id/notificationIcon"
@@ -92,6 +93,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/details_background"
+        android:elevation="8dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonNext"
@@ -203,6 +205,7 @@
         android:layout_marginBottom="24dp"
         android:background="@drawable/details_background"
         android:backgroundTint="?BackgroundColour"
+        android:elevation="8dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">

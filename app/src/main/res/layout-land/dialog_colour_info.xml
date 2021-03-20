@@ -18,9 +18,9 @@
         android:layout_width="10dp"
         android:layout_height="10dp"
         android:alpha="0"
+        android:contentDescription="Helps update blurView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="Helps update blurView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"
@@ -95,6 +95,7 @@
                                     android:gravity="center"
                                     android:text="#D03D74"
                                     android:textColor="?PrimaryTextColour"
+                                    android:textIsSelectable="true"
                                     android:textSize="16sp" />
 
                             </LinearLayout>
@@ -145,6 +146,7 @@
                                         android:gravity="center"
                                         android:text="208"
                                         android:textColor="?PrimaryTextColour"
+                                        android:textIsSelectable="true"
                                         android:textSize="14sp"
                                         tools:ignore="TooDeepLayout" />
 
@@ -167,6 +169,7 @@
                                         android:gravity="center"
                                         android:text="61"
                                         android:textColor="?PrimaryTextColour"
+                                        android:textIsSelectable="true"
                                         android:textSize="14sp" />
 
                                 </LinearLayout>
@@ -188,6 +191,7 @@
                                         android:gravity="center"
                                         android:text="116"
                                         android:textColor="?PrimaryTextColour"
+                                        android:textIsSelectable="true"
                                         android:textSize="14sp" />
 
                                 </LinearLayout>
@@ -297,6 +301,7 @@
                                         android:gravity="center"
                                         android:text="208"
                                         android:textColor="?PrimaryTextColour"
+                                        android:textIsSelectable="true"
                                         android:textSize="14sp" />
 
                                 </LinearLayout>
@@ -318,6 +323,7 @@
                                         android:gravity="center"
                                         android:text="61"
                                         android:textColor="?PrimaryTextColour"
+                                        android:textIsSelectable="true"
                                         android:textSize="14sp" />
 
                                 </LinearLayout>
@@ -339,6 +345,7 @@
                                         android:gravity="center"
                                         android:text="116"
                                         android:textColor="?PrimaryTextColour"
+                                        android:textIsSelectable="true"
                                         android:textSize="14sp" />
 
                                 </LinearLayout>

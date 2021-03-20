@@ -10,7 +10,7 @@
         android:id="@+id/backgroundDimmer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?PrimaryTextColour"
+        android:background="?ForegroundColour"
         android:contentDescription="Dims dialog background" />
 
     <ImageView

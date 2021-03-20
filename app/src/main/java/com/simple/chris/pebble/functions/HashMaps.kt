@@ -11,8 +11,8 @@ object HashMaps {
         val menuArray = ArrayList<HashMap<String, Int>>()
 
         val support = HashMap<String, Int>()
-        support["buttonIcon"] = R.drawable.icon_money
-        support["buttonText"] = R.string.word_donate
+        support["buttonIcon"] = R.drawable.icon_question
+        support["buttonText"] = R.string.word_about
         menuArray.add(support)
 
         val settings = HashMap<String, Int>()
@@ -198,7 +198,7 @@ object HashMaps {
         return missingInfoArray
     }
 
-    fun missingInfoArrayList() : ArrayList<HashMap<String, Int>> {
+    fun backButtonArrayList() : ArrayList<HashMap<String, Int>> {
         val missingInfoArray = ArrayList<HashMap<String, Int>>()
         val backHash = HashMap<String, Int>()
         backHash["buttonTitle"] = R.string.word_back
@@ -210,15 +210,27 @@ object HashMaps {
 
     fun gradientSubmittedArrayList() : ArrayList<HashMap<String, Int>> {
         val missingInfoArray = ArrayList<HashMap<String, Int>>()
-        val makeAnotherHash = HashMap<String, Int>()
-        makeAnotherHash["buttonTitle"] = R.string.word_copy
-        makeAnotherHash["buttonIcon"] = R.drawable.icon_copy
-        missingInfoArray.add(makeAnotherHash)
 
         val backHash = HashMap<String, Int>()
         backHash["buttonTitle"] = R.string.word_close
         backHash["buttonIcon"] = R.drawable.icon_close
         missingInfoArray.add(backHash)
+
+        return missingInfoArray
+    }
+
+    fun watchAdArrayList() : ArrayList<HashMap<String, Int>> {
+        val missingInfoArray = ArrayList<HashMap<String, Int>>()
+
+        val backHash = HashMap<String, Int>()
+        backHash["buttonTitle"] = R.string.word_view
+        backHash["buttonIcon"] = R.drawable.icon_view
+        missingInfoArray.add(backHash)
+
+        val closeHash = HashMap<String, Int>()
+        closeHash["buttonTitle"] = R.string.word_cancel
+        closeHash["buttonIcon"] = R.drawable.icon_close
+        missingInfoArray.add(closeHash)
 
         return missingInfoArray
     }
@@ -278,25 +290,55 @@ object HashMaps {
         ad["buttonTitle"] = R.string.word_ad
         array.add(ad)
 
-        val one = HashMap<String, Int>()
-        one["buttonIcon"] = R.drawable.image_donate_tokens_5
-        one["buttonTitle"] = R.string.word_tokens
+        /*val one = HashMap<String, Int>()
+        one["buttonIcon"] = R.drawable.image_donate_1
+        one["buttonTitle"] = R.string.dual_donate_1
         array.add(one)
 
         val two = HashMap<String, Int>()
-        two["buttonIcon"] = R.drawable.image_donate_tokens_15
-        two["buttonTitle"] = R.string.word_tokens
+        two["buttonIcon"] = R.drawable.image_donate_2
+        two["buttonTitle"] = R.string.dual_donate_2
         array.add(two)
 
         val five = HashMap<String, Int>()
-        five["buttonIcon"] = R.drawable.image_donate_tokens_40
-        five["buttonTitle"] = R.string.word_tokens
+        five["buttonIcon"] = R.drawable.image_donate_3
+        five["buttonTitle"] = R.string.dual_donate_3
         array.add(five)
 
         val ten = HashMap<String, Int>()
-        ten["buttonIcon"] = R.drawable.image_donate_tokens_100
-        ten["buttonTitle"] = R.string.word_tokens
-        array.add(ten)
+        ten["buttonIcon"] = R.drawable.image_donate_4
+        ten["buttonTitle"] = R.string.dual_donate_4
+        array.add(ten)*/
+
+        return array
+    }
+
+    fun aboutArray() : ArrayList<HashMap<String, Int>> {
+        val array = ArrayList<HashMap<String, Int>>()
+
+        val ad = HashMap<String, Int>()
+        ad["buttonIcon"] = R.drawable.icon_dev
+        ad["buttonTitle"] = R.string.word_developer
+        array.add(ad)
+
+        val one = HashMap<String, Int>()
+        one["buttonIcon"] = R.drawable.icon_build
+        one["buttonTitle"] = R.string.build_date
+        array.add(one)
+
+        val two = HashMap<String, Int>()
+        two["buttonIcon"] = R.drawable.icon_server_version
+        two["buttonTitle"] = R.string.server_version
+        array.add(two)
+
+        /*val changelog = HashMap<String, Int>()
+        changelog["buttonIcon"] = R.drawable.icon_changelog
+        changelog["buttonTitle"] = R.string.word_changelog
+        array.add(changelog)*/
+        val jr = HashMap<String, Int>()
+        jr["buttonIcon"] = R.drawable.icon_jr_dev
+        jr["buttonTitle"] = R.string.jr_dev
+        array.add(jr)
 
         return array
     }

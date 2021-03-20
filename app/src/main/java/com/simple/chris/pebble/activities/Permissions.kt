@@ -24,9 +24,6 @@ class Permissions : AppCompatActivity(), PopupDialogButtonRecycler.OnButtonListe
         UIElement.setTheme(this)
         setContentView(R.layout.activity_permissions)
         UIElements.setWallpaper(this, wallpaperImageViewer, wallpaperImageAlpha, window)
-        startActivity(Intent(this, MainActivity::class.java))
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        finish()
 
 
         getStarted.setOnClickListener {

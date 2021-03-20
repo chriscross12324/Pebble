@@ -10,7 +10,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 12
-        versionName "2021.03.11"
+        versionName "2021.03.18"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         renderscriptTargetApi 29
         renderscriptSupportModeEnabled true
@@ -37,8 +37,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.14.0'*/
     implementation 'com.android.support:appcompat-v7:30.0.0'
     implementation 'com.android.support:design:30.0.0'
-    implementation 'com.google.android.gms:play-services-ads:19.7.0'
-    implementation 'com.android.billingclient:billing-ktx:3.0.2'
+    implementation 'com.google.android.gms:play-services-ads:19.8.0'
+    implementation 'com.android.billingclient:billing-ktx:3.0.3'
     implementation 'com.android.support:recyclerview-v7:30.0.0'
     implementation 'com.android.support:cardview-v7:30.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

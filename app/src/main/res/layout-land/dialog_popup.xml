@@ -18,9 +18,9 @@
         android:layout_width="10dp"
         android:layout_height="10dp"
         android:alpha="0"
+        android:contentDescription="Helps update blurView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="Helps update blurView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"
@@ -35,12 +35,12 @@
                 android:id="@+id/dialogHolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:alpha="0"
                 android:clipChildren="false"
                 android:elevation="1dp"
                 android:orientation="horizontal"
-                android:alpha="0"
-                android:scaleY="1.1"
                 android:scaleX="1.1"
+                android:scaleY="1.1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -52,11 +52,11 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/details_background"
                     android:backgroundTint="?BackgroundColour"
+                    android:clickable="true"
+                    android:focusable="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:clickable="true"
-                    android:focusable="true">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ProgressBar
                         android:id="@+id/progressCircle"
@@ -74,12 +74,12 @@
                         android:layout_width="0dp"
                         android:layout_height="60dp"
                         android:layout_marginTop="30dp"
+                        android:contentDescription="Popup icon"
                         android:src="@drawable/icon_brush"
+                        android:tint="?PrimaryTextColour"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="?PrimaryTextColour"
-                        android:contentDescription="Popup icon" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/permissionTitle"

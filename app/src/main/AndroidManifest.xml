@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/Main"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".activities.GradientCreate" />
+        <activity android:name=".activities.GradientCreate"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

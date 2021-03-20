@@ -20,7 +20,7 @@ class SettingsRecyclerView internal constructor(var context: Context, var screen
      * @return Populated module to display in RecyclerView
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return if (screenName == "settings") {
+        return if (screenName == "settings" || screenName == "about") {
             ViewHolder(layoutInflater.inflate(R.layout.button_settings_screen, parent, false), mOnButtonListener)
         } else {
             ViewHolder(layoutInflater.inflate(R.layout.button_donate_screen, parent, false), mOnButtonListener)

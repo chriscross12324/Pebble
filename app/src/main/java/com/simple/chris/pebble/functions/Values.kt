@@ -2,6 +2,7 @@ package com.simple.chris.pebble.functions
 
 import android.content.Context
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.simple.chris.pebble.adapters_helpers.DialogPopup
@@ -12,6 +13,7 @@ import com.simple.chris.pebble.adapters_helpers.DialogPopup
 object Values {
     private const val SAVE = "SavedValues"
     private lateinit var fireBase: FirebaseFirestore
+    lateinit var linearLayoutManager: LinearLayoutManager
     var valuesLoaded = false
     var errorOccurred = false
     var adMobInitialized = false
@@ -57,7 +59,8 @@ object Values {
     var currentlySplitScreened = false
     var animatingSharedElement = false
     var canDismissSharedElement = true
-    var browseRecyclerScrollPos = -1
+    var browseRecyclerScrollPos = 0
+    var searchRecyclerScrollPos = 0
 
     //Gradient Details
     var gradientScreenName = ""
@@ -97,6 +100,8 @@ object Values {
         val editor = sharedPrefs.edit()
         editor.putBoolean("firstStart", firstStart)
         editor.putInt("lastVersion", lastVersion)
+        editor.putInt("browseRecyclerScrollPos", browseRecyclerScrollPos)
+        editor.putInt("searchRecyclerScrollPos", searchRecyclerScrollPos)
         editor.putBoolean("hintPushHoldDismissed", hintPushHoldDismissed)
         editor.putBoolean("settingVibrations", settingVibrations)
         editor.putString("settingThemes", settingThemes)
@@ -120,6 +125,8 @@ object Values {
         valuesLoaded = true
         firstStart = sharedPrefs.getBoolean("firstStart", true)
         lastVersion = sharedPrefs.getInt("lastVersion", 0)
+        browseRecyclerScrollPos = sharedPrefs.getInt("browseRecyclerScrollPos", 0)
+        searchRecyclerScrollPos = sharedPrefs.getInt("searchRecyclerScrollPos", 0)
         hintPushHoldDismissed = sharedPrefs.getBoolean("hintPushHoldDismissed", false)
         settingVibrations = sharedPrefs.getBoolean("settingVibrations", true)
         settingThemes = sharedPrefs.getString("settingThemes", "dark")!!

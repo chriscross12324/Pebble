@@ -10,7 +10,7 @@
         android:id="@+id/backgroundDimmer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?SecondaryTextColour"/>
+        android:background="?ForegroundColour" />
 
     <ImageView
         android:id="@+id/drawCaller"
@@ -33,12 +33,12 @@
                 android:id="@+id/dialogHolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:alpha="0"
                 android:clipChildren="false"
                 android:elevation="1dp"
                 android:orientation="vertical"
-                android:alpha="0"
-                android:scaleY="1.1"
                 android:scaleX="1.1"
+                android:scaleY="1.1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -51,12 +51,12 @@
                     android:layout_marginBottom="12dp"
                     android:background="@drawable/details_background"
                     android:backgroundTint="?BackgroundColour"
+                    android:clickable="true"
+                    android:focusable="true"
                     app:layout_constraintBottom_toTopOf="@id/popupButtonRecycler"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:clickable="true"
-                    android:focusable="true">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ProgressBar
                         android:id="@+id/progressCircle"
@@ -75,10 +75,10 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="30dp"
                         android:src="@drawable/icon_brush"
+                        android:tint="?PrimaryTextColour"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:tint="?PrimaryTextColour"
                         tools:ignore="UseAppTint" />
 
                     <TextView

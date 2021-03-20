@@ -5,36 +5,49 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.InputType
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.*
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.simple.chris.pebble.R
+import com.simple.chris.pebble.adapters_helpers.DialogPopup
 import com.simple.chris.pebble.adapters_helpers.GradientCreatorRecycler
 import com.simple.chris.pebble.functions.*
 import kotlinx.android.synthetic.main.activity_gradient_create.*
 import kotlinx.android.synthetic.main.activity_gradient_create.buttonAddColour
 import kotlinx.android.synthetic.main.activity_gradient_create.buttonNext
 import kotlinx.android.synthetic.main.activity_gradient_create.buttonRemoveColour
+import kotlinx.android.synthetic.main.activity_gradient_create.gradientCreatorGradientDescription
+import kotlinx.android.synthetic.main.activity_gradient_create.gradientCreatorGradientName
 import kotlinx.android.synthetic.main.activity_gradient_create.gradientDescriptionHolder
 import kotlinx.android.synthetic.main.activity_gradient_create.gradientNameHolder
 import kotlinx.android.synthetic.main.activity_gradient_create.iconRemoveActive
 import kotlinx.android.synthetic.main.activity_gradient_creator.*
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.random.Random
 
 class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonListener {
 
     lateinit var buttonAdapter: GradientCreatorRecycler
+    lateinit var mInterstitialAd: com.google.android.gms.ads.InterstitialAd
     var modeColourDelete = false
     var modeSubmitGradient = false
     var generatingGradient = false
     var colourMenuHolderHeight = 0
     var recyclerGradientColoursHeight = 0
+    var adMobTryAgain = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +56,7 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
         Values.currentActivity = "GradientCreator"
         startCreator()
         setGradientDrawable()
+        adMob()
     }
 
     private fun startCreator() {
@@ -79,7 +93,7 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
                 modeSubmitGradient = true
                 secondStepAnimIn(true)
             } else {
-
+                startSubmission()
             }
         }
 
@@ -153,6 +167,14 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
                 }, 500)
             }
         }
+
+        gradientCreatorGradientName.setOnKeyListener { _, _, event ->
+            if (event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                UIElement.hideSoftKeyboard(this)
+                gradientCreatorGradientName.clearFocus()
+            }
+            false
+        }
     }
 
     internal fun buildColourRecycler() {
@@ -215,6 +237,12 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
                 UIElements.viewObjectAnimator(gradientDescriptionHolder, "translationY", Calculations.convertToDP(this, 90f) + gradientDescriptionHolder.height, 0, 0, LinearInterpolator())
                 UIElements.viewObjectAnimator(gradientNameHolder, "translationY", Calculations.convertToDP(this, 106f) + gradientDescriptionHolder.height + gradientNameHolder.height, 0, 0, LinearInterpolator())
 
+                /**
+                 * Sets prerequisites for textViews
+                 */
+                gradientCreatorGradientName.setText(Values.gradientCreatorGradientName)
+                gradientCreatorGradientDescription.setText(Values.gradientCreatorDescription)
+
                 firstStepEnterAnim()
             } else {
                 setViewStartingLocations()
@@ -260,8 +288,8 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
 
         UIElements.viewObjectAnimator(colourMenuHolder, "translationY",
                 colourMenuHolder.measuredHeight + Calculations.convertToDP(this, 24f), 500, 0, DecelerateInterpolator(3f))
-        UIElements.setImageViewSRC(iconBack, R.drawable.icon_arrow_left, duration.toLong()/2, 0)
-        UIElements.setImageViewSRC(iconNext, R.drawable.icon_upload, duration.toLong()/2, 0)
+        UIElements.setImageViewSRC(iconBack, R.drawable.icon_arrow_left, duration.toLong() / 2, 0)
+        UIElements.setImageViewSRC(iconNext, R.drawable.icon_upload, duration.toLong() / 2, 0)
         UIElements.viewObjectAnimator(gradientDescriptionHolder, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(gradientNameHolder, "translationY", 0f, 700, 400, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(buttonBack, "translationX", -(buttonBack.measuredWidth + Calculations.convertToDP(this, 8f)), 250, 250, DecelerateInterpolator(3f))
@@ -270,6 +298,9 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
         UIElements.viewObjectAnimator(buttonNext, "translationX", 0f, 250, 750, DecelerateInterpolator(3f))
         UIElements.viewVisibility(gradientDescriptionHolder, View.VISIBLE, 0)
         UIElements.viewVisibility(gradientNameHolder, View.VISIBLE, 0)
+
+        gradientCreatorGradientDescription.imeOptions = EditorInfo.IME_ACTION_DONE
+        gradientCreatorGradientDescription.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
     }
 
     private fun secondStepAnimOut() {
@@ -326,6 +357,129 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
             }
             setGradientDrawable()
         }
+    }
+
+    private fun startSubmission() {
+        /** Check if Gradient has a name **/
+        if (Connection.getConnectionType(this) != 0) {
+            if (gradientCreatorGradientName.text.toString().trim().replace(" ", "") != "") {
+                if (Values.gradientCreatorColours.size > 2) {
+                    Values.dialogPopup = DialogPopup.newDialog(HashMaps.watchAdArrayList(), "submitPremiumGradient", R.drawable.icon_money, R.string.dual_premium_gradient,
+                            null, R.string.question_premium_gradient, null)
+                    Values.dialogPopup.show(supportFragmentManager, "submitPremiumGradient")
+                } else {
+                    submitGradient()
+                }
+
+            } else {
+                Values.dialogPopup = DialogPopup.newDialog(HashMaps.backButtonArrayList(), "submitMissingInfo", R.drawable.icon_warning, R.string.dual_missing_info,
+                        null, R.string.sentence_missing_gradient_name, null)
+                Values.dialogPopup.show(supportFragmentManager, "submitMissingInfo")
+            }
+        } else {
+            Values.dialogPopup = DialogPopup.newDialog(HashMaps.noConnectionArrayList(), "submitNoConnection", R.drawable.icon_warning, R.string.dual_no_connection,
+                    null, R.string.sentence_needs_internet_connection, null)
+            Values.dialogPopup.show(supportFragmentManager, "submitNoConnection")
+        }
+    }
+
+    internal fun submitGradient() {
+        Values.dialogPopup = DialogPopup.newDialog(null, "submittingGradient", null,
+                R.string.word_submitting, null, R.string.sentence_uploading_gradient, null)
+        Values.dialogPopup.show(supportFragmentManager, "submittingGradient")
+        val gradient = hashMapOf(
+                "gradientName" to gradientCreatorGradientName.text.toString(),
+                "gradientDescription" to gradientCreatorGradientDescription.text.toString(),
+                "gradientColours" to Values.gradientCreatorColours.toString().replace(" ", ""),
+                "gradientCategories" to arrayListOf("empty"),
+                "appVersion" to "V3",
+                "gradientTimestamp" to FieldValue.serverTimestamp(),
+                "gradientBeingViewed" to false
+        )
+
+        val db = Firebase.firestore
+        db.collection("gradientList").document()
+                .set(gradient)
+                .addOnCompleteListener {
+                    Values.dialogPopup.dismiss()
+                    Values.dialogPopup = DialogPopup.newDialog(HashMaps.gradientSubmittedArrayList(), "submitGradientSubmitted", R.drawable.icon_check, R.string.word_submit,
+                            null, R.string.sentence_gradient_submitted, null)
+                    Values.dialogPopup.show(supportFragmentManager, "submitGradientSubmitted")
+                    Values.justSubmitted = true
+                }
+                .addOnFailureListener {
+                    Values.dialogPopup.dismiss()
+                    Values.dialogPopup = DialogPopup.newDialog(HashMaps.backButtonArrayList(), "submitGradientFailed", R.drawable.icon_warning, R.string.word_failed,
+                            null, null, this.getString(R.string.sentence_server_error, it.localizedMessage))
+                    Values.dialogPopup.show(supportFragmentManager, "submitGradientFailed")
+                }
+    }
+
+    /**
+     * Make sure all gradient names include 'submit' or the dialog system WILL crash
+     */
+    fun popupDialogHandler(dialogName: String, position: Int) {
+        val fm = supportFragmentManager
+        when (dialogName) {
+            "submitMissingInfo" -> {
+                Values.dialogPopup.dismiss()
+            }
+            "submitPremiumGradient" -> {
+                when (position) {
+                    0 -> {
+                        Values.dialogPopup.dismiss()
+                        Values.dialogPopup = DialogPopup.newDialog(null, "submitLoadingAd", null,
+                                R.string.dual_ad_loading, null, R.string.sentence_ad_loading, null)
+                        Values.dialogPopup.show(fm, "submitLoadingAd")
+                        mInterstitialAd.loadAd(AdRequest.Builder().build())
+                    }
+                    1 -> {
+                        Values.dialogPopup.dismiss()
+                    }
+                }
+            }
+            "submitGradientSubmitted" -> {
+                secondStepAnimOut()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    firstStepExitAnim(true)
+                }, 500)
+            }
+            "submitNoConnection" -> {
+                when (position) {
+                    0 -> {
+                        startSubmission()
+                    }
+                    1 -> {
+                    }
+                }
+            }
+        }
+        Values.saveValues(this)
+    }
+
+    private fun adMob() {
+        MobileAds.initialize(this) { Values.adMobInitialized = true }
+        mInterstitialAd = InterstitialAd(this)
+        mInterstitialAd.adUnitId = "ca-app-pub-3224190453693148/3343829588"
+
+        mInterstitialAd.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                Values.adLoading = false
+                mInterstitialAd.show()
+                Values.dialogPopup.dismiss()
+                submitGradient()
+            }
+
+            override fun onAdFailedToLoad(p0: LoadAdError?) {
+                Values.dialogPopup.dismiss()
+                submitGradient()
+                Log.e("ERR", "pebble.gradient_create.admob: $p0")
+            }
+
+            override fun onAdClosed() {
+            }
+        }
+
     }
 
     override fun onResume() {

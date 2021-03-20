@@ -20,8 +20,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.simple.chris.pebble.R
+import com.simple.chris.pebble.activities.GradientCreate
 import com.simple.chris.pebble.activities.GradientCreator
 import com.simple.chris.pebble.activities.MainActivity
+import com.simple.chris.pebble.activities.SplashScreen
 import com.simple.chris.pebble.functions.UIElement
 import com.simple.chris.pebble.functions.UIElements
 import com.simple.chris.pebble.functions.Values
@@ -187,11 +189,17 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
     override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
         Values.dialogPopup = this
         onDismiss(dialog!!)
-        when (activity) {
-            (activity as MainActivity) -> (activity as MainActivity).popupDialogHandler(popupName, position)
-            (activity as GradientCreator) -> Log.e("INFO", "GradientCreator")
+        when {
+            popupName.contains("submit") -> {
+                (activity as GradientCreate).popupDialogHandler(popupName, position)
+            }
+            popupName.contains("splash") -> {
+                (activity as SplashScreen).popupDialogHandler(popupName, position)
+            }
+            else -> {
+                (activity as MainActivity).popupDialogHandler(popupName, position)
+            }
         }
-        //(activity as MainActivity).popupDialogHandler(popupName, position)
     }
 
 }
