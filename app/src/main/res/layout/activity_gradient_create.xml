@@ -304,7 +304,7 @@
                 android:imeOptions="actionDone"
                 android:inputType="textMultiLine|textCapSentences"
                 android:maxHeight="160dp"
-                android:maxLength="200"
+                android:maxLength="2000"
                 android:textAlignment="center"
                 android:textColor="?SecondaryTextColour"
                 android:textColorHint="?SecondaryTextColour"

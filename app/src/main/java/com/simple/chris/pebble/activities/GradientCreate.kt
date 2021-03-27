@@ -439,6 +439,7 @@ class GradientCreate : AppCompatActivity(), GradientCreatorRecycler.OnButtonList
                 }
             }
             "submitGradientSubmitted" -> {
+                colourMenuHolder.visibility = View.INVISIBLE
                 secondStepAnimOut()
                 Handler(Looper.getMainLooper()).postDelayed({
                     firstStepExitAnim(true)

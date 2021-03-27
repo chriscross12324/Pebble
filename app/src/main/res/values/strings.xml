@@ -7,7 +7,7 @@
 
     <!-- About Page Buttons -->
     <string name="word_developer">Chris\nCoulthard</string>
-    <string name="build_date">March 18, 2021</string>
+    <string name="build_date">March 23, 2021</string>
     <string name="server_version">V2.0</string>
     <string name="jr_dev">Emiliano García</string>
 
@@ -146,7 +146,6 @@
     <string name="sentence_feedback_submitting">Sending your feedback over the radio waves!</string>
     <string name="sentence_finishing_setup">Pebble is finalizing set-up and will redirect you once finished…</string>
     <string name="sentence_get_best_experience">In order to get the best experience out of Pebble you will be asked to set it up, as-well as accept the required permissions!</string>
-    <string name="sentence_google_tax">The Google Play Store takes a 30% cut out of all purchases made through it, including any purchases made to support me. If you choose to support me with $1, Google will receive $0.30 of the purchase.</string>
     <string name="sentence_gradient_creator_welcome">Welcome to the Gradient Creator, time to create your first gradient! \n\nBy creating a gradient you agree to the rules and understand that the developer can remove any gradient if necessary.</string>
     <string name="sentence_gradient_submitted">Your gradient is now available on Pebble!</string>
     <string name="sentence_gradient_successfully_saved">The gradient was successfully saved!</string>

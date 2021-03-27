@@ -19,13 +19,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.SkuDetails
 import com.google.android.gms.ads.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.adapters_helpers.DialogChangelog
 import com.simple.chris.pebble.adapters_helpers.DialogPopup
 import com.simple.chris.pebble.adapters_helpers.SettingsRecyclerView
 import com.simple.chris.pebble.functions.*
@@ -36,8 +33,6 @@ import kotlin.random.Random
 
 class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     private lateinit var mInterstitialAd: InterstitialAd
-    private lateinit var mBillingClient: BillingClient
-    private lateinit var mSkuDetails: SkuDetails
     private var mSkuList = listOf("donate_1", "donate_2", "donate_5", "donate_10")
 
     var screenHeight = 0
@@ -284,6 +279,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     fun startGradientCreator() {
         /** Check to see if GradientCreator already has colours **/
         if (Values.gradientCreatorColours.isEmpty()) {
+            Values.gradientCreatorColours.add("#${Integer.toHexString(Color.rgb(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))).substring(2)}")
             Values.gradientCreatorColours.add("#${Integer.toHexString(Color.rgb(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))).substring(2)}")
             Values.gradientCreatorColours.add("#${Integer.toHexString(Color.rgb(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))).substring(2)}")
         }

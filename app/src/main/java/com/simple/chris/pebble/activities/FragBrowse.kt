@@ -119,7 +119,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         }
     }
 
-    private fun bottomSheet() {
+    internal fun bottomSheet() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (bottomSheetPeekHeight != 0) {
                 try {
@@ -135,25 +135,30 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                         }
 
                         override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                            titleHolder.translationY = ((Values.screenHeight * (-0.333) * slideOffset + Values.screenHeight * (0.333) - (titleHolder.measuredHeight)) / 2).toFloat()
-                            buttonIcon.translationY = ((Values.screenHeight * (-0.333) * slideOffset + Values.screenHeight * (0.333) - (titleHolder.measuredHeight)) / 8).toFloat()
-                            val cornerRadius = ((slideOffset * -1) + 1) * Calculations.convertToDP((activity as MainActivity), 20f)
-                            val bottomShe = view?.findViewById<CardView>(R.id.bottomSheet)
-                            bottomShe?.radius = cornerRadius
+                            try {
+                                titleHolder.translationY = ((Values.screenHeight * (-0.333) * slideOffset + Values.screenHeight * (0.333) - (titleHolder.measuredHeight)) / 2).toFloat()
+                                buttonIcon.translationY = ((Values.screenHeight * (-0.333) * slideOffset + Values.screenHeight * (0.333) - (titleHolder.measuredHeight)) / 8).toFloat()
+                                val cornerRadius = ((slideOffset * -1) + 1) * Calculations.convertToDP((activity as MainActivity), 20f)
+                                val bottomShe = view?.findViewById<CardView>(R.id.bottomSheet)
+                                bottomShe?.radius = cornerRadius
 
-                            if (slideOffset >= 0.4f) {
-                                if (createButtonExpanded) {
-                                    UIElement.animateViewWidth("height", createButton, Calculations.convertToDP((activity as MainActivity), 35f).toInt(), 0, 250)
-                                    UIElement.animateViewWidth("width", createButton, Calculations.convertToDP((activity as MainActivity), 50f).toInt(), 0, 250)
-                                    createButtonExpanded = false
-                                }
-                            } else {
-                                if (!createButtonExpanded) {
-                                    UIElement.animateViewWidth("height", createButton, Calculations.convertToDP((activity as MainActivity), 60f).toInt(), 0, 250)
-                                    UIElement.animateViewWidth("width", createButton, Calculations.viewWrapContent(createButton, "width") + Calculations.convertToDP((activity as MainActivity), 11f).toInt(), 0, 250)
-                                    createButtonExpanded = true
-                                }
+                                if (slideOffset >= 0.4f) {
+                                    if (createButtonExpanded) {
+                                        UIElement.animateViewWidth("height", createButton, Calculations.convertToDP((activity as MainActivity), 35f).toInt(), 0, 250)
+                                        UIElement.animateViewWidth("width", createButton, Calculations.convertToDP((activity as MainActivity), 50f).toInt(), 0, 250)
+                                        createButtonExpanded = false
+                                    }
+                                } else {
+                                    if (!createButtonExpanded) {
+                                        UIElement.animateViewWidth("height", createButton, Calculations.convertToDP((activity as MainActivity), 60f).toInt(), 0, 250)
+                                        UIElement.animateViewWidth("width", createButton, Calculations.viewWrapContent(createButton, "width") + Calculations.convertToDP((activity as MainActivity), 11f).toInt(), 0, 250)
+                                        createButtonExpanded = true
+                                    }
 
+                                }
+                            } catch (e:Exception) {
+                                Log.e("ERR", "pebble.frag_browse.bottom_sheet: ${e.localizedMessage}")
+                                bottomSheet()
                             }
                         }
                     })
