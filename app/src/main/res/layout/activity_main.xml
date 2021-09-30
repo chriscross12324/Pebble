@@ -39,7 +39,6 @@
         android:background="?BackgroundColour" />
 
     <LinearLayout
-        android:id="@+id/gradientCreatorSharedElementView"
         android:layout_width="150dp"
         android:layout_height="170dp"
         android:orientation="horizontal"
@@ -155,7 +154,7 @@
                 android:id="@+id/ssIcon"
                 android:layout_width="60dp"
                 android:layout_height="70dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:adjustViewBounds="true"
                 android:src="@drawable/icon_settings"
                 android:tint="?PrimaryTextColour"

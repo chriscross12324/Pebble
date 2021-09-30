@@ -23,7 +23,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/gradientCreatorSharedElementView"
         android:layout_width="150dp"
         android:layout_height="170dp"
         android:orientation="horizontal"
@@ -67,7 +66,6 @@
     </LinearLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="0dp"
@@ -92,7 +90,6 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
-                    android:id="@+id/linearLayout5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"

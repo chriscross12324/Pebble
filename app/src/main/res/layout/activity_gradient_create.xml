@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.GradientCreate">
+    tools:context=".activities.GradientCreator">
 
     <ImageView
         android:id="@+id/gradientViewer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/placeholder_gradient_2"
+        android:background="@drawable/placeholder_gradient"
         tools:layout_editor_absoluteX="72dp"
         tools:layout_editor_absoluteY="0dp" />
 

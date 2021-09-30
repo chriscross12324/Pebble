@@ -5,12 +5,53 @@
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
     </configurations>
   </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/background_gradient_screen_colour_text.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/colour_picker_thumb.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/details_background.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/details_background_less.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/empty_shape.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_add.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_advertise.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_arrow_left.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_arrow_right.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_blur_on.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_browse.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_brush.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_changelog.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_check.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_delete.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_home.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_lock.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_money.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_view.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_wallpaper.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_warning.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_wifi_empty.xml" value="0.14375" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/icon_wifi_full.xml" value="0.26666666666666666" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/placeholder_colour.xml" value="0.26666666666666666" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/placeholder_gradient.xml" value="0.26666666666666666" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/placeholder_gradient_2.xml" value="0.26666666666666666" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/shape_circle.xml" value="0.26666666666666666" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/drawable/shape_rounded_square.xml" value="0.26666666666666666" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/layout/activity_gradient_create.xml" value="0.25052083333333336" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/layout/activity_gradient_creator.xml" value="0.25052083333333336" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/layout/activity_main.xml" value="0.12760416666666666" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/layout/button_about_screen.xml" value="0.25052083333333336" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/layout/button_colour_picker.xml" value="0.25052083333333336" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/layout/dialog_changelog.xml" value="0.12760416666666666" />
+        <entry key="..\:/Users/chris/StudioProjects/Pebble/app/src/main/res/layout/module_browse_normal.xml" value="0.12760416666666666" />
+      </map>
+    </option>
+  </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="org.jetbrains.annotations.Nullable" />
     <option name="myDefaultNotNull" value="androidx.annotation.NonNull" />
     <option name="myNullables">
       <value>
-        <list size="12">
+        <list size="15">
           <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.Nullable" />
           <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nullable" />
           <item index="2" class="java.lang.String" itemvalue="javax.annotation.CheckForNull" />
@@ -23,12 +64,15 @@
           <item index="9" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NullableType" />
           <item index="10" class="java.lang.String" itemvalue="android.annotation.Nullable" />
           <item index="11" class="java.lang.String" itemvalue="com.android.annotations.Nullable" />
+          <item index="12" class="java.lang.String" itemvalue="org.eclipse.jdt.annotation.Nullable" />
+          <item index="13" class="java.lang.String" itemvalue="io.reactivex.annotations.Nullable" />
+          <item index="14" class="java.lang.String" itemvalue="io.reactivex.rxjava3.annotations.Nullable" />
         </list>
       </value>
     </option>
     <option name="myNotNulls">
       <value>
-        <list size="11">
+        <list size="15">
           <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.NotNull" />
           <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nonnull" />
           <item index="2" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.NonNull" />
@@ -40,11 +84,15 @@
           <item index="8" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NonNullType" />
           <item index="9" class="java.lang.String" itemvalue="android.annotation.NonNull" />
           <item index="10" class="java.lang.String" itemvalue="com.android.annotations.NonNull" />
+          <item index="11" class="java.lang.String" itemvalue="org.eclipse.jdt.annotation.NonNull" />
+          <item index="12" class="java.lang.String" itemvalue="io.reactivex.annotations.NonNull" />
+          <item index="13" class="java.lang.String" itemvalue="io.reactivex.rxjava3.annotations.NonNull" />
+          <item index="14" class="java.lang.String" itemvalue="lombok.NonNull" />
         </list>
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

@@ -282,37 +282,6 @@ object HashMaps {
         return array
     }
 
-    fun donateArray() : ArrayList<HashMap<String, Int>> {
-        val array = ArrayList<HashMap<String, Int>>()
-
-        val ad = HashMap<String, Int>()
-        ad["buttonIcon"] = R.drawable.icon_advertise
-        ad["buttonTitle"] = R.string.word_ad
-        array.add(ad)
-
-        /*val one = HashMap<String, Int>()
-        one["buttonIcon"] = R.drawable.image_donate_1
-        one["buttonTitle"] = R.string.dual_donate_1
-        array.add(one)
-
-        val two = HashMap<String, Int>()
-        two["buttonIcon"] = R.drawable.image_donate_2
-        two["buttonTitle"] = R.string.dual_donate_2
-        array.add(two)
-
-        val five = HashMap<String, Int>()
-        five["buttonIcon"] = R.drawable.image_donate_3
-        five["buttonTitle"] = R.string.dual_donate_3
-        array.add(five)
-
-        val ten = HashMap<String, Int>()
-        ten["buttonIcon"] = R.drawable.image_donate_4
-        ten["buttonTitle"] = R.string.dual_donate_4
-        array.add(ten)*/
-
-        return array
-    }
-
     fun aboutArray() : ArrayList<HashMap<String, Int>> {
         val array = ArrayList<HashMap<String, Int>>()
 
@@ -335,10 +304,10 @@ object HashMaps {
         changelog["buttonIcon"] = R.drawable.icon_changelog
         changelog["buttonTitle"] = R.string.word_changelog
         array.add(changelog)*/
-        val jr = HashMap<String, Int>()
+        /*val jr = HashMap<String, Int>()
         jr["buttonIcon"] = R.drawable.icon_jr_dev
         jr["buttonTitle"] = R.string.jr_dev
-        array.add(jr)
+        array.add(jr)*/
 
         return array
     }

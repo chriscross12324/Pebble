@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_colour_picker.*
 import java.lang.Exception
 import kotlin.random.Random
 
-class ColourPickerNew : AppCompatActivity() {
+class ColourPicker : AppCompatActivity() {
 
     private var hexValue = 0
     private var hexString = ""

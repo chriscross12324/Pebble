@@ -9,7 +9,7 @@
 
     <!-- About Page Buttons -->
     <string name="word_developer">Chris\nCoulthard</string>
-    <string name="build_date">March 23, 2021</string>
+    <string name="build_date">Sept 29, 2021</string>
     <string name="server_version">V2.0</string>
     <string name="jr_dev">Emiliano García</string>
 
@@ -24,154 +24,84 @@
     <string name="word_changelog">Changelog</string>
     <string name="word_close">Cerrar</string>
     <string name="word_connecting">Conectando</string>
-    <string name="word_continue">Continuar</string>
-    <string name="word_copy">Copiar</string>
     <string name="word_create">Crear</string>
     <string name="word_dark">Oscuro</string>
     <string name="word_darker">Más Oscuro</string>
-    <string name="word_delete">Eliminar</string>
     <string name="word_deny">Negar</string>
-    <string name="word_donate">Donar</string>
-    <string name="word_email">Correo</string>
     <string name="word_error">Error</string>
-    <string name="word_exit">Salida</string>
     <string name="word_failed">Fracasado</string>
-    <string name="word_feedback">Comentario</string>
-    <string name="word_finishing">Acabado</string>
     <string name="word_leave">Dejar</string>
     <string name="word_light">Claro</string>
     <string name="word_network">Red</string>
-    <string name="word_next">Siguiente</string>
-    <string name="word_off">Fuera</string>
+    <string name="word_off">Desactivar</string>
     <string name="word_offline">Offline</string>
     <string name="word_ok">Vale</string>
-    <string name="word_on">Encendida</string>
-    <string name="word_open">Abrir</string>
+    <string name="word_on">Enablar</string>
     <string name="word_options">Opciones</string>
     <string name="word_refresh">Refrescar</string>
     <string name="word_restart">Restart</string>
     <string name="word_retry">Retry</string>
     <string name="word_search">Buscar</string>
     <string name="word_settings">Configuración</string>
-    <string name="word_special_search">Buscar…</string>
     <string name="word_storage">Almacenamiento</string>
     <string name="word_submit">Submit</string>
     <string name="word_submitting">Submitting</string>
-    <string name="word_support">Support</string>
-    <string name="word_sure">Sure</string>
     <string name="word_theme">Tema</string>
-    <string name="word_uploading">Uploading</string>
-    <string name="word_usd">USD</string>
     <string name="word_vibration">Vibraciones</string>
     <string name="word_view">Ver</string>
-    <string name="word_welcome">Hola</string>
     <string name="word_yes">Sí</string>
 
 
     <!-- Dual word strings -->
     <string name="dual_ad_loading">Anuncio Cargando</string>
-    <string name="dual_ask_everytime">Ask Every-time</string>
-    <string name="dual_copy_code">Copiar código</string>
-    <string name="dual_create_gradient">Crear gradiente</string>
-    <string name="dual_customize_pebble">Personalizar Pebble</string>
-    <string name="dual_donate_1">$1 CAD</string>
-    <string name="dual_donate_2">$2 CAD</string>
-    <string name="dual_donate_3">$5 CAD</string>
-    <string name="dual_donate_4">$10 CAD</string>
-    <string name="dual_feedback_submitted">Feedback Submitted</string>
-    <string name="dual_getting_gradients">Obteniendo Gradientes</string>
-    <string name="dual_go_offline">Go Offline</string>
-    <string name="dual_go_online">Go Online</string>
-    <string name="dual_gradient_exists">El gradiente existe</string>
-    <string name="dual_gradient_saved">Gradiente guardada</string>
+    <string name="dual_ask_everytime">Pedir siempre</string>
     <string name="dual_home_screen">Pantella\nde inicio</string>
     <string name="dual_i_understand">Entiendo</string>
     <string name="dual_lock_screen">Pantalla\nde bloqueo</string>
     <string name="dual_missing_info">Missing Info</string>
-    <string name="dual_my_gradients">Mi Gradientes</string>
     <string name="dual_no_connection">Sin Conexión</string>
-    <string name="dual_no_problem">No hay pedo</string>
-    <string name="dual_not_now">No ahora</string>
-    <string name="dual_offline_mode">Offline Mode</string>
     <string name="dual_outdated_android">Outdated Android</string>
     <string name="dual_premium_gradient">Premium Gradient</string>
-    <string name="dual_push_hold">Push &amp; Hold</string>
-    <string name="dual_save_gradient">Guardar Gradientes</string>
     <string name="dual_server_error">Server Error</string>
     <string name="dual_set_wallpaper">Set Wallpaper</string>
     <string name="dual_special_effects">Efectos Especiales</string>
     <string name="dual_split_screen">Pantalla dividida</string>
-    <string name="dual_still_connecting">Still connecting</string>
-    <string name="dual_take_tour">Take Tour</string>
     <string name="dual_tap_here">Pulse aquí</string>
-    <string name="dual_thank_you">Gracias</string>
     <string name="dual_to_return">para volver</string>
     <string name="dual_try_wifi">Try Wi-Fi</string>
     <string name="dual_use_data">Usar la red</string>
     <string name="dual_use_forever">Usar para siempre</string>
-    <string name="dual_wallpaper_set">Wallpaper Set</string>
 
 
     <!-- Question Strings -->
-    <string name="question_delete_gradient">Are you sure you want to delete this gradient from Pebble?</string>
-    <string name="question_go_online">Pebble is currently in offline mode, want to go online?</string>
-    <string name="question_leave">Would you like to leave Pebble?</string>
+    <string name="question_leave">¿Quieres salir Pebble?</string>
     <string name="question_mobile_data">Would you like to use Mobile Data? Overage fees may apply…</string>
     <string name="question_outdated_android">Your device is running outdated software, apply wallpaper to <b>Home</b> &amp; <b>Lock</b> screen?</string>
     <string name="question_premium_gradient">Any gradient using more than 2 colours is considered ‘Premium’, would you like to display an ad to submit?</string>
-    <string name="question_save_gradient">Would you like to save this gradient to your device?</string>
     <string name="question_set_wallpaper">Where do you want to apply this gradient?</string>
     <string name="question_setting_blur">Would you like to enable the <b>Blur</b> effect?</string>
     <string name="question_setting_network">Would you like to enable <b>Cellular Data</b> usage?</string>
     <string name="question_setting_theme">¿Cuál <b>Tema</b> quieres usar?</string>
-    <string name="question_setting_vibration">Would you like to enable <b>Vibrations</b>?</string>
-    <string name="question_setting_split_screen">Would you like to enable <b>Split Screen</b> mode if your screen size is supported?</string>
-    <string name="question_still_connecting">Pebble is taking a while to connect, what would you like to do?</string>
+    <string name="question_setting_vibration">¿Quieres enablar <b>Vibraciones</b>?</string>
+    <string name="question_setting_split_screen">¿Quieres enablar <b>Pantalla Dividida</b> si tu pantalla lo permite?</string>
 
 
     <!-- Sentence Strings -->
     <string name="sentence_about">Información de Pebble</string>
     <string name="sentence_ad_loading">The ad will show once loaded…</string>
-    <string name="sentence_ad_thanks">Thanks for the support!</string>
     <string name="sentence_app_error">Pebble\'s recovery system tripped! This system did not cause the error, it protected you from it. Pebble needs to restart…</string>
-    <string name="sentence_colour_combination_exists">That colour combination already exists, try some different colours…</string>
-    <string name="sentence_copied_to_clipboard">Copiado al portapapeles</string>
     <string name="sentence_customize_pebble">Personalizar Pebble</string>
-    <string name="sentence_donate">Support my development of Pebble and other future projects</string>
-    <string name="sentence_dont_ask_again">Don\'t ask again</string>
-    <string name="sentence_email_not_required">Providing an email is not required, it just helps us get in contact with you if we need anymore information.</string>
-    <string name="sentence_enter_text_below">Enter text below</string>
     <string name="sentence_enjoy_your_wallpaper">Enjoy your\nnew wallpaper!</string>
-    <string name="sentence_feedback_missing_info">It looks like you\'re missing some required information, please make sure you filled out your name and included some feedback.</string>
-    <string name="sentence_feedback_received">Your feedback has been received, we\'ll try to review it shortly.</string>
-    <string name="sentence_feedback_submit_failed">The server took to long to respond, try submitting again.</string>
-    <string name="sentence_feedback_submitting">Sending your feedback over the radio waves!</string>
-    <string name="sentence_finishing_setup">Pebble is finalizing set-up and will redirect you once finished…</string>
-    <string name="sentence_get_best_experience">In order to get the best experience out of Pebble you will be asked to set it up, as-well as accept the required permissions!</string>
-    <string name="sentence_gradient_creator_welcome">Welcome to the Gradient Creator, time to create your first gradient! \n\nBy creating a gradient you agree to the rules and understand that the developer can remove any gradient if necessary.</string>
     <string name="sentence_gradient_submitted">Your gradient is now available on Pebble!</string>
-    <string name="sentence_gradient_successfully_saved">The gradient was successfully saved!</string>
-    <string name="sentence_gradient_unique_code">Copy the unique code above to request an edit or removal, your gradient is now available!</string>
     <string name="sentence_missing_gradient_name">It looks like you’re missing a name for your gradient, add one to submit it…</string>
     <string name="sentence_needs_internet_connection">Pebble needs an internet connection, can\'t connect</string>
     <string name="sentence_needs_storage_permission">Pebble needs access to storage for all features to work properly</string>
-    <string name="sentence_needs_updated_gradients">Pebble just left Offline Mode and needs to download all the gradients; this is to make sure a gradient doesn\'t already exist.</string>
-    <string name="sentence_offline_downloaded_gradients">Pebble cannot connect to the server, but has gradients downloaded from the last connection</string>
     <string name="sentence_online_for_gradients">Go online to see gradients</string>
     <string name="sentence_pebble_is_connecting">Pebble se está conectando al servidor, por favor espera…</string>
-    <string name="sentence_permission_network">Pebble needs an active internet connecting to download and submit gradients, by default you will be warned when trying to use Mobile Data.\n\nNobody but yourself is responsible for exceeding any limit!</string>
-    <string name="sentence_push_hold">Touch the gradient to hide its details and expand the gradient fullscreen. Release to show its details again.</string>
-    <string name="sentence_serious_error">A serious error has occurred and was caught before Pebble crashed, returning to <b>Browse</b> screen.</string>
     <string name="sentence_server_error">An error occurred when trying to access the Pebble servers: %1$s</string>
-    <string name="sentence_tap_to_remove">Tap colour\nto Remove</string>
-    <string name="sentence_thanks_for_supporting">Thanks for supporting :)</string>
+    <string name="sentence_tap_to_remove">Tocar color\na eliminar</string>
     <string name="sentence_trying_mobile_data">Trying to use Mobile Data</string>
     <string name="sentence_uploading_gradient">Uploading gradient to Pebble</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-
-    <!-- Unorganized -->
-
 
 </resources>

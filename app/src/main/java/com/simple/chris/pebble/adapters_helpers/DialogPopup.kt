@@ -1,6 +1,5 @@
 package com.simple.chris.pebble.adapters_helpers
 
-import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
@@ -14,22 +13,17 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.view.animation.OvershootInterpolator
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.activities.GradientCreate
 import com.simple.chris.pebble.activities.GradientCreator
 import com.simple.chris.pebble.activities.MainActivity
 import com.simple.chris.pebble.activities.SplashScreen
-import com.simple.chris.pebble.functions.UIElement
 import com.simple.chris.pebble.functions.UIElements
 import com.simple.chris.pebble.functions.Values
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.dialog_popup.*
-import java.io.Serializable
 
 class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener {
 
@@ -191,7 +185,7 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
         onDismiss(dialog!!)
         when {
             popupName.contains("submit") -> {
-                (activity as GradientCreate).popupDialogHandler(popupName, position)
+                (activity as GradientCreator).popupDialogHandler(popupName, position)
             }
             popupName.contains("splash") -> {
                 (activity as SplashScreen).popupDialogHandler(popupName, position)

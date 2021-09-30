@@ -23,7 +23,7 @@ class SettingsRecyclerView internal constructor(var context: Context, var screen
         return if (screenName == "settings" || screenName == "about") {
             ViewHolder(layoutInflater.inflate(R.layout.button_settings_screen, parent, false), mOnButtonListener)
         } else {
-            ViewHolder(layoutInflater.inflate(R.layout.button_donate_screen, parent, false), mOnButtonListener)
+            ViewHolder(layoutInflater.inflate(R.layout.button_about_screen, parent, false), mOnButtonListener)
         }
     }
 

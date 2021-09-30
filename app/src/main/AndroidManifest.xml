@@ -20,18 +20,19 @@
         android:supportsRtl="true"
         android:theme="@style/Main"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".activities.GradientCreate"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity android:name=".activities.GradientCreator"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:exported="false"/>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3224190453693148~1184570101" />
 
-        <activity android:name=".activities.MainActivity" />
-        <activity android:name=".activities.ColourPickerNew" />
-        <activity android:name=".activities.GradientCreator" />
+        <activity android:name=".activities.MainActivity" android:exported="false"/>
+        <activity android:name=".activities.ColourPicker" android:exported="false"/>
         <activity
             android:name=".activities.SplashScreen"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/splashTheme"
             tools:ignore="LockedOrientationActivity">
@@ -41,9 +42,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.Permissions"
-            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>

@@ -32,7 +32,7 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
-    private lateinit var mInterstitialAd: InterstitialAd
+    //private lateinit var mInterstitialAd: InterstitialAd
     private var mSkuList = listOf("donate_1", "donate_2", "donate_5", "donate_10")
 
     var screenHeight = 0
@@ -92,7 +92,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             hideSmallScreen()
         }
 
-        adMob()
+        //adMob()
         appError()
         //setupBillingClient()
     }
@@ -121,26 +121,6 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             smallScreenScrollBar(buttonLayoutManager)
 
             //buttonLayoutManager.scrollToPositionWithOffset(1, 50)
-        }
-        ssRecycler.post {
-            showSmallScreen(smallScreenFragHolder.measuredHeight.toFloat())
-        }
-    }
-
-    fun startDonating() {
-        if (currentSmallScreen != "donate") {
-            currentSmallScreen = "donate"
-            ssIcon.setImageResource(R.drawable.icon_money)
-            ssTitle.setText(R.string.word_donate)
-            ssDescription.setText(R.string.sentence_donate)
-
-            ssRecycler.setHasFixedSize(true)
-            val buttonLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-            val buttonAdapter = SettingsRecyclerView(this, "donate", HashMaps.donateArray(), this)
-
-            ssRecycler.layoutManager = buttonLayoutManager
-            ssRecycler.adapter = buttonAdapter
-            smallScreenScrollBar(buttonLayoutManager)
         }
         ssRecycler.post {
             showSmallScreen(smallScreenFragHolder.measuredHeight.toFloat())
@@ -316,7 +296,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             UIElements.cardViewCornerRadiusAnimator(gradientScreenAnimationHero, 0f, Values.sharedElementLength - 100, 0, LinearInterpolator())
 
             Handler(Looper.getMainLooper()).postDelayed({
-                startActivity(Intent(this, GradientCreate::class.java))
+                startActivity(Intent(this, GradientCreator::class.java))
                 overridePendingTransition(0, 0)
                 Values.animatingSharedElement = false
             }, Values.sharedElementLength)
@@ -400,7 +380,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                 when (position) {
                     0 -> {
                         Values.adLoading = true
-                        mInterstitialAd.loadAd(AdRequest.Builder().build())
+                        //mInterstitialAd.loadAd(AdRequest.Builder().build())
                         //UIElement.popupDialog(this, "loadingAd", null, R.string.dual_ad_loading, null, R.string.sentence_ad_loading, null, window.decorView, null)
                         val fm = supportFragmentManager
                         Values.dialogPopup = DialogPopup.newDialog(null, "loadingAd", null,
@@ -924,7 +904,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         }, 100)
     }
 
-    private fun adMob() {
+    /*private fun adMob() {
         MobileAds.initialize(this) { Values.adMobInitialized = true }
         mInterstitialAd = InterstitialAd(this)
         mInterstitialAd.adUnitId = "ca-app-pub-3940256099942544/1033173712"
@@ -948,7 +928,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             }
         }
 
-    }
+    }*/
 
     fun connectionChecker() {
         Handler(Looper.getMainLooper()).postDelayed({

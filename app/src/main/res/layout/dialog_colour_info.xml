@@ -131,7 +131,6 @@
                                 tools:ignore="DisableBaselineAlignment">
 
                                 <LinearLayout
-                                    android:id="@+id/rHolder"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_marginEnd="4dp"
@@ -154,7 +153,6 @@
                                 </LinearLayout>
 
                                 <LinearLayout
-                                    android:id="@+id/gHolder"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_marginHorizontal="2dp"
@@ -176,7 +174,6 @@
                                 </LinearLayout>
 
                                 <LinearLayout
-                                    android:id="@+id/bHolder"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_marginStart="4dp"
@@ -285,7 +282,6 @@
                                 app:layout_constraintTop_toBottomOf="@+id/rgbHintHolder">
 
                                 <LinearLayout
-                                    android:id="@+id/hHolder"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_marginEnd="4dp"
@@ -307,7 +303,6 @@
                                 </LinearLayout>
 
                                 <LinearLayout
-                                    android:id="@+id/sHolder"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_marginHorizontal="2dp"
@@ -329,7 +324,6 @@
                                 </LinearLayout>
 
                                 <LinearLayout
-                                    android:id="@+id/vHolder"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_marginStart="4dp"
@@ -353,7 +347,6 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/hsvHintHolder"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
