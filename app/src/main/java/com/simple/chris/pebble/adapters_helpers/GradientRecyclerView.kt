@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.UIElement
 import com.simple.chris.pebble.functions.Values
-import kotlinx.android.synthetic.main.module_browse_normal.view.*
 
 /**
  * Creates a gradient modules for each gradient
@@ -72,8 +71,8 @@ class GradientRecyclerView internal constructor(var context: Context, private va
      * Referenced to get the views from the module layout
      */
     inner class ViewHolder internal constructor(view: View, onGradientListener: OnGradientListener, onGradientLongClickListener: OnGradientLongClickListener) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener/*, View.OnTouchListener*/ {
-        var gradientName: TextView = view.gradientName
-        var gradientViewer: ImageView = view.gradient
+        var gradientName: TextView = view.findViewById(R.id.gradientName)
+        var gradientViewer: ImageView = view.findViewById(R.id.gradient)
 
         private val myOnGradientListener = onGradientListener
         private val myOnGradientLongClickListener = onGradientLongClickListener

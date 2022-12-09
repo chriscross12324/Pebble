@@ -20,18 +20,12 @@ import android.view.animation.OvershootInterpolator
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.simple.chris.pebble.R
+import com.simple.chris.pebble.databinding.DialogSaveGradientBinding
 import com.simple.chris.pebble.functions.Calculations
 import com.simple.chris.pebble.functions.UIElement
 import com.simple.chris.pebble.functions.UIElements
 import com.simple.chris.pebble.functions.Values
 import eightbitlab.com.blurview.RenderScriptBlur
-import kotlinx.android.synthetic.main.dialog_popup.*
-import kotlinx.android.synthetic.main.dialog_save_gradient.*
-import kotlinx.android.synthetic.main.dialog_save_gradient.backgroundDimmer
-import kotlinx.android.synthetic.main.dialog_save_gradient.blurView
-import kotlinx.android.synthetic.main.dialog_save_gradient.drawCaller
-import kotlinx.android.synthetic.main.dialog_save_gradient.holder
-import kotlinx.android.synthetic.main.fragment_gradient_screen.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -40,6 +34,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class DialogSaveGradient : DialogFragment() {
+    private var _binding: DialogSaveGradientBinding? = null
+    private val binding get() = _binding!!
 
     override fun onStart() {
         super.onStart()
@@ -48,8 +44,21 @@ class DialogSaveGradient : DialogFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    /*override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.dialog_save_gradient, container)
+    }*/
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = DialogSaveGradientBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,16 +66,16 @@ class DialogSaveGradient : DialogFragment() {
         dialog!!.window!!.setBackgroundDrawableResource(android.R.color.transparent)
         dialog!!.window!!.setDimAmount(0f)
 
-        UIElement.gradientDrawableNew(activity as Context, gradientPreview, arguments!!.getStringArrayList("array")!!, 20f)
-        heightText.setText(Calculations.screenMeasure(activity as Context, "height", activity!!.window).toString())
-        widthText.setText(Calculations.screenMeasure(activity as Context, "width", activity!!.window).toString())
+        UIElement.gradientDrawableNew(activity as Context, binding.gradientPreview, requireArguments().getStringArrayList("array")!!, 20f)
+        binding.heightText.setText(Calculations.screenMeasure(activity as Context, "height", requireActivity().window).toString())
+        binding.widthText.setText(Calculations.screenMeasure(activity as Context, "width", requireActivity().window).toString())
 
         if (Values.settingsSpecialEffects) {
             try {
-                val rootView = activity!!.window.decorView.findViewById<ViewGroup>(android.R.id.content)
-                val windowBackground = activity!!.window.decorView.background
+                val rootView = requireActivity().window.decorView.findViewById<ViewGroup>(android.R.id.content)
+                val windowBackground = requireActivity().window.decorView.background
 
-                blurView.setupWith(rootView)
+                binding.blurView.setupWith(rootView)
                         .setFrameClearDrawable(windowBackground)
                         .setBlurAlgorithm(RenderScriptBlur(activity))
                         .setBlurRadius(20f)
@@ -75,35 +84,35 @@ class DialogSaveGradient : DialogFragment() {
                 Log.e("ERR", "pebble.save_gradient_dialog: ${e.localizedMessage}")
             }
         } else {
-            backgroundDimmer.alpha = Values.dialogBackgroundDimmer
+            binding.backgroundDimmer.alpha = Values.dialogBackgroundDimmer
         }
 
-        holder.post {
-            UIElements.viewObjectAnimator(holder, "scaleX", 1f, 550, 150, DecelerateInterpolator(3f))
-            UIElements.viewObjectAnimator(holder, "scaleY", 1f, 550, 150, DecelerateInterpolator(3f))
-            UIElements.viewObjectAnimator(holder, "alpha", 1f, 100, 150, LinearInterpolator())
-            UIElements.viewObjectAnimator(drawCaller, "scaleY", 2f, 2000, 0, LinearInterpolator())
+        binding.holder.post {
+            UIElements.viewObjectAnimator(binding.holder, "scaleX", 1f, 550, 150, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(binding.holder, "scaleY", 1f, 550, 150, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(binding.holder, "alpha", 1f, 100, 150, LinearInterpolator())
+            UIElements.viewObjectAnimator(binding.drawCaller, "scaleY", 2f, 2000, 0, LinearInterpolator())
         }
 
-        blurView.setOnClickListener {
+        binding.blurView.setOnClickListener {
             onDismiss(dialog!!)
         }
 
-        presetButton.setOnClickListener {
-            val height = Calculations.screenMeasure(activity as Context, "height", activity!!.window)
-            val width = Calculations.screenMeasure(activity as Context, "width", activity!!.window)
+        binding.presetButton.setOnClickListener {
+            val height = Calculations.screenMeasure(activity as Context, "height", requireActivity().window)
+            val width = Calculations.screenMeasure(activity as Context, "width", requireActivity().window)
 
-            heightText.setText(height.toString())
-            widthText.setText(width.toString())
+            binding.heightText.setText(height.toString())
+            binding.widthText.setText(width.toString())
         }
 
-        saveGradientButton.setOnClickListener {
+        binding.saveGradientButton.setOnClickListener {
             if (context != null) {
                 try {
                     var outputStream: OutputStream
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         /** Android 10+ **/
-                        val resolver = context!!.contentResolver
+                        val resolver = requireContext().contentResolver
                         val contentValues = ContentValues()
                         contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, (Values.gradientScreenName + ".png").replace(" ", "_").toLowerCase(Locale.getDefault()))
                         contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
@@ -119,7 +128,7 @@ class DialogSaveGradient : DialogFragment() {
                         outputStream = FileOutputStream(fileImage)
                     }
                     Calculations.createBitmap(UIElement.gradientDrawableNew(activity as Context, null, Values.gradientScreenColours, 0f) as Drawable,
-                            widthText.text.toString().toInt(), heightText.text.toString().toInt()).compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                        binding.widthText.text.toString().toInt(), binding.heightText.text.toString().toInt()).compress(Bitmap.CompressFormat.PNG, 100, outputStream)
                     Objects.requireNonNull(outputStream).close()
                     onDismiss(dialog!!)
                 } catch (e: Exception) {
@@ -133,10 +142,10 @@ class DialogSaveGradient : DialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         try {
-            if (holder != null) {
-                UIElements.viewObjectAnimator(holder, "scaleX", 1.15f, 200, 0, AccelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(holder, "scaleY", 1.15f, 200, 0, AccelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(holder, "alpha", 0f, 100, 100, LinearInterpolator())
+            if (binding.holder != null) {
+                UIElements.viewObjectAnimator(binding.holder, "scaleX", 1.15f, 200, 0, AccelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(binding.holder, "scaleY", 1.15f, 200, 0, AccelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(binding.holder, "alpha", 0f, 100, 100, LinearInterpolator())
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     super.onDismiss(dialog)

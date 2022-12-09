@@ -10,7 +10,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.UIElement
-import kotlinx.android.synthetic.main.button_search_colour.view.*
 
 class SearchColourRecyclerView internal constructor(var context: Context, private val buttons: ArrayList<HashMap<String, String>>?, private val buttonsArray: ArrayList<String>?,
                                                     onButtonListener: OnButtonListener): RecyclerView.Adapter<SearchColourRecyclerView.ViewHolder>() {
@@ -50,8 +49,8 @@ class SearchColourRecyclerView internal constructor(var context: Context, privat
     }
 
     inner class ViewHolder internal constructor(view: View, onButtonListener: OnButtonListener): RecyclerView.ViewHolder(view), View.OnClickListener {
-        var button: ConstraintLayout = view.colourButton
-        var buttonBackground: ConstraintLayout = view.buttonBackground
+        var button: ConstraintLayout = view.findViewById(R.id.colourButton)
+        var buttonBackground: ConstraintLayout = view.findViewById(R.id.buttonBackground)
         private val myOnButtonListener = onButtonListener
 
         init {

@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.5"
-        android:background="?BackgroundColour" />
+        android:background="?BackgroundColour"/>
 
     <LinearLayout
         android:layout_width="150dp"
@@ -157,10 +157,10 @@
                 android:layout_marginTop="16dp"
                 android:adjustViewBounds="true"
                 android:src="@drawable/icon_settings"
-                android:tint="?PrimaryTextColour"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:tint="?PrimaryTextColour"/>
 
             <TextView
                 android:id="@+id/ssTitle"
@@ -234,7 +234,7 @@
                     android:layout_height="5dp"
                     android:layout_marginStart="35dp"
                     android:background="@drawable/details_background"
-                    android:backgroundTint="?SecondaryTextColour"
+                    android:backgroundTint="?PrimaryTextColour"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

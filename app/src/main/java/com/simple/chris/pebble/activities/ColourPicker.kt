@@ -14,12 +14,13 @@ import android.widget.EditText
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import com.simple.chris.pebble.*
+import com.simple.chris.pebble.databinding.ActivityColourPickerBinding
 import com.simple.chris.pebble.functions.*
-import kotlinx.android.synthetic.main.activity_colour_picker.*
 import java.lang.Exception
 import kotlin.random.Random
 
 class ColourPicker : AppCompatActivity() {
+    private lateinit var binding: ActivityColourPickerBinding
 
     private var hexValue = 0
     private var hexString = ""
@@ -34,14 +35,16 @@ class ColourPicker : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UIElement.setTheme(this)
-        setContentView(R.layout.activity_colour_picker)
+        binding = ActivityColourPickerBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         Values.currentActivity = "ColourPicker"
 
         setInitialPositions()
         setInitialValues()
         onCreateExtension()
 
-        colourPickerSaveButton.setOnClickListener {
+        binding.colourPickerSaveButton.setOnClickListener {
             try {
                 Vibration.mediumFeedback(this)
                 val colour = Color.parseColor("#$hexString")
@@ -52,12 +55,12 @@ class ColourPicker : AppCompatActivity() {
             }
         }
 
-        colourPickerBackButton.setOnClickListener {
+        binding.colourPickerBackButton.setOnClickListener {
             animationOut()
             Vibration.lowFeedback(this)
         }
 
-        randomColourButton.setOnClickListener {
+        binding.randomColourButton.setOnClickListener {
             Vibration.lowFeedback(this)
             val rgbRNDM = Random
             val generatedColour = Color.rgb(rgbRNDM.nextInt(256), rgbRNDM.nextInt(256), rgbRNDM.nextInt(256))
@@ -96,31 +99,31 @@ class ColourPicker : AppCompatActivity() {
     }
 
     private fun updateView(animateSeekBars: Boolean) {
-        colourPickerColourViewer.setBackgroundColor(hexValue)
+        binding.colourPickerColourViewer.setBackgroundColor(hexValue)
         //hexValueEditText.setText(hexString)
         setHEXTextColour()
-        hexValueEditText.clearFocus()
-        hueText.clearFocus()
-        satText.clearFocus()
-        valText.clearFocus()
+        binding.hexValueEditText.clearFocus()
+        binding.hueText.clearFocus()
+        binding.satText.clearFocus()
+        binding.valText.clearFocus()
 
         /*hueText.setText("$hueValue")
         satText.setText("$satValue")
         valText.setText("$valValue")*/
 
         if (animateSeekBars) {
-            seekBarAnimator(hueSeekBar, hueText, hueValue.toFloat())
-            seekBarAnimator(saturationSeekBar, satText, satValue.toFloat())
-            seekBarAnimator(valueSeekBar, valText, valValue.toFloat())
+            seekBarAnimator(binding.hueSeekBar, binding.hueText, hueValue.toFloat())
+            seekBarAnimator(binding.saturationSeekBar, binding.satText, satValue.toFloat())
+            seekBarAnimator(binding.valueSeekBar, binding.valText, valValue.toFloat())
             //Toast.makeText(this, "#$valValue", Toast.LENGTH_SHORT).show()
         } else {
-            hueText.setText("$hueValue")
-            satText.setText("$satValue")
-            valText.setText("$valValue")
+            binding.hueText.setText("$hueValue")
+            binding.satText.setText("$satValue")
+            binding.valText.setText("$valValue")
         }
 
-        if (!hexValueEditText.isFocused && hexValueEditText.text.toString() != "#$hexString") {
-            hexValueEditText.setText(hexString)
+        if (!binding.hexValueEditText.isFocused && binding.hexValueEditText.text.toString() != "#$hexString") {
+            binding.hexValueEditText.setText(hexString)
             //Toast.makeText(this, "#$hexString", Toast.LENGTH_SHORT).show()
         }
 
@@ -129,7 +132,7 @@ class ColourPicker : AppCompatActivity() {
                 intArrayOf(Color.parseColor("#EAEAEA"), Color.HSVToColor(hue))
         )
         satGradientDrawable.cornerRadius = Calculations.convertToDP(this, 20f)
-        satBackground.background = satGradientDrawable
+        binding.satBackground.background = satGradientDrawable
     }
 
     private fun setHEXTextColour() {
@@ -141,37 +144,37 @@ class ColourPicker : AppCompatActivity() {
         /** Set text colour based on hexValue luminance **/
         val luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
         if (luminance > 0.5) {
-            hexValueTextView.setTextColor(Color.parseColor("#000000"))
-            hexValueEditText.setTextColor(Color.parseColor("#000000"))
+            binding.hexValueTextView.setTextColor(Color.parseColor("#000000"))
+            binding.hexValueEditText.setTextColor(Color.parseColor("#000000"))
         } else {
-            hexValueTextView.setTextColor(Color.parseColor("#ffffff"))
-            hexValueEditText.setTextColor(Color.parseColor("#ffffff"))
+            binding.hexValueTextView.setTextColor(Color.parseColor("#ffffff"))
+            binding.hexValueEditText.setTextColor(Color.parseColor("#ffffff"))
         }
     }
 
     private fun setInitialPositions() {
-        colourPickerSliders.translationY = Calculations.convertToDP(this, colourPickerSliders.height + 94.toFloat())
+        binding.colourPickerSliders.translationY = Calculations.convertToDP(this, binding.colourPickerSliders.height + 94.toFloat())
 
-        colourPickerSliders.post {
+        binding.colourPickerSliders.post {
             animationIn()
         }
     }
 
     private fun animationIn() {
-        UIElements.viewObjectAnimator(colourPickerSliders, "translationY", 0f, 700, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(colourPickerSaveButton, "translationY", 0f, 700, 250, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(colourPickerBackButton, "translationY", 0f, 700, 300, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(randomColourButton, "translationY", 0f, 700, 300, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(colourCodeHolder, "alpha", 1f, 700, 250, LinearInterpolator())
+        UIElements.viewObjectAnimator(binding.colourPickerSliders, "translationY", 0f, 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.colourPickerSaveButton, "translationY", 0f, 700, 250, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.colourPickerBackButton, "translationY", 0f, 700, 300, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.randomColourButton, "translationY", 0f, 700, 300, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.colourCodeHolder, "alpha", 1f, 700, 250, LinearInterpolator())
     }
 
     private fun animationOut() {
-        UIElements.viewObjectAnimator(colourPickerSliders, "translationY", colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f), 700, 100, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(colourPickerSaveButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(colourPickerBackButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(randomColourButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(colourCodeHolder, "translationY", (colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f)) / 2, 700, 100, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(colourCodeHolder, "alpha", 0f, 500, 450, LinearInterpolator())
+        UIElements.viewObjectAnimator(binding.colourPickerSliders, "translationY", binding.colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f), 700, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.colourPickerSaveButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.colourPickerBackButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.randomColourButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.colourCodeHolder, "translationY", (binding.colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f)) / 2, 700, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.colourCodeHolder, "alpha", 0f, 500, 450, LinearInterpolator())
 
         Handler(Looper.getMainLooper()).postDelayed({
             finish()
@@ -188,18 +191,18 @@ class ColourPicker : AppCompatActivity() {
                         Color.parseColor("#0000ff"), Color.parseColor("#ff00ff"), Color.parseColor("#f00000"))
         )
         hueGradientDrawable.cornerRadius = Calculations.convertToDP(this, 20f)
-        hueBackground.background = hueGradientDrawable
+        binding.hueBackground.background = hueGradientDrawable
 
         val valGradientDrawable = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
                 intArrayOf(Color.parseColor("#000000"), Color.parseColor("#EAEAEA"))
         )
         valGradientDrawable.cornerRadius = Calculations.convertToDP(this, 20f)
-        valBackground.background = valGradientDrawable
+        binding.valBackground.background = valGradientDrawable
 
 
         /** Slider listeners **/
-        hueSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.hueSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     hueValue = progress
@@ -212,7 +215,7 @@ class ColourPicker : AppCompatActivity() {
 
         })
 
-        saturationSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.saturationSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     satValue = progress
@@ -225,7 +228,7 @@ class ColourPicker : AppCompatActivity() {
 
         })
 
-        valueSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.valueSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     valValue = progress
@@ -253,25 +256,25 @@ class ColourPicker : AppCompatActivity() {
 
         })*/
 
-        hueText.setOnKeyListener { _, _, event ->
+        binding.hueText.setOnKeyListener { _, _, event ->
             if (event.keyCode == KeyEvent.KEYCODE_ENTER) {
-                hueValue = hueText.text.toString().toInt()
+                hueValue = binding.hueText.text.toString().toInt()
                 updateValues(true)
             }
             false
         }
 
-        satText.setOnKeyListener { _, _, event ->
+        binding.satText.setOnKeyListener { _, _, event ->
             if (event.keyCode == KeyEvent.KEYCODE_ENTER) {
-                satValue = satText.text.toString().toInt()
+                satValue = binding.satText.text.toString().toInt()
                 updateValues(true)
             }
             false
         }
 
-        valText.setOnKeyListener { _, _, event ->
+        binding.valText.setOnKeyListener { _, _, event ->
             if (event.keyCode == KeyEvent.KEYCODE_ENTER) {
-                valValue = valText.text.toString().toInt()
+                valValue = binding.valText.text.toString().toInt()
                 updateValues(true)
             }
             false

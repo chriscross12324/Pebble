@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.Vibration
-import kotlinx.android.synthetic.main.button_menu.view.*
 
 class BrowseMenuRecyclerView internal constructor(var context: Context, private val buttons: ArrayList<HashMap<String, Int>>, onButtonListener: OnButtonListener): RecyclerView.Adapter<BrowseMenuRecyclerView.ViewHolder>() {
     private var mOnButtonListener = onButtonListener
@@ -42,9 +41,9 @@ class BrowseMenuRecyclerView internal constructor(var context: Context, private 
     }
 
     inner class ViewHolder internal constructor(view: View, onButtonListener: OnButtonListener): RecyclerView.ViewHolder(view), View.OnClickListener {
-        var buttonImage: ImageView = view.buttonIcon
-        var buttonText: TextView = view.buttonText
-        var listDivider: ImageView = view.listDivider
+        var buttonImage: ImageView = view.findViewById(R.id.buttonIcon)
+        var buttonText: TextView = view.findViewById(R.id.buttonText)
+        var listDivider: ImageView = view.findViewById(R.id.listDivider)
         private val myOnButtonListener = onButtonListener
 
         init {

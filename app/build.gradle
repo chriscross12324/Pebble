@@ -1,16 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
     defaultConfig {
         applicationId "com.simple.chris.pebble"
         minSdkVersion 23
-        targetSdkVersion 31
-        versionCode 15
-        versionName "2022.08.08"
+        targetSdkVersion 33
+        versionCode 16
+        versionName "2022.12.09"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         renderscriptTargetApi 29
         renderscriptSupportModeEnabled true
@@ -21,41 +20,44 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    buildFeatures{
+        viewBinding = true
+    }
     compileOptions {
         sourceCompatibility = "8"
         targetCompatibility = "8"
     }
+    namespace 'com.simple.chris.pebble'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
-    implementation "androidx.recyclerview:recyclerview:1.3.0-alpha01"
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.recyclerview:recyclerview:1.3.0-rc01"
+    implementation 'com.google.android.material:material:1.7.0'
     /*implementation 'com.squareup.okhttp3:okhttp:3.14.0'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.14.0'*/
-    implementation 'com.android.support:appcompat-v7:31.0.0'
-    implementation 'com.android.support:design:31.0.0'
-    implementation 'com.google.android.gms:play-services-ads:20.4.0'
+    implementation 'com.android.support:appcompat-v7:33.0.0'
+    implementation 'com.android.support:design:33.0.0'
+    //implementation 'com.google.android.gms:play-services-ads:20.4.0'
     //implementation 'com.android.billingclient:billing-ktx:3.0.3'
-    implementation 'com.android.support:recyclerview-v7:31.0.0'
-    implementation 'com.android.support:cardview-v7:31.0.0'
+    implementation 'com.android.support:recyclerview-v7:33.0.0'
+    implementation 'com.android.support:cardview-v7:33.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test:runner:1.4.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'androidx.test:runner:1.5.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.31'
+    implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'org.apache.commons:commons-text:1.8'
     implementation 'androidx.palette:palette-ktx:1.0.0'
 
     implementation platform('com.google.firebase:firebase-bom:26.3.0')
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
-    implementation 'org.jsoup:jsoup:1.12.2'
+    implementation 'org.jsoup:jsoup:1.13.1'
     //implementation 'com.eightbitlab:blurview:1.6.6'
     implementation 'com.github.Dimezis:BlurView:version-1.6.6'
     implementation 'com.github.hamzaahmedkhan:BlurImageView:v1.0.2'

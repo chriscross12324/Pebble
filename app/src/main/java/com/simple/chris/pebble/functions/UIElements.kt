@@ -3,6 +3,7 @@ package com.simple.chris.pebble.functions
 import android.animation.ObjectAnimator
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.app.WallpaperManager
 import android.content.Context
@@ -20,7 +21,9 @@ import android.renderscript.ScriptIntrinsicBlur
 import android.util.Log
 import android.view.*
 import android.view.animation.*
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -28,10 +31,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.jgabrielfreitas.core.BlurImageView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.Calculations.convertToDP
+import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
-import kotlinx.android.synthetic.main.dialog_popup.backgroundDimmer
-import kotlinx.android.synthetic.main.dialog_popup.blurView
-import kotlinx.android.synthetic.main.dialog_save_gradient.*
 import kotlin.math.roundToInt
 
 object UIElements {
@@ -136,12 +137,13 @@ object UIElements {
         }, delay)
     }
 
+    @SuppressLint("MissingPermission") //[Dec 9, 2022] - Suppressing as I no longer wish to make large changes, and the try/catch will lazily handle any issues
     fun setWallpaper(context: Context, imageView: BlurImageView, alphaLayer: ImageView, window: Window) {
         if (Permissions.readStoragePermissionGiven(context)) {
             if (Values.settingsSpecialEffects) {
                 try {
                     val wallpaper: WallpaperManager = WallpaperManager.getInstance(context)
-                    val wallpaperDrawable: Drawable = wallpaper.drawable
+                    val wallpaperDrawable: Drawable = wallpaper.drawable!!
                     val bmpDraw = wallpaperDrawable as BitmapDrawable
                     val bmp = bmpDraw.bitmap
                     val wallpaperBMP = Bitmap.createScaledBitmap(bmp, Calculations.screenMeasure(context, "width", window), Calculations.screenMeasure(context, "height", window), true)
@@ -154,6 +156,8 @@ object UIElements {
             } else {
                 viewObjectAnimator(alphaLayer, "alpha", 1f, 150, 0, LinearInterpolator())
             }
+        } else {
+            Log.d("MSG", "android.permission.READ_EXTERNAL_STORAGE not granted")
         }
     }
 
@@ -231,13 +235,13 @@ object UIElements {
         dialogWindow.setGravity(Gravity.CENTER)
 
         /** Set popupDialog layout **/
-        val dialogMain = saveGradientDialog.popupHolder
-        val gradientPreview = saveGradientDialog.gradientPreview
-        val heightText = saveGradientDialog.heightText
-        val widthText = saveGradientDialog.widthText
-        val presetButton = saveGradientDialog.presetButton
-        val saveButton = saveGradientDialog.saveGradientButton
-        val backgroundDimmer = saveGradientDialog.backgroundDimmer
+        val dialogMain = saveGradientDialog.findViewById<CardView>(R.id.popupHolder)
+        val gradientPreview = saveGradientDialog.findViewById<ImageView>(R.id.gradientPreview)
+        val heightText = saveGradientDialog.findViewById<EditText>(R.id.heightText)
+        val widthText = saveGradientDialog.findViewById<EditText>(R.id.widthText)
+        val presetButton = saveGradientDialog.findViewById<LinearLayout>(R.id.presetButton)
+        val saveButton = saveGradientDialog.findViewById<ConstraintLayout>(R.id.saveGradientButton)
+        val backgroundDimmer = saveGradientDialog.findViewById<ImageView>(R.id.backgroundDimmer)
 
         /** Set UI Elements **/
         UIElement.gradientDrawableNew(context, gradientPreview, colourArray, 20f)
@@ -282,7 +286,7 @@ object UIElements {
                 val rootView = window.decorView.findViewById<ViewGroup>(android.R.id.content)
                 val windowBackground = window.decorView.background
 
-                saveGradientDialog.blurView.setupWith(rootView)
+                saveGradientDialog.findViewById<BlurView>(R.id.blurView).setupWith(rootView)
                         .setFrameClearDrawable(windowBackground)
                         .setBlurAlgorithm(RenderScriptBlur(context))
                         .setBlurRadius(20f)
@@ -291,10 +295,10 @@ object UIElements {
             } catch (e: Exception) {
                 Log.e("ERR", "pebble.ui_elements.popup_dialog: ${e.localizedMessage}")
             }
-            val backgroundDimmer = saveGradientDialog.backgroundDimmer
+            val backgroundDimmer = saveGradientDialog.findViewById<ImageView>(R.id.backgroundDimmer)
             backgroundDimmer.alpha = Values.dialogBackgroundDimmer
         } else {
-            val backgroundDimmer = saveGradientDialog.backgroundDimmer
+            val backgroundDimmer = saveGradientDialog.findViewById<ImageView>(R.id.backgroundDimmer)
             backgroundDimmer.alpha = Values.dialogBackgroundDimmer
         }
     }

@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.Vibration
-import kotlinx.android.synthetic.main.button_settings_screen.view.*
 
 class SettingsRecyclerView internal constructor(var context: Context, var screenName: String, private val buttons: ArrayList<HashMap<String, Int>>, onButtonListener: OnButtonListener): RecyclerView.Adapter<SettingsRecyclerView.ViewHolder>() {
     private var mOnButtonListener = onButtonListener
@@ -46,8 +45,8 @@ class SettingsRecyclerView internal constructor(var context: Context, var screen
     }
 
     inner class ViewHolder internal constructor(view: View, onButtonListener: OnButtonListener): RecyclerView.ViewHolder(view), View.OnClickListener {
-        var buttonImage: ImageView = view.optionIcon
-        var buttonText: TextView = view.optionTitle
+        var buttonImage: ImageView = view.findViewById(R.id.optionIcon)
+        var buttonText: TextView = view.findViewById(R.id.optionTitle)
         private val myOnButtonListener = onButtonListener
 
         init {

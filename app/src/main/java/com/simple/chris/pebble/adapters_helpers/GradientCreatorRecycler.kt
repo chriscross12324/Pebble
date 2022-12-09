@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.Calculations
 import com.simple.chris.pebble.functions.Vibration
-import kotlinx.android.synthetic.main.button_colour_picker.view.*
 import kotlin.math.roundToInt
 
 class GradientCreatorRecycler internal constructor(var context: Context, private val colours: ArrayList<String>, onButtonListener: OnButtonListener): RecyclerView.Adapter<GradientCreatorRecycler.ViewHolder>() {
@@ -45,8 +44,8 @@ class GradientCreatorRecycler internal constructor(var context: Context, private
     }
 
     inner class ViewHolder internal constructor(view: View, onButtonListener: OnButtonListener): RecyclerView.ViewHolder(view), View.OnClickListener {
-        var colourPreview: ImageView = view.colourPreview
-        var colourButton: LinearLayout = view.colourButton
+        var colourPreview: ImageView = view.findViewById(R.id.colourPreview)
+        var colourButton: LinearLayout = view.findViewById(R.id.colourButton)
         private val myOnButtonListener = onButtonListener
 
         init {

@@ -16,28 +16,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.ads.*
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.DialogPopup
 import com.simple.chris.pebble.adapters_helpers.GradientCreatorRecycler
+import com.simple.chris.pebble.databinding.ActivityGradientCreateBinding
 import com.simple.chris.pebble.functions.*
-import kotlinx.android.synthetic.main.activity_gradient_create.*
-import kotlinx.android.synthetic.main.activity_gradient_create.buttonAddColour
-import kotlinx.android.synthetic.main.activity_gradient_create.buttonNext
-import kotlinx.android.synthetic.main.activity_gradient_create.buttonRemoveColour
-import kotlinx.android.synthetic.main.activity_gradient_create.gradientCreatorGradientDescription
-import kotlinx.android.synthetic.main.activity_gradient_create.gradientCreatorGradientName
-import kotlinx.android.synthetic.main.activity_gradient_create.gradientDescriptionHolder
-import kotlinx.android.synthetic.main.activity_gradient_create.gradientNameHolder
-import kotlinx.android.synthetic.main.activity_gradient_create.iconRemoveActive
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.random.Random
 
 class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonListener {
+    private lateinit var binding: ActivityGradientCreateBinding
 
     lateinit var buttonAdapter: GradientCreatorRecycler
     //lateinit var mInterstitialAd: com.google.android.gms.ads.InterstitialAd
@@ -51,7 +42,9 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UIElement.setTheme(this)
-        setContentView(R.layout.activity_gradient_create)
+        binding = ActivityGradientCreateBinding.inflate(layoutInflater)
+        val view = binding.root;
+        setContentView(view)
         Values.currentActivity = "GradientCreator"
         startCreator()
         setGradientDrawable()
@@ -61,7 +54,7 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
     private fun startCreator() {
         /** Wait for UI to populate **/
         Handler(Looper.getMainLooper()).postDelayed({
-            if (recyclerGradientColours != null) {
+            if (binding.recyclerGradientColours != null) {
                 /** Set UI Elements **/
                 buildColourRecycler()
                 recyclerGradientColours()
@@ -74,7 +67,7 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
     }
 
     private fun buttonFunctionality() {
-        buttonBack.setOnClickListener {
+        binding.buttonBack.setOnClickListener {
             Vibration.lowFeedback(this)
             if (!modeSubmitGradient) {
                 //Exit
@@ -86,7 +79,7 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
             }
         }
 
-        buttonNext.setOnClickListener {
+        binding.buttonNext.setOnClickListener {
             Vibration.lowFeedback(this)
             if (!modeSubmitGradient) {
                 modeSubmitGradient = true
@@ -96,8 +89,8 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
             }
         }
 
-        buttonAddColour.setOnClickListener {
-            buttonRemoveColour.alpha = 1f
+        binding.buttonAddColour.setOnClickListener {
+            binding.buttonRemoveColour.alpha = 1f
             if (Values.gradientCreatorColours.size < 6) {
                 val startRNDM = Random
                 Values.gradientCreatorColours.add(Values.gradientCreatorColours.size, "#" + Integer.toHexString(Color.rgb(startRNDM.nextInt(256), startRNDM.nextInt(256), startRNDM.nextInt(256))).substring(2))
@@ -112,18 +105,18 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
             }
         }
 
-        buttonRemoveColour.setOnClickListener {
+        binding.buttonRemoveColour.setOnClickListener {
             if (modeColourDelete) {
                 modeColourDelete = false
-                iconRemoveActive.visibility = View.INVISIBLE
-                UIElements.viewVisibility(notification, View.INVISIBLE, 250)
-                UIElements.viewObjectAnimator(notification, "translationY", 0f, 250, 0, DecelerateInterpolator(3f))
+                binding.iconRemoveActive.visibility = View.INVISIBLE
+                UIElements.viewVisibility(binding.notification, View.INVISIBLE, 250)
+                UIElements.viewObjectAnimator(binding.notification, "translationY", 0f, 250, 0, DecelerateInterpolator(3f))
             } else {
                 if (Values.gradientCreatorColours.size != 1) {
                     modeColourDelete = true
-                    iconRemoveActive.visibility = View.VISIBLE
-                    UIElements.viewVisibility(notification, View.VISIBLE, 0)
-                    UIElements.viewObjectAnimator(notification, "translationY", Calculations.convertToDP(this, -8f) - notification.measuredHeight,
+                    binding.iconRemoveActive.visibility = View.VISIBLE
+                    UIElements.viewVisibility(binding.notification, View.VISIBLE, 0)
+                    UIElements.viewObjectAnimator(binding.notification, "translationY", Calculations.convertToDP(this, -8f) - binding.notification.measuredHeight,
                             250, 0, DecelerateInterpolator(3f))
                 } else {
                     Vibration.notification(this)
@@ -132,18 +125,18 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
             }
         }
 
-        buttonRandomGradient.setOnClickListener {
+        binding.buttonRandomGradient.setOnClickListener {
             if (!generatingGradient) {
                 generatingGradient = true
                 Vibration.lowFeedback(this)
                 it.alpha = 0.5f
-                buttonAddColour.alpha = 0.5f
-                buttonRemoveColour.alpha = 0.5f
+                binding.buttonAddColour.alpha = 0.5f
+                binding.buttonRemoveColour.alpha = 0.5f
                 val colourCount = Values.gradientCreatorColours.size
                 Values.gradientCreatorColours.clear()
 
-                UIElements.viewObjectAnimator(recyclerGradientColours, "alpha", 0f, 250, 0, LinearInterpolator())
-                UIElements.viewObjectAnimator(gradientTransition, "alpha", 1f, 400, 0, LinearInterpolator())
+                UIElements.viewObjectAnimator(binding.recyclerGradientColours, "alpha", 0f, 250, 0, LinearInterpolator())
+                UIElements.viewObjectAnimator(binding.gradientTransition, "alpha", 1f, 400, 0, LinearInterpolator())
                 Handler(Looper.getMainLooper()).postDelayed({
                     repeat(colourCount) {
                         val startRNDM = Random
@@ -153,13 +146,13 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
                     Handler(Looper.getMainLooper()).postDelayed({
                         setGradientDrawable()
                         buildColourRecycler()
-                        UIElements.viewObjectAnimator(recyclerGradientColours, "alpha", 1f, 250, 100, LinearInterpolator())
-                        UIElements.viewObjectAnimator(gradientTransition, "alpha", 0f, 400, 0, LinearInterpolator())
+                        UIElements.viewObjectAnimator(binding.recyclerGradientColours, "alpha", 1f, 250, 100, LinearInterpolator())
+                        UIElements.viewObjectAnimator(binding.gradientTransition, "alpha", 0f, 400, 0, LinearInterpolator())
 
                         Handler(Looper.getMainLooper()).postDelayed({
                             it.alpha = 1f
-                            buttonAddColour.alpha = 1f
-                            buttonRemoveColour.alpha = 1f
+                            binding.buttonAddColour.alpha = 1f
+                            binding.buttonRemoveColour.alpha = 1f
                             generatingGradient = false
                         }, 500)
                     }, 450)
@@ -167,10 +160,10 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
             }
         }
 
-        gradientCreatorGradientName.setOnKeyListener { _, _, event ->
+        binding.gradientCreatorGradientName.setOnKeyListener { _, _, event ->
             if (event.keyCode == KeyEvent.KEYCODE_ENTER) {
                 UIElement.hideSoftKeyboard(this)
-                gradientCreatorGradientName.clearFocus()
+                binding.gradientCreatorGradientName.clearFocus()
             }
             false
         }
@@ -179,7 +172,7 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
     internal fun buildColourRecycler() {
         /** Builds functionality of recyclerView **/
         buttonAdapter = GradientCreatorRecycler(this, Values.gradientCreatorColours, this)
-        recyclerGradientColours.apply {
+        binding.recyclerGradientColours.apply {
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(this@GradientCreator, 3)
             adapter = buttonAdapter
@@ -224,23 +217,23 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
             }
         }
         val ith = ItemTouchHelper(itemTouchHelper)
-        ith.attachToRecyclerView(recyclerGradientColours)
+        ith.attachToRecyclerView(binding.recyclerGradientColours)
     }
 
     private fun setViewStartingLocations() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (buttonAdapter != null) {
-                buttonBack.translationY = buttonBack.measuredHeight + Calculations.convertToDP(this, 24f)
-                buttonNext.translationY = buttonNext.measuredHeight + Calculations.convertToDP(this, 24f)
-                colourMenuHolder.translationY = colourMenuHolder.measuredHeight + Calculations.convertToDP(this, 24f)
-                UIElements.viewObjectAnimator(gradientDescriptionHolder, "translationY", Calculations.convertToDP(this, 90f) + gradientDescriptionHolder.height, 0, 0, LinearInterpolator())
-                UIElements.viewObjectAnimator(gradientNameHolder, "translationY", Calculations.convertToDP(this, 106f) + gradientDescriptionHolder.height + gradientNameHolder.height, 0, 0, LinearInterpolator())
+                binding.buttonBack.translationY = binding.buttonBack.measuredHeight + Calculations.convertToDP(this, 24f)
+                binding.buttonNext.translationY = binding.buttonNext.measuredHeight + Calculations.convertToDP(this, 24f)
+                binding.colourMenuHolder.translationY = binding.colourMenuHolder.measuredHeight + Calculations.convertToDP(this, 24f)
+                UIElements.viewObjectAnimator(binding.gradientDescriptionHolder, "translationY", Calculations.convertToDP(this, 90f) + binding.gradientDescriptionHolder.height, 0, 0, LinearInterpolator())
+                UIElements.viewObjectAnimator(binding.gradientNameHolder, "translationY", Calculations.convertToDP(this, 106f) + binding.gradientDescriptionHolder.height + binding.gradientNameHolder.height, 0, 0, LinearInterpolator())
 
                 /**
                  * Sets prerequisites for textViews
                  */
-                gradientCreatorGradientName.setText(Values.gradientCreatorGradientName)
-                gradientCreatorGradientDescription.setText(Values.gradientCreatorDescription)
+                binding.gradientCreatorGradientName.setText(Values.gradientCreatorGradientName)
+                binding.gradientCreatorGradientDescription.setText(Values.gradientCreatorDescription)
 
                 firstStepEnterAnim()
             } else {
@@ -253,10 +246,10 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
         /**
          * Animates all views out for firstStep
          */
-        UIElements.viewObjectAnimator(colourMenuHolder, "translationY",
-                colourMenuHolder.measuredHeight.toFloat() + Calculations.convertToDP(this, 24f), 700, 100, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(buttonBack, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(buttonNext, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.colourMenuHolder, "translationY",
+            binding.colourMenuHolder.measuredHeight.toFloat() + Calculations.convertToDP(this, 24f), 700, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonBack, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonNext, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
 
         Handler(Looper.getMainLooper()).postDelayed({
             if (mainMenu) {
@@ -268,58 +261,58 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
 
     private fun firstStepEnterAnim() {
         /** Sets views to VISIBLE **/
-        buttonBack.visibility = View.VISIBLE
-        colourMenuHolder.visibility = View.VISIBLE
-        buttonNext.visibility = View.VISIBLE
+        binding.buttonBack.visibility = View.VISIBLE
+        binding.colourMenuHolder.visibility = View.VISIBLE
+        binding.buttonNext.visibility = View.VISIBLE
 
         /** Animates views **/
-        UIElements.viewObjectAnimator(buttonBack, "translationY", 0f, 700, 100, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(colourMenuHolder, "translationY", 0f, 700, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(buttonNext, "translationY", 0f, 700, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonBack, "translationY", 0f, 700, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.colourMenuHolder, "translationY", 0f, 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonNext, "translationY", 0f, 700, 100, DecelerateInterpolator(3f))
 
         /** Sets imageView src **/
-        iconBack.setImageResource(R.drawable.icon_close)
-        iconNext.setImageResource(R.drawable.icon_arrow_right)
+        binding.iconBack.setImageResource(R.drawable.icon_close)
+        binding.iconNext.setImageResource(R.drawable.icon_arrow_right)
     }
 
     private fun secondStepAnimIn(animate: Boolean) {
         val duration = if (animate) 500 else 0
 
-        UIElements.viewObjectAnimator(colourMenuHolder, "translationY",
-                colourMenuHolder.measuredHeight + Calculations.convertToDP(this, 24f), 500, 0, DecelerateInterpolator(3f))
-        UIElements.setImageViewSRC(iconBack, R.drawable.icon_arrow_left, duration.toLong() / 2, 0)
-        UIElements.setImageViewSRC(iconNext, R.drawable.icon_upload, duration.toLong() / 2, 0)
-        UIElements.viewObjectAnimator(gradientDescriptionHolder, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(gradientNameHolder, "translationY", 0f, 700, 400, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(buttonBack, "translationX", -(buttonBack.measuredWidth + Calculations.convertToDP(this, 8f)), 250, 250, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(buttonNext, "translationX", buttonNext.measuredWidth + Calculations.convertToDP(this, 8f), 250, 250, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(buttonBack, "translationX", 0f, 250, 750, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(buttonNext, "translationX", 0f, 250, 750, DecelerateInterpolator(3f))
-        UIElements.viewVisibility(gradientDescriptionHolder, View.VISIBLE, 0)
-        UIElements.viewVisibility(gradientNameHolder, View.VISIBLE, 0)
+        UIElements.viewObjectAnimator(binding.colourMenuHolder, "translationY",
+            binding.colourMenuHolder.measuredHeight + Calculations.convertToDP(this, 24f), 500, 0, DecelerateInterpolator(3f))
+        UIElements.setImageViewSRC(binding.iconBack, R.drawable.icon_arrow_left, duration.toLong() / 2, 0)
+        UIElements.setImageViewSRC(binding.iconNext, R.drawable.icon_upload, duration.toLong() / 2, 0)
+        UIElements.viewObjectAnimator(binding.gradientDescriptionHolder, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.gradientNameHolder, "translationY", 0f, 700, 400, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonBack, "translationX", -(binding.buttonBack.measuredWidth + Calculations.convertToDP(this, 8f)), 250, 250, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonNext, "translationX", binding.buttonNext.measuredWidth + Calculations.convertToDP(this, 8f), 250, 250, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonBack, "translationX", 0f, 250, 750, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonNext, "translationX", 0f, 250, 750, DecelerateInterpolator(3f))
+        UIElements.viewVisibility(binding.gradientDescriptionHolder, View.VISIBLE, 0)
+        UIElements.viewVisibility(binding.gradientNameHolder, View.VISIBLE, 0)
 
-        gradientCreatorGradientDescription.imeOptions = EditorInfo.IME_ACTION_DONE
-        gradientCreatorGradientDescription.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
+        binding.gradientCreatorGradientDescription.imeOptions = EditorInfo.IME_ACTION_DONE
+        binding.gradientCreatorGradientDescription.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
     }
 
     private fun secondStepAnimOut() {
-        UIElements.viewObjectAnimator(colourMenuHolder, "translationY",
+        UIElements.viewObjectAnimator(binding.colourMenuHolder, "translationY",
                 0f, 750, 750, DecelerateInterpolator(3f))
-        UIElements.setImageViewSRC(iconBack, R.drawable.icon_close, 500, 0)
-        UIElements.setImageViewSRC(iconNext, R.drawable.icon_arrow_right, 500, 0)
-        UIElements.viewObjectAnimator(gradientDescriptionHolder, "translationY", Calculations.convertToDP(this, 90f) + gradientDescriptionHolder.height, 700, 200, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(gradientNameHolder, "translationY", Calculations.convertToDP(this, 106f) + gradientDescriptionHolder.height + gradientNameHolder.height, 700, 250, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(buttonBack, "translationX", -(buttonBack.measuredWidth + Calculations.convertToDP(this, 8f)), 250, 100, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(buttonNext, "translationX", buttonNext.measuredWidth + Calculations.convertToDP(this, 8f), 250, 100, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(buttonBack, "translationX", 0f, 250, 450, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(buttonNext, "translationX", 0f, 250, 450, DecelerateInterpolator(3f))
-        UIElements.viewVisibility(gradientDescriptionHolder, View.INVISIBLE, 950)
-        UIElements.viewVisibility(gradientNameHolder, View.INVISIBLE, 950)
+        UIElements.setImageViewSRC(binding.iconBack, R.drawable.icon_close, 500, 0)
+        UIElements.setImageViewSRC(binding.iconNext, R.drawable.icon_arrow_right, 500, 0)
+        UIElements.viewObjectAnimator(binding.gradientDescriptionHolder, "translationY", Calculations.convertToDP(this, 90f) + binding.gradientDescriptionHolder.height, 700, 200, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.gradientNameHolder, "translationY", Calculations.convertToDP(this, 106f) + binding.gradientDescriptionHolder.height + binding.gradientNameHolder.height, 700, 250, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonBack, "translationX", -(binding.buttonBack.measuredWidth + Calculations.convertToDP(this, 8f)), 250, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonNext, "translationX", binding.buttonNext.measuredWidth + Calculations.convertToDP(this, 8f), 250, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonBack, "translationX", 0f, 250, 450, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonNext, "translationX", 0f, 250, 450, DecelerateInterpolator(3f))
+        UIElements.viewVisibility(binding.gradientDescriptionHolder, View.INVISIBLE, 950)
+        UIElements.viewVisibility(binding.gradientNameHolder, View.INVISIBLE, 950)
     }
 
     internal fun setGradientDrawable() {
         /** Draw GradientDrawable **/
-        UIElement.gradientDrawableNew(this, gradientViewer, Values.gradientCreatorColours, 0f)
+        UIElement.gradientDrawableNew(this, binding.gradientViewer, Values.gradientCreatorColours, 0f)
     }
 
     override fun onButtonClick(position: Int, view: View) {
@@ -336,23 +329,23 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
                 Values.gradientCreatorColours.removeAt(position)
                 buildColourRecycler()
                 if (Values.gradientCreatorColours.size < 6) {
-                    buttonAddColour.alpha = 1f
+                    binding.buttonAddColour.alpha = 1f
                 }
                 if (Values.gradientCreatorColours.size == 1) {
                     modeColourDelete = false
-                    iconRemoveActive.visibility = View.INVISIBLE
-                    UIElements.viewVisibility(notification, View.INVISIBLE, 250)
-                    UIElements.viewObjectAnimator(notification, "translationY", 0f,
+                    binding.iconRemoveActive.visibility = View.INVISIBLE
+                    UIElements.viewVisibility(binding.notification, View.INVISIBLE, 250)
+                    UIElements.viewObjectAnimator(binding.notification, "translationY", 0f,
                             250, 0, DecelerateInterpolator(3f))
-                    buttonRemoveColour.alpha = 0.5f
+                    binding.buttonRemoveColour.alpha = 0.5f
                 }
             } else {
                 modeColourDelete = false
-                iconRemoveActive.visibility = View.INVISIBLE
-                UIElements.viewVisibility(notification, View.INVISIBLE, 250)
-                UIElements.viewObjectAnimator(notification, "translationY", 0f,
+                binding.iconRemoveActive.visibility = View.INVISIBLE
+                UIElements.viewVisibility(binding.notification, View.INVISIBLE, 250)
+                UIElements.viewObjectAnimator(binding.notification, "translationY", 0f,
                         250, 0, DecelerateInterpolator(3f))
-                buttonRemoveColour.alpha = 0.5f
+                binding.buttonRemoveColour.alpha = 0.5f
             }
             setGradientDrawable()
         }
@@ -361,7 +354,7 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
     private fun startSubmission() {
         /** Check if Gradient has a name **/
         if (Connection.getConnectionType(this) != 0) {
-            if (gradientCreatorGradientName.text.toString().trim().replace(" ", "") != "") {
+            if (binding.gradientCreatorGradientName.text.toString().trim().replace(" ", "") != "") {
                 submitGradient()
                 /**Not working; Google Ads**/
 
@@ -390,8 +383,8 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
                 R.string.word_submitting, null, R.string.sentence_uploading_gradient, null)
         Values.dialogPopup.show(supportFragmentManager, "submittingGradient")
         val gradient = hashMapOf(
-                "gradientName" to gradientCreatorGradientName.text.toString(),
-                "gradientDescription" to gradientCreatorGradientDescription.text.toString(),
+                "gradientName" to binding.gradientCreatorGradientName.text.toString(),
+                "gradientDescription" to binding.gradientCreatorGradientDescription.text.toString(),
                 "gradientColours" to Values.gradientCreatorColours.toString().replace(" ", ""),
                 "gradientCategories" to arrayListOf("empty"),
                 "appVersion" to "V3",
@@ -441,7 +434,7 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
                 }
             }*/
             "submitGradientSubmitted" -> {
-                colourMenuHolder.visibility = View.INVISIBLE
+                binding.colourMenuHolder.visibility = View.INVISIBLE
                 secondStepAnimOut()
                 Handler(Looper.getMainLooper()).postDelayed({
                     firstStepExitAnim(true)

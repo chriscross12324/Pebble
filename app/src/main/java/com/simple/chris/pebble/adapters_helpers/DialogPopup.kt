@@ -20,20 +20,35 @@ import com.simple.chris.pebble.R
 import com.simple.chris.pebble.activities.GradientCreator
 import com.simple.chris.pebble.activities.MainActivity
 import com.simple.chris.pebble.activities.SplashScreen
+import com.simple.chris.pebble.databinding.DialogPopupBinding
 import com.simple.chris.pebble.functions.UIElements
 import com.simple.chris.pebble.functions.Values
 import eightbitlab.com.blurview.RenderScriptBlur
-import kotlinx.android.synthetic.main.dialog_popup.*
 
 class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener {
+    private var _binding: DialogPopupBinding? = null
+    private val binding get() = _binding!!
 
     override fun onStart() {
         super.onStart()
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    /*override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.dialog_popup, container)
+    }*/
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = DialogPopupBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,16 +57,16 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
         dialog!!.window!!.setDimAmount(0f)
         Values.dialogPopup = this
         Log.d("DEBUG", "Showing Dialog")
-        if (arguments!!.getString("dialogName") == "connecting") {
+        if (requireArguments().getString("dialogName") == "connecting") {
             testConnection()
         }
 
         if (Values.settingsSpecialEffects) {
             try {
-                val rootView = activity!!.window.decorView.findViewById<ViewGroup>(android.R.id.content)
-                val windowBackground = activity!!.window.decorView.background
+                val rootView = requireActivity().window.decorView.findViewById<ViewGroup>(android.R.id.content)
+                val windowBackground = requireActivity().window.decorView.background
 
-                blurView.setupWith(rootView)
+                binding.blurView.setupWith(rootView)
                         .setFrameClearDrawable(windowBackground)
                         .setBlurAlgorithm(RenderScriptBlur(activity))
                         .setBlurRadius(20f)
@@ -60,49 +75,49 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
                 Log.e("ERR", "pebble.gradient_long_click_dialog: ${e.localizedMessage}")
             }
         } else {
-            backgroundDimmer.alpha = Values.dialogBackgroundDimmer
+            binding.backgroundDimmer.alpha = Values.dialogBackgroundDimmer
         }
 
-        if (arguments!!.getInt("icon") != 0) {
-            permissionIcon.setImageResource(arguments!!.getInt("icon"))
+        if (requireArguments().getInt("icon") != 0) {
+            binding.permissionIcon.setImageResource(requireArguments().getInt("icon"))
         } else {
-            permissionIcon.visibility = View.INVISIBLE
-            progressCircle.visibility = View.VISIBLE
+            binding.permissionIcon.visibility = View.INVISIBLE
+            binding.progressCircle.visibility = View.VISIBLE
         }
 
-        if (arguments!!.getInt("title") != 0) {
-            permissionTitle.setText(arguments!!.getInt("title"))
+        if (requireArguments().getInt("title") != 0) {
+            binding.permissionTitle.setText(requireArguments().getInt("title"))
         } else {
-            permissionTitle.text = arguments!!.getString("titleString")
+            binding.permissionTitle.text = requireArguments().getString("titleString")
         }
 
-        if (arguments!!.getInt("description") != 0) {
-            permissionDescription.setText(arguments!!.getInt("description"))
+        if (requireArguments().getInt("description") != 0) {
+            binding.permissionDescription.setText(requireArguments().getInt("description"))
         } else {
-            permissionDescription.text = arguments!!.getString("descriptionString")
+            binding.permissionDescription.text = requireArguments().getString("descriptionString")
         }
 
-        holder.post {
-            UIElements.viewObjectAnimator(dialogHolder, "scaleX", 1f, 550, 150, DecelerateInterpolator(3f))
-            UIElements.viewObjectAnimator(dialogHolder, "scaleY", 1f, 550, 150, DecelerateInterpolator(3f))
-            UIElements.viewObjectAnimator(dialogHolder, "alpha", 1f, 100, 150, LinearInterpolator())
-            UIElements.viewObjectAnimator(drawCaller, "scaleY", 2f, 60000, 0, LinearInterpolator())
+        binding.holder.post {
+            UIElements.viewObjectAnimator(binding.dialogHolder, "scaleX", 1f, 550, 150, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(binding.dialogHolder, "scaleY", 1f, 550, 150, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(binding.dialogHolder, "alpha", 1f, 100, 150, LinearInterpolator())
+            UIElements.viewObjectAnimator(binding.drawCaller, "scaleY", 2f, 60000, 0, LinearInterpolator())
         }
 
-        blurView.setOnClickListener {
-            if (arguments!!.getString("dialogName")!!.contains("setting") && (activity as Context).toString().contains("MainActivity")) {
+        binding.blurView.setOnClickListener {
+            if (requireArguments().getString("dialogName")!!.contains("setting") && (activity as Context).toString().contains("MainActivity")) {
                 onDismiss(dialog!!)
             }
         }
 
-        if (arguments!!.getSerializable("array") != null) {
+        if (requireArguments().getSerializable("array") != null) {
             try {
-                popupButtonRecycler.setHasFixedSize(true)
+                binding.popupButtonRecycler.setHasFixedSize(true)
                 val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-                val adapter = PopupDialogButtonRecycler((activity as Context), arguments!!.getString("dialogName")!!, arguments!!.getSerializable("array")!! as ArrayList<HashMap<String, Int>>, this)
+                val adapter = PopupDialogButtonRecycler((activity as Context), requireArguments().getString("dialogName")!!, requireArguments().getSerializable("array")!! as ArrayList<HashMap<String, Int>>, this)
 
-                popupButtonRecycler.layoutManager = layoutManager
-                popupButtonRecycler.adapter = adapter
+                binding.popupButtonRecycler.layoutManager = layoutManager
+                binding.popupButtonRecycler.adapter = adapter
             } catch (e: Exception) {
                 Log.e("ERR", "pebble.dialog_popup.on_view_created: ${e.localizedMessage}")
             }
@@ -133,10 +148,10 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
 
     override fun onDismiss(dialog: DialogInterface) {
         try {
-            if (holder != null) {
-                UIElements.viewObjectAnimator(dialogHolder, "scaleX", 1.15f, 200, 0, AccelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(dialogHolder, "scaleY", 1.15f, 200, 0, AccelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(dialogHolder, "alpha", 0f, 100, 100, LinearInterpolator())
+            if (binding.holder != null) {
+                UIElements.viewObjectAnimator(binding.dialogHolder, "scaleX", 1.15f, 200, 0, AccelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(binding.dialogHolder, "scaleY", 1.15f, 200, 0, AccelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(binding.dialogHolder, "alpha", 0f, 100, 100, LinearInterpolator())
 
                 /*UIElements.viewObjectAnimator(popupButtonRecycler, "scaleX", 0.6f, 350, 0, AccelerateInterpolator(3f))
                 UIElements.viewObjectAnimator(popupButtonRecycler, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))

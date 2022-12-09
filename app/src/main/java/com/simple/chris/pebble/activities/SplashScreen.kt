@@ -19,11 +19,10 @@ import androidx.core.content.ContextCompat
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.DialogPopup
 import com.simple.chris.pebble.functions.*
-import kotlinx.android.synthetic.main.activity_main.*
 
 class SplashScreen : AppCompatActivity() {
 
-    var acceptingPerms = true
+    private var acceptingPerms = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +44,7 @@ class SplashScreen : AppCompatActivity() {
                     R.string.word_storage, null, R.string.sentence_needs_storage_permission, null)
             Values.dialogPopup.show(supportFragmentManager, "splashStorage")
         } else {
-            startMainActivity()
+            //startMainActivity()
         }
     }
 
@@ -67,7 +66,7 @@ class SplashScreen : AppCompatActivity() {
             "splashStorage" -> {
                 when (position) {
                     0 -> {
-                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
                     }
                     1 -> {
                         acceptingPerms = false

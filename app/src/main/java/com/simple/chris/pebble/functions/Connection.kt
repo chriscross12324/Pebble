@@ -82,6 +82,7 @@ object Connection {
         Values.downloadingGradients = true
         Values.getFireStore().collection("gradientList")
                 .orderBy("gradientTimestamp", Query.Direction.DESCENDING)
+                .limit(20)
                 .get()
                 .addOnSuccessListener {
                     Values.gradientList.clear()

@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.Vibration
-import kotlinx.android.synthetic.main.dialog_buttons.view.*
 
 class PopupDialogButtonRecycler internal constructor(var context: Context, var popupName: String, private val buttons: ArrayList<HashMap<String, Int>>, onButtonListener: OnButtonListener): RecyclerView.Adapter<PopupDialogButtonRecycler.ViewHolder>() {
     private var mOnButtonListener = onButtonListener
@@ -39,8 +38,8 @@ class PopupDialogButtonRecycler internal constructor(var context: Context, var p
     }
 
     inner class ViewHolder internal constructor(view: View, onButtonListener: OnButtonListener): RecyclerView.ViewHolder(view), View.OnClickListener {
-        var buttonIcon: ImageView = view.buttonIcon
-        var buttonTitle: TextView = view.buttonTitle
+        var buttonIcon: ImageView = view.findViewById(R.id.buttonIcon)
+        var buttonTitle: TextView = view.findViewById(R.id.buttonTitle)
         private val myOnButtonListener = onButtonListener
 
         init {

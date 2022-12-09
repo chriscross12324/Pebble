@@ -8,8 +8,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import androidx.fragment.app.Fragment
@@ -17,13 +19,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.*
+import com.simple.chris.pebble.databinding.FragmentGradientScreenBinding
 import com.simple.chris.pebble.functions.*
-import kotlinx.android.synthetic.main.fragment_gradient_screen.*
-import kotlinx.android.synthetic.main.fragment_gradient_screen.actionsHolder
-import kotlinx.android.synthetic.main.fragment_gradient_screen.detailsHolder
 import kotlin.Exception
 
 class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchColourRecyclerView.OnButtonListener {
+    private var _binding: FragmentGradientScreenBinding? = null
+    private val binding get() = _binding!!
     private lateinit var context: Activity
     private lateinit var gradientName: String
     private lateinit var gradientDescription: String
@@ -35,6 +37,20 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
     private var notificationShowing = false
     private var animatingFullscreen = false
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentGradientScreenBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         context = (activity as MainActivity)
@@ -43,8 +59,8 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
     fun startSplitScreen() {
         /** Called if SplitScreen started from fresh, or if fullscreen **/
         try {
-            gradientViewer.background = null
-            backgroundDimmer.alpha = 0f
+            binding.gradientViewer.background = null
+            binding.backgroundDimmer.alpha = 0f
         } catch (e: Exception) {
         }
 
@@ -55,22 +71,22 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
 
         /** Wait for UI to populate **/
         Handler(Looper.getMainLooper()).postDelayed({
-            if (detailsHolder != null) {
+            if (binding.detailsHolder != null) {
                 /** Set UI Elements **/
                 optionsExpanded = false
-                optionsHolder.visibility = View.INVISIBLE
-                gradientNameText.text = gradientName
-                gradientDescriptionText.text = gradientDescription
-                gradientDescriptionText.visibility = if (gradientDescription == "") View.GONE else View.VISIBLE
-                UIElements.viewObjectAnimator(backgroundDimmer, "alpha", 0f, 0, 0, LinearInterpolator())
+                binding.optionsHolder.visibility = View.INVISIBLE
+                binding.gradientNameText.text = gradientName
+                binding.gradientDescriptionText.text = gradientDescription
+                binding.gradientDescriptionText.visibility = if (gradientDescription == "") View.GONE else View.VISIBLE
+                UIElements.viewObjectAnimator(binding.backgroundDimmer, "alpha", 0f, 0, 0, LinearInterpolator())
                 colourRecycler()
 
                 /** Set position of UI Elements **/
-                UIElements.viewObjectAnimator(detailsHolder, "translationY",
-                        (90 * resources.displayMetrics.density) + detailsHolder.height,
+                UIElements.viewObjectAnimator(binding.detailsHolder, "translationY",
+                        (90 * resources.displayMetrics.density) + binding.detailsHolder.height,
                         0, 0, LinearInterpolator())
-                UIElements.viewObjectAnimator(actionsHolder, "translationY",
-                        (74 * resources.displayMetrics.density) + detailsHolder.height,
+                UIElements.viewObjectAnimator(binding.actionsHolder, "translationY",
+                        (74 * resources.displayMetrics.density) + binding.detailsHolder.height,
                         0, 0, LinearInterpolator())
 
                 /** Tell MainActivity everything is ready **/
@@ -91,33 +107,33 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
 
         /** Wait for UI to populate **/
         Handler(Looper.getMainLooper()).postDelayed({
-            if (detailsHolder != null) {
+            if (binding.detailsHolder != null) {
                 Log.d("DEBUG", "Continuing")
                 /** Animates away UI Elements **/
-                UIElements.viewObjectAnimator(detailsHolder, "translationY",
-                        (90 * resources.displayMetrics.density) + detailsHolder.height,
+                UIElements.viewObjectAnimator(binding.detailsHolder, "translationY",
+                        (90 * resources.displayMetrics.density) + binding.detailsHolder.height,
                         500, 30, DecelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(actionsHolder, "translationY",
-                        (74 * resources.displayMetrics.density) + detailsHolder.height,
+                UIElements.viewObjectAnimator(binding.actionsHolder, "translationY",
+                        (74 * resources.displayMetrics.density) + binding.detailsHolder.height,
                         500, 0, DecelerateInterpolator(3f))
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     /** Set UI Elements **/
                     optionsExpanded = false
-                    detailsHolder.visibility = View.INVISIBLE
-                    actionsHolder.visibility = View.INVISIBLE
-                    optionsHolder.visibility = View.INVISIBLE
-                    gradientNameText.text = gradientName
-                    gradientDescriptionText.text = gradientDescription
-                    gradientDescriptionText.visibility = if (gradientDescription == "") View.GONE else View.VISIBLE
+                    binding.detailsHolder.visibility = View.INVISIBLE
+                    binding.actionsHolder.visibility = View.INVISIBLE
+                    binding.optionsHolder.visibility = View.INVISIBLE
+                    binding.gradientNameText.text = gradientName
+                    binding.gradientDescriptionText.text = gradientDescription
+                    binding.gradientDescriptionText.visibility = if (gradientDescription == "") View.GONE else View.VISIBLE
                     colourRecycler()
 
                     /** Set position of UI Elements **/
-                    UIElements.viewObjectAnimator(detailsHolder, "translationY",
-                            (90 * resources.displayMetrics.density) + detailsHolder.height,
+                    UIElements.viewObjectAnimator(binding.detailsHolder, "translationY",
+                            (90 * resources.displayMetrics.density) + binding.detailsHolder.height,
                             0, 0, LinearInterpolator())
-                    UIElements.viewObjectAnimator(actionsHolder, "translationY",
-                            (74 * resources.displayMetrics.density) + detailsHolder.height,
+                    UIElements.viewObjectAnimator(binding.actionsHolder, "translationY",
+                            (74 * resources.displayMetrics.density) + binding.detailsHolder.height,
                             0, 0, LinearInterpolator())
 
                     /** Tell MainActivity everything is ready **/
@@ -145,16 +161,16 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
 
     fun showUI() {
         /** Set visibility for UI Elements **/
-        UIElement.gradientDrawableNew(context, gradientViewer, gradientColourArray, 0f)
-        UIElements.viewVisibility(gradientViewer, View.VISIBLE, 0)
-        UIElements.viewVisibility(detailsHolder, View.VISIBLE, 0)
-        UIElements.viewVisibility(actionsHolder, View.VISIBLE, 0)
+        UIElement.gradientDrawableNew(context, binding.gradientViewer, gradientColourArray, 0f)
+        UIElements.viewVisibility(binding.gradientViewer, View.VISIBLE, 0)
+        UIElements.viewVisibility(binding.detailsHolder, View.VISIBLE, 0)
+        UIElements.viewVisibility(binding.actionsHolder, View.VISIBLE, 0)
 
-        UIElements.viewObjectAnimator(detailsHolder, "translationY",
+        UIElements.viewObjectAnimator(binding.detailsHolder, "translationY",
                 0f, 700, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(actionsHolder, "translationY",
+        UIElements.viewObjectAnimator(binding.actionsHolder, "translationY",
                 0f, 700, 50, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(backgroundDimmer, "alpha", 1f, 500, 0, LinearInterpolator())
+        UIElements.viewObjectAnimator(binding.backgroundDimmer, "alpha", 1f, 500, 0, LinearInterpolator())
 
         /** Tell app ready for another gradient **/
         Handler(Looper.getMainLooper()).postDelayed({
@@ -164,15 +180,15 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
 
     private fun hideUI() {
         /** Animate UI Elements out **/
-        UIElements.viewObjectAnimator(detailsHolder, "translationY",
-                (90 * resources.displayMetrics.density) + detailsHolder.height,
+        UIElements.viewObjectAnimator(binding.detailsHolder, "translationY",
+                (90 * resources.displayMetrics.density) + binding.detailsHolder.height,
                 500, 30, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(actionsHolder, "translationY",
-                (74 * resources.displayMetrics.density) + detailsHolder.height,
+        UIElements.viewObjectAnimator(binding.actionsHolder, "translationY",
+                (74 * resources.displayMetrics.density) + binding.detailsHolder.height,
                 500, 0, DecelerateInterpolator(3f))
 
         Handler(Looper.getMainLooper()).postDelayed({
-            optionsHolder.visibility = View.INVISIBLE
+            binding.optionsHolder.visibility = View.INVISIBLE
             optionsExpanded = false
         }, 100)
 
@@ -184,8 +200,8 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
 
     fun animateBackgroundDimmer() {
         Handler(Looper.getMainLooper()).postDelayed({
-            if (backgroundDimmer != null) {
-                UIElements.viewObjectAnimator(backgroundDimmer, "alpha", 1f, 500, 0, LinearInterpolator())
+            if (binding.backgroundDimmer != null) {
+                UIElements.viewObjectAnimator(binding.backgroundDimmer, "alpha", 1f, 500, 0, LinearInterpolator())
             } else {
                 animateBackgroundDimmer()
                 Log.e("ERR", "Run")
@@ -195,12 +211,12 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
     }
 
     private fun colourRecycler() {
-        colourElementsRecycler.setHasFixedSize(true)
+        binding.colourElementsRecycler.setHasFixedSize(true)
         val buttonLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         val buttonAdapter = SearchColourRecyclerView(context, null, Values.gradientScreenColours, this)
 
-        colourElementsRecycler.layoutManager = buttonLayoutManager
-        colourElementsRecycler.adapter = buttonAdapter
+        binding.colourElementsRecycler.layoutManager = buttonLayoutManager
+        binding.colourElementsRecycler.adapter = buttonAdapter
 
         val arrayList = ArrayList<String>()
         /*Palette.Builder(Calculations.createBitmap(UIElement.gradientDrawableNew((activity as MainActivity), null, Values.gradientScreenColours, 0f)!!,
@@ -281,22 +297,22 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
         if (!notificationShowing) {
             /** Set initial UI Elements **/
             notificationShowing = true
-            notificationIcon.setImageResource(icon)
-            notificationText.setText(text)
+            binding.notificationIcon.setImageResource(icon)
+            binding.notificationText.setText(text)
 
             /** Animates notification in **/
             Handler(Looper.getMainLooper()).postDelayed({
                 try {
                     Vibration.notification(context)
-                    notification.visibility = View.VISIBLE
-                    UIElements.viewObjectAnimator(notification, "translationY", (notification.height + Calculations.cutoutHeight(context.window) +
+                    binding.notification.visibility = View.VISIBLE
+                    UIElements.viewObjectAnimator(binding.notification, "translationY", (binding.notification.height + Calculations.cutoutHeight(context.window) +
                             Calculations.convertToDP(context, 16f)), 500, 0, DecelerateInterpolator(3f))
                     Handler(Looper.getMainLooper()).postDelayed({
                         try {
-                            UIElements.viewObjectAnimator(notification, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
+                            UIElements.viewObjectAnimator(binding.notification, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
                             Handler(Looper.getMainLooper()).postDelayed({
                                 try {
-                                    notification.visibility = View.INVISIBLE
+                                    binding.notification.visibility = View.INVISIBLE
                                     notificationShowing = false
                                 } catch (e: Exception){}
 
@@ -310,34 +326,34 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
 
     @SuppressLint("ClickableViewAccessibility")
     fun buttonFunctionality() {
-        buttonBack.setOnClickListener {
+        binding.buttonBack.setOnClickListener {
             Values.currentGradientScreenPos = -1
             Vibration.mediumFeedback(context)
             hideUI()
             Values.currentlySplitScreened = false
             Values.currentActivity = "Browse"
         }
-        buttonOptions.setOnClickListener {
+        binding.buttonOptions.setOnClickListener {
             if (!optionsAnimating) {
                 Vibration.mediumFeedback(context)
                 optionsAnimating = true
 
                 if (optionsExpanded) {
-                    UIElements.viewObjectAnimator(detailsHolder, "translationY",
+                    UIElements.viewObjectAnimator(binding.detailsHolder, "translationY",
                             0f, 500, 0, DecelerateInterpolator(3f))
-                    UIElements.constraintLayoutElevationAnimator(optionsHolder, 0f,
+                    UIElements.constraintLayoutElevationAnimator(binding.optionsHolder, 0f,
                             500, 0, DecelerateInterpolator(3f))
                     Handler(Looper.getMainLooper()).postDelayed({
-                        optionsHolder.visibility = View.INVISIBLE
+                        binding.optionsHolder.visibility = View.INVISIBLE
                         optionsAnimating = false
                         optionsExpanded = false
                     }, 500)
                 } else {
-                    optionsHolder.elevation = 0f
-                    optionsHolder.visibility = View.VISIBLE
-                    UIElements.viewObjectAnimator(detailsHolder, "translationY",
-                            -(optionsHolder.height + Calculations.convertToDP(context, -66f)), 500, 0, DecelerateInterpolator(3f))
-                    UIElements.constraintLayoutElevationAnimator(optionsHolder, 1f,
+                    binding.optionsHolder.elevation = 0f
+                    binding.optionsHolder.visibility = View.VISIBLE
+                    UIElements.viewObjectAnimator(binding.detailsHolder, "translationY",
+                            -(binding.optionsHolder.height + Calculations.convertToDP(context, -66f)), 500, 0, DecelerateInterpolator(3f))
+                    UIElements.constraintLayoutElevationAnimator(binding.optionsHolder, 1f,
                             500, 0, DecelerateInterpolator(3f))
                     Handler(Looper.getMainLooper()).postDelayed({
                         optionsAnimating = false
@@ -347,26 +363,26 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
             }
 
             if (optionsExpanded) {
-                UIElements.viewObjectAnimator(detailsHolder, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
-                UIElements.constraintLayoutElevationAnimator(optionsHolder, 0f, 500, 0, DecelerateInterpolator())
+                UIElements.viewObjectAnimator(binding.detailsHolder, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
+                UIElements.constraintLayoutElevationAnimator(binding.optionsHolder, 0f, 500, 0, DecelerateInterpolator())
                 Handler(Looper.getMainLooper()).postDelayed({
-                    if (detailsHolder.translationY == 0f) {
-                        optionsHolder.visibility = View.GONE
+                    if (binding.detailsHolder.translationY == 0f) {
+                        binding.optionsHolder.visibility = View.GONE
                         optionsExpanded = false
                     }
                 }, 500)
             } else {
-                UIElements.viewObjectAnimator(detailsHolder, "translationY", Calculations.convertToDP(context, -66f), 500, 0, DecelerateInterpolator(3f))
-                UIElements.constraintLayoutElevationAnimator(optionsHolder, Calculations.convertToDP(context, 12f), 500, 100, DecelerateInterpolator())
-                optionsHolder.visibility = View.VISIBLE
+                UIElements.viewObjectAnimator(binding.detailsHolder, "translationY", Calculations.convertToDP(context, -66f), 500, 0, DecelerateInterpolator(3f))
+                UIElements.constraintLayoutElevationAnimator(binding.optionsHolder, Calculations.convertToDP(context, 12f), 500, 100, DecelerateInterpolator())
+                binding.optionsHolder.visibility = View.VISIBLE
                 Handler(Looper.getMainLooper()).postDelayed({
-                    if (detailsHolder.translationY != 0f) {
+                    if (binding.detailsHolder.translationY != 0f) {
                         optionsExpanded = true
                     }
                 }, 500)
             }
         }
-        buttonSaveGradient.setOnClickListener {
+        binding.buttonSaveGradient.setOnClickListener {
             Vibration.lowFeedback(context)
             //UIElements.saveGradientDialog(context, Values.gradientScreenColours, (activity as MainActivity).window)
             val fm = fragmentManager as FragmentManager
@@ -374,7 +390,7 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
             saveGradientDialog.show(fm, "saveGradientDialog")
             //Save Gradient
         }
-        buttonSetWallpaper.setOnClickListener {
+        binding.buttonSetWallpaper.setOnClickListener {
             val fm = (activity as MainActivity).supportFragmentManager
             Vibration.lowFeedback(context)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -388,21 +404,21 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
             }
             //Set Wallpaper
         }
-        gradientViewer.setOnTouchListener { _, motionEvent ->
+        binding.gradientViewer.setOnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
                     if (!animatingFullscreen) {
                         animatingFullscreen = true
                         /** Animate UI Elements out **/
-                        UIElements.viewObjectAnimator(detailsHolder, "translationY",
-                                (90 * resources.displayMetrics.density) + detailsHolder.height,
+                        UIElements.viewObjectAnimator(binding.detailsHolder, "translationY",
+                                (90 * resources.displayMetrics.density) + binding.detailsHolder.height,
                                 500, 30, DecelerateInterpolator(3f))
-                        UIElements.viewObjectAnimator(actionsHolder, "translationY",
-                                (74 * resources.displayMetrics.density) + detailsHolder.height,
+                        UIElements.viewObjectAnimator(binding.actionsHolder, "translationY",
+                                (74 * resources.displayMetrics.density) + binding.detailsHolder.height,
                                 500, 0, DecelerateInterpolator(3f))
 
                         Handler(Looper.getMainLooper()).postDelayed({
-                            optionsHolder.visibility = View.INVISIBLE
+                            binding.optionsHolder.visibility = View.INVISIBLE
                             optionsExpanded = false
                         }, 100)
                     }
