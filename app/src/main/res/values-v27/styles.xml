@@ -13,11 +13,44 @@
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
     </style>
 
+    <style name="ThemeLight" parent="Main">
+        <item name="BackgroundColour">@color/lightBackground</item>
+        <item name="ForegroundColour">@color/lightForeground</item>
+        <item name="PrimaryTextColour">@color/lightTextPrimary</item>
+        <item name="SecondaryTextColour">@color/lightTextSecondary</item>
+        <item name="SupportBackground">@color/lightSupportBackground</item>
+    </style>
+
+    <style name="ThemeDark" parent="Main">
+        <item name="BackgroundColour">@color/darkBackground</item>
+        <item name="ForegroundColour">@color/darkForeground</item>
+        <item name="PrimaryTextColour">@color/darkTextPrimary</item>
+        <item name="SecondaryTextColour">@color/darkTextSecondary</item>
+        <item name="SupportBackground">@color/darkSupportBackground</item>
+    </style>
+
+    <style name="ThemeDarker" parent="Main">
+        <item name="BackgroundColour">@color/blackBackground</item>
+        <item name="ForegroundColour">@color/blackForeground</item>
+        <item name="PrimaryTextColour">@color/blackTextPrimary</item>
+        <item name="SecondaryTextColour">@color/blackTextSecondary</item>
+        <item name="SupportBackground">@color/darkSupportBackground</item>
+    </style>
+
     <style name="dialogStyle" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item> 
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowFullscreen">true</item>
+        <item name="windowMinWidthMajor">100%</item>
+        <item name="windowMinWidthMinor">100%</item>
         <item name="android:fitsSystemWindows">false</item>
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
     </style>
+    
+    <style name="Theme.AppCompat.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/darkBackground</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/icon_pebble_sunshine</item>
+        <item name="postSplashScreenTheme">@style/Main</item>
+    </style>
+    
 </resources>
