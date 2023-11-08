@@ -13,7 +13,6 @@ import android.view.animation.LinearInterpolator
 import android.widget.EditText
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
-import com.simple.chris.pebble.*
 import com.simple.chris.pebble.databinding.ActivityColourPickerBinding
 import com.simple.chris.pebble.functions.*
 import java.lang.Exception
@@ -304,7 +303,7 @@ class ColourPicker : AppCompatActivity() {
             }
         }
         valueAnimator.interpolator = DecelerateInterpolator(2f)
-        if (Values.settingsSpecialEffects) {
+        if (Values.settingSpecialEffects) {
             valueAnimator.duration = 500
         } else {
             valueAnimator.duration = 0
@@ -317,7 +316,7 @@ class ColourPicker : AppCompatActivity() {
 
         /** Checks if app setting unloaded during pause **/
         if (!Values.valuesLoaded) {
-            startActivity(Intent(this, SplashScreen::class.java))
+            startActivity(Intent(this, ActivityStarting::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         } else {

@@ -16,10 +16,8 @@ import android.view.animation.LinearInterpolator
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.simple.chris.pebble.R
 import com.simple.chris.pebble.activities.GradientCreator
 import com.simple.chris.pebble.activities.MainActivity
-import com.simple.chris.pebble.activities.SplashScreen
 import com.simple.chris.pebble.databinding.DialogPopupBinding
 import com.simple.chris.pebble.functions.UIElements
 import com.simple.chris.pebble.functions.Values
@@ -61,7 +59,7 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
             testConnection()
         }
 
-        if (Values.settingsSpecialEffects) {
+        if (Values.settingSpecialEffects) {
             try {
                 val rootView = requireActivity().window.decorView.findViewById<ViewGroup>(android.R.id.content)
                 val windowBackground = requireActivity().window.decorView.background
@@ -75,7 +73,7 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
                 Log.e("ERR", "pebble.gradient_long_click_dialog: ${e.localizedMessage}")
             }
         } else {
-            binding.backgroundDimmer.alpha = Values.dialogBackgroundDimmer
+            binding.backgroundDimmer.alpha = Values.dialogBackgroundDim
         }
 
         if (requireArguments().getInt("icon") != 0) {
@@ -201,9 +199,6 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
         when {
             popupName.contains("submit") -> {
                 (activity as GradientCreator).popupDialogHandler(popupName, position)
-            }
-            popupName.contains("splash") -> {
-                (activity as SplashScreen).popupDialogHandler(popupName, position)
             }
             else -> {
                 (activity as MainActivity).popupDialogHandler(popupName, position)

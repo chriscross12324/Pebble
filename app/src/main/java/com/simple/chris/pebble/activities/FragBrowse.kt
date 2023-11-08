@@ -630,7 +630,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
          * Checks if app settings unloaded during pause
          */
         if (!Values.valuesLoaded) {
-            startActivity(Intent((activity as MainActivity), SplashScreen::class.java))
+            startActivity(Intent((activity as MainActivity), ActivityStarting::class.java))
             (activity as MainActivity).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             (activity as MainActivity).finish()
         } else {

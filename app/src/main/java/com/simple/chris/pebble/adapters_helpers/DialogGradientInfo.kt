@@ -10,11 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.*
-import android.widget.Toast
-import androidx.dynamicanimation.animation.DynamicAnimation
-import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.fragment.app.DialogFragment
-import com.simple.chris.pebble.R
 import com.simple.chris.pebble.databinding.DialogLongPressGradientsBinding
 import com.simple.chris.pebble.functions.Calculations
 import com.simple.chris.pebble.functions.UIElement
@@ -55,7 +51,7 @@ class DialogGradientInfo : DialogFragment() {
         dialog!!.window!!.setDimAmount(0f)
         val gradientPos = requireArguments().getIntArray("viewPos")!!
 
-        if (Values.settingsSpecialEffects) {
+        if (Values.settingSpecialEffects) {
             try {
                 val rootView = requireActivity().window.decorView.findViewById<ViewGroup>(android.R.id.content)
                 val windowBackground = requireActivity().window.decorView.background
@@ -69,10 +65,10 @@ class DialogGradientInfo : DialogFragment() {
                 Log.e("ERR", "pebble.gradient_long_click_dialog: ${e.localizedMessage}")
             }
         } else {
-            binding.backgroundDimmer.alpha = Values.dialogBackgroundDimmer
+            binding.backgroundDimmer.alpha = Values.dialogBackgroundDim
         }
 
-        UIElement.gradientDrawableNew(activity as Context, binding.gradientPreview, requireArguments().getStringArrayList("array")!!, Values.gradientCornerRadius)
+        UIElement.gradientDrawableNew(activity as Context, binding.gradientPreview, requireArguments().getStringArrayList("array")!!, 15f)
         binding.gradientDialogGradientName.text = requireArguments().getString("name")
         binding.gradientDialogGradientDescription.text = requireArguments().getString("desc")
 

@@ -13,14 +13,10 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.view.animation.OvershootInterpolator
 import androidx.fragment.app.DialogFragment
-import com.simple.chris.pebble.R
 import com.simple.chris.pebble.databinding.DialogColourInfoBinding
-import com.simple.chris.pebble.functions.UIElement
 import com.simple.chris.pebble.functions.UIElements
 import com.simple.chris.pebble.functions.Values
-import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
 import java.io.Serializable
 
@@ -56,7 +52,7 @@ class DialogColourInfo : DialogFragment() {
         dialog!!.window!!.setDimAmount(0f)
         val hexString = requireArguments().getString("hexString")!!
 
-        if (Values.settingsSpecialEffects) {
+        if (Values.settingSpecialEffects) {
             try {
                 val rootView = requireActivity().window.decorView.findViewById<ViewGroup>(android.R.id.content)
                 val windowBackground = requireActivity().window.decorView.background
@@ -70,7 +66,7 @@ class DialogColourInfo : DialogFragment() {
                 Log.e("ERR", "pebble.gradient_long_click_dialog: ${e.localizedMessage}")
             }
         } else {
-            binding.backgroundDimmer.alpha = Values.dialogBackgroundDimmer
+            binding.backgroundDimmer.alpha = Values.dialogBackgroundDim
         }
 
         /** Calculate RGB & HSV values **/

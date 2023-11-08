@@ -31,13 +31,13 @@ object UIElement {
     var dialogsToShow = LinkedBlockingDeque<Dialog>()
 
     fun setTheme(context: Context) {
-        when (Values.settingThemes) {
+        when (Values.settingTheme) {
             "light" -> context.setTheme(R.style.ThemeLight)
             "dark" -> context.setTheme(R.style.ThemeDark)
             "darker" -> context.setTheme(R.style.ThemeDarker)
             "black" -> {
                 context.setTheme(R.style.ThemeDarker)
-                Values.settingThemes = "darker"
+                Values.settingTheme = "darker"
             }
         }
     }
@@ -230,7 +230,7 @@ object UIElement {
         }
 
         *//** Create blurView **//*
-        if (decorView != null && Values.settingsSpecialEffects) {
+        if (decorView != null && Values.settingSpecialEffects) {
             try {
                 val rootView = decorView.findViewById<ViewGroup>(android.R.id.content)
                 val windowBackground = decorView.background

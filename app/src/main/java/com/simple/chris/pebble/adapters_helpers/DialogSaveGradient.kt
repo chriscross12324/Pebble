@@ -16,10 +16,8 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.view.animation.OvershootInterpolator
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.simple.chris.pebble.R
 import com.simple.chris.pebble.databinding.DialogSaveGradientBinding
 import com.simple.chris.pebble.functions.Calculations
 import com.simple.chris.pebble.functions.UIElement
@@ -29,7 +27,6 @@ import eightbitlab.com.blurview.RenderScriptBlur
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
-import java.net.URI
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -70,7 +67,7 @@ class DialogSaveGradient : DialogFragment() {
         binding.heightText.setText(Calculations.screenMeasure(activity as Context, "height", requireActivity().window).toString())
         binding.widthText.setText(Calculations.screenMeasure(activity as Context, "width", requireActivity().window).toString())
 
-        if (Values.settingsSpecialEffects) {
+        if (Values.settingSpecialEffects) {
             try {
                 val rootView = requireActivity().window.decorView.findViewById<ViewGroup>(android.R.id.content)
                 val windowBackground = requireActivity().window.decorView.background
@@ -84,7 +81,7 @@ class DialogSaveGradient : DialogFragment() {
                 Log.e("ERR", "pebble.save_gradient_dialog: ${e.localizedMessage}")
             }
         } else {
-            binding.backgroundDimmer.alpha = Values.dialogBackgroundDimmer
+            binding.backgroundDimmer.alpha = Values.dialogBackgroundDim
         }
 
         binding.holder.post {

@@ -140,7 +140,7 @@ object UIElements {
     @SuppressLint("MissingPermission") //[Dec 9, 2022] - Suppressing as I no longer wish to make large changes, and the try/catch will lazily handle any issues
     fun setWallpaper(context: Context, imageView: BlurImageView, alphaLayer: ImageView, window: Window) {
         if (Permissions.readStoragePermissionGiven(context)) {
-            if (Values.settingsSpecialEffects) {
+            if (Values.settingSpecialEffects) {
                 try {
                     val wallpaper: WallpaperManager = WallpaperManager.getInstance(context)
                     val wallpaperDrawable: Drawable = wallpaper.drawable!!
@@ -281,7 +281,7 @@ object UIElements {
         }
 
         /** Create blurView **/
-        if (Values.settingsSpecialEffects) {
+        if (Values.settingSpecialEffects) {
             try {
                 val rootView = window.decorView.findViewById<ViewGroup>(android.R.id.content)
                 val windowBackground = window.decorView.background
@@ -296,10 +296,10 @@ object UIElements {
                 Log.e("ERR", "pebble.ui_elements.popup_dialog: ${e.localizedMessage}")
             }
             val backgroundDimmer = saveGradientDialog.findViewById<ImageView>(R.id.backgroundDimmer)
-            backgroundDimmer.alpha = Values.dialogBackgroundDimmer
+            backgroundDimmer.alpha = Values.dialogBackgroundDim
         } else {
             val backgroundDimmer = saveGradientDialog.findViewById<ImageView>(R.id.backgroundDimmer)
-            backgroundDimmer.alpha = Values.dialogBackgroundDimmer
+            backgroundDimmer.alpha = Values.dialogBackgroundDim
         }
     }
 

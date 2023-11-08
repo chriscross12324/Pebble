@@ -100,7 +100,6 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     }
 
     override fun onAttachedToWindow() {
-        UIElements.setWallpaper(this, binding.wallpaperImageViewer, binding.wallpaperImageAlpha, window)
         binding.fragmentHolder.post {
             Values.screenHeight = Calculations.screenMeasure(this, "height", window)
             bottomSheetPeekHeight = (screenHeight * (0.667)).toInt()
@@ -287,21 +286,21 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
             /** Animate SharedElement **/
             UIElements.viewWidthAnimator(binding.gradientScreenAnimationHero, binding.gradientScreenAnimationHero.measuredWidth.toFloat(),
-                    Calculations.screenMeasure(this, "width", window).toFloat(), Values.sharedElementLength, 0, DecelerateInterpolator(3f))
+                    Calculations.screenMeasure(this, "width", window).toFloat(), Values.animationDuration, 0, DecelerateInterpolator(3f))
             UIElements.viewHeightAnimator(binding.gradientScreenAnimationHero, binding.gradientScreenAnimationHero.measuredHeight.toFloat(),
-                    Calculations.screenMeasure(this, "height", window).toFloat(), Values.sharedElementLength, 0, DecelerateInterpolator(3f))
-            UIElements.viewObjectAnimator(binding.gradientScreenAnimationHero, "translationX", 0f, Values.sharedElementLength, 0,
+                    Calculations.screenMeasure(this, "height", window).toFloat(), Values.animationDuration, 0, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(binding.gradientScreenAnimationHero, "translationX", 0f, Values.animationDuration, 0,
                     DecelerateInterpolator(3f))
             UIElements.viewObjectAnimator(binding.gradientScreenAnimationHero, "translationY",
                     (Calculations.screenMeasure(this, "height", window) - binding.gradientScreenAnimationHero.measuredHeight).toFloat() / 2,
-                    Values.sharedElementLength, 0, DecelerateInterpolator(3f))
-            UIElements.cardViewCornerRadiusAnimator(binding.gradientScreenAnimationHero, 0f, Values.sharedElementLength - 100, 0, LinearInterpolator())
+                    Values.animationDuration, 0, DecelerateInterpolator(3f))
+            UIElements.cardViewCornerRadiusAnimator(binding.gradientScreenAnimationHero, 0f, Values.animationDuration - 100, 0, LinearInterpolator())
 
             Handler(Looper.getMainLooper()).postDelayed({
                 startActivity(Intent(this, GradientCreator::class.java))
                 overridePendingTransition(0, 0)
                 Values.animatingSharedElement = false
-            }, Values.sharedElementLength)
+            }, Values.animationDuration)
         }, 0)
     }
 
@@ -375,19 +374,6 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                         Values.dialogPopup = DialogPopup.newDialog(HashMaps.onOffAsk(), "settingNetwork", R.drawable.icon_cell_wifi, R.string.word_network,
                                 null, R.string.question_setting_network, null)
                         Values.dialogPopup.show(fm, "settingNetwork")
-                    }
-                }
-            }
-            "donate" -> {
-                when (position) {
-                    0 -> {
-                        Values.adLoading = true
-                        //mInterstitialAd.loadAd(AdRequest.Builder().build())
-                        //UIElement.popupDialog(this, "loadingAd", null, R.string.dual_ad_loading, null, R.string.sentence_ad_loading, null, window.decorView, null)
-                        val fm = supportFragmentManager
-                        Values.dialogPopup = DialogPopup.newDialog(null, "loadingAd", null,
-                                R.string.dual_ad_loading, null, R.string.sentence_ad_loading, null)
-                        Values.dialogPopup.show(fm, "loadingAd")
                     }
                 }
             }
@@ -516,16 +502,16 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             UIElement.gradientDrawableNew(this, binding.sharedElementGradientViewer, Values.gradientScreenColours, 0f)
 
             /** Animate SharedElement **/
-            UIElements.viewWidthAnimator(binding.gradientScreenAnimationHero, gradientViewSizeX, secondaryFragScaleX, Values.sharedElementLength, 0, DecelerateInterpolator(3f))
-            UIElements.viewHeightAnimator(binding.gradientScreenAnimationHero, gradientViewSizeY, secondaryFragScaleY, Values.sharedElementLength, 0, DecelerateInterpolator(3f))
-            UIElements.viewObjectAnimator(binding.gradientScreenAnimationHero, "translationX", secondaryFragPosX, Values.sharedElementLength, 0, DecelerateInterpolator(3f))
-            UIElements.viewObjectAnimator(binding.gradientScreenAnimationHero, "translationY", 0f, Values.sharedElementLength, 0, DecelerateInterpolator(3f))
-            UIElements.cardViewCornerRadiusAnimator(binding.gradientScreenAnimationHero, 0f, Values.sharedElementLength - 100, 0, LinearInterpolator())
+            UIElements.viewWidthAnimator(binding.gradientScreenAnimationHero, gradientViewSizeX, secondaryFragScaleX, Values.animationDuration, 0, DecelerateInterpolator(3f))
+            UIElements.viewHeightAnimator(binding.gradientScreenAnimationHero, gradientViewSizeY, secondaryFragScaleY, Values.animationDuration, 0, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(binding.gradientScreenAnimationHero, "translationX", secondaryFragPosX, Values.animationDuration, 0, DecelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(binding.gradientScreenAnimationHero, "translationY", 0f, Values.animationDuration, 0, DecelerateInterpolator(3f))
+            UIElements.cardViewCornerRadiusAnimator(binding.gradientScreenAnimationHero, 0f, Values.animationDuration - 100, 0, LinearInterpolator())
 
             /** Tells app sharedElement can be dismissed **/
             Handler(Looper.getMainLooper()).postDelayed({
                 Values.canDismissSharedElement = true
-            }, Values.sharedElementLength)
+            }, Values.animationDuration)
         }
     }
 
@@ -693,24 +679,24 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         val fm = supportFragmentManager
         when (dialogName) {
             "settingTheme" -> {
-                val current = Values.settingThemes
+                val current = Values.settingTheme
                 when (position) {
                     0 -> {
                         //Light
-                        Values.settingThemes = "light"
+                        Values.settingTheme = "light"
                     }
                     1 -> {
                         //Dark
-                        Values.settingThemes = "dark"
+                        Values.settingTheme = "dark"
                     }
                     2 -> {
                         //Darker
-                        Values.settingThemes = "darker"
+                        Values.settingTheme = "darker"
                     }
                 }
                 ////dialogPopupHider()
                 Handler(Looper.getMainLooper()).postDelayed({
-                    if (current != Values.settingThemes) {
+                    if (current != Values.settingTheme) {
                         hideSmallScreen()
                         refreshTheme()
                     }
@@ -720,11 +706,11 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                 when (position) {
                     0 -> {
                         //On
-                        Values.settingVibrations = true
+                        Values.settingVibration = true
                     }
                     1 -> {
                         //Off
-                        Values.settingVibrations = false
+                        Values.settingVibration = false
                     }
                 }
                 //dialogPopupHider()
@@ -733,15 +719,13 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                 when (position) {
                     0 -> {
                         //On
-                        Values.settingsSpecialEffects = true
+                        Values.settingSpecialEffects = true
                     }
                     1 -> {
                         //Off
-                        Values.settingsSpecialEffects = false
+                        Values.settingSpecialEffects = false
                     }
                 }
-                ////dialogPopupHider()
-                UIElements.setWallpaper(this, binding.wallpaperImageViewer, binding.wallpaperImageAlpha, window)
             }
             "settingSplitScreen" -> {
                 when (position) {
@@ -756,49 +740,12 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                 }
                 //dialogPopupHider()
             }
-            "settingNetwork" -> {
-                when (position) {
-                    0 -> {
-                        //On
-                        Values.useMobileData = "on"
-                    }
-                    1 -> {
-                        //Ask Every-time
-                        Values.useMobileData = "ask"
-                    }
-                }
-                //dialogPopupHider()
-            }
             "leave" -> {
                 when (position) {
                     0 -> {
                         finishAndRemoveTask()
                     }
                     //1 -> //dialogPopupHider()
-                }
-            }
-            "askMobile" -> {
-                when (position) {
-                    0 -> {
-                        //Values.dialogPopup.dismiss()
-                        Connection.getGradientsFireStore(this)
-                        Log.e("INFO", "0")
-                        //UIElement.popupDialogHider()
-                    }
-                    1 -> {
-                        Values.useMobileData = "on"
-                        //Values.dialogPopup.dismiss()
-                        Connection.getGradientsFireStore(this)
-                        Log.e("INFO", "1")
-                        //UIElement.popupDialogHider()
-                    }
-                    2 -> {
-                        //UIElement.popupDialogHider()
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            Connection.checkConnection(this, this)
-                            Log.e("INFO", "2")
-                        }, Values.dialogShowAgainTime)
-                    }
                 }
             }
             "noConnection" -> {
@@ -866,7 +813,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             "appError" -> {
                 when (position) {
                     0 -> {
-                        startActivity(Intent(this, SplashScreen::class.java))
+                        startActivity(Intent(this, ActivityStarting::class.java))
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                         finish()
                     }

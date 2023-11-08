@@ -232,7 +232,7 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
                 /**
                  * Sets prerequisites for textViews
                  */
-                binding.gradientCreatorGradientName.setText(Values.gradientCreatorGradientName)
+                binding.gradientCreatorGradientName.setText(Values.gradientCreatorName)
                 binding.gradientCreatorGradientDescription.setText(Values.gradientCreatorDescription)
 
                 firstStepEnterAnim()
@@ -482,7 +482,7 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
         super.onResume()
         /** Check if appSettings unloaded **/
         if (!Values.valuesLoaded) {
-            startActivity(Intent(this, SplashScreen::class.java))
+            startActivity(Intent(this, ActivityStarting::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }
