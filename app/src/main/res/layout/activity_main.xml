@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?BackgroundColour"
     tools:context=".activities.MainActivity">
 
     <androidx.cardview.widget.CardView
@@ -24,30 +25,6 @@
             android:background="@drawable/placeholder_gradient" />
 
     </androidx.cardview.widget.CardView>
-
-
-    <com.jgabrielfreitas.core.BlurImageView
-        android:id="@+id/wallpaperImageViewer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <ImageView
-        android:id="@+id/wallpaperImageAlpha"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0.5"
-        android:background="?BackgroundColour"/>
-
-    <LinearLayout
-        android:layout_width="150dp"
-        android:layout_height="170dp"
-        android:orientation="horizontal"
-        android:transitionName="gradientCreatorViewer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent">
-
-    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/separator"
@@ -143,7 +120,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wallpaperImageViewer">
+        app:layout_constraintTop_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
