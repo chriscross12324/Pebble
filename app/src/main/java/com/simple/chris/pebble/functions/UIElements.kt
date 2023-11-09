@@ -244,7 +244,7 @@ object UIElements {
         val backgroundDimmer = saveGradientDialog.findViewById<ImageView>(R.id.backgroundDimmer)
 
         /** Set UI Elements **/
-        UIElement.gradientDrawableNew(context, gradientPreview, colourArray, 20f)
+        generateGradientDrawable(context, gradientPreview, colourArray, 20f)
         //heightText.setText(Calculations.screenMeasure(context, "height", window))
         //widthText.setText(Calculations.screenMeasure(context, "width", window))
 

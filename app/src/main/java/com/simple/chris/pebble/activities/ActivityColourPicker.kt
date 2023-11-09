@@ -33,7 +33,7 @@ class ActivityColourPicker : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        UIElement.setTheme(this)
+        setAppTheme(this)
         binding = ActivityColourPickerBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)

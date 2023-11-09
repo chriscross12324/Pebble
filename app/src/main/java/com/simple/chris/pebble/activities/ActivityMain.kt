@@ -66,7 +66,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        UIElement.setTheme(this)
+        setAppTheme(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -447,7 +447,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                 ),
                 0, 0, LinearInterpolator()
             )
-            UIElement.gradientDrawableNew(
+            generateGradientDrawable(
                 this,
                 binding.sharedElementGradientViewer,
                 Values.gradientCreatorColours,
@@ -816,7 +816,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                 0,
                 LinearInterpolator()
             )
-            UIElement.gradientDrawableNew(
+            generateGradientDrawable(
                 this,
                 binding.sharedElementGradientViewer,
                 Values.gradientScreenColours,
@@ -1005,7 +1005,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                 }
 
                 /** Set initial properties of SharedElement **/
-                UIElement.gradientDrawableNew(
+                generateGradientDrawable(
                     this,
                     binding.sharedElementGradientViewer,
                     Values.gradientScreenColours,
@@ -1155,7 +1155,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
     private fun hideGradientCreator() {
         /** Set initial properties of SharedElement **/
-        UIElement.gradientDrawableNew(
+        generateGradientDrawable(
             this,
             binding.sharedElementGradientViewer,
             Values.gradientCreatorColours,
@@ -1372,7 +1372,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                             Handler(Looper.getMainLooper()).postDelayed({
                                 wallpaperManager.setBitmap(
                                     createBitmap(
-                                        UIElement.gradientDrawableNew(
+                                        generateGradientDrawable(
                                             this,
                                             null,
                                             Values.gradientScreenColours,
@@ -1402,7 +1402,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                             Handler(Looper.getMainLooper()).postDelayed({
                                 wallpaperManager.setBitmap(
                                     createBitmap(
-                                        UIElement.gradientDrawableNew(
+                                        generateGradientDrawable(
                                             this,
                                             null,
                                             Values.gradientScreenColours,
@@ -1437,7 +1437,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                         try {
                             wallpaperManager.setBitmap(
                                 createBitmap(
-                                    UIElement.gradientDrawableNew(
+                                    generateGradientDrawable(
                                         this,
                                         null,
                                         Values.gradientScreenColours,

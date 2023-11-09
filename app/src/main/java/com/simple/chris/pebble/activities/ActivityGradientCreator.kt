@@ -41,7 +41,7 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        UIElement.setTheme(this)
+        setAppTheme(this)
         binding = ActivityGradientCreateBinding.inflate(layoutInflater)
         val view = binding.root;
         setContentView(view)
@@ -312,7 +312,7 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
 
     internal fun setGradientDrawable() {
         /** Draw GradientDrawable **/
-        UIElement.gradientDrawableNew(this, binding.gradientViewer, Values.gradientCreatorColours, 0f)
+        generateGradientDrawable(this, binding.gradientViewer, Values.gradientCreatorColours, 0f)
     }
 
     override fun onButtonClick(position: Int, view: View) {

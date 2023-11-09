@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.UIElement
+import com.simple.chris.pebble.functions.generateGradientDrawable
 
 /**
  * Creates a gradient modules for each gradient
@@ -53,7 +54,7 @@ class GradientRecyclerView internal constructor(var context: Context, private va
             holder.gradientName.text = details["gradientName"]
             val gradientColours = details["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }
             val nl = ArrayList<String>(gradientColours)
-            UIElement.gradientDrawableNew(context, holder.gradientViewer, nl, 25f)
+            generateGradientDrawable(context, holder.gradientViewer, nl, 25f)
             holder.gradientViewer.transitionName = details["gradientName"]
         } catch (e: Exception) {
             holder.gradientViewer.setBackgroundColor(context.resources.getColor(R.color.pebbleEnd))

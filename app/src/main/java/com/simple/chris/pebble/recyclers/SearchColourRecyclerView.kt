@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.ColourButtonItem
 import com.simple.chris.pebble.functions.UIElement
+import com.simple.chris.pebble.functions.generateGradientDrawable
 
 class SearchColourRecyclerView internal constructor(
     var context: Context,
@@ -45,20 +46,18 @@ class SearchColourRecyclerView internal constructor(
             if (buttons != null) {
                 val details: ColourButtonItem = buttons[position]
                 //Log.e("COLOUR", "${details["buttonColour"]}")
-                UIElement.gradientDrawable(
+                generateGradientDrawable(
                     context,
                     holder.buttonBackground,
-                    Color.parseColor(details.buttonHex),
-                    Color.parseColor(details.buttonHex),
+                    arrayListOf(details.buttonHex),
                     20f
                 )
             } else if (buttonsArray != null) {
                 val details: String = buttonsArray[position]
-                UIElement.gradientDrawable(
+                generateGradientDrawable(
                     context,
                     holder.buttonBackground,
-                    Color.parseColor(details),
-                    Color.parseColor(details),
+                    arrayListOf(details),
                     20f
                 )
             }

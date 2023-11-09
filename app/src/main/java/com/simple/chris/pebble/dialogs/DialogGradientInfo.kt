@@ -16,6 +16,7 @@ import com.simple.chris.pebble.functions.UIElement
 import com.simple.chris.pebble.functions.UIElements
 import com.simple.chris.pebble.functions.Values
 import com.simple.chris.pebble.functions.convertFloatToDP
+import com.simple.chris.pebble.functions.generateGradientDrawable
 import com.simple.chris.pebble.functions.getScreenMetrics
 import eightbitlab.com.blurview.RenderScriptBlur
 import java.io.Serializable
@@ -66,7 +67,7 @@ class DialogGradientInfo : DialogFragment() {
             binding.backgroundDimmer.alpha = Values.dialogBackgroundDim
         }
 
-        UIElement.gradientDrawableNew(activity as Context, binding.gradientPreview, requireArguments().getStringArrayList("array")!!, 15f)
+        generateGradientDrawable(activity as Context, binding.gradientPreview, requireArguments().getStringArrayList("array")!!, 15f)
         binding.gradientDialogGradientName.text = requireArguments().getString("name")
         binding.gradientDialogGradientDescription.text = requireArguments().getString("desc")
 

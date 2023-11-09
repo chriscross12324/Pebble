@@ -165,7 +165,7 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
 
     fun showUI() {
         /** Set visibility for UI Elements **/
-        UIElement.gradientDrawableNew(context, binding.gradientViewer, gradientColourArray, 0f)
+        generateGradientDrawable(context, binding.gradientViewer, gradientColourArray, 0f)
         UIElements.viewVisibility(binding.gradientViewer, View.VISIBLE, 0)
         UIElements.viewVisibility(binding.detailsHolder, View.VISIBLE, 0)
         UIElements.viewVisibility(binding.actionsHolder, View.VISIBLE, 0)
@@ -223,7 +223,7 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
         binding.colourElementsRecycler.adapter = buttonAdapter
 
         val arrayList = ArrayList<String>()
-        /*Palette.Builder(Calculations.createBitmap(UIElement.gradientDrawableNew((activity as MainActivity), null, Values.gradientScreenColours, 0f)!!,
+        /*Palette.Builder(Calculations.createBitmap(generateGradientDrawable((activity as MainActivity), null, Values.gradientScreenColours, 0f)!!,
             100, 100)).maximumColorCount(6).generate {
                 it?.let {
                     for (i in 0 until 5) {
@@ -449,7 +449,7 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
                 when (position) {
                     0 -> {
                         try {
-                            wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(context, null, Values.gradientScreenColours, 0f) as Drawable,
+                            wallpaperManager.setBitmap(Calculations.createBitmap(generateGradientDrawable(context, null, Values.gradientScreenColours, 0f) as Drawable,
                                     Calculations.screenMeasure(context, "width", context.window), getScreenMetrics(context, context.window).height)),
                                     null, true, WallpaperManager.FLAG_SYSTEM)
                             runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
@@ -459,7 +459,7 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
                     }
                     1 -> {
                         try {
-                            wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(context, null, Values.gradientScreenColours, 0f) as Drawable,
+                            wallpaperManager.setBitmap(Calculations.createBitmap(generateGradientDrawable(context, null, Values.gradientScreenColours, 0f) as Drawable,
                                     Calculations.screenMeasure(context, "width", context.window), getScreenMetrics(context, context.window).height)),
                                     null, true, WallpaperManager.FLAG_LOCK)
                             runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
@@ -476,7 +476,7 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
                 when (position) {
                     0 -> {
                         try {
-                            wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(context, null, Values.gradientScreenColours, 0f) as Drawable,
+                            wallpaperManager.setBitmap(Calculations.createBitmap(generateGradientDrawable(context, null, Values.gradientScreenColours, 0f) as Drawable,
                                     Calculations.screenMeasure(context, "width", context.window), getScreenMetrics(context, context.window).height)))
                             runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
                         } catch (e: Exception) {
