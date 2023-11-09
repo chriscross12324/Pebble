@@ -307,7 +307,7 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
             /** Animates notification in **/
             Handler(Looper.getMainLooper()).postDelayed({
                 try {
-                    Vibration.notification(context)
+                    vibrateNotification(context)
                     binding.notification.visibility = View.VISIBLE
                     UIElements.viewObjectAnimator(binding.notification, "translationY", (binding.notification.height + getCutoutHeight(context.window) +
                             convertFloatToDP(context, 16f)), 500, 0, DecelerateInterpolator(3f))
@@ -332,14 +332,14 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
     fun buttonFunctionality() {
         binding.buttonBack.setOnClickListener {
             Values.currentGradientScreenPos = -1
-            Vibration.mediumFeedback(context)
+            vibrateMedium(context)
             hideUI()
             Values.currentlySplitScreened = false
             Values.currentActivity = "Browse"
         }
         binding.buttonOptions.setOnClickListener {
             if (!optionsAnimating) {
-                Vibration.mediumFeedback(context)
+                vibrateMedium(context)
                 optionsAnimating = true
 
                 if (optionsExpanded) {
@@ -387,7 +387,7 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
             }
         }
         binding.buttonSaveGradient.setOnClickListener {
-            Vibration.lowFeedback(context)
+            vibrateWeak(context)
             //UIElements.saveGradientDialog(context, Values.gradientScreenColours, (activity as MainActivity).window)
             val fm = fragmentManager as FragmentManager
             val saveGradientDialog = DialogSaveGradient.newInstance(Values.gradientScreenColours)
@@ -396,7 +396,7 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
         }
         binding.buttonSetWallpaper.setOnClickListener {
             val fm = (activity as ActivityMain).supportFragmentManager
-            Vibration.lowFeedback(context)
+            vibrateWeak(context)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Values.dialogPopup = DialogPopup.newDialog(
                     arraySetWallpaper(), "setWallpaper", R.drawable.icon_wallpaper, R.string.dual_set_wallpaper,

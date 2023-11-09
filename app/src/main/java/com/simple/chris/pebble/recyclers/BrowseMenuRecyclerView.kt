@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.ButtonItem
-import com.simple.chris.pebble.functions.Vibration
+import com.simple.chris.pebble.functions.vibrateMedium
 
 class BrowseMenuRecyclerView internal constructor(var context: Context, private val buttons: List<ButtonItem>, onButtonListener: OnButtonListener): RecyclerView.Adapter<BrowseMenuRecyclerView.ViewHolder>() {
     private var mOnButtonListener = onButtonListener
@@ -52,7 +52,7 @@ class BrowseMenuRecyclerView internal constructor(var context: Context, private 
 
         override fun onClick(v: View?) {
             myOnButtonListener.onButtonClick(adapterPosition, v as View)
-            Vibration.mediumFeedback(context)
+            vibrateMedium(context)
         }
     }
 

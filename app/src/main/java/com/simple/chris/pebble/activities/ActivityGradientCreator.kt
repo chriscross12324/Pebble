@@ -68,7 +68,7 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
 
     private fun buttonFunctionality() {
         binding.buttonBack.setOnClickListener {
-            Vibration.lowFeedback(this)
+            vibrateWeak(this)
             if (!modeSubmitGradient) {
                 //Exit
                 firstStepExitAnim(true)
@@ -80,7 +80,7 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
         }
 
         binding.buttonNext.setOnClickListener {
-            Vibration.lowFeedback(this)
+            vibrateWeak(this)
             if (!modeSubmitGradient) {
                 modeSubmitGradient = true
                 secondStepAnimIn(true)
@@ -100,7 +100,7 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
                     it.alpha = 0.5f
                 }
             } else {
-                Vibration.notification(this)
+                vibrateNotification(this)
                 it.alpha = 0.5f
             }
         }
@@ -119,7 +119,7 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
                     UIElements.viewObjectAnimator(binding.notification, "translationY", convertFloatToDP(this, -8f) - binding.notification.measuredHeight,
                             250, 0, DecelerateInterpolator(3f))
                 } else {
-                    Vibration.notification(this)
+                    vibrateNotification(this)
                     it.alpha = 0.5f
                 }
             }
@@ -128,7 +128,7 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
         binding.buttonRandomGradient.setOnClickListener {
             if (!generatingGradient) {
                 generatingGradient = true
-                Vibration.lowFeedback(this)
+                vibrateWeak(this)
                 it.alpha = 0.5f
                 binding.buttonAddColour.alpha = 0.5f
                 binding.buttonRemoveColour.alpha = 0.5f
@@ -183,7 +183,7 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
         /** Touch Events **/
         val itemTouchHelper = object : ItemTouchHelper.Callback() {
             override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-                Vibration.strongFeedback(this@ActivityGradientCreator)
+                vibrateStrong(this@ActivityGradientCreator)
                 return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG,
                         ItemTouchHelper.DOWN or ItemTouchHelper.UP or ItemTouchHelper.START or ItemTouchHelper.END)
                 //Log.e("INFO", "Moving")
@@ -202,7 +202,7 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
                     }
                 }
                 buttonAdapter.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
-                Vibration.lowFeedback(this@ActivityGradientCreator)
+                vibrateWeak(this@ActivityGradientCreator)
                 setGradientDrawable()
                 return true
             }

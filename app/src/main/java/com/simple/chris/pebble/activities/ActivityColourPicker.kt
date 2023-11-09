@@ -45,7 +45,7 @@ class ActivityColourPicker : AppCompatActivity() {
 
         binding.colourPickerSaveButton.setOnClickListener {
             try {
-                Vibration.mediumFeedback(this)
+                vibrateMedium(this)
                 val colour = Color.parseColor("#$hexString")
                 Values.gradientCreatorColours[Values.editingColourAtPos] = "#$hexString"
 
@@ -56,11 +56,11 @@ class ActivityColourPicker : AppCompatActivity() {
 
         binding.colourPickerBackButton.setOnClickListener {
             animationOut()
-            Vibration.lowFeedback(this)
+            vibrateWeak(this)
         }
 
         binding.randomColourButton.setOnClickListener {
-            Vibration.lowFeedback(this)
+            vibrateWeak(this)
             val rgbRNDM = Random
             val generatedColour = Color.rgb(rgbRNDM.nextInt(256), rgbRNDM.nextInt(256), rgbRNDM.nextInt(256))
             Color.colorToHSV(generatedColour, hsv)

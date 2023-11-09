@@ -238,7 +238,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         val handler = Handler(Looper.getMainLooper())
         val runnable = Runnable {
             try {
-                Vibration.lowFeedback((activity as ActivityMain))
+                vibrateWeak((activity as ActivityMain))
                 UIElements.viewWidthAnimator(binding.browseScrollbar, binding.browseScrollbar.measuredWidth.toFloat(), convertFloatToDP((activity as ActivityMain), 2.5f), 500, 0, DecelerateInterpolator(3f))
                 UIElements.viewObjectAnimator(binding.browseScrollbar, "translationX", convertFloatToDP((activity as ActivityMain), 8f), 500, 0, DecelerateInterpolator(3f))
             } catch (e: Exception) {
@@ -250,7 +250,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
                     isDragging = true
-                    Vibration.mediumFeedback((activity as ActivityMain))
+                    vibrateMedium((activity as ActivityMain))
                     binding.gradientGrid.suppressLayout(true)
                     binding.gradientGrid.suppressLayout(false)
                     handler.removeCallbacks(runnable)
@@ -260,7 +260,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                 }
                 MotionEvent.ACTION_UP -> {
                     isDragging = false
-                    Vibration.mediumFeedback((activity as ActivityMain))
+                    vibrateMedium((activity as ActivityMain))
                     handler.postDelayed(runnable, 1000)
                     true
                 }
@@ -319,7 +319,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         UIElement.animateViewWidth("height", binding.menu, getViewMetrics(binding.menu).height, 50, 500)
         UIElements.viewObjectAnimator(binding.menuArrow, "translationY", convertFloatToDP((activity as ActivityMain), 0f), 250, 250, DecelerateInterpolator())
         UIElements.viewVisibility(binding.menuArrow, View.VISIBLE, 250)
-        Vibration.lowFeedback((activity as ActivityMain))
+        vibrateWeak((activity as ActivityMain))
     }
 
     private fun hideMenu() {
@@ -440,7 +440,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
     override fun onGradientClick(position: Int, view: View) {
         if (!Values.animatingSharedElement) {
             Log.d("DEBUG", "Not Animating")
-            Vibration.lowFeedback((activity as ActivityMain))
+            vibrateWeak((activity as ActivityMain))
             Values.currentGradientScreenView = view
             Values.animatingSharedElement = true
             Values.canDismissSharedElement = false
@@ -451,7 +451,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
     }
 
     override fun onGradientLongClick(position: Int, view: View) {
-        Vibration.lowFeedback((activity as ActivityMain))
+        vibrateWeak((activity as ActivityMain))
         val gradientScaleX = ObjectAnimator.ofFloat(view, "scaleX", 0.9f)
         val gradientScaleY = ObjectAnimator.ofFloat(view, "scaleY", 0.9f)
         gradientScaleX.duration = 125
@@ -491,7 +491,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
             longClickGradientDialog.show(fm, "longClickGradientDialog")
 
             Handler(Looper.getMainLooper()).postDelayed({
-                Vibration.mediumFeedback((activity as ActivityMain))
+                vibrateMedium((activity as ActivityMain))
             }, 150)
         }, 150)
     }

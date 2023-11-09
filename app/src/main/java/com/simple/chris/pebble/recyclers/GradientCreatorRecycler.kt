@@ -11,8 +11,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.functions.Vibration
 import com.simple.chris.pebble.functions.convertFloatToDP
+import com.simple.chris.pebble.functions.vibrateWeak
 import kotlin.math.roundToInt
 
 class GradientCreatorRecycler internal constructor(var context: Context, private val colours: ArrayList<String>, onButtonListener: OnButtonListener): RecyclerView.Adapter<GradientCreatorRecycler.ViewHolder>() {
@@ -54,7 +54,7 @@ class GradientCreatorRecycler internal constructor(var context: Context, private
 
         override fun onClick(v: View?) {
             myOnButtonListener.onButtonClick(adapterPosition, v as View)
-            Vibration.lowFeedback(context)
+            vibrateWeak(context)
         }
     }
 

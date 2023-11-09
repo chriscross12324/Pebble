@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.ButtonItem
-import com.simple.chris.pebble.functions.Vibration
+import com.simple.chris.pebble.functions.vibrateMedium
 
 class SettingsRecyclerView internal constructor(var context: Context, var screenName: String, private val buttons: List<ButtonItem>, onButtonListener: OnButtonListener): RecyclerView.Adapter<SettingsRecyclerView.ViewHolder>() {
     private var mOnButtonListener = onButtonListener
@@ -55,7 +55,7 @@ class SettingsRecyclerView internal constructor(var context: Context, var screen
 
         override fun onClick(v: View?) {
             myOnButtonListener.onButtonClick(screenName, adapterPosition, v as View)
-            Vibration.mediumFeedback(context)
+            vibrateMedium(context)
         }
     }
 

@@ -5,13 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.ButtonItem
-import com.simple.chris.pebble.functions.Vibration
+import com.simple.chris.pebble.functions.vibrateWeak
 
 class PopupDialogButtonRecycler internal constructor(var context: Context, var popupName: String, private val buttons: List<ButtonItem>, onButtonListener: OnButtonListener): RecyclerView.Adapter<PopupDialogButtonRecycler.ViewHolder>() {
     private var mOnButtonListener = onButtonListener
@@ -49,7 +48,7 @@ class PopupDialogButtonRecycler internal constructor(var context: Context, var p
 
         override fun onClick(v: View?) {
             myOnButtonListener.onButtonClickPopup(popupName, adapterPosition, v as View)
-            Vibration.lowFeedback(context)
+            vibrateWeak(context)
         }
     }
 

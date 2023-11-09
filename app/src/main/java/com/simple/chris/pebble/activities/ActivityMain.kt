@@ -176,7 +176,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
         val handler = Handler(Looper.getMainLooper())
         val runnable = Runnable {
-            Vibration.lowFeedback(this)
+            vibrateWeak(this)
             UIElements.viewHeightAnimator(
                 binding.ssScrollbar,
                 convertFloatToDP(this, 5f),
@@ -199,7 +199,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
                     Log.e("INFO", "Down")
-                    Vibration.mediumFeedback(this)
+                    vibrateMedium(this)
                     handler.removeCallbacks(runnable)
                     UIElements.viewHeightAnimator(
                         binding.ssScrollbar,
@@ -222,7 +222,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
                 MotionEvent.ACTION_UP -> {
                     Log.e("INFO", "Up")
-                    Vibration.mediumFeedback(this)
+                    vibrateMedium(this)
                     handler.postDelayed(runnable, 1000)
                     true
                 }
@@ -718,7 +718,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     @SuppressLint("CutPasteId")
     fun sharedElement(position: Int, view: View) {
         if (Values.currentGradientScreenPos == position) {
-            Vibration.notification(this)
+            vibrateNotification(this)
             shrinkFrag(
                 binding.fragmentHolderSecondary,
                 0.95f,
@@ -1507,6 +1507,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                 //closeSecondary()
             }
         }
+        //super.onBackPressed()
     }
 
     fun getFragmentWidth(): Float {
