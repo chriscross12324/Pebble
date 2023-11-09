@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.simple.chris.pebble.activities.ActivityGradientCreator
 import com.simple.chris.pebble.activities.ActivityMain
 import com.simple.chris.pebble.databinding.DialogPopupBinding
+import com.simple.chris.pebble.functions.ButtonItem
 import com.simple.chris.pebble.functions.UIElements
 import com.simple.chris.pebble.functions.Values
 import com.simple.chris.pebble.recyclers.PopupDialogButtonRecycler
@@ -110,7 +111,7 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
             try {
                 binding.popupButtonRecycler.setHasFixedSize(true)
                 val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-                val adapter = PopupDialogButtonRecycler((activity as Context), requireArguments().getString("dialogName")!!, requireArguments().getSerializable("array")!! as ArrayList<HashMap<String, Int>>, this)
+                val adapter = PopupDialogButtonRecycler((activity as Context), requireArguments().getString("dialogName")!!, requireArguments().getSerializable("array")!! as List<ButtonItem>, this)
 
                 binding.popupButtonRecycler.layoutManager = layoutManager
                 binding.popupButtonRecycler.adapter = adapter
@@ -157,12 +158,12 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
     }
 
     companion object {
-        fun newDialog(buttonArray: ArrayList<HashMap<String, Int>>?, dialogName: String, icon: Int?, title: Int?, titleString: String?, description: Int?, descriptionString: String?): DialogPopup {
+        fun newDialog(buttonArray: List<ButtonItem>?, dialogName: String, icon: Int?, title: Int?, titleString: String?, description: Int?, descriptionString: String?): DialogPopup {
             val frag = DialogPopup()
             val args = Bundle()
             args.putString("dialogName", dialogName)
             if (buttonArray != null) {
-                args.putSerializable("array", buttonArray)
+                args.putSerializable("array", ArrayList(buttonArray))
             }
             if (icon != null) {
                 args.putInt("icon", icon)

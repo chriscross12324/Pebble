@@ -398,11 +398,13 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
             val fm = (activity as ActivityMain).supportFragmentManager
             Vibration.lowFeedback(context)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Values.dialogPopup = DialogPopup.newDialog(HashMaps.setWallpaperArrayList(), "setWallpaper", R.drawable.icon_wallpaper, R.string.dual_set_wallpaper,
+                Values.dialogPopup = DialogPopup.newDialog(
+                    arraySetWallpaper(), "setWallpaper", R.drawable.icon_wallpaper, R.string.dual_set_wallpaper,
                         null, R.string.question_set_wallpaper, null)
                 Values.dialogPopup.show(fm, "setWallpaper")
             } else {
-                Values.dialogPopup = DialogPopup.newDialog(HashMaps.arrayYesCancel(), "setWallpaperOutdated", R.drawable.icon_warning, R.string.dual_outdated_android,
+                Values.dialogPopup = DialogPopup.newDialog(
+                    arrayYesCancel(), "setWallpaperOutdated", R.drawable.icon_warning, R.string.dual_outdated_android,
                         null, R.string.question_outdated_android, null)
                 Values.dialogPopup.show(fm, "setWallpaperOutdated")
             }

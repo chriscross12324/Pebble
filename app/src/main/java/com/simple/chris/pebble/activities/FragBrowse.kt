@@ -425,7 +425,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         try {
             binding.browseMenu.setHasFixedSize(true)
             val buttonLayoutManager = LinearLayoutManager((activity as ActivityMain), LinearLayoutManager.VERTICAL, false)
-            val buttonAdapter = BrowseMenuRecyclerView((activity as ActivityMain), HashMaps.browseMenuArray(), this)
+            val buttonAdapter = BrowseMenuRecyclerView((activity as ActivityMain), arrayBrowseMenu(), this)
 
             binding.browseMenu.layoutManager = buttonLayoutManager
             binding.browseMenu.adapter = buttonAdapter
@@ -597,7 +597,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
             if (binding.searchByColourRecycler != null) {
                 binding.searchByColourRecycler.setHasFixedSize(true)
                 val buttonLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                val buttonAdapter = SearchColourRecyclerView(context, HashMaps.searchByColourButtons(), null, this)
+                val buttonAdapter = SearchColourRecyclerView(context, arraySearchByColour(), null, this)
 
                 binding.searchByColourRecycler.layoutManager = buttonLayoutManager
                 binding.searchByColourRecycler.adapter = buttonAdapter

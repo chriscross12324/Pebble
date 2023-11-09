@@ -9,9 +9,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
+import com.simple.chris.pebble.functions.ButtonItem
 import com.simple.chris.pebble.functions.Vibration
 
-class BrowseMenuRecyclerView internal constructor(var context: Context, private val buttons: ArrayList<HashMap<String, Int>>, onButtonListener: OnButtonListener): RecyclerView.Adapter<BrowseMenuRecyclerView.ViewHolder>() {
+class BrowseMenuRecyclerView internal constructor(var context: Context, private val buttons: List<ButtonItem>, onButtonListener: OnButtonListener): RecyclerView.Adapter<BrowseMenuRecyclerView.ViewHolder>() {
     private var mOnButtonListener = onButtonListener
     private var layoutInflater = LayoutInflater.from(context)
 
@@ -28,9 +29,9 @@ class BrowseMenuRecyclerView internal constructor(var context: Context, private 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
-            val details: HashMap<String, Int> = buttons[position]
-            holder.buttonImage.setImageResource(details["buttonIcon"]!!.toInt())
-            holder.buttonText.text = context.getString(details["buttonText"] as Int)
+            val details: ButtonItem = buttons[position]
+            holder.buttonImage.setImageResource(details.buttonIcon)
+            holder.buttonText.text = context.getString(details.buttonText)
             if (position+1 == buttons.size) {
                 holder.listDivider.alpha = 0f
             }

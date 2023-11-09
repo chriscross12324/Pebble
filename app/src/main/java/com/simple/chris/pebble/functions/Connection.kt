@@ -28,7 +28,8 @@ object Connection {
         if (isOnline(context)) {
             getGradientsFireStore(activity)
         } else {
-            Values.dialogPopup = DialogPopup.newDialog(HashMaps.noConnectionArrayList(), "noConnection", R.drawable.icon_warning, R.string.dual_no_connection,
+            Values.dialogPopup = DialogPopup.newDialog(
+                arrayNoConnection(), "noConnection", R.drawable.icon_warning, R.string.dual_no_connection,
                 null, R.string.sentence_needs_internet_connection, null)
             Values.dialogPopup.show(fm, "noConnection")
         }
@@ -64,7 +65,8 @@ object Connection {
                 .addOnFailureListener {
                     Log.e("INFO", "Firebase failure: $it")
                     Values.downloadingGradients = false
-                    Values.dialogPopup = DialogPopup.newDialog(HashMaps.noConnectionArrayList(), "serverError", R.drawable.icon_wifi_empty, R.string.dual_server_error,
+                    Values.dialogPopup = DialogPopup.newDialog(
+                        arrayNoConnection(), "serverError", R.drawable.icon_wifi_empty, R.string.dual_server_error,
                             null, null, activity.getString(R.string.sentence_server_error, it.localizedMessage))
                     Values.dialogPopup.show(fm, "serverError")
                 }

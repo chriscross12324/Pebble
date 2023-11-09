@@ -367,12 +367,14 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
                 }*/
 
             } else {
-                Values.dialogPopup = DialogPopup.newDialog(HashMaps.backButtonArrayList(), "submitMissingInfo", R.drawable.icon_warning, R.string.dual_missing_info,
+                Values.dialogPopup = DialogPopup.newDialog(
+                    arrayBack(), "submitMissingInfo", R.drawable.icon_warning, R.string.dual_missing_info,
                         null, R.string.sentence_missing_gradient_name, null)
                 Values.dialogPopup.show(supportFragmentManager, "submitMissingInfo")
             }
         } else {
-            Values.dialogPopup = DialogPopup.newDialog(HashMaps.noConnectionArrayList(), "submitNoConnection", R.drawable.icon_warning, R.string.dual_no_connection,
+            Values.dialogPopup = DialogPopup.newDialog(
+                arrayNoConnection(), "submitNoConnection", R.drawable.icon_warning, R.string.dual_no_connection,
                     null, R.string.sentence_needs_internet_connection, null)
             Values.dialogPopup.show(supportFragmentManager, "submitNoConnection")
         }
@@ -397,14 +399,16 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
                 .set(gradient)
                 .addOnCompleteListener {
                     Values.dialogPopup.dismiss()
-                    Values.dialogPopup = DialogPopup.newDialog(HashMaps.gradientSubmittedArrayList(), "submitGradientSubmitted", R.drawable.icon_check, R.string.word_submit,
+                    Values.dialogPopup = DialogPopup.newDialog(
+                        arrayClose(), "submitGradientSubmitted", R.drawable.icon_check, R.string.word_submit,
                             null, R.string.sentence_gradient_submitted, null)
                     Values.dialogPopup.show(supportFragmentManager, "submitGradientSubmitted")
                     Values.justSubmitted = true
                 }
                 .addOnFailureListener {
                     Values.dialogPopup.dismiss()
-                    Values.dialogPopup = DialogPopup.newDialog(HashMaps.backButtonArrayList(), "submitGradientFailed", R.drawable.icon_warning, R.string.word_failed,
+                    Values.dialogPopup = DialogPopup.newDialog(
+                        arrayBack(), "submitGradientFailed", R.drawable.icon_warning, R.string.word_failed,
                             null, null, this.getString(R.string.sentence_server_error, it.localizedMessage))
                     Values.dialogPopup.show(supportFragmentManager, "submitGradientFailed")
                 }
