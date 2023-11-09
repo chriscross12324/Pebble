@@ -24,8 +24,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.adapters_helpers.DialogPopup
-import com.simple.chris.pebble.adapters_helpers.SettingsRecyclerView
+import com.simple.chris.pebble.dialogs.DialogPopup
+import com.simple.chris.pebble.recyclers.SettingsRecyclerView
 import com.simple.chris.pebble.databinding.ActivityMainBinding
 import com.simple.chris.pebble.functions.*
 import kotlin.math.roundToInt
@@ -93,10 +93,6 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         binding.tapReturn.setOnClickListener {
             hideSmallScreen()
         }
-
-        //adMob()
-        appError()
-        //setupBillingClient()
     }
 
     override fun onAttachedToWindow() {
@@ -377,16 +373,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                     }
                 }
             }
-            "about" -> {
-                when (position) {
-                    /*3 -> {
-                        val dialogChangelog = DialogChangelog.newDialog(null)
-                        dialogChangelog.show(fm, "loadingAd")
-                    }*/
-                }
-            }
         }
-
     }
 
     fun startGradientScreen(animateNew: Boolean) {
@@ -676,7 +663,6 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
     @SuppressLint("NewApi")
     fun popupDialogHandler(dialogName: String, position: Int) {
-        val fm = supportFragmentManager
         when (dialogName) {
             "settingTheme" -> {
                 val current = Values.settingTheme
@@ -751,14 +737,12 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             "noConnection" -> {
                 when (position) {
                     0 -> {
-                        //UIElement.popupDialogHider()
                         Handler(Looper.getMainLooper()).postDelayed({
                             Connection.checkConnection(this, this)
                         }, Values.dialogShowAgainTime)
                     }
                     1 -> {
-                        //UIElement.popupDialogHider()
-                        Connection.connectionOffline(this)
+                        Values.downloadingGradients = false
                     }
                 }
             }
@@ -810,15 +794,6 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                     //1 -> //dialogPopupHider()
                 }
             }
-            "appError" -> {
-                when (position) {
-                    0 -> {
-                        startActivity(Intent(this, ActivityStarting::class.java))
-                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                        finish()
-                    }
-                }
-            }
             "serverError" -> {
                 when (position) {
                     0 -> {
@@ -832,54 +807,9 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                     }
                 }
             }
-            "thanksAdvertise" -> {
-                Values.dialogPopup = DialogPopup.newDialog(HashMaps.restartArray(), "thanksAdvertise", R.drawable.icon_warning, R.string.word_error,
-                        null, R.string.sentence_app_error, null)
-                Values.dialogPopup.show(fm, "thanksAdvertise")
-            }
         }
         Values.saveValues(this)
     }
-
-    fun appError() {
-        Handler(Looper.getMainLooper()).postDelayed({
-            if (Values.errorOccurred) {
-                Values.errorOccurred = false
-                val fm = supportFragmentManager
-                Values.dialogPopup = DialogPopup.newDialog(HashMaps.restartArray(), "appError", R.drawable.icon_warning, R.string.word_error,
-                        null, R.string.sentence_app_error, null)
-                Values.dialogPopup.show(fm, "appError")
-            } else {
-                appError()
-            }
-        }, 100)
-    }
-
-    /*private fun adMob() {
-        MobileAds.initialize(this) { Values.adMobInitialized = true }
-        mInterstitialAd = InterstitialAd(this)
-        mInterstitialAd.adUnitId = "ca-app-pub-3940256099942544/1033173712"
-
-        mInterstitialAd.adListener = object : AdListener() {
-            override fun onAdLoaded() {
-                //Hide popup
-                Values.adLoading = false
-                mInterstitialAd.show()
-                Values.dialogPopup.dismiss()
-                //UIElement.popupDialogHider()
-                //Show Ad
-            }
-
-            override fun onAdFailedToLoad(p0: LoadAdError?) {
-                //Warn user
-            }
-
-            override fun onAdClosed() {
-
-            }
-        }
-
-    }*/
 
     fun connectionChecker() {
         Handler(Looper.getMainLooper()).postDelayed({
@@ -909,12 +839,6 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
     fun getFragmentWidth(): Float {
         return binding.fragmentHolder.measuredWidth.toFloat()
-    }
-
-    fun dialogPopupHider() {
-        if (Values.dialogPopup.dialog != null) {
-            Values.dialogPopup.onDismiss(Values.dialogPopup.dialog!!)
-        }
     }
 
     override fun onResume() {
@@ -955,45 +879,6 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             } else {
                 (browseFragment as FragBrowse).showGradients()
             }
-        } else {
-            appError()
         }
     }
-
-    /*private fun setupBillingClient() {
-        mBillingClient = BillingClient.newBuilder(this)
-                .enablePendingPurchases()
-                .setListener(this)
-                .build()
-        mBillingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(p0: BillingResult) {
-                if (p0.responseCode == BillingClient.BillingResponseCode.OK) {
-                    Log.i("Information","pebble.billing_service: Connected")
-                    loadAllSKUs()
-                }
-            }
-
-            override fun onBillingServiceDisconnected() {
-                Log.i("Information","pebble.billing_service: Disconnected")
-            }
-        })
-    }
-
-    private fun loadAllSKUs() = if (mBillingClient.isReady) {
-        val params = SkuDetailsParams
-                .newBuilder()
-                .setSkusList(mSkuList)
-                .setType(BillingClient.SkuType.INAPP)
-                .build()
-        mBillingClient.querySkuDetailsAsync(params) {billingResults, skuDetailsList ->
-            if (billingResults.responseCode == BillingClient.BillingResponseCode.OK && skuDetailsList!!.isNotEmpty()) {
-                for (skuDetails in skuDetailsList) {
-
-                }
-            }
-        }
-    } else {
-        Log.i("Information","pebble.billing_service: Not Ready Yet")
-    }*/
-
 }

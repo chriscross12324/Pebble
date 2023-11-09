@@ -1,4 +1,4 @@
-package com.simple.chris.pebble.adapters_helpers
+package com.simple.chris.pebble.recyclers
 
 import android.content.Context
 import android.graphics.Color

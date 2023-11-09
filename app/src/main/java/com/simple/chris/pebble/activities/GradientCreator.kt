@@ -20,8 +20,8 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.adapters_helpers.DialogPopup
-import com.simple.chris.pebble.adapters_helpers.GradientCreatorRecycler
+import com.simple.chris.pebble.dialogs.DialogPopup
+import com.simple.chris.pebble.recyclers.GradientCreatorRecycler
 import com.simple.chris.pebble.databinding.ActivityGradientCreateBinding
 import com.simple.chris.pebble.functions.*
 import java.util.*
@@ -353,7 +353,7 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
 
     private fun startSubmission() {
         /** Check if Gradient has a name **/
-        if (Connection.getConnectionType(this) != 0) {
+        if (Connection.isOnline(this)) {
             if (binding.gradientCreatorGradientName.text.toString().trim().replace(" ", "") != "") {
                 submitGradient()
                 /**Not working; Google Ads**/

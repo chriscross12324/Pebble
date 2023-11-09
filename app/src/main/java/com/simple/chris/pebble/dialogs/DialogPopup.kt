@@ -1,4 +1,4 @@
-package com.simple.chris.pebble.adapters_helpers
+package com.simple.chris.pebble.dialogs
 
 import android.content.Context
 import android.content.DialogInterface
@@ -21,6 +21,7 @@ import com.simple.chris.pebble.activities.MainActivity
 import com.simple.chris.pebble.databinding.DialogPopupBinding
 import com.simple.chris.pebble.functions.UIElements
 import com.simple.chris.pebble.functions.Values
+import com.simple.chris.pebble.recyclers.PopupDialogButtonRecycler
 import eightbitlab.com.blurview.RenderScriptBlur
 
 class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener {
@@ -32,14 +33,11 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
-    /*override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.dialog_popup, container)
-    }*/
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DialogPopupBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -146,19 +144,13 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
 
     override fun onDismiss(dialog: DialogInterface) {
         try {
-            if (binding.holder != null) {
-                UIElements.viewObjectAnimator(binding.dialogHolder, "scaleX", 1.15f, 200, 0, AccelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(binding.dialogHolder, "scaleY", 1.15f, 200, 0, AccelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(binding.dialogHolder, "alpha", 0f, 100, 100, LinearInterpolator())
+            UIElements.viewObjectAnimator(binding.dialogHolder, "scaleX", 1.15f, 200, 0, AccelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(binding.dialogHolder, "scaleY", 1.15f, 200, 0, AccelerateInterpolator(3f))
+            UIElements.viewObjectAnimator(binding.dialogHolder, "alpha", 0f, 100, 100, LinearInterpolator())
 
-                /*UIElements.viewObjectAnimator(popupButtonRecycler, "scaleX", 0.6f, 350, 0, AccelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(popupButtonRecycler, "scaleY", 0.6f, 350, 0, AccelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(popupButtonRecycler, "alpha", 0f, 150, 200, LinearInterpolator())*/
-
-                Handler(Looper.getMainLooper()).postDelayed({
-                    super.onDismiss(dialog)
-                }, 250)
-            }
+            Handler(Looper.getMainLooper()).postDelayed({
+                super.onDismiss(dialog)
+            }, 250)
         } catch (e: Exception) {
             onDismiss(Values.dialogPopup.dialog!!)
         }

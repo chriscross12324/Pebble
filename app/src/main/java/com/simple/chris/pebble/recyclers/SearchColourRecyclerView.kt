@@ -1,4 +1,4 @@
-package com.simple.chris.pebble.adapters_helpers
+package com.simple.chris.pebble.recyclers
 
 import android.content.Context
 import android.graphics.Color
@@ -12,7 +12,8 @@ import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.UIElement
 
 class SearchColourRecyclerView internal constructor(var context: Context, private val buttons: ArrayList<HashMap<String, String>>?, private val buttonsArray: ArrayList<String>?,
-                                                    onButtonListener: OnButtonListener): RecyclerView.Adapter<SearchColourRecyclerView.ViewHolder>() {
+                                                    onButtonListener: OnButtonListener
+): RecyclerView.Adapter<SearchColourRecyclerView.ViewHolder>() {
     private var mOnButtonListener = onButtonListener
     private var layoutInflater = LayoutInflater.from(context)
 

@@ -1,4 +1,4 @@
-package com.simple.chris.pebble.adapters_helpers
+package com.simple.chris.pebble.recyclers
 
 //import com.sinaseyfi.advancedcardview.AdvancedCardView
 import android.annotation.SuppressLint
@@ -12,7 +12,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.UIElement
-import com.simple.chris.pebble.functions.Values
 
 /**
  * Creates a gradient modules for each gradient

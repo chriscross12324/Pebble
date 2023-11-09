@@ -1,4 +1,4 @@
-package com.simple.chris.pebble.adapters_helpers
+package com.simple.chris.pebble.dialogs
 
 import android.content.ContentValues
 import android.content.Context
@@ -41,14 +41,11 @@ class DialogSaveGradient : DialogFragment() {
         }
     }
 
-    /*override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.dialog_save_gradient, container)
-    }*/
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DialogSaveGradientBinding.inflate(inflater, container, false)
         return binding.root
     }

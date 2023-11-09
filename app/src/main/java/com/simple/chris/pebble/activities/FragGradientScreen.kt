@@ -20,7 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.*
 import com.simple.chris.pebble.databinding.FragmentGradientScreenBinding
+import com.simple.chris.pebble.dialogs.DialogColourInfo
+import com.simple.chris.pebble.dialogs.DialogPopup
+import com.simple.chris.pebble.dialogs.DialogSaveGradient
 import com.simple.chris.pebble.functions.*
+import com.simple.chris.pebble.recyclers.SearchColourRecyclerView
 import kotlin.Exception
 
 class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchColourRecyclerView.OnButtonListener {

@@ -3,7 +3,7 @@ package com.simple.chris.pebble.functions
 import android.content.Context
 import android.view.View
 import com.google.firebase.firestore.FirebaseFirestore
-import com.simple.chris.pebble.adapters_helpers.DialogPopup
+import com.simple.chris.pebble.dialogs.DialogPopup
 
 /**
  * Stores all essential values, can be referenced and changed from Activities
@@ -63,7 +63,6 @@ object Values {
     var dialogShowAgainTime: Long = 450
     var downloadingGradients = false
     var refreshTheme = false
-    var connectionOffline = false
     var screenHeight = 0
     var currentlySplitScreened = false
     var animatingSharedElement = false

@@ -29,7 +29,12 @@ import com.google.firebase.firestore.Query
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.*
 import com.simple.chris.pebble.databinding.FragmentBrowseBinding
+import com.simple.chris.pebble.dialogs.DialogGradientInfo
 import com.simple.chris.pebble.functions.*
+import com.simple.chris.pebble.recyclers.BrowseMenuRecyclerView
+import com.simple.chris.pebble.recyclers.GradientRecyclerView
+import com.simple.chris.pebble.recyclers.PopupDialogButtonRecycler
+import com.simple.chris.pebble.recyclers.SearchColourRecyclerView
 import kotlin.math.roundToInt
 
 class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGradientListener, GradientRecyclerView.OnGradientLongClickListener,
@@ -318,11 +323,11 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
     }
 
     private fun hideMenu() {
-        UIElement.animateViewWidth("height", binding.menu, Calculations.convertToDP((activity as MainActivity), 55f).toInt(), 0, 400)
-        UIElements.viewObjectAnimator(binding.menu, "alpha", 0f, 175, 125, LinearInterpolator())
-        UIElements.viewObjectAnimator(binding.menuArrow, "translationY", Calculations.convertToDP((activity as MainActivity), -25f), 150, 0, DecelerateInterpolator())
-        UIElements.viewVisibility(binding.menuArrow, View.INVISIBLE, 150)
-        UIElements.viewObjectAnimator(binding.touchBlockerDark, "alpha", 0f, 175, 175, LinearInterpolator())
+        UIElement.animateViewWidth("height", binding.menu, Calculations.convertToDP((activity as MainActivity), 50f).toInt(), 0, 400)
+        UIElements.viewObjectAnimator(binding.menu, "alpha", 0f, 175, 75, LinearInterpolator())
+        UIElements.viewObjectAnimator(binding.menuArrow, "translationY", Calculations.convertToDP((activity as MainActivity), -25f), 100, 0, DecelerateInterpolator())
+        UIElements.viewVisibility(binding.menuArrow, View.INVISIBLE, 100)
+        UIElements.viewObjectAnimator(binding.touchBlockerDark, "alpha", 0f, 175, 100, LinearInterpolator())
         Handler(Looper.getMainLooper()).postDelayed({
             binding.touchBlockerDark.visibility = View.GONE
             binding.menuArrow.visibility = View.GONE
@@ -669,7 +674,6 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                     }
                     Log.d("DEBUG", "Firestore: Done")
                     Values.downloadingGradients = true
-                    Values.connectionOffline = false
                     binding.resultsText.text = getString(R.string.variable_gradients, Values.searchList.size)
                     showGradients()
                 }

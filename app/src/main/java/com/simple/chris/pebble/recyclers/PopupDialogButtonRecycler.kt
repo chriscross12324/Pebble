@@ -1,4 +1,4 @@
-package com.simple.chris.pebble.adapters_helpers
+package com.simple.chris.pebble.recyclers
 
 import android.content.Context
 import android.util.Log
@@ -32,7 +32,6 @@ class PopupDialogButtonRecycler internal constructor(var context: Context, var p
             holder.buttonTitle.text = context.getString(details["buttonTitle"] as Int)
             holder.buttonIcon.setImageResource(details["buttonIcon"]!!.toInt())
         } catch (e: Exception) {
-            //context.startActivity(Intent(context, Feedback::class.java))
             Log.e("ERR", "pebble.popup_dialog_button_recycler.on_bind_view_holder: ${e.localizedMessage}")
         }
     }

@@ -5,70 +5,32 @@ import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.util.Log
-import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import com.google.firebase.firestore.Query
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.activities.MainActivity
-import com.simple.chris.pebble.adapters_helpers.DialogPopup
+import com.simple.chris.pebble.dialogs.DialogPopup
 import java.util.*
 
 object Connection {
 
     private lateinit var fm: FragmentManager
 
-    fun getConnectionType(context: Context) : Int {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            connectivityManager?.run {
-                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.run {
-                    when {
-                        hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
-                            return 1
-                        }
-                        hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
-                            return 2
-                        }
-                        hasTransport(NetworkCapabilities.TRANSPORT_VPN) -> {
-                            return 1
-                        }
-                        else -> 0
-                    }
-                }
-            }
-        }
-        return 0
+    fun isOnline(context: Context) : Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkCompatibilities = cm.getNetworkCapabilities(cm.activeNetwork)
+        return networkCompatibilities != null
+                && networkCompatibilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 
     fun checkConnection(context: Context, activity: Activity) {
-        fm = (activity as MainActivity).supportFragmentManager
-        when (getConnectionType(context)) {
-            0 -> {
-                Values.dialogPopup = DialogPopup.newDialog(HashMaps.noConnectionArrayList(), "noConnection", R.drawable.icon_warning, R.string.dual_no_connection,
-                        null, R.string.sentence_needs_internet_connection, null)
-                Values.dialogPopup.show(fm, "noConnection")
-            }
-            1 -> {
-                getGradientsFireStore(activity)
-            }
-            2 -> {
-                when (Values.useMobileData) {
-                    "on" -> {
-                        getGradientsFireStore(activity)
-                    }
-                    "off" -> {
-                        Toast.makeText(context, "Enable Data Usage in Settings", Toast.LENGTH_LONG).show()
-                    }
-                    "ask" -> {
-                        Values.dialogPopup = DialogPopup.newDialog(HashMaps.dataWarningArrayList(), "askMobile", R.drawable.icon_warning, R.string.sentence_trying_mobile_data,
-                                null, R.string.question_mobile_data, null)
-                        Values.dialogPopup.show(fm, "askMobile")
-                    }
-                }
-            }
+        if (isOnline(context)) {
+            getGradientsFireStore(activity)
+        } else {
+            Values.dialogPopup = DialogPopup.newDialog(HashMaps.noConnectionArrayList(), "noConnection", R.drawable.icon_warning, R.string.dual_no_connection,
+                null, R.string.sentence_needs_internet_connection, null)
+            Values.dialogPopup.show(fm, "noConnection")
         }
     }
 
@@ -97,8 +59,7 @@ object Connection {
                         Values.gradientList = gradientList
                     }
                     Log.d("DEBUG", "Firestore: Done")
-                    connectionOnline()
-                    Values.connectionOffline = false
+                    Values.downloadingGradients = false
                 }
                 .addOnFailureListener {
                     Log.e("INFO", "Firebase failure: $it")
@@ -107,16 +68,5 @@ object Connection {
                             null, null, activity.getString(R.string.sentence_server_error, it.localizedMessage))
                     Values.dialogPopup.show(fm, "serverError")
                 }
-    }
-
-    private fun connectionOnline() {
-        Values.downloadingGradients = false
-    }
-
-    fun connectionOffline(context: Activity) {
-        Values.downloadingGradients = false
-        Values.connectionOffline = true
-        context.findViewById<TextView>(R.id.screenTitle).setText(R.string.word_offline)
-        context.findViewById<TextView>(R.id.resultsText).setText(R.string.sentence_online_for_gradients)
     }
 }

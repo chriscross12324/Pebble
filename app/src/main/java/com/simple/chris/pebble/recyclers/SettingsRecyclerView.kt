@@ -1,4 +1,4 @@
-package com.simple.chris.pebble.adapters_helpers
+package com.simple.chris.pebble.recyclers
 
 import android.content.Context
 import android.util.Log
@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.functions.Vibration
 
-class BrowseMenuRecyclerView internal constructor(var context: Context, private val buttons: ArrayList<HashMap<String, Int>>, onButtonListener: OnButtonListener): RecyclerView.Adapter<BrowseMenuRecyclerView.ViewHolder>() {
+class SettingsRecyclerView internal constructor(var context: Context, var screenName: String, private val buttons: ArrayList<HashMap<String, Int>>, onButtonListener: OnButtonListener): RecyclerView.Adapter<SettingsRecyclerView.ViewHolder>() {
     private var mOnButtonListener = onButtonListener
     private var layoutInflater = LayoutInflater.from(context)
 
@@ -19,7 +19,11 @@ class BrowseMenuRecyclerView internal constructor(var context: Context, private 
      * @return Populated module to display in RecyclerView
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(layoutInflater.inflate(R.layout.button_menu, parent, false), mOnButtonListener)
+        return if (screenName == "settings" || screenName == "about") {
+            ViewHolder(layoutInflater.inflate(R.layout.button_settings_screen, parent, false), mOnButtonListener)
+        } else {
+            ViewHolder(layoutInflater.inflate(R.layout.button_about_screen, parent, false), mOnButtonListener)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -29,11 +33,10 @@ class BrowseMenuRecyclerView internal constructor(var context: Context, private 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         try {
             val details: HashMap<String, Int> = buttons[position]
-            //UIElement.gradientDrawable(context, holder.buttonBackground, Color.parseColor(details["buttonColour"]), Color.parseColor(details["buttonColour"]), 20f)
             holder.buttonImage.setImageResource(details["buttonIcon"]!!.toInt())
-            holder.buttonText.text = context.getString(details["buttonText"] as Int)
-            if (position+1 == buttons.size) {
-                holder.listDivider.alpha = 0f
+            holder.buttonText.text = context.getString(details["buttonTitle"] as Int)
+            if (screenName == "donate" && position != 0) {
+                holder.buttonImage.imageTintList = null
             }
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse_menu_recycler_view.on_bind_view_holder: ${e.localizedMessage}")
@@ -41,9 +44,8 @@ class BrowseMenuRecyclerView internal constructor(var context: Context, private 
     }
 
     inner class ViewHolder internal constructor(view: View, onButtonListener: OnButtonListener): RecyclerView.ViewHolder(view), View.OnClickListener {
-        var buttonImage: ImageView = view.findViewById(R.id.buttonIcon)
-        var buttonText: TextView = view.findViewById(R.id.buttonText)
-        var listDivider: ImageView = view.findViewById(R.id.listDivider)
+        var buttonImage: ImageView = view.findViewById(R.id.optionIcon)
+        var buttonText: TextView = view.findViewById(R.id.optionTitle)
         private val myOnButtonListener = onButtonListener
 
         init {
@@ -51,13 +53,13 @@ class BrowseMenuRecyclerView internal constructor(var context: Context, private 
         }
 
         override fun onClick(v: View?) {
-            myOnButtonListener.onButtonClick(adapterPosition, v as View)
+            myOnButtonListener.onButtonClick(screenName, adapterPosition, v as View)
             Vibration.mediumFeedback(context)
         }
     }
 
     interface OnButtonListener {
-        fun onButtonClick(position: Int, view: View)
+        fun onButtonClick(screenName: String, position: Int, view: View)
     }
 
 }
