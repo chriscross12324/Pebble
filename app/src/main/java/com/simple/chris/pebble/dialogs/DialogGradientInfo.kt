@@ -12,10 +12,11 @@ import android.view.ViewGroup
 import android.view.animation.*
 import androidx.fragment.app.DialogFragment
 import com.simple.chris.pebble.databinding.DialogLongPressGradientsBinding
-import com.simple.chris.pebble.functions.Calculations
 import com.simple.chris.pebble.functions.UIElement
 import com.simple.chris.pebble.functions.UIElements
 import com.simple.chris.pebble.functions.Values
+import com.simple.chris.pebble.functions.convertFloatToDP
+import com.simple.chris.pebble.functions.getScreenMetrics
 import eightbitlab.com.blurview.RenderScriptBlur
 import java.io.Serializable
 
@@ -70,10 +71,10 @@ class DialogGradientInfo : DialogFragment() {
         binding.gradientDialogGradientDescription.text = requireArguments().getString("desc")
 
         binding.holder.post {
-            UIElements.viewObjectAnimator(binding.holder, "translationX", gradientPos[0].toFloat() - Calculations.convertToDP(this.requireContext(), 20f), 0, 0, LinearInterpolator())
-            UIElements.viewObjectAnimator(binding.holder, "translationY", gradientPos[1].toFloat() - Calculations.convertToDP(this.requireContext(), 20f), 0, 0, LinearInterpolator())
-            UIElements.viewObjectAnimator(binding.holder, "translationX", Calculations.screenMeasure(this.requireContext(), "width", dialog!!.window!!)/2.toFloat() - binding.holder.width/2, 400, 0, DecelerateInterpolator(2f))
-            UIElements.viewObjectAnimator(binding.holder, "translationY", Calculations.screenMeasure(this.requireContext(), "height", dialog!!.window!!)/2.toFloat() - binding.holder.height/2, 400, 0, DecelerateInterpolator(2f))
+            UIElements.viewObjectAnimator(binding.holder, "translationX", gradientPos[0].toFloat() - convertFloatToDP(this.requireContext(), 20f), 0, 0, LinearInterpolator())
+            UIElements.viewObjectAnimator(binding.holder, "translationY", gradientPos[1].toFloat() - convertFloatToDP(this.requireContext(), 20f), 0, 0, LinearInterpolator())
+            UIElements.viewObjectAnimator(binding.holder, "translationX", getScreenMetrics(this.requireContext(), dialog!!.window!!).width /2.toFloat() - binding.holder.width/2, 400, 0, DecelerateInterpolator(2f))
+            UIElements.viewObjectAnimator(binding.holder, "translationY", getScreenMetrics(this.requireContext(), dialog!!.window!!).height /2.toFloat() - binding.holder.height/2, 400, 0, DecelerateInterpolator(2f))
             UIElements.viewObjectAnimator(binding.holder, "scaleX", 1f, 0, 0, DecelerateInterpolator(3f))
             UIElements.viewObjectAnimator(binding.holder, "scaleY", 1f, 0, 0, DecelerateInterpolator(3f))
             UIElements.viewObjectAnimator(binding.holder, "alpha", 1f, 200, 200, LinearInterpolator())

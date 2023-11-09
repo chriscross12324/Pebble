@@ -309,8 +309,8 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
                 try {
                     Vibration.notification(context)
                     binding.notification.visibility = View.VISIBLE
-                    UIElements.viewObjectAnimator(binding.notification, "translationY", (binding.notification.height + Calculations.cutoutHeight(context.window) +
-                            Calculations.convertToDP(context, 16f)), 500, 0, DecelerateInterpolator(3f))
+                    UIElements.viewObjectAnimator(binding.notification, "translationY", (binding.notification.height + getCutoutHeight(context.window) +
+                            convertFloatToDP(context, 16f)), 500, 0, DecelerateInterpolator(3f))
                     Handler(Looper.getMainLooper()).postDelayed({
                         try {
                             UIElements.viewObjectAnimator(binding.notification, "translationY", 0f, 500, 0, DecelerateInterpolator(3f))
@@ -356,7 +356,7 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
                     binding.optionsHolder.elevation = 0f
                     binding.optionsHolder.visibility = View.VISIBLE
                     UIElements.viewObjectAnimator(binding.detailsHolder, "translationY",
-                            -(binding.optionsHolder.height + Calculations.convertToDP(context, -66f)), 500, 0, DecelerateInterpolator(3f))
+                            -(binding.optionsHolder.height + convertFloatToDP(context, -66f)), 500, 0, DecelerateInterpolator(3f))
                     UIElements.constraintLayoutElevationAnimator(binding.optionsHolder, 1f,
                             500, 0, DecelerateInterpolator(3f))
                     Handler(Looper.getMainLooper()).postDelayed({
@@ -376,8 +376,8 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
                     }
                 }, 500)
             } else {
-                UIElements.viewObjectAnimator(binding.detailsHolder, "translationY", Calculations.convertToDP(context, -66f), 500, 0, DecelerateInterpolator(3f))
-                UIElements.constraintLayoutElevationAnimator(binding.optionsHolder, Calculations.convertToDP(context, 12f), 500, 100, DecelerateInterpolator())
+                UIElements.viewObjectAnimator(binding.detailsHolder, "translationY", convertFloatToDP(context, -66f), 500, 0, DecelerateInterpolator(3f))
+                UIElements.constraintLayoutElevationAnimator(binding.optionsHolder, convertFloatToDP(context, 12f), 500, 100, DecelerateInterpolator())
                 binding.optionsHolder.visibility = View.VISIBLE
                 Handler(Looper.getMainLooper()).postDelayed({
                     if (binding.detailsHolder.translationY != 0f) {
@@ -450,7 +450,7 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
                     0 -> {
                         try {
                             wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(context, null, Values.gradientScreenColours, 0f) as Drawable,
-                                    Calculations.screenMeasure(context, "width", context.window), Calculations.screenMeasure(context, "height", context.window)),
+                                    Calculations.screenMeasure(context, "width", context.window), getScreenMetrics(context, context.window).height)),
                                     null, true, WallpaperManager.FLAG_SYSTEM)
                             runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
                         } catch (e: Exception) {
@@ -460,7 +460,7 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
                     1 -> {
                         try {
                             wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(context, null, Values.gradientScreenColours, 0f) as Drawable,
-                                    Calculations.screenMeasure(context, "width", context.window), Calculations.screenMeasure(context, "height", context.window)),
+                                    Calculations.screenMeasure(context, "width", context.window), getScreenMetrics(context, context.window).height)),
                                     null, true, WallpaperManager.FLAG_LOCK)
                             runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
                         } catch (e: Exception) {
@@ -477,7 +477,7 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
                     0 -> {
                         try {
                             wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(context, null, Values.gradientScreenColours, 0f) as Drawable,
-                                    Calculations.screenMeasure(context, "width", context.window), Calculations.screenMeasure(context, "height", context.window)))
+                                    Calculations.screenMeasure(context, "width", context.window), getScreenMetrics(context, context.window).height)))
                             runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
                         } catch (e: Exception) {
                             Log.e("ERR", "pebble.frag_gradient_screen.on_button_click_popup.set_wallpaper_outdated: ${e.localizedMessage}")

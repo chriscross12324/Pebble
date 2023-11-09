@@ -30,7 +30,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.jgabrielfreitas.core.BlurImageView
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.functions.Calculations.convertToDP
+import com.simple.chris.pebble.functions.convertFloatToDP
 import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlin.math.roundToInt
@@ -146,7 +146,7 @@ object UIElements {
                     val wallpaperDrawable: Drawable = wallpaper.drawable!!
                     val bmpDraw = wallpaperDrawable as BitmapDrawable
                     val bmp = bmpDraw.bitmap
-                    val wallpaperBMP = Bitmap.createScaledBitmap(bmp, Calculations.screenMeasure(context, "width", window), Calculations.screenMeasure(context, "height", window), true)
+                    val wallpaperBMP = Bitmap.createScaledBitmap(bmp, getScreenMetrics(context, window).width, getScreenMetrics(context, window).height, true)
                     imageView.setImageBitmap(wallpaperBMP)
                     imageView.setBlur(15)
                     viewObjectAnimator(alphaLayer, "alpha", 0.3f, 150, 0, LinearInterpolator())
@@ -255,8 +255,8 @@ object UIElements {
         saveGradientDialog.show()
 
         presetButton.setOnClickListener {
-            heightText.setText(Calculations.screenMeasure(context, "height", window))
-            widthText.setText(Calculations.screenMeasure(context, "width", window))
+            heightText.setText(getScreenMetrics(context, window).height)
+            widthText.setText(getScreenMetrics(context, window).width)
         }
 
         /** Animate popupLayout in **/
@@ -308,7 +308,7 @@ object UIElements {
                 GradientDrawable.Orientation.TL_BR,
                 intArrayOf(Color.parseColor(hexString), Color.parseColor(hexString))
         )
-        colourDrawable.cornerRadius = convertToDP(context, cornerRadius)
+        colourDrawable.cornerRadius = convertFloatToDP(context, cornerRadius)
 
         return colourDrawable
     }

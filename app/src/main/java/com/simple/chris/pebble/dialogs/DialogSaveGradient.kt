@@ -19,10 +19,11 @@ import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.simple.chris.pebble.databinding.DialogSaveGradientBinding
-import com.simple.chris.pebble.functions.Calculations
 import com.simple.chris.pebble.functions.UIElement
 import com.simple.chris.pebble.functions.UIElements
 import com.simple.chris.pebble.functions.Values
+import com.simple.chris.pebble.functions.createBitmap
+import com.simple.chris.pebble.functions.getScreenMetrics
 import eightbitlab.com.blurview.RenderScriptBlur
 import java.io.File
 import java.io.FileOutputStream
@@ -61,8 +62,8 @@ class DialogSaveGradient : DialogFragment() {
         dialog!!.window!!.setDimAmount(0f)
 
         UIElement.gradientDrawableNew(activity as Context, binding.gradientPreview, requireArguments().getStringArrayList("array")!!, 20f)
-        binding.heightText.setText(Calculations.screenMeasure(activity as Context, "height", requireActivity().window).toString())
-        binding.widthText.setText(Calculations.screenMeasure(activity as Context, "width", requireActivity().window).toString())
+        binding.heightText.setText(getScreenMetrics(activity as Context, requireActivity().window).height.toString())
+        binding.widthText.setText(getScreenMetrics(activity as Context, requireActivity().window).width.toString())
 
         if (Values.settingSpecialEffects) {
             try {
@@ -93,8 +94,8 @@ class DialogSaveGradient : DialogFragment() {
         }
 
         binding.presetButton.setOnClickListener {
-            val height = Calculations.screenMeasure(activity as Context, "height", requireActivity().window)
-            val width = Calculations.screenMeasure(activity as Context, "width", requireActivity().window)
+            val height = getScreenMetrics(activity as Context, requireActivity().window).height
+            val width = getScreenMetrics(activity as Context, requireActivity().window).width
 
             binding.heightText.setText(height.toString())
             binding.widthText.setText(width.toString())
@@ -121,7 +122,7 @@ class DialogSaveGradient : DialogFragment() {
                         val fileImage = File(imageDir, (Values.gradientScreenName + ".png").replace(" ", "_").toLowerCase(Locale.getDefault()))
                         outputStream = FileOutputStream(fileImage)
                     }
-                    Calculations.createBitmap(UIElement.gradientDrawableNew(activity as Context, null, Values.gradientScreenColours, 0f) as Drawable,
+                    createBitmap(UIElement.gradientDrawableNew(activity as Context, null, Values.gradientScreenColours, 0f) as Drawable,
                         binding.widthText.text.toString().toInt(), binding.heightText.text.toString().toInt()).compress(Bitmap.CompressFormat.PNG, 100, outputStream)
                     Objects.requireNonNull(outputStream).close()
                     onDismiss(dialog!!)

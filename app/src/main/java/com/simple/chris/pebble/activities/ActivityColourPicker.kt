@@ -130,7 +130,7 @@ class ActivityColourPicker : AppCompatActivity() {
                 GradientDrawable.Orientation.LEFT_RIGHT,
                 intArrayOf(Color.parseColor("#EAEAEA"), Color.HSVToColor(hue))
         )
-        satGradientDrawable.cornerRadius = Calculations.convertToDP(this, 20f)
+        satGradientDrawable.cornerRadius = convertFloatToDP(this, 20f)
         binding.satBackground.background = satGradientDrawable
     }
 
@@ -152,7 +152,7 @@ class ActivityColourPicker : AppCompatActivity() {
     }
 
     private fun setInitialPositions() {
-        binding.colourPickerSliders.translationY = Calculations.convertToDP(this, binding.colourPickerSliders.height + 94.toFloat())
+        binding.colourPickerSliders.translationY = convertFloatToDP(this, binding.colourPickerSliders.height + 94.toFloat())
 
         binding.colourPickerSliders.post {
             animationIn()
@@ -168,11 +168,11 @@ class ActivityColourPicker : AppCompatActivity() {
     }
 
     private fun animationOut() {
-        UIElements.viewObjectAnimator(binding.colourPickerSliders, "translationY", binding.colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f), 700, 100, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(binding.colourPickerSaveButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(binding.colourPickerBackButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(binding.randomColourButton, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(binding.colourCodeHolder, "translationY", (binding.colourPickerSliders.height.toFloat() + Calculations.convertToDP(this, 94f)) / 2, 700, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.colourPickerSliders, "translationY", binding.colourPickerSliders.height.toFloat() + convertFloatToDP(this, 94f), 700, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.colourPickerSaveButton, "translationY", convertFloatToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.colourPickerBackButton, "translationY", convertFloatToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.randomColourButton, "translationY", convertFloatToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.colourCodeHolder, "translationY", (binding.colourPickerSliders.height.toFloat() + convertFloatToDP(this, 94f)) / 2, 700, 100, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(binding.colourCodeHolder, "alpha", 0f, 500, 450, LinearInterpolator())
 
         Handler(Looper.getMainLooper()).postDelayed({
@@ -189,14 +189,14 @@ class ActivityColourPicker : AppCompatActivity() {
                 intArrayOf(Color.parseColor("#f00000"), Color.parseColor("#ffff00"), Color.parseColor("#00ff00"), Color.parseColor("#00ffff"),
                         Color.parseColor("#0000ff"), Color.parseColor("#ff00ff"), Color.parseColor("#f00000"))
         )
-        hueGradientDrawable.cornerRadius = Calculations.convertToDP(this, 20f)
+        hueGradientDrawable.cornerRadius = convertFloatToDP(this, 20f)
         binding.hueBackground.background = hueGradientDrawable
 
         val valGradientDrawable = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
                 intArrayOf(Color.parseColor("#000000"), Color.parseColor("#EAEAEA"))
         )
-        valGradientDrawable.cornerRadius = Calculations.convertToDP(this, 20f)
+        valGradientDrawable.cornerRadius = convertFloatToDP(this, 20f)
         binding.valBackground.background = valGradientDrawable
 
 

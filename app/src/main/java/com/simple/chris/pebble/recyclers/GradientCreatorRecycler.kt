@@ -11,8 +11,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.functions.Calculations
 import com.simple.chris.pebble.functions.Vibration
+import com.simple.chris.pebble.functions.convertFloatToDP
 import kotlin.math.roundToInt
 
 class GradientCreatorRecycler internal constructor(var context: Context, private val colours: ArrayList<String>, onButtonListener: OnButtonListener): RecyclerView.Adapter<GradientCreatorRecycler.ViewHolder>() {
@@ -36,7 +36,7 @@ class GradientCreatorRecycler internal constructor(var context: Context, private
 
             val colourDrawable = GradientDrawable()
             colourDrawable.shape = GradientDrawable.OVAL
-            colourDrawable.setStroke(Calculations.convertToDP(context, 5f).roundToInt(), colour)
+            colourDrawable.setStroke(convertFloatToDP(context, 5f).roundToInt(), colour)
             holder.colourPreview.background = colourDrawable
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse_menu_recycler_view.on_bind_view_holder: ${e.localizedMessage}")

@@ -116,7 +116,7 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
                     modeColourDelete = true
                     binding.iconRemoveActive.visibility = View.VISIBLE
                     UIElements.viewVisibility(binding.notification, View.VISIBLE, 0)
-                    UIElements.viewObjectAnimator(binding.notification, "translationY", Calculations.convertToDP(this, -8f) - binding.notification.measuredHeight,
+                    UIElements.viewObjectAnimator(binding.notification, "translationY", convertFloatToDP(this, -8f) - binding.notification.measuredHeight,
                             250, 0, DecelerateInterpolator(3f))
                 } else {
                     Vibration.notification(this)
@@ -223,11 +223,11 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
     private fun setViewStartingLocations() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (buttonAdapter != null) {
-                binding.buttonBack.translationY = binding.buttonBack.measuredHeight + Calculations.convertToDP(this, 24f)
-                binding.buttonNext.translationY = binding.buttonNext.measuredHeight + Calculations.convertToDP(this, 24f)
-                binding.colourMenuHolder.translationY = binding.colourMenuHolder.measuredHeight + Calculations.convertToDP(this, 24f)
-                UIElements.viewObjectAnimator(binding.gradientDescriptionHolder, "translationY", Calculations.convertToDP(this, 90f) + binding.gradientDescriptionHolder.height, 0, 0, LinearInterpolator())
-                UIElements.viewObjectAnimator(binding.gradientNameHolder, "translationY", Calculations.convertToDP(this, 106f) + binding.gradientDescriptionHolder.height + binding.gradientNameHolder.height, 0, 0, LinearInterpolator())
+                binding.buttonBack.translationY = binding.buttonBack.measuredHeight + convertFloatToDP(this, 24f)
+                binding.buttonNext.translationY = binding.buttonNext.measuredHeight + convertFloatToDP(this, 24f)
+                binding.colourMenuHolder.translationY = binding.colourMenuHolder.measuredHeight + convertFloatToDP(this, 24f)
+                UIElements.viewObjectAnimator(binding.gradientDescriptionHolder, "translationY", convertFloatToDP(this, 90f) + binding.gradientDescriptionHolder.height, 0, 0, LinearInterpolator())
+                UIElements.viewObjectAnimator(binding.gradientNameHolder, "translationY", convertFloatToDP(this, 106f) + binding.gradientDescriptionHolder.height + binding.gradientNameHolder.height, 0, 0, LinearInterpolator())
 
                 /**
                  * Sets prerequisites for textViews
@@ -247,9 +247,9 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
          * Animates all views out for firstStep
          */
         UIElements.viewObjectAnimator(binding.colourMenuHolder, "translationY",
-            binding.colourMenuHolder.measuredHeight.toFloat() + Calculations.convertToDP(this, 24f), 700, 100, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(binding.buttonBack, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(binding.buttonNext, "translationY", Calculations.convertToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+            binding.colourMenuHolder.measuredHeight.toFloat() + convertFloatToDP(this, 24f), 700, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonBack, "translationY", convertFloatToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonNext, "translationY", convertFloatToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
 
         Handler(Looper.getMainLooper()).postDelayed({
             if (mainMenu) {
@@ -279,13 +279,13 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
         val duration = if (animate) 500 else 0
 
         UIElements.viewObjectAnimator(binding.colourMenuHolder, "translationY",
-            binding.colourMenuHolder.measuredHeight + Calculations.convertToDP(this, 24f), 500, 0, DecelerateInterpolator(3f))
+            binding.colourMenuHolder.measuredHeight + convertFloatToDP(this, 24f), 500, 0, DecelerateInterpolator(3f))
         UIElements.setImageViewSRC(binding.iconBack, R.drawable.icon_arrow_left, duration.toLong() / 2, 0)
         UIElements.setImageViewSRC(binding.iconNext, R.drawable.icon_upload, duration.toLong() / 2, 0)
         UIElements.viewObjectAnimator(binding.gradientDescriptionHolder, "translationY", 0f, 700, 500, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(binding.gradientNameHolder, "translationY", 0f, 700, 400, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(binding.buttonBack, "translationX", -(binding.buttonBack.measuredWidth + Calculations.convertToDP(this, 8f)), 250, 250, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(binding.buttonNext, "translationX", binding.buttonNext.measuredWidth + Calculations.convertToDP(this, 8f), 250, 250, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonBack, "translationX", -(binding.buttonBack.measuredWidth + convertFloatToDP(this, 8f)), 250, 250, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonNext, "translationX", binding.buttonNext.measuredWidth + convertFloatToDP(this, 8f), 250, 250, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(binding.buttonBack, "translationX", 0f, 250, 750, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(binding.buttonNext, "translationX", 0f, 250, 750, DecelerateInterpolator(3f))
         UIElements.viewVisibility(binding.gradientDescriptionHolder, View.VISIBLE, 0)
@@ -300,10 +300,10 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
                 0f, 750, 750, DecelerateInterpolator(3f))
         UIElements.setImageViewSRC(binding.iconBack, R.drawable.icon_close, 500, 0)
         UIElements.setImageViewSRC(binding.iconNext, R.drawable.icon_arrow_right, 500, 0)
-        UIElements.viewObjectAnimator(binding.gradientDescriptionHolder, "translationY", Calculations.convertToDP(this, 90f) + binding.gradientDescriptionHolder.height, 700, 200, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(binding.gradientNameHolder, "translationY", Calculations.convertToDP(this, 106f) + binding.gradientDescriptionHolder.height + binding.gradientNameHolder.height, 700, 250, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(binding.buttonBack, "translationX", -(binding.buttonBack.measuredWidth + Calculations.convertToDP(this, 8f)), 250, 100, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(binding.buttonNext, "translationX", binding.buttonNext.measuredWidth + Calculations.convertToDP(this, 8f), 250, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.gradientDescriptionHolder, "translationY", convertFloatToDP(this, 90f) + binding.gradientDescriptionHolder.height, 700, 200, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.gradientNameHolder, "translationY", convertFloatToDP(this, 106f) + binding.gradientDescriptionHolder.height + binding.gradientNameHolder.height, 700, 250, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonBack, "translationX", -(binding.buttonBack.measuredWidth + convertFloatToDP(this, 8f)), 250, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.buttonNext, "translationX", binding.buttonNext.measuredWidth + convertFloatToDP(this, 8f), 250, 100, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(binding.buttonBack, "translationX", 0f, 250, 450, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(binding.buttonNext, "translationX", 0f, 250, 450, DecelerateInterpolator(3f))
         UIElements.viewVisibility(binding.gradientDescriptionHolder, View.INVISIBLE, 950)

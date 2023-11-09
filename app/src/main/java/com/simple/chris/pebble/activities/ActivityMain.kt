@@ -97,7 +97,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
     override fun onAttachedToWindow() {
         binding.fragmentHolder.post {
-            Values.screenHeight = Calculations.screenMeasure(this, "height", window)
+            Values.screenHeight = getScreenMetrics(this, window).height
             bottomSheetPeekHeight = (screenHeight * (0.667)).toInt()
         }
     }
@@ -149,12 +149,12 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     @SuppressLint("ClickableViewAccessibility")
     fun smallScreenScrollBar(layoutManager: LinearLayoutManager) {
         ssScrollbarWidth =
-            binding.smallScreenFragHolder.measuredWidth - Calculations.convertToDP(this, 70f)
+            binding.smallScreenFragHolder.measuredWidth - convertFloatToDP(this, 70f)
         ssScrollbarArea = ssScrollbarWidth - binding.ssScrollbar.measuredWidth
         UIElements.viewHeightAnimator(
             binding.ssScrollbar,
-            Calculations.convertToDP(this, 5f),
-            Calculations.convertToDP(this, 2.55f),
+            convertFloatToDP(this, 5f),
+            convertFloatToDP(this, 2.55f),
             0,
             0,
             DecelerateInterpolator(3f)
@@ -162,7 +162,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         UIElements.viewObjectAnimator(
             binding.ssScrollbar,
             "translationY",
-            Calculations.convertToDP(this, 8f),
+            convertFloatToDP(this, 8f),
             0,
             0,
             DecelerateInterpolator(3f)
@@ -179,8 +179,8 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             Vibration.lowFeedback(this)
             UIElements.viewHeightAnimator(
                 binding.ssScrollbar,
-                Calculations.convertToDP(this, 5f),
-                Calculations.convertToDP(this, 2.55f),
+                convertFloatToDP(this, 5f),
+                convertFloatToDP(this, 2.55f),
                 500,
                 0,
                 DecelerateInterpolator(3f)
@@ -188,7 +188,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             UIElements.viewObjectAnimator(
                 binding.ssScrollbar,
                 "translationY",
-                Calculations.convertToDP(this, 8f),
+                convertFloatToDP(this, 8f),
                 500,
                 0,
                 DecelerateInterpolator(3f)
@@ -204,7 +204,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                     UIElements.viewHeightAnimator(
                         binding.ssScrollbar,
                         binding.ssScrollbar.measuredHeight.toFloat(),
-                        Calculations.convertToDP(this, 5f),
+                        convertFloatToDP(this, 5f),
                         500,
                         0,
                         DecelerateInterpolator(3f)
@@ -229,8 +229,8 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
                 MotionEvent.ACTION_MOVE -> {
                     val x = motionEvent.x
-                    val xIntStart = Calculations.convertToDP(this, 57.5f)
-                    val xIntEnd = Calculations.screenMeasure(this, "width", window) - xIntStart
+                    val xIntStart = convertFloatToDP(this, 57.5f)
+                    val xIntEnd = getScreenMetrics(this, window).width - xIntStart
                     val xProgress =
                         0f.coerceAtLeast(100f.coerceAtMost((100 / (xIntEnd - xIntStart)) * (x - xIntStart)))
                     val xOffset = (xProgress / 100) * (ssScrollbarRange - ssScrollbarExtent)
@@ -255,7 +255,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         UIElements.viewObjectAnimator(fragment, "scaleX", scale, duration, 0, interpolator)
         UIElement.cardRadiusAnimator(
             fragment,
-            Calculations.convertToDP(this, 30f),
+            convertFloatToDP(this, 30f),
             duration,
             0,
             interpolator
@@ -421,19 +421,19 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             UIElements.viewVisibility(binding.gradientScreenAnimationHero, View.VISIBLE, 0)
             UIElements.cardViewCornerRadiusAnimator(
                 binding.gradientScreenAnimationHero,
-                Calculations.convertToDP(this, 20f), 0, 0, LinearInterpolator()
+                convertFloatToDP(this, 20f), 0, 0, LinearInterpolator()
             )
             UIElements.viewWidthAnimator(
                 binding.gradientScreenAnimationHero, 0f,
-                Calculations.convertToDP(this, 150f), 0, 0, LinearInterpolator()
+                convertFloatToDP(this, 150f), 0, 0, LinearInterpolator()
             )
             UIElements.viewHeightAnimator(
                 binding.gradientScreenAnimationHero, 0f,
-                Calculations.convertToDP(this, 150f), 0, 0, LinearInterpolator()
+                convertFloatToDP(this, 150f), 0, 0, LinearInterpolator()
             )
             UIElements.viewObjectAnimator(
                 binding.gradientScreenAnimationHero, "translationX",
-                (Calculations.screenMeasure(this, "width", window) - Calculations.convertToDP(
+                (getScreenMetrics(this, window).width - convertFloatToDP(
                     this,
                     150f
                 )) / 2,
@@ -441,7 +441,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             )
             UIElements.viewObjectAnimator(
                 binding.gradientScreenAnimationHero, "translationY",
-                Calculations.screenMeasure(this, "height", window) + Calculations.convertToDP(
+                getScreenMetrics(this, window).height + convertFloatToDP(
                     this,
                     150f
                 ),
@@ -458,7 +458,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             UIElements.viewWidthAnimator(
                 binding.gradientScreenAnimationHero,
                 binding.gradientScreenAnimationHero.measuredWidth.toFloat(),
-                Calculations.screenMeasure(this, "width", window).toFloat(),
+                getScreenMetrics(this, window).width.toFloat(),
                 Values.animationDuration,
                 0,
                 DecelerateInterpolator(3f)
@@ -466,7 +466,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             UIElements.viewHeightAnimator(
                 binding.gradientScreenAnimationHero,
                 binding.gradientScreenAnimationHero.measuredHeight.toFloat(),
-                Calculations.screenMeasure(this, "height", window).toFloat(),
+                getScreenMetrics(this, window).height.toFloat(),
                 Values.animationDuration,
                 0,
                 DecelerateInterpolator(3f)
@@ -481,11 +481,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             )
             UIElements.viewObjectAnimator(
                 binding.gradientScreenAnimationHero, "translationY",
-                (Calculations.screenMeasure(
-                    this,
-                    "height",
-                    window
-                ) - binding.gradientScreenAnimationHero.measuredHeight).toFloat() / 2,
+                (getScreenMetrics(this, window).height - binding.gradientScreenAnimationHero.measuredHeight).toFloat() / 2,
                 Values.animationDuration, 0, DecelerateInterpolator(3f)
             )
             UIElements.cardViewCornerRadiusAnimator(
@@ -512,7 +508,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             UIElements.viewWidthAnimator(
                 binding.fragmentHolder,
                 binding.fragmentHolder.width.toFloat(),
-                Calculations.screenMeasure(this, "width", window).toFloat(),
+                getScreenMetrics(this, window).width.toFloat(),
                 500,
                 0,
                 DecelerateInterpolator(3f)
@@ -663,7 +659,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     fun startGradientScreen(animateNew: Boolean) {
         Log.e("INFO", "${Values.currentlySplitScreened}")
         if (!Values.currentlySplitScreened) {
-            if (Calculations.splitScreenPossible(this, window)) {
+            if (canSplitScreen(this, window)) {
                 openSplitScreen(true)
             } else {
                 openFullScreen(false)
@@ -698,7 +694,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         //Toast.makeText(this, "${Values.currentlySplitScreened} : ${Values.currentActivity}", Toast.LENGTH_SHORT).show()
         Values.currentGradientScreenPos = -1
         if (!Values.currentlySplitScreened) {
-            if (Calculations.splitScreenPossible(this, window)) {
+            if (canSplitScreen(this, window)) {
                 //Toast.makeText(this, "Split", Toast.LENGTH_SHORT).show()
                 openSplitScreen(true)
             } else {
@@ -749,22 +745,14 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             view.findViewById<ImageView>(R.id.gradient).getLocationOnScreen(gradientViewPos)
 
             /** Get scale/position of secondFrag **/
-            if (Values.settingSplitScreen && Calculations.pxToIn(this, window) >= 4) {
-                secondaryFragPosX = (Calculations.screenMeasure(
-                    this,
-                    "width",
-                    window
-                ) / 2) + (binding.separator.width / 2).toFloat()
-                secondaryFragScaleX = (Calculations.screenMeasure(
-                    this,
-                    "width",
-                    window
-                ) / 2) - (binding.separator.width / 2).toFloat()
-                secondaryFragScaleY = Calculations.screenMeasure(this, "height", window).toFloat()
+            if (canSplitScreen(this, window)) {
+                secondaryFragPosX = (getScreenMetrics(this, window).width / 2) + (binding.separator.width / 2).toFloat()
+                secondaryFragScaleX = (getScreenMetrics(this, window).width / 2) - (binding.separator.width / 2).toFloat()
+                secondaryFragScaleY = getScreenMetrics(this, window).height.toFloat()
             } else {
                 secondaryFragPosX = 0f
-                secondaryFragScaleX = Calculations.screenMeasure(this, "width", window).toFloat()
-                secondaryFragScaleY = Calculations.screenMeasure(this, "height", window).toFloat()
+                secondaryFragScaleX = getScreenMetrics(this, window).width.toFloat()
+                secondaryFragScaleY = getScreenMetrics(this, window).height.toFloat()
             }
 
             /** Set values for FragGradientScreen in Values.kt **/
@@ -791,7 +779,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             UIElements.viewVisibility(binding.gradientScreenAnimationHero, View.VISIBLE, 0)
             UIElements.cardViewCornerRadiusAnimator(
                 binding.gradientScreenAnimationHero,
-                Calculations.convertToDP(this, 20f),
+                convertFloatToDP(this, 20f),
                 0,
                 0,
                 LinearInterpolator()
@@ -894,20 +882,12 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             val duration: Long = if (animation) 500 else 0
             UIElements.viewWidthAnimator(
                 binding.fragmentHolderSecondary, binding.fragmentHolderSecondary.width.toFloat(),
-                Calculations.screenMeasure(
-                    this,
-                    "width",
-                    window
-                ) / 2 - (binding.separator.width / 2).toFloat(), 0, 0, LinearInterpolator()
+                getScreenMetrics(this, window).width / 2 - (binding.separator.width / 2).toFloat(), 0, 0, LinearInterpolator()
             )
             UIElements.viewWidthAnimator(
                 binding.fragmentHolder,
                 binding.fragmentHolder.width.toFloat(),
-                (Calculations.screenMeasure(
-                    this,
-                    "width",
-                    window
-                ) / 2) - (binding.separator.width / 2).toFloat(),
+                (getScreenMetrics(this, window).width / 2) - (binding.separator.width / 2).toFloat(),
                 duration,
                 0,
                 DecelerateInterpolator(3f)
@@ -915,20 +895,12 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             UIElements.viewObjectAnimator(
                 binding.separator,
                 "translationX",
-                -((Calculations.screenMeasure(
-                    this,
-                    "width",
-                    window
-                ) / 2) + (binding.separator.width / 2)).toFloat(),
+                -((getScreenMetrics(this, window).width / 2) + (binding.separator.width / 2)).toFloat(),
                 duration,
                 0,
                 DecelerateInterpolator(3f)
             )
-            val secondaryPlacement = (Calculations.screenMeasure(
-                this,
-                "width",
-                window
-            ) / 2) + (binding.separator.width / 2).toFloat()
+            val secondaryPlacement = (getScreenMetrics(this, window).width / 2) + (binding.separator.width / 2).toFloat()
             UIElements.viewObjectAnimator(
                 binding.fragmentHolderSecondary,
                 "translationX",
@@ -949,14 +921,10 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         binding.separator.post {
             if (animation) {
                 binding.fragmentHolderSecondary.layoutParams.width =
-                    Calculations.screenMeasure(this, "width", window)
+                    getScreenMetrics(this, window).width
                 moveFragLeft(binding.fragmentHolder.width.toFloat(), binding.fragmentHolder)
                 moveFragLeft(
-                    (Calculations.screenMeasure(
-                        this,
-                        "width",
-                        window
-                    ) + binding.separator.width).toFloat(), binding.fragmentHolderSecondary
+                    (getScreenMetrics(this, window).width + binding.separator.width).toFloat(), binding.fragmentHolderSecondary
                 )
                 shrinkFrag(binding.fragmentHolder, 0.9f, 100, DecelerateInterpolator(3f))
                 shrinkFrag(binding.fragmentHolderSecondary, 0.9f, 100, DecelerateInterpolator(3f))
@@ -970,18 +938,14 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                 UIElements.viewWidthAnimator(
                     binding.fragmentHolderSecondary,
                     binding.fragmentHolderSecondary.width.toFloat(),
-                    Calculations.screenMeasure(this, "width", window).toFloat(),
+                    getScreenMetrics(this, window).width.toFloat(),
                     0,
                     0,
                     LinearInterpolator()
                 )
                 UIElements.viewObjectAnimator(
                     binding.fragmentHolderSecondary, "translationX",
-                    -(Calculations.screenMeasure(
-                        this,
-                        "width",
-                        window
-                    ) + binding.separator.width).toFloat(), 0, 0, LinearInterpolator()
+                    -(getScreenMetrics(this, window).width + binding.separator.width).toFloat(), 0, 0, LinearInterpolator()
                 )
             }
         }
@@ -1016,7 +980,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         } else {
             //Gradient Screen
             Values.animatingSharedElement = true
-            if (!Calculations.splitScreenPossible(this, window)) {
+            if (!canSplitScreen(this, window)) {
                 //Shared Element
                 /** Get scale/position of clicked Gradient **/
                 gradientViewSizeX =
@@ -1027,25 +991,17 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                     .getLocationOnScreen(gradientViewPos)
 
                 /** Get scale/position of secondFrag **/
-                if (Values.settingSplitScreen && Calculations.pxToIn(this, window) >= 4) {
-                    secondaryFragPosX = (Calculations.screenMeasure(
-                        this,
-                        "width",
-                        window
-                    ) / 2) + (binding.separator.width / 2).toFloat()
-                    secondaryFragScaleX = (Calculations.screenMeasure(
-                        this,
-                        "width",
-                        window
-                    ) / 2) - (binding.separator.width / 2).toFloat()
+                if (canSplitScreen(this, window)) {
+                    secondaryFragPosX = (getScreenMetrics(this, window).width / 2) + (binding.separator.width / 2).toFloat()
+                    secondaryFragScaleX = (getScreenMetrics(this, window).width / 2) - (binding.separator.width / 2).toFloat()
                     secondaryFragScaleY =
-                        Calculations.screenMeasure(this, "height", window).toFloat()
+                        getScreenMetrics(this, window).height.toFloat()
                 } else {
                     secondaryFragPosX = 0f
                     secondaryFragScaleX =
-                        Calculations.screenMeasure(this, "width", window).toFloat()
+                        getScreenMetrics(this, window).width.toFloat()
                     secondaryFragScaleY =
-                        Calculations.screenMeasure(this, "height", window).toFloat()
+                        getScreenMetrics(this, window).height.toFloat()
                 }
 
                 /** Set initial properties of SharedElement **/
@@ -1121,7 +1077,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                 )
                 UIElements.cardViewCornerRadiusAnimator(
                     binding.gradientScreenAnimationHero,
-                    Calculations.convertToDP(this, 20f),
+                    convertFloatToDP(this, 20f),
                     600,
                     0,
                     LinearInterpolator()
@@ -1163,7 +1119,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                 UIElements.viewWidthAnimator(
                     binding.fragmentHolder,
                     binding.fragmentHolder.width.toFloat(),
-                    Calculations.screenMeasure(this, "width", window).toFloat(),
+                    getScreenMetrics(this, window).width.toFloat(),
                     500,
                     0,
                     DecelerateInterpolator(3f)
@@ -1215,7 +1171,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         UIElements.viewWidthAnimator(
             binding.gradientScreenAnimationHero,
             0f,
-            Calculations.screenMeasure(this, "width", window).toFloat(),
+            getScreenMetrics(this, window).width.toFloat(),
             0,
             0,
             LinearInterpolator()
@@ -1223,7 +1179,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         UIElements.viewHeightAnimator(
             binding.gradientScreenAnimationHero,
             0f,
-            Calculations.screenMeasure(this, "height", window).toFloat(),
+            getScreenMetrics(this, window).height.toFloat(),
             0,
             0,
             LinearInterpolator()
@@ -1271,7 +1227,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         )
         UIElements.cardViewCornerRadiusAnimator(
             binding.gradientScreenAnimationHero,
-            Calculations.convertToDP(this, 20f),
+            convertFloatToDP(this, 20f),
             600,
             0,
             LinearInterpolator()
@@ -1415,15 +1371,15 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                         try {
                             Handler(Looper.getMainLooper()).postDelayed({
                                 wallpaperManager.setBitmap(
-                                    Calculations.createBitmap(
+                                    createBitmap(
                                         UIElement.gradientDrawableNew(
                                             this,
                                             null,
                                             Values.gradientScreenColours,
                                             0f
                                         ) as Drawable,
-                                        Calculations.screenMeasure(this, "width", window),
-                                        Calculations.screenMeasure(this, "height", window)
+                                        getScreenMetrics(this, window).width,
+                                        getScreenMetrics(this, window).height
                                     ),
                                     null, true, WallpaperManager.FLAG_SYSTEM
                                 )
@@ -1445,15 +1401,15 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                         try {
                             Handler(Looper.getMainLooper()).postDelayed({
                                 wallpaperManager.setBitmap(
-                                    Calculations.createBitmap(
+                                    createBitmap(
                                         UIElement.gradientDrawableNew(
                                             this,
                                             null,
                                             Values.gradientScreenColours,
                                             0f
                                         ) as Drawable,
-                                        Calculations.screenMeasure(this, "width", window),
-                                        Calculations.screenMeasure(this, "height", window)
+                                        getScreenMetrics(this, window).width,
+                                        getScreenMetrics(this, window).height
                                     ),
                                     null, true, WallpaperManager.FLAG_LOCK
                                 )
@@ -1480,15 +1436,15 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                         //dialogPopupHider()
                         try {
                             wallpaperManager.setBitmap(
-                                Calculations.createBitmap(
+                                createBitmap(
                                     UIElement.gradientDrawableNew(
                                         this,
                                         null,
                                         Values.gradientScreenColours,
                                         0f
                                     ) as Drawable,
-                                    Calculations.screenMeasure(this, "width", window),
-                                    Calculations.screenMeasure(this, "height", window)
+                                    getScreenMetrics(this, window).width,
+                                    getScreenMetrics(this, window).height
                                 )
                             )
                             (gradientFragment as FragExpandedGradient).runNotification(

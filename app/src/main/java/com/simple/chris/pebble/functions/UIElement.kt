@@ -49,14 +49,12 @@ object UIElement {
                 GradientDrawable.Orientation.TL_BR,
                 intArrayOf(startColour, endColour)
         )
-        gradientDrawable.cornerRadius = Calculations.convertToDP(context, cornerRadius)
+        gradientDrawable.cornerRadius = convertFloatToDP(context, cornerRadius)
 
         /** Set or return gradientDrawable **/
         if (view != null) {
             view.background = gradientDrawable
-            if (Calculations.isAndroidPOrGreater()) {
-                view.outlineSpotShadowColor = endColour
-            }
+            view.outlineSpotShadowColor = endColour
         } else {
             return gradientDrawable
         }
@@ -70,16 +68,14 @@ object UIElement {
             if (colourArray.size >= 2) {
                 val gradientDrawable = GradientDrawable(
                         GradientDrawable.Orientation.TL_BR,
-                        Calculations.stringArraytoIntArray(colourArray)
+                        convertStringArrToIntArr(colourArray)
                 )
-                gradientDrawable.cornerRadius = Calculations.convertToDP(context, cornerRadius)
+                gradientDrawable.cornerRadius = convertFloatToDP(context, cornerRadius)
 
                 /** Set or return gradientDrawable **/
                 if (view != null) {
                     view.background = gradientDrawable
-                    if (Calculations.isAndroidPOrGreater()) {
-                        view.outlineSpotShadowColor = Color.parseColor(colourArray[colourArray.size - 1])
-                    }
+                    view.outlineSpotShadowColor = Color.parseColor(colourArray[colourArray.size - 1])
                 } else {
                     return gradientDrawable
                 }
@@ -89,13 +85,11 @@ object UIElement {
                         GradientDrawable.Orientation.TL_BR,
                         intArrayOf(colour, colour)
                 )
-                gradientDrawable.cornerRadius = Calculations.convertToDP(context, cornerRadius)
+                gradientDrawable.cornerRadius = convertFloatToDP(context, cornerRadius)
                 /** Set or return gradientDrawable **/
                 if (view != null) {
                     view.background = gradientDrawable
-                    if (Calculations.isAndroidPOrGreater()) {
-                        view.outlineSpotShadowColor = colour
-                    }
+                    view.outlineSpotShadowColor = colour
                 } else {
                     return gradientDrawable
                 }

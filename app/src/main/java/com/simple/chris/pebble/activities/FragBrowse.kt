@@ -151,7 +151,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                     bottomSheetBehavior.peekHeight = bottomSheetPeekHeight
 
                     if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                        bottomSheetPeekHeight = Calculations.screenMeasure(context, "height", context.window)
+                        bottomSheetPeekHeight = getScreenMetrics(context, context.window).height
                     }
 
                     bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
@@ -162,20 +162,20 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                             try {
                                 binding.titleHolder.translationY = ((Values.screenHeight * (-0.333) * slideOffset + Values.screenHeight * (0.333) - (binding.titleHolder.measuredHeight)) / 2).toFloat()
                                 binding.buttonIcon.translationY = ((Values.screenHeight * (-0.333) * slideOffset + Values.screenHeight * (0.333) - (binding.titleHolder.measuredHeight)) / 8).toFloat()
-                                val cornerRadius = ((slideOffset * -1) + 1) * Calculations.convertToDP((activity as ActivityMain), 20f)
+                                val cornerRadius = ((slideOffset * -1) + 1) * convertFloatToDP((activity as ActivityMain), 20f)
                                 val bottomShe = view?.findViewById<CardView>(R.id.bottomSheet)
                                 bottomShe?.radius = cornerRadius
 
                                 if (slideOffset >= 0.4f) {
                                     if (createButtonExpanded) {
-                                        UIElement.animateViewWidth("height", binding.createButton, Calculations.convertToDP((activity as ActivityMain), 35f).toInt(), 0, 250)
-                                        UIElement.animateViewWidth("width", binding.createButton, Calculations.convertToDP((activity as ActivityMain), 50f).toInt(), 0, 250)
+                                        UIElement.animateViewWidth("height", binding.createButton, convertFloatToDP((activity as ActivityMain), 35f).toInt(), 0, 250)
+                                        UIElement.animateViewWidth("width", binding.createButton, convertFloatToDP((activity as ActivityMain), 50f).toInt(), 0, 250)
                                         createButtonExpanded = false
                                     }
                                 } else {
                                     if (!createButtonExpanded) {
-                                        UIElement.animateViewWidth("height", binding.createButton, Calculations.convertToDP((activity as ActivityMain), 60f).toInt(), 0, 250)
-                                        UIElement.animateViewWidth("width", binding.createButton, Calculations.viewWrapContent(binding.createButton, "width") + Calculations.convertToDP((activity as ActivityMain), 11f).toInt(), 0, 250)
+                                        UIElement.animateViewWidth("height", binding.createButton, convertFloatToDP((activity as ActivityMain), 60f).toInt(), 0, 250)
+                                        UIElement.animateViewWidth("width", binding.createButton, getViewMetrics(binding.createButton).width + convertFloatToDP((activity as ActivityMain), 11f).toInt(), 0, 250)
                                         createButtonExpanded = true
                                     }
 
@@ -217,10 +217,10 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
 
     @SuppressLint("ClickableViewAccessibility")
     private fun browseScrollBar(layoutManager: LinearLayoutManager) {
-        browseScrollbarHeight = binding.bottomSheet.measuredHeight - Calculations.convertToDP((activity as ActivityMain), 50f)
+        browseScrollbarHeight = binding.bottomSheet.measuredHeight - convertFloatToDP((activity as ActivityMain), 50f)
         browseScrollbarArea = browseScrollbarHeight - binding.browseScrollbar.measuredHeight
-        UIElements.viewWidthAnimator(binding.browseScrollbar, binding.browseScrollbar.measuredWidth.toFloat(), Calculations.convertToDP((activity as ActivityMain), 2.5f), 500, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(binding.browseScrollbar, "translationX", Calculations.convertToDP((activity as ActivityMain), 8f), 500, 0, DecelerateInterpolator(3f))
+        UIElements.viewWidthAnimator(binding.browseScrollbar, binding.browseScrollbar.measuredWidth.toFloat(), convertFloatToDP((activity as ActivityMain), 2.5f), 500, 0, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.browseScrollbar, "translationX", convertFloatToDP((activity as ActivityMain), 8f), 500, 0, DecelerateInterpolator(3f))
         browseScrollbarOffset = 0
         binding.gradientGrid.setOnScrollChangeListener { _, _, _, _, _ ->
             browseScrollbarExtent = binding.gradientGrid.computeVerticalScrollExtent()
@@ -239,8 +239,8 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         val runnable = Runnable {
             try {
                 Vibration.lowFeedback((activity as ActivityMain))
-                UIElements.viewWidthAnimator(binding.browseScrollbar, binding.browseScrollbar.measuredWidth.toFloat(), Calculations.convertToDP((activity as ActivityMain), 2.5f), 500, 0, DecelerateInterpolator(3f))
-                UIElements.viewObjectAnimator(binding.browseScrollbar, "translationX", Calculations.convertToDP((activity as ActivityMain), 8f), 500, 0, DecelerateInterpolator(3f))
+                UIElements.viewWidthAnimator(binding.browseScrollbar, binding.browseScrollbar.measuredWidth.toFloat(), convertFloatToDP((activity as ActivityMain), 2.5f), 500, 0, DecelerateInterpolator(3f))
+                UIElements.viewObjectAnimator(binding.browseScrollbar, "translationX", convertFloatToDP((activity as ActivityMain), 8f), 500, 0, DecelerateInterpolator(3f))
             } catch (e: Exception) {
                 Log.e("ERR", "pebble.frag_browse.browse_scrollbar: ${e.localizedMessage}")
             }
@@ -254,7 +254,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                     binding.gradientGrid.suppressLayout(true)
                     binding.gradientGrid.suppressLayout(false)
                     handler.removeCallbacks(runnable)
-                    UIElements.viewWidthAnimator(binding.browseScrollbar, binding.browseScrollbar.measuredWidth.toFloat(), Calculations.convertToDP((activity as ActivityMain), 5f), 500, 0, DecelerateInterpolator(3f))
+                    UIElements.viewWidthAnimator(binding.browseScrollbar, binding.browseScrollbar.measuredWidth.toFloat(), convertFloatToDP((activity as ActivityMain), 5f), 500, 0, DecelerateInterpolator(3f))
                     UIElements.viewObjectAnimator(binding.browseScrollbar, "translationX", 0f, 500, 0, DecelerateInterpolator(3f))
                     true
                 }
@@ -267,8 +267,8 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                 MotionEvent.ACTION_MOVE -> {
                     scrollbarExpandBottomSheet()
                     val y = motionEvent.y
-                    val yIntStart = Calculations.convertToDP((activity as ActivityMain), 47.5f)
-                    val yIntEnd = Calculations.screenMeasure((activity as ActivityMain), "height", (activity as ActivityMain).window) - yIntStart
+                    val yIntStart = convertFloatToDP((activity as ActivityMain), 47.5f)
+                    val yIntEnd = getScreenMetrics((activity as ActivityMain), (activity as ActivityMain).window).height - yIntStart
                     val yProgress = 0f.coerceAtLeast(100f.coerceAtMost((100 / (yIntEnd - yIntStart)) * (y - yIntStart)))
                     val yOffset = (yProgress / 100) * (browseScrollbarRange - browseScrollbarExtent)
                     layoutManager.scrollToPositionWithOffset(0, -yOffset.roundToInt())
@@ -313,19 +313,19 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         binding.touchBlockerDark.visibility = View.VISIBLE
         binding.menuArrow.visibility = View.INVISIBLE
         binding.menu.visibility = View.VISIBLE
-        binding.menu.layoutParams.height = Calculations.convertToDP((activity as ActivityMain), 60f).toInt()
+        binding.menu.layoutParams.height = convertFloatToDP((activity as ActivityMain), 60f).toInt()
         UIElements.viewObjectAnimator(binding.touchBlockerDark, "alpha", 1f, 250, 0, LinearInterpolator())
         UIElements.viewObjectAnimator(binding.menu, "alpha", 1f, 250, 0, LinearInterpolator())
-        UIElement.animateViewWidth("height", binding.menu, Calculations.viewWrapContent(binding.menu, "height"), 50, 500)
-        UIElements.viewObjectAnimator(binding.menuArrow, "translationY", Calculations.convertToDP((activity as ActivityMain), 0f), 250, 250, DecelerateInterpolator())
+        UIElement.animateViewWidth("height", binding.menu, getViewMetrics(binding.menu).height, 50, 500)
+        UIElements.viewObjectAnimator(binding.menuArrow, "translationY", convertFloatToDP((activity as ActivityMain), 0f), 250, 250, DecelerateInterpolator())
         UIElements.viewVisibility(binding.menuArrow, View.VISIBLE, 250)
         Vibration.lowFeedback((activity as ActivityMain))
     }
 
     private fun hideMenu() {
-        UIElement.animateViewWidth("height", binding.menu, Calculations.convertToDP((activity as ActivityMain), 50f).toInt(), 0, 400)
+        UIElement.animateViewWidth("height", binding.menu, convertFloatToDP((activity as ActivityMain), 50f).toInt(), 0, 400)
         UIElements.viewObjectAnimator(binding.menu, "alpha", 0f, 175, 75, LinearInterpolator())
-        UIElements.viewObjectAnimator(binding.menuArrow, "translationY", Calculations.convertToDP((activity as ActivityMain), -25f), 100, 0, DecelerateInterpolator())
+        UIElements.viewObjectAnimator(binding.menuArrow, "translationY", convertFloatToDP((activity as ActivityMain), -25f), 100, 0, DecelerateInterpolator())
         UIElements.viewVisibility(binding.menuArrow, View.INVISIBLE, 100)
         UIElements.viewObjectAnimator(binding.touchBlockerDark, "alpha", 0f, 175, 100, LinearInterpolator())
         Handler(Looper.getMainLooper()).postDelayed({
@@ -550,9 +550,9 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         UIElements.viewObjectAnimator(binding.buttonIcon, "translationY", (((Values.screenHeight * (0.333)) / 8) - (binding.titleHolder.measuredHeight / 8)).toFloat(),
                 hideAnimationDur * 2, hideAnimationDur * 2, DecelerateInterpolator(3f))
         UIElements.setTextViewText(binding.screenTitle, R.string.word_search, (hideAnimationDur * 1.5).toLong(), 0)
-        UIElements.viewObjectAnimator(binding.createButton, "translationY", Calculations.convertToDP((activity as ActivityMain),
+        UIElements.viewObjectAnimator(binding.createButton, "translationY", convertFloatToDP((activity as ActivityMain),
                 84f), hideAnimationDur, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(binding.menuButton, "translationY", Calculations.convertToDP((activity as ActivityMain),
+        UIElements.viewObjectAnimator(binding.menuButton, "translationY", convertFloatToDP((activity as ActivityMain),
                 84f), hideAnimationDur, 50, DecelerateInterpolator(3f))
 
         /** SearchByColour Reveal **/
@@ -564,7 +564,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                     if (binding.searchByColourRecycler != null) {
                         UIElements.viewObjectAnimator(binding.searchByColourHolder, "alpha", 1f, 150, -hideAnimationDur + 250, LinearInterpolator())
                         UIElements.viewObjectAnimator(binding.searchByColourHolder, "translationX",
-                                -Calculations.convertToDP((activity as ActivityMain), 58f), hideAnimationDur, -hideAnimationDur + 250, DecelerateInterpolator(3f))
+                                -convertFloatToDP((activity as ActivityMain), 58f), hideAnimationDur, -hideAnimationDur + 250, DecelerateInterpolator(3f))
                     } else {
                         Log.e("ERR", "Critical Error Caught: startSearch - @view == null")
                     }
@@ -588,7 +588,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         /** SearchByColour Reveal **/
         UIElements.viewObjectAnimator(binding.searchByColourHolder, "alpha", 0f, 150, 0, LinearInterpolator())
         UIElements.viewObjectAnimator(binding.searchByColourHolder, "translationX", 0f, hideAnimationDur, 0, DecelerateInterpolator(3f))
-        UIElements.viewWidthAnimator(binding.searchByColourHolder, binding.searchByColourHolder.measuredWidth.toFloat(), Calculations.convertToDP((activity as ActivityMain), 50f), hideAnimationDur * 2, 0, DecelerateInterpolator(3f))
+        UIElements.viewWidthAnimator(binding.searchByColourHolder, binding.searchByColourHolder.measuredWidth.toFloat(), convertFloatToDP((activity as ActivityMain), 50f), hideAnimationDur * 2, 0, DecelerateInterpolator(3f))
         UIElements.setImageViewSRC(binding.iconSearch, R.drawable.icon_search, hideAnimationDur, 0)
     }
 
@@ -612,7 +612,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         binding.searchByColourRecycler.post {
             Handler(Looper.getMainLooper()).postDelayed({
                 if (binding.searchByColourHolder != null) {
-                    UIElements.viewWidthAnimator(binding.searchByColourHolder, binding.searchByColourHolder.measuredWidth.toFloat(), (activity as ActivityMain).getFragmentWidth() - Calculations.convertToDP((activity as ActivityMain), 122f), hideAnimationDur * 2, -hideAnimationDur + 250, DecelerateInterpolator(3f))
+                    UIElements.viewWidthAnimator(binding.searchByColourHolder, binding.searchByColourHolder.measuredWidth.toFloat(), (activity as ActivityMain).getFragmentWidth() - convertFloatToDP((activity as ActivityMain), 122f), hideAnimationDur * 2, -hideAnimationDur + 250, DecelerateInterpolator(3f))
                 } else {
                     Log.e("ERR", "Critical Error Caught: setSBCRecyclerWidth - @view == null")
                 }
