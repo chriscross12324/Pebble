@@ -27,7 +27,7 @@ import com.simple.chris.pebble.functions.*
 import java.util.*
 import kotlin.random.Random
 
-class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonListener {
+class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonListener {
     private lateinit var binding: ActivityGradientCreateBinding
 
     lateinit var buttonAdapter: GradientCreatorRecycler
@@ -174,7 +174,7 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
         buttonAdapter = GradientCreatorRecycler(this, Values.gradientCreatorColours, this)
         binding.recyclerGradientColours.apply {
             setHasFixedSize(true)
-            layoutManager = GridLayoutManager(this@GradientCreator, 3)
+            layoutManager = GridLayoutManager(this@ActivityGradientCreator, 3)
             adapter = buttonAdapter
         }
     }
@@ -183,7 +183,7 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
         /** Touch Events **/
         val itemTouchHelper = object : ItemTouchHelper.Callback() {
             override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-                Vibration.strongFeedback(this@GradientCreator)
+                Vibration.strongFeedback(this@ActivityGradientCreator)
                 return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG,
                         ItemTouchHelper.DOWN or ItemTouchHelper.UP or ItemTouchHelper.START or ItemTouchHelper.END)
                 //Log.e("INFO", "Moving")
@@ -202,7 +202,7 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
                     }
                 }
                 buttonAdapter.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
-                Vibration.lowFeedback(this@GradientCreator)
+                Vibration.lowFeedback(this@ActivityGradientCreator)
                 setGradientDrawable()
                 return true
             }
@@ -320,7 +320,7 @@ class GradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnButtonLis
             firstStepExitAnim(false)
             Handler(Looper.getMainLooper()).postDelayed({
                 Values.editingColourAtPos = position
-                startActivity(Intent(this, ColourPicker::class.java))
+                startActivity(Intent(this, ActivityColourPicker::class.java))
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }, 600)
         } else {

@@ -31,7 +31,7 @@ import com.simple.chris.pebble.functions.*
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
+class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     private lateinit var binding: ActivityMainBinding
     private var mSkuList = listOf("donate_1", "donate_2", "donate_5", "donate_10")
 
@@ -83,7 +83,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
 
         browseFragment = FragBrowse()
-        gradientFragment = FragGradientScreen()
+        gradientFragment = FragExpandedGradient()
 
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragmentHolder, browseFragment)
@@ -293,7 +293,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             UIElements.cardViewCornerRadiusAnimator(binding.gradientScreenAnimationHero, 0f, Values.animationDuration - 100, 0, LinearInterpolator())
 
             Handler(Looper.getMainLooper()).postDelayed({
-                startActivity(Intent(this, GradientCreator::class.java))
+                startActivity(Intent(this, ActivityGradientCreator::class.java))
                 overridePendingTransition(0, 0)
                 Values.animatingSharedElement = false
             }, Values.animationDuration)
@@ -330,7 +330,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     private fun refreshTheme() {
         val fragment = supportFragmentManager.findFragmentById(R.id.fragmentHolder)
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, ActivityMain::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }, 500)
@@ -387,7 +387,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentHolderSecondary, gradientFragment)
                     .commitAllowingStateLoss()
-            (gradientFragment as FragGradientScreen).startSplitScreen()
+            (gradientFragment as FragExpandedGradient).startSplitScreen()
         } else {
             Log.e("INFO", "${Values.currentActivity}")
             if (Values.currentActivity != "GradientScreen") {
@@ -395,16 +395,16 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                         .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                         .replace(R.id.fragmentHolderSecondary, gradientFragment)
                         .commitAllowingStateLoss()
-                (gradientFragment as FragGradientScreen).startSplitScreen()
+                (gradientFragment as FragExpandedGradient).startSplitScreen()
             } else {
                 if (animateNew) {
                     supportFragmentManager.beginTransaction()
                             .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                             .replace(R.id.fragmentHolderSecondary, gradientFragment)
                             .commitAllowingStateLoss()
-                    (gradientFragment as FragGradientScreen).startSplitScreen()
+                    (gradientFragment as FragExpandedGradient).startSplitScreen()
                 } else {
-                    (gradientFragment as FragGradientScreen).continueSplitScreen()
+                    (gradientFragment as FragExpandedGradient).continueSplitScreen()
                 }
             }
         }
@@ -505,7 +505,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     fun endSharedElement() {
         /** Called from FragGradientScreen.kt; hides sharedElement **/
         UIElements.viewVisibility(binding.gradientScreenAnimationHero, View.GONE, 0)
-        (gradientFragment as FragGradientScreen).showUI()
+        (gradientFragment as FragExpandedGradient).showUI()
     }
 
     fun openSplitScreen(animation: Boolean) {
@@ -756,7 +756,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                                 wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(this, null, Values.gradientScreenColours, 0f) as Drawable,
                                         Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)),
                                         null, true, WallpaperManager.FLAG_SYSTEM)
-                                (gradientFragment as FragGradientScreen).runNotification(R.drawable.icon_wallpaper, R.string.sentence_enjoy_your_wallpaper)
+                                (gradientFragment as FragExpandedGradient).runNotification(R.drawable.icon_wallpaper, R.string.sentence_enjoy_your_wallpaper)
                             }, 250)
                         } catch (e: Exception) {
                             Log.e("ERR", "pebble.frag_gradient_screen.on_button_click_popup.set_wallpaper: ${e.localizedMessage}")
@@ -769,7 +769,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                                 wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(this, null, Values.gradientScreenColours, 0f) as Drawable,
                                         Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)),
                                         null, true, WallpaperManager.FLAG_LOCK)
-                                (gradientFragment as FragGradientScreen).runNotification(R.drawable.icon_wallpaper, R.string.sentence_enjoy_your_wallpaper)
+                                (gradientFragment as FragExpandedGradient).runNotification(R.drawable.icon_wallpaper, R.string.sentence_enjoy_your_wallpaper)
                             }, 250)
                         } catch (e: Exception) {
                             Log.e("ERR", "pebble.frag_gradient_screen.on_button_click_popup.set_wallpaper: ${e.localizedMessage}")
@@ -786,7 +786,7 @@ class MainActivity : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                         try {
                             wallpaperManager.setBitmap(Calculations.createBitmap(UIElement.gradientDrawableNew(this, null, Values.gradientScreenColours, 0f) as Drawable,
                                     Calculations.screenMeasure(this, "width", window), Calculations.screenMeasure(this, "height", window)))
-                            (gradientFragment as FragGradientScreen).runNotification(R.drawable.icon_wallpaper, R.string.sentence_enjoy_your_wallpaper)
+                            (gradientFragment as FragExpandedGradient).runNotification(R.drawable.icon_wallpaper, R.string.sentence_enjoy_your_wallpaper)
                         } catch (e: Exception) {
                             Log.e("ERR", "pebble.frag_gradient_screen.on_button_click_popup.set_wallpaper_outdated: ${e.localizedMessage}")
                         }

@@ -16,8 +16,8 @@ import android.view.animation.LinearInterpolator
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.simple.chris.pebble.activities.GradientCreator
-import com.simple.chris.pebble.activities.MainActivity
+import com.simple.chris.pebble.activities.ActivityGradientCreator
+import com.simple.chris.pebble.activities.ActivityMain
 import com.simple.chris.pebble.databinding.DialogPopupBinding
 import com.simple.chris.pebble.functions.UIElements
 import com.simple.chris.pebble.functions.Values
@@ -190,10 +190,10 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
         onDismiss(dialog!!)
         when {
             popupName.contains("submit") -> {
-                (activity as GradientCreator).popupDialogHandler(popupName, position)
+                (activity as ActivityGradientCreator).popupDialogHandler(popupName, position)
             }
             else -> {
-                (activity as MainActivity).popupDialogHandler(popupName, position)
+                (activity as ActivityMain).popupDialogHandler(popupName, position)
             }
         }
     }

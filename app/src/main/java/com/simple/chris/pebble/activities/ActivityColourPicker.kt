@@ -18,7 +18,7 @@ import com.simple.chris.pebble.functions.*
 import java.lang.Exception
 import kotlin.random.Random
 
-class ColourPicker : AppCompatActivity() {
+class ActivityColourPicker : AppCompatActivity() {
     private lateinit var binding: ActivityColourPickerBinding
 
     private var hexValue = 0

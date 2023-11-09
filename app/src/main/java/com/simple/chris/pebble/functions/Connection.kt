@@ -9,7 +9,7 @@ import android.util.Log
 import androidx.fragment.app.FragmentManager
 import com.google.firebase.firestore.Query
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.activities.MainActivity
+import com.simple.chris.pebble.activities.ActivityMain
 import com.simple.chris.pebble.dialogs.DialogPopup
 import java.util.*
 
@@ -36,7 +36,7 @@ object Connection {
 
     @SuppressLint("StringFormatMatches")
     fun getGradientsFireStore(activity: Activity) {
-        fm = (activity as MainActivity).supportFragmentManager
+        fm = (activity as ActivityMain).supportFragmentManager
         Values.dialogPopup = DialogPopup.newDialog(null, "connecting", null, R.string.word_connecting,
                 null, R.string.sentence_pebble_is_connecting, null)
         Values.dialogPopup.show(fm, "connecting")

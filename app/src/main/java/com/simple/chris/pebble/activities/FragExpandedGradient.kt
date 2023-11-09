@@ -27,7 +27,7 @@ import com.simple.chris.pebble.functions.*
 import com.simple.chris.pebble.recyclers.SearchColourRecyclerView
 import kotlin.Exception
 
-class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchColourRecyclerView.OnButtonListener {
+class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), SearchColourRecyclerView.OnButtonListener {
     private var _binding: FragmentGradientScreenBinding? = null
     private val binding get() = _binding!!
     private lateinit var context: Activity
@@ -57,7 +57,7 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        context = (activity as MainActivity)
+        context = (activity as ActivityMain)
     }
 
     fun startSplitScreen() {
@@ -154,7 +154,7 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
     private fun tellMainReady() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (Values.canDismissSharedElement) {
-                (activity as MainActivity).endSharedElement()
+                (activity as ActivityMain).endSharedElement()
                 Values.currentActivity = "GradientScreen"
                 buttonFunctionality()
             } else {
@@ -198,7 +198,7 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
 
         /** Tell MainActivity to hide secondary **/
         Handler(Looper.getMainLooper()).postDelayed({
-            (activity as MainActivity).hideFullScreen(false)
+            (activity as ActivityMain).hideFullScreen(false)
         }, 550)
     }
 
@@ -395,7 +395,7 @@ class FragGradientScreen : Fragment(R.layout.fragment_gradient_screen), SearchCo
             //Save Gradient
         }
         binding.buttonSetWallpaper.setOnClickListener {
-            val fm = (activity as MainActivity).supportFragmentManager
+            val fm = (activity as ActivityMain).supportFragmentManager
             Vibration.lowFeedback(context)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Values.dialogPopup = DialogPopup.newDialog(HashMaps.setWallpaperArrayList(), "setWallpaper", R.drawable.icon_wallpaper, R.string.dual_set_wallpaper,
