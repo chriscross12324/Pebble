@@ -4,8 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> -->
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.vending.BILLING" />
@@ -18,17 +17,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Main">
-        <!--tools:ignore="AllowBackup,GoogleAppIndexingWarning"-->
-
+        <activity
+            android:name=".ActivityMainNew"
+            android:exported="false" />
+        <!-- tools:ignore="AllowBackup,GoogleAppIndexingWarning" -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3224190453693148~1184570101" />
 
-        <activity android:name=".activities.ActivityGradientCreator"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:exported="false"/>
-        <activity android:name=".activities.ActivityMain" android:exported="false"/>
-        <activity android:name=".activities.ActivityColourPicker" android:exported="false"/>
+        <activity
+            android:name=".activities.ActivityGradientCreator"
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".activities.ActivityMain"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ActivityColourPicker"
+            android:exported="false" />
         <activity
             android:name=".activities.ActivityStarting"
             android:exported="true"

@@ -1,56 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
     android:background="?BackgroundColour"
-    tools:context=".activities.ActivityMain">
+    tools:context=".ActivityMainNew">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/separator"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/fragmentHolderBrowse"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:cardBackgroundColor="?ForegroundColour"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"/>
+
+    <View
+        android:id="@+id/fragmentSeparator"
         android:layout_width="10dp"
         android:layout_height="match_parent"
-        android:background="#BF000000"
-        app:layout_constraintStart_toEndOf="parent">
-
-        <ImageView
-            android:layout_width="3dp"
-            android:layout_height="100dp"
-            android:background="@drawable/details_background"
-            android:backgroundTint="#BFFFFFFF"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:background="#000000"/>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/fragmentHolder"
-        android:name="com.simple.chris.pebble.activities.BrowseFrag"
-        android:layout_width="match_parent"
+        android:id="@+id/fragmentHolderGradientDetails"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        app:cardBackgroundColor="#00000000"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_weight="1"
+        app:cardBackgroundColor="?ForegroundColour"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"/>
 
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/fragmentHolderSecondary"
-        android:name="com.simple.chris.pebble.activities.SearchFrag"
-        android:layout_width="100dp"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardBackgroundColor="#00000000"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="0dp"
-        app:layout_constraintStart_toEndOf="@id/separator" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
