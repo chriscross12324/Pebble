@@ -111,7 +111,7 @@ class ScreenMetrics constructor(
 )
 
 enum class Property {
-    HEIGHT, WIDTH, SMALLEST, LARGEST, VISIBILITY, RADIUS, TRANSLATION_Y, TRANSLATION_X, ALPHA
+    HEIGHT, WIDTH, SMALLEST, LARGEST, VISIBILITY, RADIUS, TRANSLATION_Y, TRANSLATION_X, SCALE_Y, SCALE_X, ALPHA
 }
 
 fun Property.toReadableString(): String {
@@ -124,6 +124,8 @@ fun Property.toReadableString(): String {
         Property.RADIUS -> "radius"
         Property.TRANSLATION_Y -> "translationY"
         Property.TRANSLATION_X -> "translationX"
+        Property.SCALE_Y -> "scaleY"
+        Property.SCALE_X -> "scaleX"
         Property.ALPHA -> "alpha"
     }
 }

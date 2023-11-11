@@ -288,9 +288,9 @@ object UIElements {
 
                 saveGradientDialog.findViewById<BlurView>(R.id.blurView).setupWith(rootView)
                         .setFrameClearDrawable(windowBackground)
-                        .setBlurAlgorithm(RenderScriptBlur(context))
-                        .setBlurRadius(20f)
-                        .setHasFixedTransformationMatrix(true)
+                        //.setBlurAlgorithm(RenderScriptBlur(context))
+                        .setBlurRadius(30f)
+                        //.setHasFixedTransformationMatrix(true)
                         .setOverlayColor(Color.parseColor(Values.dialogBackgroundTint))
             } catch (e: Exception) {
                 Log.e("ERR", "pebble.ui_elements.popup_dialog: ${e.localizedMessage}")

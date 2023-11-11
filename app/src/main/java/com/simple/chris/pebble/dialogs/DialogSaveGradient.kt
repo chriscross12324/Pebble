@@ -72,8 +72,8 @@ class DialogSaveGradient : DialogFragment() {
 
                 binding.blurView.setupWith(rootView)
                         .setFrameClearDrawable(windowBackground)
-                        .setBlurAlgorithm(RenderScriptBlur(activity))
-                        .setBlurRadius(20f)
+                        //.setBlurAlgorithm(RenderScriptBlur(activity))
+                        .setBlurRadius(30f)
                         .setOverlayColor(Color.parseColor(Values.dialogBackgroundTint))
             } catch (e: Exception) {
                 Log.e("ERR", "pebble.save_gradient_dialog: ${e.localizedMessage}")

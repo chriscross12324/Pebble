@@ -57,8 +57,8 @@ class DialogGradientInfo : DialogFragment() {
 
                 binding.blurView.setupWith(rootView)
                         .setFrameClearDrawable(windowBackground)
-                        .setBlurAlgorithm(RenderScriptBlur(activity))
-                        .setBlurRadius(20f)
+                        //.setBlurAlgorithm(RenderScriptBlur(activity))
+                        .setBlurRadius(30f)
                         .setOverlayColor(Color.parseColor(Values.dialogBackgroundTint))
             } catch (e: Exception) {
                 Log.e("ERR", "pebble.gradient_long_click_dialog: ${e.localizedMessage}")

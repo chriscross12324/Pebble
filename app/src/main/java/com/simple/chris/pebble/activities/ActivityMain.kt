@@ -29,8 +29,6 @@ import kotlin.math.roundToInt
 class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     private lateinit var binding: ActivityMainBinding
 
-    var screenHeight = 0
-    var bottomSheetPeekHeight = 0
     lateinit var browseFragment: Fragment
     lateinit var searchFragment: Fragment
     lateinit var gradientFragment: Fragment
@@ -83,13 +81,6 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
 
         binding.tapReturn.setOnClickListener {
             hideSmallScreen()
-        }
-    }
-
-    override fun onAttachedToWindow() {
-        binding.fragmentHolder.post {
-            Values.screenHeight = getScreenMetrics(this, window).height
-            bottomSheetPeekHeight = (screenHeight * (0.667)).toInt()
         }
     }
 
