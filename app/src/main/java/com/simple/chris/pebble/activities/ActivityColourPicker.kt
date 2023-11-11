@@ -10,8 +10,8 @@ import android.os.Looper
 import android.view.KeyEvent
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.widget.EditText
 import android.widget.SeekBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.simple.chris.pebble.databinding.ActivityColourPickerBinding
 import com.simple.chris.pebble.functions.*
@@ -45,8 +45,7 @@ class ActivityColourPicker : AppCompatActivity() {
 
         binding.colourPickerSaveButton.setOnClickListener {
             try {
-                vibrateMedium(this)
-                val colour = Color.parseColor("#$hexString")
+                vibrateStrong(this)
                 Values.gradientCreatorColours[Values.editingColourAtPos] = "#$hexString"
 
                 animationOut()
@@ -56,11 +55,11 @@ class ActivityColourPicker : AppCompatActivity() {
 
         binding.colourPickerBackButton.setOnClickListener {
             animationOut()
-            vibrateWeak(this)
+            vibrateMedium(this)
         }
 
         binding.randomColourButton.setOnClickListener {
-            vibrateWeak(this)
+            vibrateMedium(this)
             val rgbRNDM = Random
             val generatedColour = Color.rgb(rgbRNDM.nextInt(256), rgbRNDM.nextInt(256), rgbRNDM.nextInt(256))
             Color.colorToHSV(generatedColour, hsv)
@@ -94,21 +93,12 @@ class ActivityColourPicker : AppCompatActivity() {
         hexValue = Color.HSVToColor(hsv)
 
         updateView(animateSeekBars)
-
     }
 
     private fun updateView(animateSeekBars: Boolean) {
         binding.colourPickerColourViewer.setBackgroundColor(hexValue)
-        //hexValueEditText.setText(hexString)
-        setHEXTextColour()
-        binding.hexValueEditText.clearFocus()
-        binding.hueText.clearFocus()
-        binding.satText.clearFocus()
-        binding.valText.clearFocus()
 
-        /*hueText.setText("$hueValue")
-        satText.setText("$satValue")
-        valText.setText("$valValue")*/
+        setHEXTextColour()
 
         if (animateSeekBars) {
             seekBarAnimator(binding.hueSeekBar, binding.hueText, hueValue.toFloat())
@@ -116,15 +106,12 @@ class ActivityColourPicker : AppCompatActivity() {
             seekBarAnimator(binding.valueSeekBar, binding.valText, valValue.toFloat())
             //Toast.makeText(this, "#$valValue", Toast.LENGTH_SHORT).show()
         } else {
-            binding.hueText.setText("$hueValue")
-            binding.satText.setText("$satValue")
-            binding.valText.setText("$valValue")
+            binding.hueText.text = "$hueValue"
+            binding.satText.text = "$satValue"
+            binding.valText.text = "$valValue"
         }
 
-        if (!binding.hexValueEditText.isFocused && binding.hexValueEditText.text.toString() != "#$hexString") {
-            binding.hexValueEditText.setText(hexString)
-            //Toast.makeText(this, "#$hexString", Toast.LENGTH_SHORT).show()
-        }
+        binding.hexValueTextView.text = "#$hexString"
 
         val satGradientDrawable = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
@@ -144,10 +131,10 @@ class ActivityColourPicker : AppCompatActivity() {
         val luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
         if (luminance > 0.5) {
             binding.hexValueTextView.setTextColor(Color.parseColor("#000000"))
-            binding.hexValueEditText.setTextColor(Color.parseColor("#000000"))
+            binding.hexValueTextView.setTextColor(Color.parseColor("#000000"))
         } else {
             binding.hexValueTextView.setTextColor(Color.parseColor("#ffffff"))
-            binding.hexValueEditText.setTextColor(Color.parseColor("#ffffff"))
+            binding.hexValueTextView.setTextColor(Color.parseColor("#ffffff"))
         }
     }
 
@@ -164,7 +151,7 @@ class ActivityColourPicker : AppCompatActivity() {
         UIElements.viewObjectAnimator(binding.colourPickerSaveButton, "translationY", 0f, 700, 250, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(binding.colourPickerBackButton, "translationY", 0f, 700, 300, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(binding.randomColourButton, "translationY", 0f, 700, 300, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(binding.colourCodeHolder, "alpha", 1f, 700, 250, LinearInterpolator())
+        UIElements.viewObjectAnimator(binding.hexValueTextView, "alpha", 1f, 700, 250, LinearInterpolator())
     }
 
     private fun animationOut() {
@@ -172,8 +159,8 @@ class ActivityColourPicker : AppCompatActivity() {
         UIElements.viewObjectAnimator(binding.colourPickerSaveButton, "translationY", convertFloatToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(binding.colourPickerBackButton, "translationY", convertFloatToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
         UIElements.viewObjectAnimator(binding.randomColourButton, "translationY", convertFloatToDP(this, 74f), 700, 0, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(binding.colourCodeHolder, "translationY", (binding.colourPickerSliders.height.toFloat() + convertFloatToDP(this, 94f)) / 2, 700, 100, DecelerateInterpolator(3f))
-        UIElements.viewObjectAnimator(binding.colourCodeHolder, "alpha", 0f, 500, 450, LinearInterpolator())
+        UIElements.viewObjectAnimator(binding.hexValueTextView, "translationY", (binding.colourPickerSliders.height.toFloat() + convertFloatToDP(this, 94f)) / 2, 700, 100, DecelerateInterpolator(3f))
+        UIElements.viewObjectAnimator(binding.hexValueTextView, "alpha", 0f, 500, 450, LinearInterpolator())
 
         Handler(Looper.getMainLooper()).postDelayed({
             finish()
@@ -209,8 +196,12 @@ class ActivityColourPicker : AppCompatActivity() {
                 }
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                vibrateMedium(this@ActivityColourPicker)
+            }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                vibrateMedium(this@ActivityColourPicker)
+            }
 
         })
 
@@ -222,8 +213,12 @@ class ActivityColourPicker : AppCompatActivity() {
                 }
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                vibrateMedium(this@ActivityColourPicker)
+            }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                vibrateMedium(this@ActivityColourPicker)
+            }
 
         })
 
@@ -235,14 +230,18 @@ class ActivityColourPicker : AppCompatActivity() {
                 }
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                vibrateMedium(this@ActivityColourPicker)
+            }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                vibrateMedium(this@ActivityColourPicker)
+            }
 
         })
 
 
         /** EditText listeners **/
-        /*hexValueEditText.addTextChangedListener(object : TextWatcher {
+        /*hexValueTextView.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -281,12 +280,12 @@ class ActivityColourPicker : AppCompatActivity() {
 
     }
 
-    private fun seekBarAnimator(view: SeekBar, editText: EditText, endValue: Float) {
+    private fun seekBarAnimator(view: SeekBar, textView: TextView, endValue: Float) {
         val valueAnimator = ValueAnimator.ofFloat(view.progress.toFloat(), endValue)
         valueAnimator.addUpdateListener {
             val value = it.animatedValue as Float
             view.progress = value.toInt()
-            editText.setText("${value.toInt()}")
+            textView.text = "${value.toInt()}"
             when (view.tag) {
                 "hue" -> {
                     hueValue = value.toInt()

@@ -14,41 +14,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/colourCodeHolder"
+    <TextView
+        android:id="@+id/hexValueTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         android:alpha="0"
-        android:orientation="horizontal"
+        android:fontFamily="@font/googlesans_bold"
+        android:maxLength="7"
+        android:maxLines="1"
+        android:minWidth="50dp"
+        android:text="\#3a76f0"
+        android:textColor="#ffffff"
+        android:textSize="36sp"
         app:layout_constraintBottom_toTopOf="@+id/colourPickerSliders"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/hexValueTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/googlesans_bold"
-            android:text="#"
-            android:textColor="#ffffff"
-            android:textSize="36sp" />
-
-        <EditText
-            android:id="@+id/hexValueEditText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:digits="0123456789abcdef"
-            android:fontFamily="@font/googlesans_bold"
-            android:inputType="text"
-            android:maxLength="6"
-            android:maxLines="1"
-            android:minWidth="50dp"
-            android:text="3a76f0"
-            android:textColor="#ffffff"
-            android:textSize="36sp" />
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"/>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -152,20 +134,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-            <EditText
+            <TextView
                 android:id="@+id/hueText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/googlesans_medium"
-                android:hint="H"
-                android:inputType="number"
+                android:gravity="center"
                 android:maxLength="3"
                 android:maxLines="1"
-                android:text="214"
+                android:text="H"
+                android:textSize="18sp"
                 android:textAlignment="center"
-                android:textColor="?PrimaryTextColour"
-                android:textColorHint="?SecondaryTextColour" />
+                android:textColor="?PrimaryTextColour" />
         </LinearLayout>
 
         <LinearLayout
@@ -191,22 +172,20 @@
                 android:textColor="?SecondaryTextColour"
                 android:textSize="18sp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/satText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="6dp"
                 android:layout_weight="0.75"
-                android:background="@android:color/transparent"
+                android:gravity="center"
                 android:fontFamily="@font/googlesans_medium"
-                android:hint="S"
-                android:inputType="number"
                 android:maxLength="3"
                 android:maxLines="1"
-                android:text="85"
+                android:text="S"
+                android:textSize="18sp"
                 android:textAlignment="center"
-                android:textColor="?PrimaryTextColour"
-                android:textColorHint="?SecondaryTextColour" />
+                android:textColor="?PrimaryTextColour" />
         </LinearLayout>
 
         <LinearLayout
@@ -234,22 +213,21 @@
                 android:textColor="?SecondaryTextColour"
                 android:textSize="18sp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/valText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="6dp"
                 android:layout_weight="0.75"
+                android:gravity="center"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/googlesans_medium"
-                android:hint="V"
-                android:inputType="number"
                 android:maxLength="3"
                 android:maxLines="1"
-                android:text="94"
+                android:text="V"
+                android:textSize="18sp"
                 android:textAlignment="center"
-                android:textColor="?PrimaryTextColour"
-                android:textColorHint="?SecondaryTextColour" />
+                android:textColor="?PrimaryTextColour" />
         </LinearLayout>
 
         <SeekBar
