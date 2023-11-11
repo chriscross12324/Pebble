@@ -63,7 +63,6 @@ object Values {
     var dialogShowAgainTime: Long = 450
     var downloadingGradients = false
     var refreshTheme = false
-    var screenHeight = 0
     var currentlySplitScreened = false
     var animatingSharedElement = false
     var canDismissSharedElement = true

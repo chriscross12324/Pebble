@@ -29,7 +29,7 @@ import com.google.firebase.firestore.Query
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.*
 import com.simple.chris.pebble.databinding.FragmentBrowseBinding
-import com.simple.chris.pebble.dialogs.DialogGradientInfo
+import com.simple.chris.pebble.dialogs.DialogGradientPopup
 import com.simple.chris.pebble.functions.*
 import com.simple.chris.pebble.recyclers.BrowseMenuRecyclerView
 import com.simple.chris.pebble.recyclers.GradientRecyclerView
@@ -88,7 +88,11 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
 
     private fun initiate() {
         Handler(Looper.getMainLooper()).postDelayed({
-            if (Values.screenHeight != 0) {
+            if (getScreenMetrics(
+                    this@FragBrowse.requireContext(),
+                    this@FragBrowse.context.window
+                ).height != 0
+            ) {
                 try {
                     getHeights()
                     bottomSheet()
@@ -129,12 +133,24 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
     private fun getHeights() {
         try {
             binding.titleHolder.translationY =
-                (((Values.screenHeight * (0.333)) / 2) - (binding.titleHolder.measuredHeight / 2)).toFloat()
+                (((getScreenMetrics(
+                    this@FragBrowse.requireContext(),
+                    this@FragBrowse.context.window
+                ).height * (0.333)) / 2) - (binding.titleHolder.measuredHeight / 2)).toFloat()
             binding.buttonIcon.translationY =
-                (((Values.screenHeight * (0.333)) / 8) - (binding.titleHolder.measuredHeight / 8)).toFloat()
-            bottomSheetPeekHeight = (Values.screenHeight * (0.667)).toInt()
+                (((getScreenMetrics(
+                    this@FragBrowse.requireContext(),
+                    this@FragBrowse.context.window
+                ).height * (0.333)) / 8) - (binding.titleHolder.measuredHeight / 8)).toFloat()
+            bottomSheetPeekHeight = (getScreenMetrics(
+                this@FragBrowse.requireContext(),
+                this@FragBrowse.context.window
+            ).height * (0.667)).toInt()
 
-            Log.e("SCREEN", "${Values.screenHeight}")
+            Log.e("SCREEN", "${getScreenMetrics(
+                this@FragBrowse.requireContext(),
+                this@FragBrowse.context.window
+            ).height}")
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse_frag.get_heights: ${e.localizedMessage}")
         }
@@ -159,9 +175,21 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                         override fun onSlide(bottomSheet: View, slideOffset: Float) {
                             try {
                                 binding.titleHolder.translationY =
-                                    ((Values.screenHeight * (-0.333) * slideOffset + Values.screenHeight * (0.333) - (binding.titleHolder.measuredHeight)) / 2).toFloat()
+                                    ((getScreenMetrics(
+                                        this@FragBrowse.requireContext(),
+                                        this@FragBrowse.context.window
+                                    ).height * (-0.333) * slideOffset + getScreenMetrics(
+                                        this@FragBrowse.requireContext(),
+                                        this@FragBrowse.context.window
+                                    ).height * (0.333) - (binding.titleHolder.measuredHeight)) / 2).toFloat()
                                 binding.buttonIcon.translationY =
-                                    ((Values.screenHeight * (-0.333) * slideOffset + Values.screenHeight * (0.333) - (binding.titleHolder.measuredHeight)) / 8).toFloat()
+                                    ((getScreenMetrics(
+                                        this@FragBrowse.requireContext(),
+                                        this@FragBrowse.context.window
+                                    ).height * (-0.333) * slideOffset + getScreenMetrics(
+                                        this@FragBrowse.requireContext(),
+                                        this@FragBrowse.context.window
+                                    ).height * (0.333) - (binding.titleHolder.measuredHeight)) / 8).toFloat()
                                 val cornerRadius = ((slideOffset * -1) + 1) * convertFloatToDP(
                                     (activity as ActivityMain),
                                     20f
@@ -423,7 +451,12 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
     }
 
     private fun hideMenu() {
-        animateView(binding.menu, Property.HEIGHT, convertFloatToDP(this@FragBrowse.context, 50f), 400)
+        animateView(
+            binding.menu,
+            Property.HEIGHT,
+            convertFloatToDP(this@FragBrowse.context, 50f),
+            400
+        )
         UIElements.viewObjectAnimator(binding.menu, "alpha", 0f, 175, 75, LinearInterpolator())
         UIElements.viewObjectAnimator(
             binding.menuArrow,
@@ -620,7 +653,7 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
             val fm = fragmentManager as FragmentManager
 
             val gradientList = if (Values.isSearchMode) Values.searchList else Values.gradientList
-            val longClickGradientDialog = DialogGradientInfo.newDialog(
+            val longClickGradientDialog = DialogGradientPopup.newDialog(
                 ArrayList(gradientList[position]["gradientColours"]!!.replace("[", "")
                     .replace("]", "")
                     .split(",").map { it.trim() }),
@@ -704,7 +737,10 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         UIElements.viewObjectAnimator(
             binding.buttonIcon,
             "translationY",
-            (((Values.screenHeight * (0.333)) / 8) - (binding.titleHolder.measuredHeight / 8)).toFloat(),
+            (((getScreenMetrics(
+                this@FragBrowse.requireContext(),
+                this@FragBrowse.context.window
+            ).height * (0.333)) / 8) - (binding.titleHolder.measuredHeight / 8)).toFloat(),
             hideAnimationDur * 2,
             hideAnimationDur * 2,
             DecelerateInterpolator(3f)
@@ -780,7 +816,10 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         UIElements.viewObjectAnimator(
             binding.buttonIcon,
             "translationY",
-            (((Values.screenHeight * (0.333)) / 8) - (binding.titleHolder.measuredHeight / 8)).toFloat(),
+            (((getScreenMetrics(
+                this@FragBrowse.requireContext(),
+                this@FragBrowse.context.window
+            ).height * (0.333)) / 8) - (binding.titleHolder.measuredHeight / 8)).toFloat(),
             hideAnimationDur * 2,
             hideAnimationDur * 2,
             DecelerateInterpolator(3f)
