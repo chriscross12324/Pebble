@@ -31,8 +31,8 @@ object Values {
      */
     val vibrationWeak = longArrayOf(0, 1)
     val vibrationMedium = longArrayOf(0, 7)
-    val vibrationStrong = longArrayOf(0, 20)
-    val vibrationNotification = longArrayOf(0, 25, 80, 20)
+    val vibrationStrong = longArrayOf(0, 15)
+    val vibrationNotification = longArrayOf(0, 15, 80, 10)
 
     const val dialogBackgroundDim = 0.75f
     const val dialogBackgroundTint = "#33000000"
