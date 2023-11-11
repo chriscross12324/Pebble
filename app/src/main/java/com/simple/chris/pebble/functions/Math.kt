@@ -12,6 +12,7 @@ import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import kotlin.random.Random
 
 
 fun canSplitScreen(context: Context, window: Window): Boolean {
@@ -33,15 +34,15 @@ fun convertFloatToDP(context: Context, dp: Float): Float {
     )
 }
 
-fun convertStringArrToIntArr(stringArr: ArrayList<String>) : IntArray {
-   return stringArr.mapNotNull {
-       try {
-           Color.parseColor(it)
-       } catch (e: Exception) {
-           Log.e("ERR", "pebble.functions.Math.convertStringArrToIntArr: ${e.localizedMessage}")
-           null
-       }
-   }.toIntArray()
+fun convertStringArrToIntArr(stringArr: ArrayList<String>): IntArray {
+    return stringArr.mapNotNull {
+        try {
+            Color.parseColor(it)
+        } catch (e: Exception) {
+            Log.e("ERR", "pebble.functions.Math.convertStringArrToIntArr: ${e.localizedMessage}")
+            null
+        }
+    }.toIntArray()
 }
 
 fun getScreenMetrics(context: Context, window: Window): ScreenMetrics {
@@ -60,7 +61,7 @@ fun getScreenMetrics(context: Context, window: Window): ScreenMetrics {
     )
 }
 
-fun getViewMetrics(view: View) : ScreenMetrics {
+fun getViewMetrics(view: View): ScreenMetrics {
     view.measure(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     return ScreenMetrics(
         view.measuredHeight,
@@ -81,7 +82,7 @@ fun getCutoutHeight(window: Window): Int {
     return 0
 }
 
-fun createBitmap(drawable: Drawable, width: Int, height: Int): Bitmap {
+fun generateBitmap(drawable: Drawable, width: Int, height: Int): Bitmap {
     val mutableBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(mutableBitmap)
     drawable.setBounds(0, 0, width, height)
@@ -90,4 +91,39 @@ fun createBitmap(drawable: Drawable, width: Int, height: Int): Bitmap {
     return mutableBitmap
 }
 
-class ScreenMetrics constructor(var height: Int, var width: Int, var smallest: Int, var largest: Int)
+fun generateRandomColour(): String {
+    return "#${
+        Integer.toHexString(
+            Color.rgb(
+                Random.nextInt(256),
+                Random.nextInt(256),
+                Random.nextInt(256)
+            )
+        ).substring(2)
+    }"
+}
+
+class ScreenMetrics constructor(
+    var height: Int,
+    var width: Int,
+    var smallest: Int,
+    var largest: Int
+)
+
+enum class Property {
+    HEIGHT, WIDTH, SMALLEST, LARGEST, VISIBILITY, RADIUS, TRANSLATION_Y, TRANSLATION_X, ALPHA
+}
+
+fun Property.toReadableString(): String {
+    return when (this) {
+        Property.HEIGHT -> "height"
+        Property.WIDTH -> "width"
+        Property.SMALLEST -> "smallest"
+        Property.LARGEST -> "largest"
+        Property.VISIBILITY -> "visibility"
+        Property.RADIUS -> "radius"
+        Property.TRANSLATION_Y -> "translationY"
+        Property.TRANSLATION_X -> "translationX"
+        Property.ALPHA -> "alpha"
+    }
+}
