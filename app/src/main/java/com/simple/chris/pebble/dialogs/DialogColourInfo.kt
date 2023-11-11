@@ -17,6 +17,7 @@ import androidx.fragment.app.DialogFragment
 import com.simple.chris.pebble.databinding.DialogColourInfoBinding
 import com.simple.chris.pebble.functions.UIElements
 import com.simple.chris.pebble.functions.Values
+import com.simple.chris.pebble.functions.generateGradientDrawable
 import eightbitlab.com.blurview.RenderScriptBlur
 import java.io.Serializable
 
@@ -77,7 +78,8 @@ class DialogColourInfo : DialogFragment() {
         val v = (hsv[2] * 100).toInt()
 
         /** Set dialog layout **/
-        binding.colourPreview.setImageDrawable(UIElements.colourDrawable(activity as Context, hexString, 20f))
+        //binding.colourPreview.setImageDrawable(UIElements.colourDrawable(activity as Context, hexString, 20f))
+        binding.colourPreview.setImageDrawable(generateGradientDrawable(this@DialogColourInfo.requireContext(), null, arrayListOf(hexString), 20f))
         binding.hexText.text = hexString
         binding.rText.text = r.toString()
         binding.gText.text = g.toString()

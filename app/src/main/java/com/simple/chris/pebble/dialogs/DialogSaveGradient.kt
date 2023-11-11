@@ -19,10 +19,9 @@ import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.simple.chris.pebble.databinding.DialogSaveGradientBinding
-import com.simple.chris.pebble.functions.UIElement
 import com.simple.chris.pebble.functions.UIElements
 import com.simple.chris.pebble.functions.Values
-import com.simple.chris.pebble.functions.createBitmap
+import com.simple.chris.pebble.functions.generateBitmap
 import com.simple.chris.pebble.functions.generateGradientDrawable
 import com.simple.chris.pebble.functions.getScreenMetrics
 import eightbitlab.com.blurview.RenderScriptBlur
@@ -123,7 +122,7 @@ class DialogSaveGradient : DialogFragment() {
                         val fileImage = File(imageDir, (Values.gradientScreenName + ".png").replace(" ", "_").toLowerCase(Locale.getDefault()))
                         outputStream = FileOutputStream(fileImage)
                     }
-                    createBitmap(generateGradientDrawable(activity as Context, null, Values.gradientScreenColours, 0f) as Drawable,
+                    generateBitmap(generateGradientDrawable(activity as Context, null, Values.gradientScreenColours, 0f) as Drawable,
                         binding.widthText.text.toString().toInt(), binding.heightText.text.toString().toInt()).compress(Bitmap.CompressFormat.PNG, 100, outputStream)
                     Objects.requireNonNull(outputStream).close()
                     onDismiss(dialog!!)

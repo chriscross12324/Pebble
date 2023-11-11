@@ -102,7 +102,7 @@ class DialogPopup : DialogFragment(), PopupDialogButtonRecycler.OnButtonListener
         }
 
         binding.blurView.setOnClickListener {
-            if (requireArguments().getString("dialogName")!!.contains("setting") && (activity as Context).toString().contains("MainActivity")) {
+            if (requireArguments().getString("dialogName")!!.contains("setting") && (activity as Context).toString().contains("ActivityMain")) {
                 onDismiss(dialog!!)
             }
         }

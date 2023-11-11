@@ -92,8 +92,7 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
         binding.buttonAddColour.setOnClickListener {
             binding.buttonRemoveColour.alpha = 1f
             if (Values.gradientCreatorColours.size < 6) {
-                val startRNDM = Random
-                Values.gradientCreatorColours.add(Values.gradientCreatorColours.size, "#" + Integer.toHexString(Color.rgb(startRNDM.nextInt(256), startRNDM.nextInt(256), startRNDM.nextInt(256))).substring(2))
+                Values.gradientCreatorColours.add(Values.gradientCreatorColours.size, generateRandomColour())
                 buildColourRecycler()
                 setGradientDrawable()
                 if (Values.gradientCreatorColours.size == 6) {
@@ -109,13 +108,15 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
             if (modeColourDelete) {
                 modeColourDelete = false
                 binding.iconRemoveActive.visibility = View.INVISIBLE
-                UIElements.viewVisibility(binding.notification, View.INVISIBLE, 250)
+                //UIElements.viewVisibility(binding.notification, View.INVISIBLE, 250)
+                animateView(binding.notification, Property.VISIBILITY, View.INVISIBLE.toFloat(), 0, 250)
                 UIElements.viewObjectAnimator(binding.notification, "translationY", 0f, 250, 0, DecelerateInterpolator(3f))
             } else {
                 if (Values.gradientCreatorColours.size != 1) {
                     modeColourDelete = true
                     binding.iconRemoveActive.visibility = View.VISIBLE
-                    UIElements.viewVisibility(binding.notification, View.VISIBLE, 0)
+                    //UIElements.viewVisibility(binding.notification, View.VISIBLE, 0)
+                    animateView(binding.notification, Property.VISIBILITY, View.VISIBLE.toFloat())
                     UIElements.viewObjectAnimator(binding.notification, "translationY", convertFloatToDP(this, -8f) - binding.notification.measuredHeight,
                             250, 0, DecelerateInterpolator(3f))
                 } else {
@@ -139,8 +140,7 @@ class ActivityGradientCreator : AppCompatActivity(), GradientCreatorRecycler.OnB
                 UIElements.viewObjectAnimator(binding.gradientTransition, "alpha", 1f, 400, 0, LinearInterpolator())
                 Handler(Looper.getMainLooper()).postDelayed({
                     repeat(colourCount) {
-                        val startRNDM = Random
-                        Values.gradientCreatorColours.add("#" + Integer.toHexString(Color.rgb(startRNDM.nextInt(256), startRNDM.nextInt(256), startRNDM.nextInt(256))).substring(2))
+                        Values.gradientCreatorColours.add(generateRandomColour())
                     }
 
                     Handler(Looper.getMainLooper()).postDelayed({
