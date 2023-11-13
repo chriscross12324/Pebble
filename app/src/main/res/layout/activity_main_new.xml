@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/container"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     android:orientation="horizontal"
-    android:background="?BackgroundColour"
     tools:context=".ActivityMainNew">
 
     <androidx.cardview.widget.CardView
@@ -14,23 +13,32 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        app:cardBackgroundColor="?ForegroundColour"
+        app:cardBackgroundColor="?BackgroundColour"
         app:cardCornerRadius="20dp"
-        app:cardElevation="0dp"/>
+        app:cardElevation="0dp" />
 
-    <View
+    <LinearLayout
         android:id="@+id/fragmentSeparator"
         android:layout_width="10dp"
         android:layout_height="match_parent"
-        android:background="#000000"/>
+        android:background="#000000"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/fragmentSeparatorIndicator"
+            android:layout_width="2dp"
+            android:layout_height="50dp"
+            android:background="@drawable/details_background"
+            android:backgroundTint="#BFFFFFFF"/>
+    </LinearLayout>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/fragmentHolderGradientDetails"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        app:cardBackgroundColor="?ForegroundColour"
+        app:cardBackgroundColor="?BackgroundColour"
         app:cardCornerRadius="20dp"
-        app:cardElevation="0dp"/>
+        app:cardElevation="0dp" />
 
 </LinearLayout>

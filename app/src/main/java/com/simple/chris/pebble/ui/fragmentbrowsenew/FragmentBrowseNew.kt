@@ -1,12 +1,13 @@
 package com.simple.chris.pebble.ui.fragmentbrowsenew
 
-import androidx.lifecycle.ViewModelProvider
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.simple.chris.pebble.R
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.simple.chris.pebble.databinding.FragmentBrowseNewBinding
 
 class FragmentBrowseNew : Fragment() {
 
@@ -14,11 +15,13 @@ class FragmentBrowseNew : Fragment() {
         fun newInstance() = FragmentBrowseNew()
     }
 
+    private lateinit var binding:FragmentBrowseNewBinding
     private lateinit var viewModel: FragmentBrowseNewViewModel
+    private var fragmentListener: BrowseFragmentListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FragmentBrowseNewViewModel::class.java)
+        viewModel = ViewModelProvider(this)[FragmentBrowseNewViewModel::class.java]
         // TODO: Use the ViewModel
     }
 
@@ -26,7 +29,26 @@ class FragmentBrowseNew : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_browse_new, container, false)
+        binding = FragmentBrowseNewBinding.inflate(inflater, container, false)
+
+        binding.button.setOnClickListener {
+            fragmentListener?.onOpenDetailsButtonClick()
+        }
+
+        return binding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is BrowseFragmentListener) {
+            fragmentListener = context
+        } else {
+            throw ClassCastException("$context must implement BrowseFragmentListener")
+        }
+    }
+
+    interface BrowseFragmentListener {
+        fun onOpenDetailsButtonClick()
     }
 
 }

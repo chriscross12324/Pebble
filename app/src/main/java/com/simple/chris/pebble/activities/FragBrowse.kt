@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.firestore.Query
+import com.simple.chris.pebble.ActivityMainNew
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.adapters_helpers.*
 import com.simple.chris.pebble.databinding.FragmentBrowseBinding
@@ -107,6 +108,16 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                         showMenu()
                     }
 
+                    binding.menuButton.setOnLongClickListener {
+                        startActivity(
+                            Intent(
+                                this@FragBrowse.requireContext(),
+                                ActivityMainNew::class.java
+                            )
+                        )
+                        true
+                    }
+
                     binding.searchButton.setOnClickListener {
                         if (Values.isSearchMode) {
                             Values.isSearchMode = false
@@ -147,10 +158,14 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
                 this@FragBrowse.context.window
             ).height * (0.667)).toInt()
 
-            Log.e("SCREEN", "${getScreenMetrics(
-                this@FragBrowse.requireContext(),
-                this@FragBrowse.context.window
-            ).height}")
+            Log.e(
+                "SCREEN", "${
+                    getScreenMetrics(
+                        this@FragBrowse.requireContext(),
+                        this@FragBrowse.context.window
+                    ).height
+                }"
+            )
         } catch (e: Exception) {
             Log.e("ERR", "pebble.browse_frag.get_heights: ${e.localizedMessage}")
         }

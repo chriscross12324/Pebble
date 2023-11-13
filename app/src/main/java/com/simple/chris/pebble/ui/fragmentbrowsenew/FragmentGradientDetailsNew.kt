@@ -1,12 +1,13 @@
 package com.simple.chris.pebble.ui.fragmentbrowsenew
 
-import androidx.lifecycle.ViewModelProvider
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.simple.chris.pebble.R
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.simple.chris.pebble.databinding.FragmentGradientDetailsNewBinding
 
 class FragmentGradientDetailsNew : Fragment() {
 
@@ -14,11 +15,13 @@ class FragmentGradientDetailsNew : Fragment() {
         fun newInstance() = FragmentGradientDetailsNew()
     }
 
-    private lateinit var viewModel: FragmentBrowseNewViewModel
+    private lateinit var binding: FragmentGradientDetailsNewBinding
+    private lateinit var viewModel: FragmentGradientDetailsNewViewModel
+    private var fragmentListener: DetailsFragmentListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FragmentBrowseNewViewModel::class.java)
+        viewModel = ViewModelProvider(this)[FragmentGradientDetailsNewViewModel::class.java]
         // TODO: Use the ViewModel
     }
 
@@ -26,7 +29,26 @@ class FragmentGradientDetailsNew : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_browse_new, container, false)
+        binding = FragmentGradientDetailsNewBinding.inflate(inflater, container, false)
+
+        binding.button.setOnClickListener {
+            fragmentListener?.onCloseDetailsButtonClick()
+        }
+
+        return binding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is DetailsFragmentListener) {
+            fragmentListener = context
+        } else {
+            throw ClassCastException("$context must implement DetailsFragmentListener")
+        }
+    }
+
+    interface DetailsFragmentListener {
+        fun onCloseDetailsButtonClick()
     }
 
 }

@@ -34,23 +34,20 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'androidx.core:core-splashscreen:1.0.1'
+    implementation 'androidx.activity:activity-ktx:1.8.0'
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.work:work-runtime-ktx:2.8.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "androidx.recyclerview:recyclerview:1.4.0-alpha01"
     implementation 'com.google.android.material:material:1.10.0'
-    /*implementation 'com.squareup.okhttp3:okhttp:3.14.0'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.14.0'*/
     implementation 'com.android.support:appcompat-v7:33.0.0'
     implementation 'com.android.support:design:33.0.0'
-    //implementation 'com.google.android.gms:play-services-ads:20.4.0'
-    //implementation 'com.android.billingclient:billing-ktx:3.0.3'
     implementation 'com.android.support:recyclerview-v7:33.0.0'
     implementation 'com.android.support:cardview-v7:33.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -63,11 +60,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
     implementation 'org.jsoup:jsoup:1.13.1'
-    //implementation 'com.eightbitlab:blurview:1.6.6'
     implementation 'com.github.Dimezis:BlurView:version-2.0.4'
     implementation 'com.github.hamzaahmedkhan:BlurImageView:v1.0.2'
     //implementation 'com.github.sina-seyfi:AdvancedCardView:1.0.1'
 }
+
 repositories {
     mavenCentral()
 }

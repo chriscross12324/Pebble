@@ -2,6 +2,7 @@ package com.simple.chris.pebble.functions
 
 import android.content.Context
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -24,6 +25,12 @@ fun convertPxToInch(context: Context, window: Window): Float {
     window.windowManager.defaultDisplay.getMetrics(displayMetrics)
     val dpi = displayMetrics.xdpi
     return getScreenMetrics(context, window).width / dpi
+}
+
+fun convertInchToPx(inch: Float, resources: Resources): Float {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_IN, inch, resources.displayMetrics
+    )
 }
 
 fun convertFloatToDP(context: Context, dp: Float): Float {
