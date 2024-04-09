@@ -3,16 +3,21 @@ package com.simple.chris.pebble.recyclers
 //import com.sinaseyfi.advancedcardview.AdvancedCardView
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
 import androidx.recyclerview.widget.RecyclerView
 import com.simple.chris.pebble.R
+import com.simple.chris.pebble.components.GradientModule
 import com.simple.chris.pebble.functions.UIElement
 import com.simple.chris.pebble.functions.generateGradientDrawable
+import com.simple.chris.pebble.ui.utils.hexToColour
 
 /**
  * Creates a gradient modules for each gradient
@@ -32,7 +37,8 @@ class GradientRecyclerView internal constructor(var context: Context, private va
      * @return Populated module to display in RecyclerView
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(layoutInflater.inflate(R.layout.module_browse_normal, parent, false), mOnGradientListener, mOnGradientLongClickListener)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.module_browse_normal, parent, false)
+        return ViewHolder(view, mOnGradientListener, mOnGradientLongClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -47,9 +53,12 @@ class GradientRecyclerView internal constructor(var context: Context, private va
      *
      * If information for a module is invalid/missing, the module will be populated with fallback info
      */
-    @SuppressLint("NewApi")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        try {
+        val details: HashMap<String, String> = gradients[position]
+        val gradientName = details["gradientName"] ?: "[Broken Data]"
+        val gradientColours = ArrayList<String>(details["gradientColours"]?.replace("[", "")?.replace("]", "")?.split(",")?.map { it.trim() } ?: emptyList())
+        holder.bind(gradientName, gradientColours)
+        /*try {
             val details: HashMap<String, String> = gradients[position]
             holder.gradientName.text = details["gradientName"]
             val gradientColours = details["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }
@@ -60,7 +69,7 @@ class GradientRecyclerView internal constructor(var context: Context, private va
             holder.gradientViewer.setBackgroundColor(context.resources.getColor(R.color.pebbleEnd))
             holder.gradientName.text = "[Broken Data]"
             Log.e("ERR", e.localizedMessage)
-        }
+        }*/
     }
 
     fun stringToWords(s: String) = s.trim().splitToSequence(",")
@@ -71,8 +80,8 @@ class GradientRecyclerView internal constructor(var context: Context, private va
      * Referenced to get the views from the module layout
      */
     inner class ViewHolder internal constructor(view: View, onGradientListener: OnGradientListener, onGradientLongClickListener: OnGradientLongClickListener) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener/*, View.OnTouchListener*/ {
-        var gradientName: TextView = view.findViewById(R.id.gradientName)
-        var gradientViewer: ImageView = view.findViewById(R.id.gradient)
+        /*var gradientName: TextView = view.findViewById(R.id.gradientName)
+        var gradientViewer: ImageView = view.findViewById(R.id.gradient)*/
 
         private val myOnGradientListener = onGradientListener
         private val myOnGradientLongClickListener = onGradientLongClickListener
@@ -89,6 +98,19 @@ class GradientRecyclerView internal constructor(var context: Context, private va
         override fun onLongClick(v: View?): Boolean {
             myOnGradientLongClickListener.onGradientLongClick(adapterPosition, v as View)
             return true
+        }
+
+        fun bind(gradientName: String, gradientColours: ArrayList<String>) {
+
+
+            ComposeView(itemView.context).apply {
+                itemView.findViewById<ComposeView>(R.id.compose_view).setContent {
+                    GradientModule(
+                        gradientName = gradientName,
+                        gradientColours = gradientColours.map { hexToColour(it) }
+                    )
+                }
+            }
         }
     }
 

@@ -662,8 +662,8 @@ class FragBrowse : Fragment(R.layout.fragment_browse), GradientRecyclerView.OnGr
         Handler(Looper.getMainLooper()).postDelayed({
             gradientScaleX.reverse()
             gradientScaleY.reverse()
-            val intArray = IntArray(2)
-            view.findViewById<ImageView>(R.id.gradient).getLocationOnScreen(intArray)
+            val intArray = intArrayOf(0, 0)
+            //view.findViewById<ImageView>(R.id.gradient).getLocationOnScreen(intArray)
 
             val fm = fragmentManager as FragmentManager
 

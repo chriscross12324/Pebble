@@ -664,10 +664,10 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             }, Values.animationDuration - 350)
         } else {
             Values.currentGradientScreenPos = position
-            /** Get scale/position of clicked Gradient **/
+            /** Get scale/position of clicked Gradient **//*
             gradientViewSizeX = view.findViewById<ImageView>(R.id.gradient).width.toFloat()
             gradientViewSizeY = view.findViewById<ImageView>(R.id.gradient).height.toFloat()
-            view.findViewById<ImageView>(R.id.gradient).getLocationOnScreen(gradientViewPos)
+            view.findViewById<ImageView>(R.id.gradient).getLocationOnScreen(gradientViewPos)*/
 
             /** Get scale/position of secondFrag **/
             if (canSplitScreen(this, window)) {
@@ -930,12 +930,12 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             if (!canSplitScreen(this, window)) {
                 //Shared Element
                 /** Get scale/position of clicked Gradient **/
-                gradientViewSizeX =
+                /*gradientViewSizeX =
                     Values.currentGradientScreenView.findViewById<ImageView>(R.id.gradient).width.toFloat()
                 gradientViewSizeY =
                     Values.currentGradientScreenView.findViewById<ImageView>(R.id.gradient).height.toFloat()
                 Values.currentGradientScreenView.findViewById<ImageView>(R.id.gradient)
-                    .getLocationOnScreen(gradientViewPos)
+                    .getLocationOnScreen(gradientViewPos)*/
 
                 /** Get scale/position of secondFrag **/
                 if (canSplitScreen(this, window)) {
