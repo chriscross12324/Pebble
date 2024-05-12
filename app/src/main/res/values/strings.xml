@@ -103,6 +103,7 @@
     <string name="sentence_tap_to_remove">Tap colour\nto Remove</string>
     <string name="sentence_trying_mobile_data">Trying to use Mobile Data</string>
     <string name="sentence_uploading_gradient">Uploading gradient to Pebble</string>
+    <string name="title_activity_main">MainActivity</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 

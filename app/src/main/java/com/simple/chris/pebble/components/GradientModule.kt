@@ -12,67 +12,56 @@
 
 package com.simple.chris.pebble.components
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.compose.ui.unit.sp
 import com.simple.chris.pebble.ui.theme.googleSansFamily
 
 
 @Composable
 @Preview
 fun GradientModule(
-    modifier: Modifier = Modifier,
-    gradientName: String = "Name",
-    gradientColours: List<Color> = listOf(Color.Red, Color.Blue),
+    modifier: Modifier = Modifier.fillMaxWidth(),
+    gradientName: String = "ERR",
+    hexList: List<String> = listOf("#000000"),
 ) {
-    ConstraintLayout(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(13.dp)
-            .background(Color.Transparent)
-    ) {
-        val (gradientImageView, gradientTextView) = createRefs()
 
+    Column (
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         GradientImageView(
-            gradientColours = gradientColours,
+            hexList = hexList,
             cornerRadius = 25f,
             modifier = modifier
                 .height(170.dp)
                 .fillMaxWidth()
-                .constrainAs(gradientImageView) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                },
         )
 
         Text(
             text = gradientName,
             modifier
                 .height(40.dp)
-                .constrainAs(gradientTextView) {
-                    top.linkTo(gradientImageView.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                },
+                .padding(start = 24.dp, end = 24.dp, top = 8.dp)
+                ,
             maxLines = 2,
             fontFamily = googleSansFamily,
             fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
             color = Color.White,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Center
         )
     }
 }

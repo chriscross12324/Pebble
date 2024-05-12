@@ -1,23 +1,13 @@
 package com.simple.chris.pebble.recyclers
 
-//import com.sinaseyfi.advancedcardview.AdvancedCardView
-import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.recyclerview.widget.RecyclerView
-import com.simple.chris.pebble.R
 import com.simple.chris.pebble.components.GradientModule
-import com.simple.chris.pebble.functions.UIElement
-import com.simple.chris.pebble.functions.generateGradientDrawable
-import com.simple.chris.pebble.ui.utils.hexToColour
+import com.simple.chris.pebble.data.GradientObject
+import com.simple.chris.pebble.functions.Values
+import com.simple.chris.pebble.functions.vibrateWeak
 
 /**
  * Creates a gradient modules for each gradient
@@ -28,14 +18,76 @@ import com.simple.chris.pebble.ui.utils.hexToColour
  * @param onGradientLongClickListener Actions to perform when module is long pressed
  *
  */
-class GradientRecyclerView internal constructor(var context: Context, private val gradients: ArrayList<HashMap<String, String>>, onGradientListener: OnGradientListener, onGradientLongClickListener: OnGradientLongClickListener) : RecyclerView.Adapter<GradientRecyclerView.ViewHolder>() {
+
+class GradientRecyclerViewAdapter(
+    private val context: Context,
+    private val gradientInfo: List<GradientObject>,
+) : RecyclerView.Adapter<GradientRecyclerViewAdapter.ViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(ComposeView(parent.context))
+    }
+
+    override fun getItemCount(): Int = gradientInfo.size
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val gradientDetails = gradientInfo[position]
+        val gradientName: String = gradientDetails.gradientName
+        val gradientHexList: List<String> = gradientDetails.gradientHEXList
+
+        holder.bind(gradientName, gradientHexList)
+    }
+
+    inner class ViewHolder(
+        private val composeView: ComposeView,
+    ) : RecyclerView.ViewHolder(composeView) {
+
+        init {
+            composeView.setOnClickListener {
+                if (!Values.animatingSharedElement) {
+                    vibrateWeak(context)
+                    Values.currentGradientScreenView = composeView
+                    Values.animatingSharedElement = true
+                    Values.canDismissSharedElement = false
+                }
+            }
+            composeView.setOnLongClickListener {
+
+                true
+            }
+        }
+
+        fun bind(gradientName: String, hexList: List<String>) {
+            composeView.setContent {
+                GradientModule(
+                    gradientName = gradientName,
+                    hexList = hexList
+                )
+            }
+        }
+
+    }
+
+
+}
+
+interface ListenerGradientClick {
+    fun onClick(position: Int)
+}
+
+interface ListenerGradientLongClick {
+    fun onLongClick(position: Int)
+}
+
+/*class GradientRecyclerView internal constructor(var context: Context, private val gradients: ArrayList<HashMap<String, String>>, onGradientListener: OnGradientListener, onGradientLongClickListener: OnGradientLongClickListener) : RecyclerView.Adapter<GradientRecyclerView.ViewHolder>() {
     private var mOnGradientListener: OnGradientListener = onGradientListener
     private var mOnGradientLongClickListener: OnGradientLongClickListener = onGradientLongClickListener
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
-    /**
-     * @return Populated module to display in RecyclerView
-     */
+    */
+/**
+ * @return Populated module to display in RecyclerView
+ *//*
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.module_browse_normal, parent, false)
         return ViewHolder(view, mOnGradientListener, mOnGradientLongClickListener)
@@ -45,43 +97,20 @@ class GradientRecyclerView internal constructor(var context: Context, private va
         return gradients.size
     }
 
-    /**
-     * Populates a module
-     *
-     * @param holder References ViewHolder to use its internal views
-     * @param position Grabs required information for a gradient at a specific position from the ArrayList
-     *
-     * If information for a module is invalid/missing, the module will be populated with fallback info
-     */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val details: HashMap<String, String> = gradients[position]
         val gradientName = details["gradientName"] ?: "[Broken Data]"
         val gradientColours = ArrayList<String>(details["gradientColours"]?.replace("[", "")?.replace("]", "")?.split(",")?.map { it.trim() } ?: emptyList())
         holder.bind(gradientName, gradientColours)
-        /*try {
-            val details: HashMap<String, String> = gradients[position]
-            holder.gradientName.text = details["gradientName"]
-            val gradientColours = details["gradientColours"]!!.replace("[", "").replace("]", "").split(",").map { it.trim() }
-            val nl = ArrayList<String>(gradientColours)
-            generateGradientDrawable(context, holder.gradientViewer, nl, 25f)
-            holder.gradientViewer.transitionName = details["gradientName"]
-        } catch (e: Exception) {
-            holder.gradientViewer.setBackgroundColor(context.resources.getColor(R.color.pebbleEnd))
-            holder.gradientName.text = "[Broken Data]"
-            Log.e("ERR", e.localizedMessage)
-        }*/
     }
 
-    fun stringToWords(s: String) = s.trim().splitToSequence(",")
-            .filter { it.isNotEmpty() }
-            .toList()
-
-    /**
-     * Referenced to get the views from the module layout
-     */
-    inner class ViewHolder internal constructor(view: View, onGradientListener: OnGradientListener, onGradientLongClickListener: OnGradientLongClickListener) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener/*, View.OnTouchListener*/ {
-        /*var gradientName: TextView = view.findViewById(R.id.gradientName)
-        var gradientViewer: ImageView = view.findViewById(R.id.gradient)*/
+    */
+/**
+ * Referenced to get the views from the module layout
+ *//*
+    inner class ViewHolder internal constructor(view: View, onGradientListener: OnGradientListener, onGradientLongClickListener: OnGradientLongClickListener) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener*//*, View.OnTouchListener*//* {
+        *//*var gradientName: TextView = view.findViewById(R.id.gradientName)
+        var gradientViewer: ImageView = view.findViewById(R.id.gradient)*//*
 
         private val myOnGradientListener = onGradientListener
         private val myOnGradientLongClickListener = onGradientLongClickListener
@@ -100,25 +129,25 @@ class GradientRecyclerView internal constructor(var context: Context, private va
             return true
         }
 
-        fun bind(gradientName: String, gradientColours: ArrayList<String>) {
+        fun bind(gradientName: String, hexList: List<String>) {
 
 
             ComposeView(itemView.context).apply {
                 itemView.findViewById<ComposeView>(R.id.compose_view).setContent {
                     GradientModule(
                         gradientName = gradientName,
-                        gradientColours = gradientColours.map { hexToColour(it) }
+                        hexList = hexList
                     )
                 }
             }
         }
     }
 
-    interface OnGradientListener {
+    interface OnGradientClickListener {
         fun onGradientClick(position: Int, view: View)
     }
 
     interface OnGradientLongClickListener {
         fun onGradientLongClick(position: Int, view: View)
     }
-}
+}*/

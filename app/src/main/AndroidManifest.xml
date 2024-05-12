@@ -18,9 +18,13 @@
         android:supportsRtl="true"
         android:theme="@style/Main">
         <activity
+            android:name=".ui.screens.MainActivity"
+            android:exported="false"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Main" />
+        <activity
             android:name=".ActivityMainNew"
-            android:exported="false" />
-        <!-- tools:ignore="AllowBackup,GoogleAppIndexingWarning" -->
+            android:exported="false" /> <!-- tools:ignore="AllowBackup,GoogleAppIndexingWarning" -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3224190453693148~1184570101" />

@@ -31,9 +31,7 @@ class FragmentBrowseNew : Fragment() {
     ): View {
         binding = FragmentBrowseNewBinding.inflate(inflater, container, false)
 
-        binding.button.setOnClickListener {
-            fragmentListener?.onOpenDetailsButtonClick()
-        }
+
 
         return binding.root
     }

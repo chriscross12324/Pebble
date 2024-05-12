@@ -3,6 +3,7 @@ package com.simple.chris.pebble.functions
 import android.content.Context
 import android.view.View
 import com.google.firebase.firestore.FirebaseFirestore
+import com.simple.chris.pebble.data.GradientObject
 import com.simple.chris.pebble.dialogs.DialogPopup
 
 /**
@@ -46,15 +47,13 @@ object Values {
     var valuesLoaded = false
     var errorOccurred = false
     var recyclerBrowseAtTop = true
-    var isSearchMode = false
 
 
     //DialogFragment
     lateinit var dialogPopup: DialogPopup
 
     //Connection
-    var gradientList: ArrayList<HashMap<String, String>> = ArrayList()
-    var searchList: ArrayList<HashMap<String, String>> = ArrayList()
+    var gradientList: List<GradientObject> = listOf()
 
     //Hidden Values
     var firstStart = true
@@ -67,7 +66,6 @@ object Values {
     var animatingSharedElement = false
     var canDismissSharedElement = true
     var browseRecyclerScrollPos = 0
-    var searchRecyclerScrollPos = 0
 
     //Gradient Details
     var gradientScreenName = ""
@@ -90,7 +88,6 @@ object Values {
         val editor = sharedPrefs.edit()
         editor.putBoolean("firstStart", firstStart)
         editor.putInt("browseRecyclerScrollPos", browseRecyclerScrollPos)
-        editor.putInt("searchRecyclerScrollPos", searchRecyclerScrollPos)
         editor.putBoolean("settingVibrations", settingVibration)
         editor.putString("settingThemes", settingTheme)
         editor.putBoolean("settingsSpecialEffects", settingSpecialEffects)
@@ -107,7 +104,6 @@ object Values {
         valuesLoaded = true
         firstStart = sharedPrefs.getBoolean("firstStart", true)
         browseRecyclerScrollPos = sharedPrefs.getInt("browseRecyclerScrollPos", 0)
-        searchRecyclerScrollPos = sharedPrefs.getInt("searchRecyclerScrollPos", 0)
         settingVibration = sharedPrefs.getBoolean("settingVibrations", true)
         settingTheme = sharedPrefs.getString("settingThemes", "dark")!!
         settingSpecialEffects = sharedPrefs.getBoolean("settingsSpecialEffects", true)

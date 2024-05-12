@@ -130,13 +130,12 @@ class DialogGradientPopup : DialogFragment() {
     }
 
     companion object {
-        fun newDialog(arrayList: ArrayList<String>, name: String, description: String, viewPos: IntArray): DialogGradientPopup {
+        fun newDialog(arrayList: ArrayList<String>, name: String, description: String): DialogGradientPopup {
             return DialogGradientPopup().apply {
                 arguments = Bundle().apply {
                     putSerializable("array", arrayList)
                     putString("name", name)
                     putString("description", description)
-                    putIntArray("viewPos", viewPos)
                 }
             }
         }

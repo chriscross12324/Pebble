@@ -14,34 +14,41 @@ package com.simple.chris.pebble.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.simple.chris.pebble.functions.convertFloatToDP
+import com.simple.chris.pebble.ui.utils.hexToColour
 
 @Composable
 fun GradientImageView(
-    modifier: Modifier = Modifier,
-    gradientColours: List<Color>,
+    modifier: Modifier = Modifier.fillMaxHeight().fillMaxWidth(),
+    hexList: List<String>,
     cornerRadius: Float
 ) {
-    var colours = gradientColours
-    if (gradientColours.size >= 2) {
-        Box(
-            modifier = modifier
-                .clip(RoundedCornerShape(size = convertFloatToDP(LocalContext.current, cornerRadius)))
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = gradientColours,
-                        start = Offset.Zero,
-                        end = Offset.Infinite
-                    )
-                )
-        )
+    //Convert HEX to Color
+    var colourList = hexList.map { hexToColour(it) }
+
+    //Add additional colour if only one (1) colour present
+    if (colourList.size < 2) {
+        colourList = listOf(colourList[0], colourList[0])
     }
+
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(size = convertFloatToDP(LocalContext.current, cornerRadius)))
+            .background(
+                brush = Brush.linearGradient(
+                    colors = colourList,
+                    start = Offset.Zero,
+                    end = Offset.Infinite
+                )
+            )
+    )
 }

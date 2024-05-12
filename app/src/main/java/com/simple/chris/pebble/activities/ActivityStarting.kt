@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.simple.chris.pebble.functions.Values
+import com.simple.chris.pebble.ui.screens.MainActivity
 
 class ActivityStarting : AppCompatActivity() {
 

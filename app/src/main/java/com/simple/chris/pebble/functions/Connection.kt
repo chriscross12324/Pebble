@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager
 import com.google.firebase.firestore.Query
 import com.simple.chris.pebble.R
 import com.simple.chris.pebble.activities.ActivityMain
+import com.simple.chris.pebble.data.GradientObject
 import com.simple.chris.pebble.dialogs.DialogPopup
 import java.util.*
 
@@ -47,18 +48,20 @@ object Connection {
                 .orderBy("gradientTimestamp", Query.Direction.DESCENDING)
                 .limit(20)
                 .get()
-                .addOnSuccessListener {
-                    Values.gradientList.clear()
-                    val gradientList = ArrayList<HashMap<String, String>>()
+                .addOnSuccessListener { it ->
+                    Values.gradientList = emptyList()
+                    val gradientList = mutableListOf<GradientObject>()
                     for (document in it) {
-                        val item = HashMap<String, String>()
-                        item["gradientName"] = document.data["gradientName"] as String
-                        item["gradientColours"] = document.data["gradientColours"] as String
-                        item["gradientDescription"] = document.data["gradientDescription"] as String
+                        val gradientItem = GradientObject(
+                            document.data["gradientName"] as String,
+                            document.data["gradientDescription"] as String,
+                            (document.data["gradientColours"] as String).replace("[", "").replace("]", "").split(",").map { it.trim() }
+                        )
 
-                        gradientList.add(item)
-                        Values.gradientList = gradientList
+                        gradientList.add(gradientItem)
+
                     }
+                    Values.gradientList = gradientList
                     Log.d("DEBUG", "Firestore: Done")
                     Values.downloadingGradients = false
                 }

@@ -16,18 +16,14 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.simple.chris.pebble.R
-import com.simple.chris.pebble.adapters_helpers.*
 import com.simple.chris.pebble.databinding.FragmentGradientScreenBinding
-import com.simple.chris.pebble.dialogs.DialogColourInfo
 import com.simple.chris.pebble.dialogs.DialogPopup
 import com.simple.chris.pebble.dialogs.DialogSaveGradient
 import com.simple.chris.pebble.functions.*
-import com.simple.chris.pebble.recyclers.SearchColourRecyclerView
 import kotlin.Exception
 
-class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), SearchColourRecyclerView.OnButtonListener {
+class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen) {
     private var _binding: FragmentGradientScreenBinding? = null
     private val binding get() = _binding!!
     private lateinit var context: Activity
@@ -83,7 +79,6 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
                 binding.gradientDescriptionText.text = gradientDescription
                 binding.gradientDescriptionText.visibility = if (gradientDescription == "") View.GONE else View.VISIBLE
                 UIElements.viewObjectAnimator(binding.backgroundDimmer, "alpha", 0f, 0, 0, LinearInterpolator())
-                colourRecycler()
 
                 /** Set position of UI Elements **/
                 UIElements.viewObjectAnimator(binding.detailsHolder, "translationY",
@@ -130,7 +125,6 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
                     binding.gradientNameText.text = gradientName
                     binding.gradientDescriptionText.text = gradientDescription
                     binding.gradientDescriptionText.visibility = if (gradientDescription == "") View.GONE else View.VISIBLE
-                    colourRecycler()
 
                     /** Set position of UI Elements **/
                     UIElements.viewObjectAnimator(binding.detailsHolder, "translationY",
@@ -212,31 +206,6 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
             }
         }, 10)
 
-    }
-
-    private fun colourRecycler() {
-        binding.colourElementsRecycler.setHasFixedSize(true)
-        val buttonLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        val buttonAdapter = SearchColourRecyclerView(context, null, Values.gradientScreenColours, this)
-
-        binding.colourElementsRecycler.layoutManager = buttonLayoutManager
-        binding.colourElementsRecycler.adapter = buttonAdapter
-
-        val arrayList = ArrayList<String>()
-        /*Palette.Builder(Calculations.createBitmap(generateGradientDrawable((activity as MainActivity), null, Values.gradientScreenColours, 0f)!!,
-            100, 100)).maximumColorCount(6).generate {
-                it?.let {
-                    for (i in 0 until 5) {
-                        //Log.e("INFO", "#${Integer.toHexString(it.swatches[i].rgb).removeRange(0, 2)}")
-                        arrayList.add("#${Integer.toHexString(it.swatches[i].rgb).removeRange(0, 2)}")
-                        categorizeColour("#${Integer.toHexString(it.swatches[i].rgb).removeRange(0, 2)}")
-                    }
-                    val buttonAdapter = SearchColourRecyclerView(context, null, arrayList, this)
-
-                    colourElementsRecycler.layoutManager = buttonLayoutManager
-                    colourElementsRecycler.adapter = buttonAdapter
-                }
-        }*/
     }
 
     fun categorizeColour(colour: String): ArrayList<String> {
@@ -439,60 +408,4 @@ class FragExpandedGradient : Fragment(R.layout.fragment_gradient_screen), Search
             true
         }
     }
-
-    /*@SuppressLint("InlinedApi")
-    override fun onButtonClickPopup(popupName: String, position: Int, view: View) {
-        when (popupName) {
-            "setWallpaper" -> {
-                val wallpaperManager = WallpaperManager.getInstance(context)
-                UIElement.popupDialogHider()
-                when (position) {
-                    0 -> {
-                        try {
-                            wallpaperManager.setBitmap(Calculations.createBitmap(generateGradientDrawable(context, null, Values.gradientScreenColours, 0f) as Drawable,
-                                    Calculations.screenMeasure(context, "width", context.window), getScreenMetrics(context, context.window).height)),
-                                    null, true, WallpaperManager.FLAG_SYSTEM)
-                            runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
-                        } catch (e: Exception) {
-                            Log.e("ERR", "pebble.frag_gradient_screen.on_button_click_popup.set_wallpaper: ${e.localizedMessage}")
-                        }
-                    }
-                    1 -> {
-                        try {
-                            wallpaperManager.setBitmap(Calculations.createBitmap(generateGradientDrawable(context, null, Values.gradientScreenColours, 0f) as Drawable,
-                                    Calculations.screenMeasure(context, "width", context.window), getScreenMetrics(context, context.window).height)),
-                                    null, true, WallpaperManager.FLAG_LOCK)
-                            runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
-                        } catch (e: Exception) {
-                            Log.e("ERR", "pebble.frag_gradient_screen.on_button_click_popup.set_wallpaper: ${e.localizedMessage}")
-                        }
-                    }
-                    2 -> UIElement.popupDialogHider()
-                }
-            }
-            "setWallpaperOutdated" -> {
-                val wallpaperManager = WallpaperManager.getInstance(context)
-                UIElement.popupDialogHider()
-                when (position) {
-                    0 -> {
-                        try {
-                            wallpaperManager.setBitmap(Calculations.createBitmap(generateGradientDrawable(context, null, Values.gradientScreenColours, 0f) as Drawable,
-                                    Calculations.screenMeasure(context, "width", context.window), getScreenMetrics(context, context.window).height)))
-                            runNotification(R.drawable.icon_wallpaper_new, R.string.sentence_enjoy_your_wallpaper)
-                        } catch (e: Exception) {
-                            Log.e("ERR", "pebble.frag_gradient_screen.on_button_click_popup.set_wallpaper_outdated: ${e.localizedMessage}")
-                        }
-                    }
-                    1 -> UIElement.popupDialogHider()
-                }
-            }
-        }
-    }*/
-
-    override fun onButtonClick(position: Int, view: View, buttonColour: String) {
-        val fm = fragmentManager as FragmentManager
-        val colourInfoDialog = DialogColourInfo.newDialog(buttonColour)
-        colourInfoDialog.show(fm, "colourInfoDialog")
-    }
-
 }

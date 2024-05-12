@@ -235,7 +235,14 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
     fun shrinkFrag(fragment: CardView, scale: Float, duration: Long, interpolator: Interpolator) {
         UIElements.viewObjectAnimator(fragment, "scaleY", scale, duration, 0, interpolator)
         UIElements.viewObjectAnimator(fragment, "scaleX", scale, duration, 0, interpolator)
-        animateView(fragment, Property.RADIUS, convertFloatToDP(this, 30f), duration, 0, interpolator)
+        animateView(
+            fragment,
+            Property.RADIUS,
+            convertFloatToDP(this, 30f),
+            duration,
+            0,
+            interpolator
+        )
     }
 
     private fun moveUpFrag(height: Float) {
@@ -366,7 +373,11 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
         Values.animatingSharedElement = true
         Handler(Looper.getMainLooper()).postDelayed({
             /** Set initial properties of SharedElement **/
-            animateView(binding.gradientScreenAnimationHero, Property.VISIBILITY, View.VISIBLE.toFloat())
+            animateView(
+                binding.gradientScreenAnimationHero,
+                Property.VISIBILITY,
+                View.VISIBLE.toFloat()
+            )
             animateView(
                 binding.gradientScreenAnimationHero,
                 Property.RADIUS,
@@ -687,23 +698,11 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
             }
 
             /** Set values for FragGradientScreen in Values.kt **/
-            if (Values.isSearchMode) {
-                Values.gradientScreenName = Values.searchList[position]["gradientName"] as String
-                Values.gradientScreenDesc =
-                    Values.searchList[position]["gradientDescription"] as String
-                Values.gradientScreenColours =
-                    ArrayList(Values.searchList[position]["gradientColours"]!!.replace("[", "")
-                        .replace("]", "")
-                        .split(",").map { it.trim() })
-            } else {
-                Values.gradientScreenName = Values.gradientList[position]["gradientName"] as String
-                Values.gradientScreenDesc =
-                    Values.gradientList[position]["gradientDescription"] as String
-                Values.gradientScreenColours =
-                    ArrayList(Values.gradientList[position]["gradientColours"]!!.replace("[", "")
-                        .replace("]", "")
-                        .split(",").map { it.trim() })
-            }
+            Values.gradientScreenName = Values.gradientList[position].gradientName
+            Values.gradientScreenDesc =
+                Values.gradientList[position].gradientDescription
+            Values.gradientScreenColours =
+                ArrayList(Values.gradientList[position].gradientHEXList)
             startGradientScreen(false)
 
             /** Set initial properties of SharedElement **/
@@ -852,10 +851,6 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                 DecelerateInterpolator(3f)
             )
             Values.currentlySplitScreened = true
-
-            if (Values.isSearchMode) {
-                (browseFragment as FragBrowse).setSBCRecyclerWidth(true)
-            }
         }
     }
 
@@ -1093,9 +1088,6 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                     0,
                     DecelerateInterpolator(3f)
                 )
-                if (Values.isSearchMode) {
-                    (browseFragment as FragBrowse).setSBCRecyclerWidth(true)
-                }
 
                 /** Tells app it can reopen SplitScreen **/
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -1485,9 +1477,7 @@ class ActivityMain : FragmentActivity(), SettingsRecyclerView.OnButtonListener {
                     }
                 }
             }
-            if (Values.isSearchMode) {
-                (browseFragment as FragBrowse).startSearch(false)
-            }
+
             if (Values.currentActivity == "GradientCreator") {
                 growFrag(binding.fragmentHolder, 1f, 500, DecelerateInterpolator(3f))
                 hideGradientCreator()
