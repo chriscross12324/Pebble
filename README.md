@@ -6,4 +6,4 @@
 With this in mind, I invite you to take a look at the source code (ideally commits from before the latest commit), and to see how my mind worked years ago. I'd love to show off my newer programming knowledge from my current project, but I'm fairly secretive about the internal working of it.
 
 ## Future Updates
-I may come back to this project to give it a final update, clean up the code and patch some final issues... but unless I get really bored to where I wish to do that, this project doesn't provide income and never will.
+I may come back to this project to give it a final update, clean up the code and patch some final issues... but unless I get really bored to where I wish to do that, this project has since fallen off my radar as I pursue other projects.
